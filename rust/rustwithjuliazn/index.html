@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="interaction-rust-with-julia">Interaction Rust with Julia</h1>
+
+<p>Rust 和 Julia 的交互</p>
+
+<p><a href="https://hashnode.com/@h_ajsf"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="Hasan Yousef's photo" /></a></p>
+
+<p><a href="https://hashnode.com/@h_ajsf">Hasan Yousef</a></p>
+
+<p>Published  <a href="https://hashnode.com/post/interaction-rust-with-julia-cjpwu6ynz00rxnjs2lzphqebb" title="December 20, 2018 4:45 PM">5 months ago</a></p>
+
+<p><a href="https://hashnode.com/n/rust"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" />Rust</a><a href="https://hashnode.com/n/julia"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" />Julia</a></p>
+
+<p>Rust 和 Julia 都快速发展着也同样致力于效率的提高，两者之间的结合一定会有高回报。</p>
+
+<p>让我们来尝试从 Rust调用下面的 Julia 代码:</p>
+
+<pre><code># __precompile__()   # If required to be kept precompiled for faster execution
+# name = isempty(ARGS) ? &quot;name&quot; : ARGS[1] # To check input arguments
+println(&quot;hello from Julia function&quot;)
+
+</code></pre>
+
+<p>可以采用下面rust调用：</p>
+
+<pre><code class="language-rust">use std::process::Command;
+
+fn main() {
+    println!(&quot;Hello from Rust&quot;);
+    let mut cmd = Command::new(&quot;Julia&quot;);
+    cmd.arg(&quot;main.jl&quot;);
+    // cmd.args(&amp;[&quot;main.jl&quot;, &quot;arg1&quot;, &quot;arg2&quot;]);
+    match cmd.output() {
+        Ok(o) =&gt; unsafe {
+            println!(&quot;Output: {}&quot;, String::from_utf8_unchecked(o.stdout));
+        },
+        Err(e) =&gt; {
+            println!(&quot;There was an error {}&quot;, e);
+        }
+    }
+}
+
+</code></pre>
+
+<p>采用 &ldquo;cargo run&rdquo; 来执行：</p>
+
+<p>From the other other hand, let&rsquo;s say we have the below rust file:
+从 Julia 调用下面的 Rust 代码:</p>
+
+<pre><code class="language-rust">#[no_mangle]
+pub extern fn double_input(input: i32) -&gt; i32 {
+    println!(&quot;Hello from Rust&quot;);
+    input * 2
+}
+
+</code></pre>
+
+<p>首先定义cargo文件来并且运行“caogo buiild”:</p>
+
+<pre><code>[package]
+name = &quot;julia_call_rust&quot;
+version = &quot;1.0.0&quot;
+authors = [&quot;hasan yousef]
+
+[lib]
+name = &quot;my_rust_lib&quot;
+crate-type = [&quot;dylib&quot;]
+
+</code></pre>
+
+<p>下面是调用rust库的Julia:</p>
+
+<pre><code class="language-Julia">println(&quot;Hello from Julia&quot;)
+input = 10 #Int32(10)
+output =  ccall(   #(:function or &quot;function&quot;, &quot;library&quot;), Return type, (Input types,), arguments if any)
+                (:double_input,
+                &quot;target/debug/libmy_rust_lib&quot;),
+                Int32,          # Return type
+                (Int32,),       # (Input types,)
+                input)          # Arguments if any
+println(&quot;As result of $input * 2 is: $output&quot;)
+
+</code></pre>
+
+<p>好了， 先执行&rdquo;cargo build&rdquo; 之后运行 &ldquo;julia mainl.jl&rdquo; 能看到什么。</p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

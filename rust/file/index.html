@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="file">file</h1>
+
+<h3 id="creates-a-new-file-and-write-bytes-to-it">Creates a new file and write bytes to it</h3>
+
+<p>创建
+1.</p>
+
+<pre><code class="language-rust">//Creates a new file and write bytes to it:
+use std::fs::File;
+use std::io::prelude::*;
+
+fn main() -&gt; std::io::Result&lt;()&gt; {
+    let mut file = File::create(&quot;foo.txt&quot;)?;
+    file.write_all(b&quot;Hello, world!&quot;)?;
+    Ok(())
+}
+</code></pre>
+
+<h3 id="read-the-contents-of-a-file-into-a-string">Read the contents of a file into a String</h3>
+
+<p>读入
+2.</p>
+
+<pre><code class="language-rust">//Read the contents of a file into a String:
+use std::fs::File;
+use std::io::prelude::*;
+
+fn main() -&gt; std::io::Result&lt;()&gt; {
+    let mut file = File::open(&quot;foo.txt&quot;)?;
+    let mut contents = String::new();
+    file.read_to_string(&amp;mut contents)?;
+    assert_eq!(contents, &quot;Hello, world!&quot;);
+    Ok(())
+}
+</code></pre>
+
+<h3 id="bufreader">BufReader</h3>
+
+<p>3.</p>
+
+<pre><code class="language-rust">//It can be more efficient to read the contents of a file with a buffered Reader. This can be accomplished with BufReader&lt;R&gt;:
+//高效
+use std::fs::File;
+use std::io::BufReader;
+use std::io::prelude::*;
+
+fn main() -&gt; std::io::Result&lt;()&gt; {
+    let file = File::open(&quot;foo.txt&quot;)?;
+    let mut buf_reader = BufReader::new(file);
+    let mut contents = String::new();
+    buf_reader.read_to_string(&amp;mut contents)?;
+    assert_eq!(contents, &quot;Hello, world!&quot;);
+    Ok(())
+}
+</code></pre>
+
+<h3 id="errors">Errors</h3>
+
+<pre><code class="language-rust">Examples
+use std::fs::File;
+
+fn main() -&gt; std::io::Result&lt;()&gt; {
+    let mut f = File::open(&quot;foo.txt&quot;)?;
+    Ok(())
+}
+</code></pre>
+
+<hr />
+
+<pre><code class="language-rust">fn main() -&gt; std::io::Result&lt;()&gt; {
+    let mut f = File::create(&quot;foo.txt&quot;)?;
+    Ok(())
+}
+
+//This function will attempt to ensure that all in-core data reaches the filesystem before returning.
+
+//Examples
+use std::fs::File;
+use std::io::prelude::*;
+
+fn main() -&gt; std::io::Result&lt;()&gt; {
+    let mut f = File::create(&quot;foo.txt&quot;)?;
+    f.write_all(b&quot;Hello, world!&quot;)?;
+
+    f.sync_all()?;
+    Ok(())
+}
+
+</code></pre>
+
+<h1 id="rust-file-input-output">Rust - File Input/ Output</h1>
+
+<hr />
+
+<p>Advertisements</p>
+
+<p><a href="https://www.tutorialspoint.com/rust/rust_input_output.htm">Previous Page</a></p>
+
+<p><a href="https://www.tutorialspoint.com/rust/rust_package_manager.htm">Next Page</a></p>
+
+<p>In addition to reading and writing to console, Rust allows reading and writing to files.</p>
+
+<p>The File struct represents a file. It allows a program to perform read-write operations on a file. All methods in the File struct return a variant of the io::Result enumeration.</p>
+
+<p>The commonly used methods of the File struct are listed in the table below −</p>
+
+<p>| <strong>Module</strong> | <strong>Method</strong> | <strong>Signature</strong> | <strong>Description</strong> |
+|&ndash;|&ndash;|&ndash;|&ndash;|
+| std::fs::File | open() | pub fn open<P: AsRef>(path: P) -&gt; Result |The open static method can be used to open a file in read-only mode. |
+| std::fs::File | create() | pub fn create<P: AsRef>(path: P) -&gt; Result | Static method opens a file in write-only mode. If the file already existed, the old content is destroyed. Otherwise, a new file is created.|
+|std::fs::remove_file| remove_file() |pub fn remove_file<P: AsRef>(path: P) -&gt; Result&lt;()&gt; |Removes a file from the filesystem. There is no guarantee that the file is immediately deleted.|
+|std::fs::OpenOptions  | append() | pub fn append(&amp;mut self, append: bool) -&gt; &amp;mut OpenOptions | Sets the option for the append mode of file. |
+| std::io::Writes | write_all() | fn write_all(&amp;mut self, buf: &amp;[u8]) -&gt; Result&lt;()&gt; |Attempts to write an entire buffer into this write. |<br />
+| std::io::Read | read_to_string() | fn read_to_string(&amp;mut self, buf: &amp;mut String) -&gt; Result | Reads all bytes until EOF in this source, appending them to buf. |</p>
+
+<h2 id="write-to-a-file">Write to a File</h2>
+
+<p>Let us see an example to understand how to write a file.</p>
+
+<p>The following program creates a file &lsquo;data.txt&rsquo;. The create() method is used to create a file. The method returns a file handle if the file is created successfully. The last line  _write<em>all</em>  function will write bytes in newly created file. If any of the operations fail, the expect() function returns an error message.</p>
+
+<pre><code class="language-rust">use std::io::Write;
+fn main() {
+   let mut file = std::fs::File::create(&quot;data.txt&quot;).expect(&quot;create failed&quot;);
+   file.write_all(&quot;Hello World&quot;.as_bytes()).expect(&quot;write failed&quot;);
+   file.write_all(&quot;\nTutorialsPoint&quot;.as_bytes()).expect(&quot;write failed&quot;);
+   println!(&quot;data written to file&quot; );
+}```
+
+### Output
+
+data written to file
+
+## Read from a File
+
+The following program reads the contents in a file data.txt and prints it to the console. The &quot;open&quot; function is used to open an existing file. An absolute or relative path to the file is passed to the open() function as a parameter. The open() function throws an exception if the file does not exist, or if it is not accessible for whatever reason. If it succeeds, a file handle to such file is assigned to the &quot;file&quot; variable.
+
+The &quot;read_to_string&quot; function of the &quot;file&quot; handle is used to read contents of that file into a string variable.
+
+</code></pre>
+
+<p>rust
+use std::io::Read;</p>
+
+<p>fn main(){
+   let mut file = std::fs::File::open(&ldquo;data.txt&rdquo;).unwrap();
+   let mut contents = String::new();
+   file.read_to_string(&amp;mut contents).unwrap();
+   print!(&ldquo;{}&rdquo;, contents);
+}</p>
+
+<pre><code>
+### Output
+
+Hello World
+TutorialsPoint
+
+## Delete a file
+
+The following example uses the remove_file() function to delete a file. The expect() function returns a custom message in case an error occurs.
+
+</code></pre>
+
+<p>rust
+use std::fs;
+fn main() {
+   fs::remove_file(&ldquo;data.txt&rdquo;).expect(&ldquo;could not remove file&rdquo;);
+   println!(&ldquo;file is removed&rdquo;);
+}</p>
+
+<pre><code>
+### Output
+
+file is removed
+
+## Append data to a file
+
+The append() function writes data to the end of the file. This is shown in the example given below −
+
+</code></pre>
+
+<p>rust
+use std::fs::OpenOptions;
+use std::io::Write;</p>
+
+<p>fn main() {
+   let mut file = OpenOptions::new().append(true).open(&ldquo;data.txt&rdquo;).expect(
+      &ldquo;cannot open file&rdquo;);
+   file.write_all(&ldquo;Hello World&rdquo;.as_bytes()).expect(&ldquo;write failed&rdquo;);
+   file.write_all(&rdquo;\nTutorialsPoint&rdquo;.as_bytes()).expect(&ldquo;write failed&rdquo;);
+   println!(&ldquo;file append success&rdquo;);
+}</p>
+
+<pre><code>### Output
+
+file append success
+
+## Copy a file
+
+The following example copies the contents in a file to a new file.
+
+</code></pre>
+
+<p>rust
+use std::io::Read;
+use std::io::Write;</p>
+
+<p>fn main() {
+   let mut command_line: std::env::Args = std::env::args();
+   command_line.next().unwrap();
+   // skip the executable file name
+   // accept the source file
+   let source = command_line.next().unwrap();
+   // accept the destination file
+   let destination = command_line.next().unwrap();
+   let mut file_in = std::fs::File::open(source).unwrap();
+   let mut file_out = std::fs::File::create(destination).unwrap();
+   let mut buffer = [0u8; 4096];
+   loop {
+      let nbytes = file_in.read(&amp;mut buffer).unwrap();
+      file_out.write(&amp;buffer[..nbytes]).unwrap();
+      if nbytes &lt; buffer.len() { break; }
+   }
+}</p>
+
+<pre><code>Execute the above program as  _main.exe data.txt datacopy.txt_. Two command line arguments are passed while executing the file −
+
+-   the path to the source file
+-   the destination file
+
+[Rust - File Input/ Output](https://www.tutorialspoint.com/rust/rust_file_input_output.htm)
+
+</code></pre>
+
+<p>rust<br />
+    pub fn get_window(&amp;mut self, window: Window, line_length: u64, buf: &amp;mut Vec<u8>) -&gt; Result&lt;()&gt; {
+        // The binary file is viewed in terms of lines.
+        // The lines turn the linear byte sequence into a 2D byte grid.
+        // Each line may be significantly longer than what can fit in the window.
+        // The window is the rectangular viewport that is projected onto the grid.
+        // We are only interested in the bytes that fall within the window.
+        // The &lsquo;y&rsquo; coordinate of the window directly corresponds to the first line in the window.
+        // The &lsquo;x&rsquo; coordinate is the offset into each line, where the left-most window edge starts.
+        // The &lsquo;h&rsquo; height is the number of lines in the window,
+        // and &lsquo;w&rsquo; is the width of each window line.
+        let (x, y, w, h) = window;
+        let mut read_buf = vec![0; usize::from(w)];</p>
+
+<pre><code>    for i in y..(y + (u64::from(h))) {
+        let offset = line_length * i + x;
+        self.file.seek(SeekFrom::Start(offset))?;
+        let bytes_read = self.file.read(&amp;mut read_buf)?;
+        buf.extend(&amp;read_buf[0..bytes_read]);
+    }
+    Ok(())
+}
+</code></pre>
+
+<p>```</p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

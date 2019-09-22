@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="rust-save">rust-save</h1>
+
+<pre><code class="language-rust">    let output = sentence.replace(&quot;$noun&quot;,noun.trim())
+	.replace(&quot;$verb&quot;,verb.trim())
+	.replace(&quot;$adjective&quot;,adjective.trim())
+	.replace(&quot;$adverb&quot;,adverb.trim());
+</code></pre>
+
+<pre><code class="language-rust">	    let mut build = cc::Build::new();
+    build
+        .flag(&quot;-fvisibility=hidden&quot;)
+        .include(&quot;../libbacktrace&quot;)
+        .include(&amp;native.out_dir)
+        .out_dir(&amp;native.out_dir)
+        .warnings(false)
+        .file(&quot;../libbacktrace/alloc.c&quot;)
+        .file(&quot;../libbacktrace/backtrace.c&quot;)
+        // ...一堆.c文件
+</code></pre>
+
+<p>// rustup component add clippy</p>
+
+<pre><code class="language-rust">impl Solution {
+    pub fn count_and_say(n: i32) -&gt; String {
+        if n ==1 {
+            String::from(&quot;1&quot;)
+        }
+        else {
+            let beg: String = Solution::count_and_say(n-1);
+            let mut res: String = String::new();
+            let mut rev = vec![];
+            let mut cont: u32 = 1;
+            for c in beg.chars() {
+                rev.push(c);
+            }
+            for i in 0..rev.len() {
+                if i+1 &lt; rev.len() &amp;&amp; rev[i] == rev[i+1] {
+                    cont += 1;
+                } else {
+                    res.push(std::char::from_digit(cont,10).unwrap());
+                    res.push(rev[i]);
+                    cont = 1;
+                }
+            }
+            res
+        }
+    }
+}
+</code></pre>
+
+<h3 id="out-range">out range</h3>
+
+<p>//[−231,  231 − 1]
+//        let (i32_min, i32_max) = (-2_i64.pow(31), 2_i64.pow(31) - 1);</p>
+
+<pre><code class="language-rust">        let upper_bound: i64 = base.pow(31) - 1;
+        let lower_bound: i64 = - base.pow(31);
+        if result &gt; upper_bound || result &lt; lower_bound {
+            return 0;
+        }
+</code></pre>
+
+<p>//==</p>
+
+<pre><code>            if rem &gt; 0 &amp;&amp; ret &gt; std::i32::MAX - rem || rem &lt; 0 &amp;&amp; ret &lt; std::i32::MIN - rem {
+                return 0;
+            }
+            ret = ret + rem;
+</code></pre>
+
+<p>Fn，函数不保有自己的状态
+FnMut，函数可以改变自己的状态
+FnOnce，函数消费自己的状态</p>
+
+<pre><code class="language-rust">fn main() {
+    let a = &quot;Hello&quot;;
+    let b = &quot;world&quot;;
+    let result = [a, b].join(&quot;\n&quot;);
+
+    print!(&quot;{}&quot;, result);
+}
+</code></pre>
+
+<pre><code class="language-rust">fn main() {
+    let factorial = |mut x: i32| -&gt; i64 {
+        let mut k: i64 = 1;  
+        //base.pow(64)-1      
+        while x &gt; 1 {
+            if k &gt; std::i64::MAX / (x as i64) {k=0; return k};
+            k =k * (x as i64);
+            x -= 1;
+            println!(&quot;{}&quot;,k);
+        }
+        k
+    };
+    println!(&quot;{}&quot;, 1 + factorial(50));
+}
+
+</code></pre>
+
+<h3 id="sum-vec">sum-vec</h3>
+
+<pre><code class="language-rust">/* It prints:
+67*/
+fn main() {
+    print!(
+        &quot;{}&quot;,
+        (|v: &amp;Vec&lt;i32&gt;| {
+            let mut sum = 0;
+            for i in 0..v.len() {
+                sum += v[i];
+            }
+            sum
+        })(&amp;vec![11, 22, 34]));
+}
+</code></pre>
+
+<h3 id="iter-mut">iter_mut</h3>
+
+<pre><code class="language-rust">/* It prints:
+12 23 34 45 56 67 - B - */
+fn main() {
+    for item_ref in (&amp;mut [11u8, 22, 33]).iter_mut() {
+        *item_ref += 1;
+        print!(&quot;{} &quot;, *item_ref);
+    }
+    for item_ref in [44, 55, 66].iter_mut() {
+        *item_ref += 1;
+        print!(&quot;{} &quot;, *item_ref);
+    }
+    for item_ref in vec!['a', 'b', 'c'].iter_mut() {
+        *item_ref = if *item_ref == 'b' { 'B' } else { '-' };
+        print!(&quot;{} &quot;, *item_ref);
+    }
+}
+
+</code></pre>
+
+<h3 id="clone">clone</h3>
+
+<pre><code class="language-rust">/* It prints:
+13 12*/
+fn main() {
+    struct S { x: Vec&lt;i32&gt; }
+    impl Clone for S {
+        fn clone(&amp;self) -&gt; Self {
+            S { x: self.x.clone() }
+        }
+    }
+    let mut s1 = S { x: vec![12] };
+    let s2 = s1.clone();
+    s1.x[0] += 1;
+    print!(&quot;{} {}&quot;, s1.x[0], s2.x[0]);
+}
+</code></pre>
+
+<h3 id="is-it-v2-in-here-what-did-it">Is it v2 in here , what did it?</h3>
+
+<pre><code class="language-rust">/* It prints:
+[11, 22]*/
+fn main() {
+    let v1 = vec![11u8, 22];
+    let result;
+    {
+        let v2 = vec![33u8];
+        result = {
+            let _x1: &amp;Vec&lt;u8&gt; = &amp;v1;
+            let _x2: &amp;Vec&lt;u8&gt; = &amp;v2;
+            _x1
+        }
+    }
+    print!(&quot;{:?}&quot;, *result);
+}
+</code></pre>
+
+<h3 id="print">print!</h3>
+
+<pre><code class="language-rust">    pub fn print_help(&amp;self) {
+        print!(
+            r#&quot;{0} version {1}
+
+USAGE:
+    {0} [OPTIONS] [FLAGS] [--] ...
+
+FLAGS:
+    -d, detach          Running in the background
+    -h, help            Print help information
+    -r, restart         Restart the service program
+    -s, stop            Stop the daemon
+    -t, test            Test the config file for error
+    -v, version         Print version number
+
+OPTIONS:
+    -c    &lt;FILE&gt;        Specify a configuration file
+    start &lt;PORT?&gt;       Quick Start
+&quot;#,
+            env!(&quot;CARGO_PKG_NAME&quot;),
+            env!(&quot;CARGO_PKG_VERSION&quot;)
+        );
+    }
+</code></pre>
+
+<h1 id="json">json</h1>
+
+<pre><code>extern crate serialize;
+
+use serialize::json;
+
+fn main() {
+    for &amp;json_str in [
+        // Valid JSON
+        r#&quot;{&quot;name&quot;: &quot;London&quot;, &quot;lat&quot;: 51.507222, &quot;lon&quot;: -0.1275}&quot;#,
+
+        // Not a valid JSON, will produce an error
+        r#&quot;{&quot;name&quot;: &quot;Prague&quot; &quot;lat&quot;: 50.082542, &quot;lon&quot;: 14.425992}&quot;#,
+        // FIXME            ^ a comma is missing here
+    ].iter() {
+        // `from_str` decodes JSON from a string and returns a `Result`
+        // containing either a `Json` enum or an error
+        match json::from_str(json_str) {
+            Ok(json) =&gt; println!(&quot;json::from_str(): {}&quot;, json),
+            Err(err) =&gt; println!(&quot;json::from_str(): {}&quot;, err),
+        };
+    }
+}
+</code></pre>
+
+<h1 id="binary-gist">binary (gist)</h1>
+
+<p><a href="https://gist.github.com/derrickturk/a0997e5ea93ea39381c1">https://gist.github.com/derrickturk/a0997e5ea93ea39381c1</a></p>
+
+<pre><code class="language-rust">
+#![allow(unstable)]
+
+use std::os;
+use std::io;
+use std::io::stdio;
+use std::result;
+use std::str::StrExt;
+
+struct Record {
+    filename: String,
+    stage_num: u32,
+    data: Vec&lt;(f64, f64)&gt;
+}
+
+fn read_header&lt;T: io::Buffer&gt;(reader: &amp;mut T) -&gt; io::IoResult&lt;Vec&lt;String&gt;&gt; {
+    let mut res = Vec::new();
+    match result::fold(reader.lines(), (),
+      |_, string| res.push(String::from_str(string.trim_right()))) {
+        Ok(_) =&gt; Ok(res),
+        Err(e) =&gt; Err(e)
+    }
+}
+
+fn read_binary&lt;T: io::Reader&gt;(header: &amp;Vec&lt;String&gt;, reader: &amp;mut T)
+  -&gt; io::IoResult&lt;Vec&lt;Record&gt;&gt; {
+      let mut res = Vec::new();
+      loop {
+          let rec = read_record(header, reader);
+          match rec {
+              Ok(record) =&gt; res.push(record),
+              Err(io::IoError { kind: io::IoErrorKind::EndOfFile, .. }) =&gt; return Ok(res),
+              Err(e) =&gt; return Err(e),
+          }
+      }
+}
+
+fn read_record&lt;T: io::Reader&gt;(header: &amp;Vec&lt;String&gt;, reader: &amp;mut T)
+  -&gt; io::IoResult&lt;Record&gt; {
+      let fnum = try!(reader.read_le_u32());
+      if fnum as usize &gt; header.len() {
+          return Err(io::IoError {
+              kind: io::IoErrorKind::InvalidInput,
+              desc: &quot;Invalid index into header file.&quot;,
+              detail: None
+          });
+      }
+
+      let stage_num = try!(reader.read_le_u32());
+
+      let data_length = try!(reader.read_le_u32().map(|l| l / 2));
+
+      let mut data: Vec&lt;(f64, f64)&gt; =
+          Vec::with_capacity(data_length as usize);
+      for _ in range(0u32, data_length) {
+          let first = reader.read_le_f64();
+          if first.is_err() { return Err(first.unwrap_err()); }
+          let second = reader.read_le_f64();
+          if second.is_err() { return Err(second.unwrap_err()); }
+          data.push((first.unwrap(), second.unwrap()));
+      }
+
+      return Ok(Record {
+          filename: header[fnum as usize].clone(),
+          stage_num: stage_num,
+          data: data
+      });
+}
+
+fn main() {
+    if os::args().len() != 3 {
+        if os::args().len() &lt; 1 {
+            let _ = writeln!(&amp;mut stdio::stderr(),
+              &quot;Usage: readbin &lt;bin-file&gt; &lt;hdr-file&gt;&quot;);
+        } else {
+            let _ = writeln!(&amp;mut stdio::stderr(),
+              &quot;Usage: {} &lt;bin-file&gt; &lt;hdr-file&gt;\n&quot;, os::args()[0]);
+        }
+        return;
+    }
+
+    let binfile = io::File::open(&amp;Path::new(&amp;os::args()[1][])).unwrap();
+    let hdrfile = io::File::open(&amp;Path::new(&amp;os::args()[2][])).unwrap();
+    let hdr = read_header(&amp;mut io::BufferedReader::new(hdrfile)).unwrap();
+    let records = read_binary(&amp;hdr, &amp;mut io::BufferedReader::new(binfile))
+        .unwrap();
+    println!(&quot;File\tStage\tX\tY&quot;);
+    for rec in records.iter() {
+        for &amp;(x, y) in rec.data.iter() {
+            println!(&quot;{}\t{}\t{}\t{}&quot;,
+              rec.filename, rec.stage_num, x, y);
+        }
+    }
+}
+</code></pre>
+
+<h2 id="about">About ?</h2>
+
+<pre><code class="language-rust">use std::io;
+use std::io::Read;
+use std::fs::File;
+
+fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
+    let mut s = String::new();
+
+    File::open(&quot;hello.txt&quot;)?.read_to_string(&amp;mut s)?;
+
+    Ok(s)
+}
+</code></pre>
+
+<hr />
+
+<pre><code class="language-rust">// Output error and exit
+fn exit&lt;T: Display&gt;(message: T) -&gt; ! {
+    eprintln!(&quot;{}&quot;, message);
+    std::process::exit(1)
+}
+</code></pre>
+
+<hr />
+
+<pre><code class="language-rust">use std::sync::mpsc;
+use std::sync::Arc;
+use std::sync::Mutex;
+use std::thread;
+
+pub struct ThreadPool {
+    workers: Vec&lt;Worker&gt;,
+    sender: mpsc::Sender&lt;Job&gt;,
+}
+
+trait FnBox {
+    fn call_box(self: Box&lt;Self&gt;);
+}
+
+impl&lt;F: FnOnce()&gt; FnBox for F {
+    fn call_box(self: Box&lt;F&gt;) {
+        (*self)()
+    }
+}
+
+type Job = Box&lt;FnBox + Send + 'static&gt;;
+
+impl ThreadPool {
+    pub fn new(size: usize) -&gt; ThreadPool {
+        let (sender, receiver) = mpsc::channel();
+
+        let receiver = Arc::new(Mutex::new(receiver));
+
+        let mut workers = Vec::with_capacity(size);
+
+        for id in 0..size {
+            workers.push(Worker::new(id, Arc::clone(&amp;receiver)));
+        }
+
+        ThreadPool { workers, sender }
+    }
+
+    pub fn execute&lt;F&gt;(&amp;self, f: F)
+    where
+        F: FnOnce() + Send + 'static,
+    {
+        let job = Box::new(f);
+
+        self.sender.send(job).unwrap();
+    }
+}
+
+struct Worker {
+    id: usize,
+    thread: thread::JoinHandle&lt;()&gt;,
+}
+
+impl Worker {
+    fn new(id: usize, receiver: Arc&lt;Mutex&lt;mpsc::Receiver&lt;Job&gt;&gt;&gt;) -&gt; Worker {
+        let thread = thread::spawn(move || loop {
+            let job = receiver.lock().unwrap().recv().unwrap();
+            job.call_box();
+        });
+
+        Worker { id, thread }
+    }
+}
+
+</code></pre>
+
+<hr />
+
+<h2 id="cargo">Cargo</h2>
+
+<p>[dependencies]
+rand = { git = &ldquo;<a href="https://github.com/rust-lang-nursery/rand&quot;">https://github.com/rust-lang-nursery/rand&quot;</a>, branch = &ldquo;next&rdquo; }</p>
+
+<pre><code class="language-rust">pub fn write&lt;P: AsRef&lt;Path&gt;, C: AsRef&lt;[u8]&gt;&gt;(path: P, contents: C) -&gt; Result&lt;()&gt;
+</code></pre>
+
+<h1 id="windows">## windows</h1>
+
+<p>C:\Users\Administrator.cargo
+C:\Users\Administrator.cargo\config</p>
+
+<h3 id="html-to-text">html to text</h3>
+
+<pre><code class="language-rust">fn build_desc(content: &amp;str) -&gt; String {
+    // TODO: fix this shit
+    content
+        .replace(&quot;&lt;strong&gt;&quot;, &quot;&quot;)
+        .replace(&quot;&lt;/strong&gt;&quot;, &quot;&quot;)
+        .replace(&quot;&lt;em&gt;&quot;, &quot;&quot;)
+        .replace(&quot;&lt;/em&gt;&quot;, &quot;&quot;)
+        .replace(&quot;&lt;/p&gt;&quot;, &quot;&quot;)
+        .replace(&quot;&lt;p&gt;&quot;, &quot;&quot;)
+        .replace(&quot;&lt;b&gt;&quot;, &quot;&quot;)
+        .replace(&quot;&lt;/b&gt;&quot;, &quot;&quot;)
+        .replace(&quot;&lt;pre&gt;&quot;, &quot;&quot;)
+        .replace(&quot;&lt;/pre&gt;&quot;, &quot;&quot;)
+        .replace(&quot;&lt;ul&gt;&quot;, &quot;&quot;)
+        .replace(&quot;&lt;/ul&gt;&quot;, &quot;&quot;)
+        .replace(&quot;&lt;li&gt;&quot;, &quot;&quot;)
+        .replace(&quot;&lt;/li&gt;&quot;, &quot;&quot;)
+        .replace(&quot;&lt;code&gt;&quot;, &quot;&quot;)
+        .replace(&quot;&lt;/code&gt;&quot;, &quot;&quot;)
+        .replace(&quot;&lt;i&gt;&quot;, &quot;&quot;)
+        .replace(&quot;&lt;/i&gt;&quot;, &quot;&quot;)
+        .replace(&quot;&lt;sub&gt;&quot;, &quot;&quot;)
+        .replace(&quot;&lt;/sub&gt;&quot;, &quot;&quot;)
+        .replace(&quot;&lt;/sup&gt;&quot;, &quot;&quot;)
+        .replace(&quot;&lt;sup&gt;&quot;, &quot;^&quot;)
+        .replace(&quot;&amp;nbsp;&quot;, &quot; &quot;)
+        .replace(&quot;&amp;gt;&quot;, &quot;&gt;&quot;)
+        .replace(&quot;&amp;lt;&quot;, &quot;&lt;&quot;)
+        .replace(&quot;&amp;quot;&quot;, &quot;\&quot;&quot;)
+        .replace(&quot;&amp;minus;&quot;, &quot;-&quot;)
+        .replace(&quot;&amp;#39;&quot;, &quot;'&quot;)
+        .replace(&quot;\n\n&quot;, &quot;\n&quot;)
+        .replace(&quot;\n&quot;, &quot;\n * &quot;)
+}
+</code></pre>
+
+<h3 id="select-return">Select Return;</h3>
+
+<pre><code>    let squares: Vec&lt;_&gt; = (1..50)
+        .filter_map(|x| if x % 3 == 0 { Some(x * x) } else { None })
+        .collect();
+</code></pre>
+
+<h3 id="generic-function-rs">// generic-function.rs</h3>
+
+<pre><code class="language-rust">fn select_first&lt;T&gt;(p1: T, _: T) -&gt; T {
+    p1
+}
+
+fn main() {
+    let x = 1;
+    let y = 2;
+
+    let a = &quot;meep&quot;;
+    let b = &quot;moop&quot;;
+
+    println!(&quot;Selected first: {}&quot;, select_first(x, y));
+    println!(&quot;Selected frist: {}&quot;, select_first(a, b));
+}
+</code></pre>
+
+<h3 id="bytesplit">bytesplit</h3>
+
+<pre><code class="language-rust">
+fn main() {
+    let byte: u8 = 0b1001_0110;
+    
+    let mut high: u8 = 0b0000_0000;
+    let mut low: u8 = 0b0000_0000;
+    
+      /*
+      (1 &lt;&lt; 0) -&gt; 0000 0001
+      (1 &lt;&lt; 1) -&gt; 0000 0010
+      (1 &lt;&lt; 2) -&gt; 0000 0100
+      (1 &lt;&lt; 3) -&gt; 0000 1000
+      (1 &lt;&lt; 4) -&gt; 0001 0000
+      (1 &lt;&lt; 5) -&gt; 0010 0000
+      (1 &lt;&lt; 6) -&gt; 0100 0000
+      (1 &lt;&lt; 7) -&gt; 1000 0000
+      */
+    
+    //high
+    if byte &amp; (1 &lt;&lt; 4) == 0b0001_0000 { high = high | 1 &lt;&lt; 0; }
+    if byte &amp; (1 &lt;&lt; 5) == 0b0010_0000 { high = high | 1 &lt;&lt; 1; }
+    if byte &amp; (1 &lt;&lt; 6) == 0b0100_0000 { high = high | 1 &lt;&lt; 2; }
+    if byte &amp; (1 &lt;&lt; 7) == 0b1000_0000 { high = high | 1 &lt;&lt; 3; }
+    
+    //low
+    if byte &amp; (1 &lt;&lt; 0) == 0b0000_0001 { low = low | 1 &lt;&lt; 0; }
+    if byte &amp; (1 &lt;&lt; 1) == 0b0000_0010 { low = low | 1 &lt;&lt; 1; }
+    if byte &amp; (1 &lt;&lt; 2) == 0b0000_0100 { low = low | 1 &lt;&lt; 2; }
+    if byte &amp; (1 &lt;&lt; 3) == 0b0000_1000 { low = low | 1 &lt;&lt; 3; }
+    
+    println!(&quot;byte: {:08b}\nupper: {:04b}\nlower: {:04b}&quot;, byte, high, low);
+}
+</code></pre>
+
+<h3 id="super">super</h3>
+
+<p>使用以 super 开头的路径从父目录开始调用函数</p>
+
+<h3 id="pointer">pointer</h3>
+
+<p>Box<T>，用于在堆上分配值
+Rc<T>，一个引用计数类型，其数据可以有多个所有者
+Ref<T> 和 RefMut<T>，通过 RefCell<T> 访问，一个在运行时而不是在编译时执行借用规则的类型。</p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

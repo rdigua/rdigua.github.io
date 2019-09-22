@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="trait">trait</h1>
+
+<h2 id="toc_1">-</h2>
+
+<ol>
+<li><pre><code class="language-rust">/* It prints:
+100.00000000000003 3.1622776601683795*/
+fn main() {
+fn quartic_root(x: f64) -&gt; f64 { x.sqrt().sqrt() }
+let qr = quartic_root(100f64);
+print!(&quot;{} {}&quot;, qr * qr * qr * qr, qr);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+3.1622776601683795 3.1622777*/
+fn main() {
+fn quartic_root_f64(x: f64) -&gt; f64 { x.sqrt().sqrt() }
+fn quartic_root_f32(x: f32) -&gt; f32 { x.sqrt().sqrt() }
+print!(&quot;{} {}&quot;,
+    quartic_root_f64(100f64),
+    quartic_root_f32(100f32));
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">// ILLEGAL
+fn main() {
+fn quartic_root&lt;Number&gt;(x: Number) -&gt; Number {
+    x.sqrt().sqrt()
+}
+print!(&quot;{} {}&quot;,
+    quartic_root(100f64),
+    quartic_root(100f32));
+}
+</code></pre></li>
+</ol>
+
+<h2 id="cpp">cpp</h2>
+
+<ol>
+<li><pre><code class="language-cpp">/* It prints:
+3.16228 3.16228*/
+#include &lt;iostream&gt;
+#include &lt;cmath&gt;
+
+template &lt;typename Number&gt;
+Number quartic_root(Number x) {
+return sqrt(sqrt(x));
+}
+
+int main() {
+std::cout &lt;&lt; quartic_root((float)100)
+    &lt;&lt; &quot; &quot; &lt;&lt; quartic_root((double)100);
+}
+</code></pre></li>
+
+<li><pre><code class="language-cpp">// ILLEGAL
+#include &lt;iostream&gt;
+#include &lt;cmath&gt;
+
+template &lt;typename Number&gt;
+Number quartic_root(Number x) {
+return sqrt(sqrt(x));
+}
+
+int main() {
+std::cout &lt;&lt; quartic_root(&quot;Hello&quot;);
+}
+</code></pre></li>
+</ol>
+
+<h2 id="trait-1">trait</h2>
+
+<ol>
+<li><pre><code class="language-rust">/* It prints:
+3.1622776601683795 3.1622777*/
+fn main() {
+trait HasSquareRoot {
+    fn sq_root(self) -&gt; Self;
+}
+impl HasSquareRoot for f32 {
+    fn sq_root(self) -&gt; Self { f32::sqrt(self) }
+}
+impl HasSquareRoot for f64 {
+    fn sq_root(self) -&gt; Self { f64::sqrt(self) }
+}
+fn quartic_root&lt;Number&gt;(x: Number) -&gt; Number
+where Number: HasSquareRoot {
+    x.sq_root().sq_root()
+}
+print!(&quot;{} {}&quot;,
+    quartic_root(100f64),
+    quartic_root(100f32));
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">// It does nothing.
+fn main() {
+fn _f1&lt;T&gt;(a: T) -&gt; T { a }
+fn _f2&lt;T&gt;(a: T) -&gt; T {
+    let b: T = a;
+    let mut c = b;
+    c = _f1(c);
+    c
+}
+fn _f3&lt;T&gt;(a: &amp;T) -&gt; &amp;T { a }
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">// ILLEGAL
+fn main() {
+fn g(a: i32) { }
+fn f&lt;T&gt;(a: T) -&gt; bool {
+    g(a);
+    a == a
+}
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+A, B; B, A*/
+fn main() {
+let mut a = 'A';
+let mut b = 'B';
+print!(&quot;{}, {}; &quot;, a, b);
+std::mem::swap(&amp;mut a, &amp;mut b);
+print!(&quot;{}, {}&quot;, a, b);
+}
+</code></pre></li>
+</ol>
+
+<h2 id="sqrt">sqrt</h2>
+
+<ol>
+<li><pre><code class="language-rust">/* It prints:
+3.1622776601683795 3.1622777*/
+fn main() {
+fn sqrt() {}
+trait HasSquareRoot {
+    fn sqrt(self) -&gt; Self;
+}
+impl HasSquareRoot for f32 {
+    fn sqrt(self) -&gt; Self { f32::sqrt(self) }
+}
+impl HasSquareRoot for f64 {
+    fn sqrt(self) -&gt; Self { f64::sqrt(self) }
+}
+fn quartic_root&lt;Number&gt;(x: Number) -&gt; Number
+where Number: HasSquareRoot {
+    x.sqrt().sqrt()
+}
+sqrt();
+print!(&quot;{} {}&quot;,
+    quartic_root(100f64),
+    quartic_root(100f32));
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+NaN NaN*/
+fn main() {
+fn sqrt() {}
+trait HasSquareRoot {
+    fn sqrt(self) -&gt; Self;
+}
+impl HasSquareRoot for f32 {
+    fn sqrt(self) -&gt; Self { f32::sqrt(self) }
+}
+impl HasSquareRoot for f64 {
+    fn sqrt(self) -&gt; Self { f64::sqrt(self) }
+}
+fn quartic_root&lt;Number&gt;(x: Number) -&gt; Number
+where Number: HasSquareRoot {
+    x.sqrt().sqrt()
+}
+sqrt();
+print!(&quot;{} {}&quot;,
+    quartic_root(-100f64),
+    quartic_root(-100f32));
+}
+</code></pre></li>
+</ol>
+
+<p>##
+ 12.</p>
+
+<pre><code class="language-rust">/* It prints:
+3.1622776601683795 3.1622777*/
+fn main() {
+    trait HasSquareRoot {
+        fn sqrt(self) -&gt; Self;
+    }
+    impl HasSquareRoot for f32 {
+        fn sqrt(self) -&gt; Self { f32::sqrt(self) }
+    }
+    impl HasSquareRoot for f64 {
+        fn sqrt(self) -&gt; Self { f64::sqrt(self) }
+    }
+    trait HasAbsoluteValue {
+        fn abs(self) -&gt; Self;
+    }
+    impl HasAbsoluteValue for f32 {
+        fn abs(self) -&gt; Self { f32::abs(self) }
+    }
+    impl HasAbsoluteValue for f64 {
+        fn abs(self) -&gt; Self { f64::abs(self) }
+    }
+    fn abs_quartic_root&lt;Number&gt;(x: Number) -&gt; Number
+    where Number: HasSquareRoot + HasAbsoluteValue {
+        x.abs().sqrt().sqrt()
+    }
+    print!(&quot;{} {}&quot;,
+        abs_quartic_root(-100f64),
+        abs_quartic_root(-100f32));
+}
+</code></pre>
+
+<ol>
+<li><pre><code class="language-rust">/* It prints:
+3.1622776601683795 3.1622777*/
+fn main() {
+trait HasSquareRoot {
+    fn sqrt(self) -&gt; Self;
+}
+impl HasSquareRoot for f32 {
+    fn sqrt(self) -&gt; Self { f32::sqrt(self) }
+}
+impl HasSquareRoot for f64 {
+    fn sqrt(self) -&gt; Self { f64::sqrt(self) }
+}
+trait HasAbsoluteValue {
+    fn abs(self) -&gt; Self;
+}
+impl HasAbsoluteValue for f32 {
+    fn abs(self) -&gt; Self { f32::abs(self) }
+}
+impl HasAbsoluteValue for f64 {
+    fn abs(self) -&gt; Self { f64::abs(self) }
+}
+fn abs_quartic_root&lt;Number&gt;(x: Number) -&gt; Number
+where Number: HasSquareRoot + HasAbsoluteValue {
+    x.abs().sqrt().sqrt()
+}
+print!(&quot;{} {}&quot;,
+    abs_quartic_root(-100f64),
+    abs_quartic_root(-100f32));
+}
+</code></pre></li>
+</ol>
+
+<hr />
+
+<ol>
+<li><pre><code class="language-rust">/* It prints:
+abcd,3,[7]; abcd,3,[7]*/
+fn main() {
+print!(&quot;{},&quot;, &quot;abcd&quot;.to_string());
+print!(&quot;{},&quot;, [1, 2, 3].len());
+let mut v1 = vec![0u8; 0];
+v1.push(7u8);
+print!(&quot;{:?}; &quot;, v1);
+
+print!(&quot;{},&quot;, std::string::ToString::to_string(&quot;abcd&quot;));
+print!(&quot;{:?},&quot;, &lt;[i32]&gt;::len(&amp;[1, 2, 3]));
+let mut v2 = vec![0u8; 0];
+Vec::push(&amp;mut v2, 7u8);
+print!(&quot;{:?}&quot;, v2);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+14*/
+fn main() {
+fn double(x: i32) -&gt; i32 {
+    x * 2
+}
+print!(&quot;{}&quot;, double(7i32));
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">// ILLEGAL
+fn main() {
+fn double(x: i32) -&gt; i32 {
+    x * 2
+}
+print!(&quot;{}&quot;, 7i32.double());
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+14*/
+fn main() {
+trait CanBeDoubled {
+    fn double(self) -&gt; Self;
+}
+impl CanBeDoubled for i32 {
+    fn double(self) -&gt; Self {
+        self * 2
+    }
+}
+print!(&quot;{}&quot;, 7i32.double());
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">// ILLEGAL
+fn double(self) -&gt; Self {
+fn double(self: Self) -&gt; Self {
+fn double(self: i32) -&gt; Self {
+fn double(self) -&gt; i32 {
+fn double(self: Self) -&gt; i32 {
+fn double(self: i32) -&gt; i32 {
+</code></pre></li>
+</ol>
+
+<h2 id="letterscount">LettersCount</h2>
+
+<ol>
+<li><pre><code class="language-rust">/* It prints:
+0 0 3 2 */
+fn main() {
+trait LettersCount {
+    fn letters_count(&amp;self, ch: char) -&gt; usize;
+}
+impl LettersCount for str {
+    fn letters_count(&amp;self, ch: char) -&gt; usize {
+        let mut count = 0;
+        for c in self.chars() {
+            if c == ch {
+                count += 1;
+            }
+        }
+        count
+    }
+}
+print!(&quot;{} &quot;, &quot;&quot;.letters_count('a'));
+print!(&quot;{} &quot;, &quot;ddd&quot;.letters_count('a'));
+print!(&quot;{} &quot;, &quot;ddd&quot;.letters_count('d'));
+print!(&quot;{} &quot;, &quot;foobarbaz&quot;.letters_count('a'));
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+0 0 3 2 */
+fn main() {
+trait LettersCount {
+    fn letters_count(&amp;self, ch: char) -&gt; usize;
+}
+impl LettersCount for str {
+    fn letters_count(&amp;self, ch: char) -&gt; usize {
+        self.chars().filter(|c| *c == ch).count()
+    }
+}
+print!(&quot;{} &quot;, &quot;&quot;.letters_count('a'));
+print!(&quot;{} &quot;, &quot;ddd&quot;.letters_count('a'));
+print!(&quot;{} &quot;, &quot;ddd&quot;.letters_count('d'));
+print!(&quot;{} &quot;, &quot;foobarbaz&quot;.letters_count('a'));
+}
+</code></pre></li>
+</ol>
+
+<h2 id="struct">struct</h2>
+
+<ol>
+<li><pre><code class="language-rust">/* It prints:
+-2.3 + 0i, -2.1 - 5.2i, -2.2 + 5.2i*/
+fn main() {
+struct Complex {
+    re: f64,
+    im: f64,
+}
+impl std::fmt::Display for Complex {
+    fn fmt(&amp;self, f: &amp;mut std::fmt::Formatter) -&gt; std::fmt::Result {
+        write!(
+            f,
+            &quot;{} {} {}i&quot;,
+            self.re,
+            if self.im &gt;= 0. { '+' } else { '-' },
+            self.im.abs()
+        )
+    }
+}
+let c1 = Complex { re: -2.3, im: 0. };
+let c2 = Complex { re: -2.1, im: -5.2 };
+let c3 = Complex { re: -2.2, im: 5.2 };
+print!(&quot;{}, {}, {}&quot;, c1, c2, c3);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+None Some(22)*/
+fn main() {
+fn get_third(r: std::ops::Range&lt;u32&gt;) -&gt; Option&lt;u32&gt; {
+    if r.len() &gt;= 3 {
+        Some(r.start + 2)
+    } else {
+        None
+    }
+}
+print!(&quot;{:?} {:?}&quot;, get_third(10..12), get_third(20..23));
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+None Some(3.1)*/
+fn main() {
+fn get_third(s: &amp;[f64]) -&gt; Option&lt;f64&gt; {
+    if s.len() &gt;= 3 {
+        Some(s[2])
+    } else {
+        None
+    }
+}
+print!(&quot;{:?} {:?}&quot;,
+    get_third(&amp;[1.0, 2.0]),
+    get_third(&amp;[1.1, 2.1, 3.1]));
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">// ILLEGAL
+fn main() {
+fn get_third&lt;Iter, Item&gt;(mut iterator: Iter) -&gt; Option&lt;Item&gt; {
+    iterator.next();
+    iterator.next();
+    iterator.next()
+}
+print!(&quot;{:?} {:?}&quot;,
+    get_third(0..9),
+    get_third([11, 22, 33, 44].iter()));
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">// ILLEGAL
+fn main() {
+fn get_third&lt;Iter, Item&gt;(mut iterator: Iter) -&gt; Option&lt;Item&gt;
+where Iter: std::iter::Iterator {
+    iterator.next();
+    iterator.next();
+    iterator.next()
+}
+print!(&quot;{:?} {:?}&quot;,
+    get_third(0..9),
+    get_third([11, 22, 33, 44].iter()));
+}
+
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+2.3 3.4*/
+fn main() {
+fn f1(x: f32) -&gt; f32 { x }
+fn f2(x: f32) -&gt; f32 { x }
+let a: f32 = 2.3;
+let b: f32 = 3.4;
+print!(&quot;{} {}&quot;, f1(a), f2(b));
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+2.3 3.4*/
+fn main() {
+type Number = f32;
+fn f1(x: Number) -&gt; Number { x }
+fn f2(x: Number) -&gt; Number { x }
+let a: Number = 2.3;
+let b: Number = 3.4;
+print!(&quot;{} {}&quot;, f1(a), f2(b));
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">// It does nothing.
+fn main() {
+type Number = f32;
+let a: Number = 2.3;
+let _b: f32 = a;
+}
+
+</code></pre></li>
+
+<li><pre><code class="language-rust">// It does nothing.
+fn main() {
+trait Searchable&lt;Key&gt; {
+    fn contains(&amp;self, key: Key) -&gt; bool;
+}
+fn is_present&lt;Collection&gt;(coll: &amp;Collection, id: u32) -&gt; bool
+where Collection: Searchable&lt;u32&gt;
+{
+    coll.contains(id)
+}
+}
+</code></pre></li>
+</ol>
+
+<h2 id="where">where</h2>
+
+<ol>
+<li><pre><code class="language-rust">/* It prints:
+false true*/
+fn main() {
+trait Searchable&lt;Key&gt; {
+    fn contains(&amp;self, key: Key) -&gt; bool;
+}
+struct RecordWithId {
+    id: u32,
+    _descr: String,
+}
+struct NameSetWithId {
+    data: Vec&lt;RecordWithId&gt;,
+}
+impl Searchable&lt;u32&gt; for NameSetWithId {
+    fn contains(&amp;self, key: u32) -&gt; bool {
+        for record in self.data.iter() {
+            if record.id == key {
+                return true;
+            }
+        }
+        false
+    }
+}
+fn is_present&lt;Collection&gt;(coll: &amp;Collection, id: u32) -&gt; bool
+where
+    Collection: Searchable&lt;u32&gt;,
+{
+    coll.contains(id)
+}
+let names = NameSetWithId {
+    data: vec![
+        RecordWithId {
+            id: 34,
+            _descr: &quot;John&quot;.to_string(),
+        },
+        RecordWithId {
+            id: 49,
+            _descr: &quot;Jane&quot;.to_string(),
+        },
+    ],
+};
+print!(&quot;{} {}&quot;, is_present(&amp;names, 48), is_present(&amp;names, 49));
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+0, 1; false true*/
+fn main() {
+trait Searchable&lt;Key, Count&gt; {
+    fn contains(&amp;self, key: Key) -&gt; bool;
+    fn count(&amp;self, key: Key) -&gt; Count;
+}
+struct RecordWithId {
+    id: u32,
+    _descr: String,
+}
+struct NameSetWithId {
+    data: Vec&lt;RecordWithId&gt;,
+}
+impl Searchable&lt;u32, usize&gt; for NameSetWithId {
+    fn contains(&amp;self, key: u32) -&gt; bool {
+        for record in self.data.iter() {
+            if record.id == key {
+                return true;
+            }
+        }
+        false
+    }
+    fn count(&amp;self, key: u32) -&gt; usize {
+        let mut c = 0;
+        for record in self.data.iter() {
+            if record.id == key {
+                c += 1;
+            }
+        }
+        c
+    }
+}
+fn is_present&lt;Collection&gt;(coll: &amp;Collection, id: u32) -&gt; bool
+where
+    Collection: Searchable&lt;u32, usize&gt;,
+{
+    coll.contains(id)
+}
+let names = NameSetWithId {
+    data: vec![
+        RecordWithId {
+            id: 34,
+            _descr: &quot;John&quot;.to_string(),
+        },
+        RecordWithId {
+            id: 49,
+            _descr: &quot;Jane&quot;.to_string(),
+        },
+    ],
+};
+print!(
+    &quot;{}, {}; {} {}&quot;,
+    names.count(48),
+    names.count(49),
+    is_present(&amp;names, 48),
+    is_present(&amp;names, 49)
+);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+0, 1; false true*/
+fn main() {
+trait Searchable { //1
+    type Key; //2
+    type Count; //3
+    fn contains(&amp;self, key: Self::Key) -&gt; bool; //4
+    fn count(&amp;self, key: Self::Key) -&gt; Self::Count; //5
+}
+struct RecordWithId {
+    id: u32,
+    _descr: String,
+}
+struct NameSetWithId {
+    data: Vec&lt;RecordWithId&gt;,
+}
+impl Searchable for NameSetWithId { //6
+    type Key = u32; //7
+    type Count = usize; //8
+    fn contains(&amp;self, key: Self::Key) -&gt; bool { //9
+        for record in self.data.iter() {
+            if record.id == key {
+                return true;
+            }
+        }
+        false
+    }
+    fn count(&amp;self, key: Self::Key) -&gt; usize { //10
+        let mut c = 0;
+        for record in self.data.iter() {
+            if record.id == key {
+                c += 1;
+            }
+        }
+        c
+    }
+}
+fn is_present&lt;Collection&gt;(
+    coll: &amp;Collection,
+    id: &lt;Collection as Searchable&gt;::Key,//11
+) -&gt; bool
+where
+    Collection: Searchable, //12
+{
+    coll.contains(id)
+}
+let names = NameSetWithId {
+    data: vec![
+        RecordWithId {
+            id: 34,
+            _descr: &quot;John&quot;.to_string(),
+        },
+        RecordWithId {
+            id: 49,
+            _descr: &quot;Jane&quot;.to_string(),
+        },
+    ],
+};
+print!(
+    &quot;{}, {}; {} {}&quot;,
+    names.count(48),
+    names.count(49),
+    is_present(&amp;names, 48),
+    is_present(&amp;names, 49)
+);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">// It does nothing.
+fn main() {
+trait Iterator {
+    type Item;
+    fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt;;
+}
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+Some(10), Some(11), Some(12), None, None, */
+fn main() {
+trait MyIterator {
+    type Item;
+    fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt;;
+}
+struct MyRangeIterator&lt;T&gt; {
+    current: T,
+    limit: T,
+}
+impl MyIterator for MyRangeIterator&lt;u32&gt; {
+    type Item = u32;
+    fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt; {
+        if self.current == self.limit {
+            None
+        } else {
+            self.current += 1;
+            Some(self.current - 1)
+        }
+    }
+}
+let mut range_it = MyRangeIterator {
+    current: 10,
+    limit: 13,
+};
+print!(&quot;{:?}, &quot;, range_it.next());
+print!(&quot;{:?}, &quot;, range_it.next());
+print!(&quot;{:?}, &quot;, range_it.next());
+print!(&quot;{:?}, &quot;, range_it.next());
+print!(&quot;{:?}, &quot;, range_it.next());
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+[10, 11, 12]; 20 21 22 23 */
+fn main() {
+struct MyRangeIterator&lt;T&gt; {
+    current: T,
+    limit: T,
+}
+impl Iterator for MyRangeIterator&lt;u32&gt; {
+    type Item = u32;
+    fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt; {
+        if self.current == self.limit {
+            None
+        } else {
+            self.current += 1;
+            Some(self.current - 1)
+        }
+    }
+}
+print!(
+    &quot;{:?}; &quot;,
+    MyRangeIterator {
+        current: 10,
+        limit: 13,
+    }.collect::&lt;Vec&lt;_&gt;&gt;()
+);
+for i in (MyRangeIterator {
+    current: 20,
+    limit: 24,
+}) {
+    print!(&quot;{} &quot;, i);
+}
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+None Some(22) None Some(43)*/
+fn main() {
+fn get_third&lt;Iter&gt;(mut iterator: Iter) -&gt; Option&lt;Iter::Item&gt;
+where
+    Iter: std::iter::Iterator,
+{
+    iterator.next();
+    iterator.next();
+    iterator.next()
+}
+print!(
+    &quot;{:?} {:?} {:?} {:?}&quot;,
+    get_third(10..12),
+    get_third(20..29),
+    get_third([31, 32].iter()),
+    get_third([41, 42, 43, 44].iter())
+);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+None Some(23) None Some(44)*/
+fn main() {
+print!(
+    &quot;{:?} {:?} {:?} {:?}&quot;,
+    (10..12).nth(2),
+    (20..29).nth(2),
+    ([31, 32].iter()).nth(2),
+    ([41, 42, 43, 44].iter()).nth(2)
+);
+}
+</code></pre></li>
+</ol>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

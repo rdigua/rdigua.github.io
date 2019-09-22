@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="挖掘-rust-文件读写">挖掘 Rust &ndash; 文件读写</h1>
+
+<p><a href="https://www.jianshu.com/u/e3a7dbb96834"><img src="https://upload.jianshu.io/users/upload_avatars/2582140/6119e317-ed62-4b4b-b608-985e53921fe1.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/96/h/96" alt="96" /></a></p>
+
+<p><a href="https://www.jianshu.com/u/e3a7dbb96834">蔡洪宇</a>  关注</p>
+
+<p>2018.06.17 09:49*  字数 832  阅读 824评论 0喜欢 0</p>
+
+<p>注：因为 Rust 有些结构重名，读起来不容易理解，本文解释部分不会省略任何一个 std 命名空间</p>
+
+<h1 id="示例">示例</h1>
+
+<h2 id="用途">用途</h2>
+
+<p>以行为单位读写文件</p>
+
+<h2 id="代码及输出">代码及输出</h2>
+
+<pre><code>use std::fs::File;
+use std::io;
+use std::io::prelude::*;
+use std::io::BufReader;
+
+fn main() -&gt; io::Result&lt;()&gt; {
+    let path: &amp;str = &quot;lines.txt&quot;;
+
+    let mut output: File = File::create(path)?;
+    write!(output, &quot;Rust\n:)\nFun&quot;);
+
+    let input: File = File::open(path)?;
+    let buffered: BufReader&lt;File&gt; = BufReader::new(input);
+
+    for line in buffered.lines().map(|x| x.unwrap()) {
+        // line: String     x:Result&lt;String, Error&gt;
+        println!(&quot;{}&quot;, line);
+    }
+
+    Ok(())
+}
+
+</code></pre>
+
+<p>输出</p>
+
+<pre><code>Rust
+:)
+Fun
+
+</code></pre>
+
+<h2 id="本段代码中可能存在的疑问有">本段代码中可能存在的疑问有</h2>
+
+<ul>
+<li>什么是
+
+<ul>
+<li><code>std::io::prelude</code></li>
+<li><code>std::io::Result</code></li>
+<li><code>std::io::BufReader</code></li>
+<li><code>write!</code></li>
+</ul></li>
+<li>为什么
+
+<ul>
+<li>File  <code>output</code>  需要  <code>mut</code>  关键字，而  <code>input</code>  不需要？(此处存在争议，后续补充)</li>
+<li>没有手动关闭文件，不会发生资源泄漏吗？</li>
+</ul></li>
+</ul>
+
+<h1 id="解释">解释</h1>
+
+<h2 id="std-io-prelude-https-doc-rust-lang-org-std-io-prelude-index-html"><a href="https://doc.rust-lang.org/std/io/prelude/index.html">std::io::prelude</a></h2>
+
+<p><code>std::io::prelude</code>  是一个模块，包含了许多对 I/O 有用的 trait。不同于  <code>std::prelude</code>，<code>std::io::prelude</code>  需要被显示 use。<br />
+<code>std::io::prelude</code>  会导出如下 trait</p>
+
+<pre><code>pub use std::io::Read;
+pub use std::io::Write;
+pub use std::io::BufRead;
+pub use std::io::Seek;
+
+</code></pre>
+
+<p><strong>补充，和本段无关</strong><br />
+<code>std::prelude</code>  会导出如下内容</p>
+
+<pre><code>pub use marker::{Copy, Send, Sized, Sync};
+pub use ops::{Drop, Fn, FnMut, FnOnce};
+pub use mem::drop;
+pub use boxed::Box;
+pub use borrow::ToOwned;
+pub use clone::Clone;
+pub use cmp::{PartialEq, PartialOrd, Eq, Ord};
+pub use convert::{AsRef, AsMut, Into, From};
+pub use default::Default;
+pub use iter::{Iterator, Extend, IntoIterator};
+pub use iter::{DoubleEndedIterator, ExactSizeIterator};
+pub use option::Option::{self, Some, None};
+pub use result::Result::{self, Ok, Err};
+pub use slice::SliceConcatExt;
+pub use string::{String, ToString};
+pub use vec::Vec;
+
+</code></pre>
+
+<h2 id="std-io-result-https-doc-rust-lang-org-std-io-type-result-html"><a href="https://doc.rust-lang.org/std/io/type.Result.html">std::io::Result</a></h2>
+
+<p><code>std::io::Result</code>  是一个类型别名，<code>std::io::Result</code>  是一个类型别名，是一种专为 I/O 设计的  <a href="https://doc.rust-lang.org/std/result/enum.Result.html"><code>std::result::Result</code></a>。,<code>std::io</code>  中所有可能出错的函数都会用该类型返回结果。<br />
+<code>type Result&lt;T&gt; = Result&lt;T, Error&gt;</code></p>
+
+<h3 id="为什么用它而不用-std-result-result">为什么用它而不用  <code>std::result::Result</code></h3>
+
+<p>因为  <code>std::io</code>  中的函数返回的错误类型总在  <a href="https://doc.rust-lang.org/std/io/struct.Error.html"><code>std::io::Error</code></a>  这个枚举中，总是要写出  <code>std::result::Result</code>  显得繁琐。</p>
+
+<h3 id="命名空间习惯">命名空间习惯</h3>
+
+<p><code>std::result::Result</code>  是会被  <code>std::prelude</code>  默认导出的（见上节），为了避免混淆，通常会  <code>use std::io</code>  然后用  <code>io::Result</code>  来指代  <code>std::io::Result</code>。通过这种方式把它和  <code>std::result::Result</code>  区分开。</p>
+
+<h3 id="i-o-都会出现什么错误呢">I/O 都会出现什么错误呢?</h3>
+
+<p>详见  <a href="https://doc.rust-lang.org/std/io/enum.ErrorKind.html">std::io::ErrorKind</a></p>
+
+<h3 id="还有其他的这种-result-类型别名吗">还有其他的这种 Result 类型别名吗?</h3>
+
+<p>另一种常用的 Result 类型别名是  <code>std::fmt::Result</code></p>
+
+<h2 id="std-io-bufreader-https-doc-rust-lang-org-std-io-struct-bufreader-html"><a href="https://doc.rust-lang.org/std/io/struct.BufReader.html">std::io::BufReader</a></h2>
+
+<p>直接调用 Read 实例上的读取函数效率比较低（比如，每次在 TcpStream 上的读取都会发起一个系统调用）。如果你想在内存中创建一个缓存区来加快读取效率的话，只需要用  <code>BufReader::new</code>  就能将一个实现了  <code>Read</code>  的实例转化为带有缓冲区的  <code>BufReader</code>。<br />
+<code>BufReader</code>  是实现了  <code>BufRead</code>  这个 trait 的结构，<code>BufRead</code>  实现了一个  <code>read_lines</code>  方法。<br />
+与之对比的是，<code>std::io::Read</code>  中仅有  <code>bytes</code>  和  <code>chars</code>，因而不能直接被用来以行为单位读取文件。</p>
+
+<h2 id="write-https-doc-rust-lang-org-std-macro-write-html"><a href="https://doc.rust-lang.org/std/macro.write.html">write!</a></h2>
+
+<p><code>write!</code>  宏用来向实现了  <code>Write</code>  这个 trait 的实体中写入格式化数据。<br />
+因为  <code>impl Write for Vec&lt;u8&gt;</code>  存在于  <code>std::vec::Vec</code>  中，我们也可以利用这个宏向其中写入数据。<br />
+<strong>注意  <code>u8</code></strong></p>
+
+<pre><code>use std::io::Write;
+
+fn main() {
+  let mut w = Vec::new();
+  write!(&amp;mut w, &quot;test&quot;).unwrap();
+  write!(&amp;mut w, &quot;formatted {}&quot;, &quot;arguments&quot;).unwrap();
+
+  assert_eq!(w, b&quot;testformatted arguments&quot;);
+}
+
+</code></pre>
+
+<h2 id="为什么-file-output-需要-mut-关键字-而-input-不需要">为什么 File  <code>output</code>  需要  <code>mut</code>  关键字，而  <code>input</code>  不需要？</h2>
+
+<p>存疑，我会在稍后确定答案后加在这里。</p>
+
+<h2 id="为什么不需要手动关闭文件">为什么不需要手动关闭文件？</h2>
+
+<p><code>File</code>  类型具有文件资源的所有权，当它离开作用域时，文件将被自动关闭。</p>
+
+<p><a href="https://www.jianshu.com/p/7e2ed75ed179">From</a></p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

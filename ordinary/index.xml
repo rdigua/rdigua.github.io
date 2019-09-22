@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ordinaries on Jay Blog</title>
+    <link>http://blog.jaytogo.com/ordinary/</link>
+    <description>Recent content in Ordinaries on Jay Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    
+	<atom:link href="http://blog.jaytogo.com/ordinary/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/ordinary/1968/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/ordinary/1968/</guid>
+      <description>1968 1968 was a leap year starting on Monday of the Gregorian calendar, the 1968th year of the Common Era and Anno Domini designations, the 968th year of the 2nd millennium, the 68th year of the 20th century, and the 9th year of the 1960s decade. This was the year of the Protests of 1968.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/ordinary/20190813/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/ordinary/20190813/</guid>
+      <description>52 19680813-20190813</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/ordinary/20190814/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/ordinary/20190814/</guid>
+      <description>&amp;hellip; mind-list-do:100-10-1</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/ordinary/20190815/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/ordinary/20190815/</guid>
+      <description>&amp;hellip; mind-list-do:100-10-1
+20190815
+days 10465 numbers 7006 start
+It&amp;rsquo;s not you, it&amp;rsquo;s us Bing isn&amp;rsquo;t available right now, but everything should be back to normal very soon.
+Ref A: EA8EF21A257240AF88C6C33F704006A9 Ref B: BJ1EDGE0118 Ref C: 2019-08-13T15:33:03Z</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/ordinary/at-time/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/ordinary/at-time/</guid>
+      <description>at time Linux中计划任务、周期性任务设置 计划任务：指在未来的特定时间里，执行一次某一特定任务。当然，如果同一任务需要在不同时间点执行执行两次、三次或多次，可以视为多个一次看待。
+周期性任务：指某一任务需要周期性的执行。周期性可以是以分、时、天等为单位，但又不限于这些单位。
+常用于执行计划任务的命令——at, batch, 与周期性任务相关的的命令crontabs。
+1.at命令和batch命令的区别。
+　at命令旨在特定的之间执行任务；batch命令设置的任务由系统选择空闲时间去执行，空闲时间默认为cpu利用率小于0.8的时候
+2.at命令　复制代码 格式　at [option] TIME
+选项
+-l atq命令的别名，显示用户的计划任务　-d atrm命令的别名，清空计划任务 -c 查看特定的计划任务 -f FILE 从文件中读取计划任务命令　TIME，有如下几种格式 HH:MM [YYYY-mm-dd] noon, midnight, teatime tomorrow now+#{minutes,hours,days, weeks}
+注：batch命令使用方法和at类似，这里不再赘述 复制代码 3. crontabs命令 a. 与cron服务相关的程序包有三个：
+　cronie:主程序包，提供crond守护进程及相关辅助工具
+　cronie-anacron：cronie的补充程序，用于监控cronie任务执行
+　crontabs： 包含CentOS提供系统维护任务
+b. 周期任务分类。根据用户级别，可分为系统周期任务和用户周期任务。
+c. 系统周期任务一般直接直接修改/etc/crontab文件，即可配置周期任务, 可查看该文件中的内容
+复制代码 [root@vathe-pc tmp]#cat /etc/crontab
+SHELL=/bin/bash PATH=/sbin:/bin:/usr/sbin:/usr/bin # 环境变量路径 MAILTO=root # 周期任务执行之后，邮件接受者 HOME=/
+For details see man 4 crontabs Example of job definition: # 计划任务书写格式 .</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/ordinary/c-examples/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/ordinary/c-examples/</guid>
+      <description>example the point  #include &amp;lt;stdio.h&amp;gt; void main() { int a, b; int *pointer_1, *pointer_2; a = 100; b = 10; pointer_1 = &amp;amp;a; pointer_2 = &amp;amp;b; printf(&amp;quot;%d,%d\n&amp;quot;, a, b); printf(&amp;quot;%d,%d\n&amp;quot;, *pointer_1, *pointer_2); }   42.
+#include &amp;lt;stdio.h&amp;gt; void main() { int *p1, *p2, *p, a, b; scanf(&amp;quot;%d %d&amp;quot;, &amp;amp;a, &amp;amp;b); p1 = &amp;amp;a; p2 = &amp;amp;b; if( a &amp;lt; b) { p = p1; p1 = p2; p2 = p; } //此后，p1指向b, p2指向a ^_^ printf(&amp;quot;a = %d, b = %d\n&amp;quot;, a, b); printf(&amp;quot;max = %d, min = %d\n&amp;quot;, *p1, *p2); }  #include &amp;lt;stdio.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/ordinary/cmd-o/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/ordinary/cmd-o/</guid>
+      <description>version:  lsb_release -a uname -a cat /proc/version  cls  clear Ctrl+L  system  sudo dmidecode -t system  sudo apt-get remove fcitx*
+uninstall 查看是否卸载：sudo dpkg &amp;ndash;get-selections | grep fcitx
+sudo apt-get autoremove 要移除的软件包名 sudo apt-get install 要安装的软件包名
+qemu jayhu@jayhu-Dell-System-Inspiron-N4120:/usr/share/doc/qemu$ pwd /usr/share/doc/qemu jayhu@jayhu-Dell-System-Inspiron-N4120:/usr/share/doc/qemu$ qemu
+Command &amp;lsquo;qemu&amp;rsquo; not found, did you mean:
+command &amp;lsquo;aqemu&amp;rsquo; from deb aqemu
+Try: sudo apt install  qemu-system-x86_64 qemu-x86_64  vistual:  file /bin/ls egrep -o &amp;lsquo;(vmx|svm)&amp;rsquo; /proc/cpuinfo</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/ordinary/linuxapi-c-rust/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/ordinary/linuxapi-c-rust/</guid>
+      <description>linux API函数大全 还没有认真研读过，今晚在其他博客上找了比较久，今晚时间也不多了，等有空再细看
+先复制先
+获取当前执行路径:getcwd
+ API之网络函数  WNetAddConnection 创建同一个网络资源的永久性连接 WNetAddConnection2 创建同一个网络资源的连接 WNetAddConnection3 创建同一个网络资源的连接 WNetCancelConnection 结束一个网络连接 WNetCancelConnection2 结束一个网络连接 WNetCloseEnum 结束一次枚举操作 WNetConnectionDialog 启动一个标准对话框，以便建立同网络资源的连接 WNetDisconnectDialog 启动一个标准对话框，以便断开同网络资源的连接 WNetEnumResource 枚举网络资源 WNetGetConnection 获取本地或已连接的一个资源的网络名称 WNetGetLastError 获取网络错误的扩展错误信息 WNetGetUniversalName 获取网络中一个文件的远程名称以及/或者UNC（统一命名规范）名称 WNetGetUser 获取一个网络资源用以连接的名字 WNetOpenEnum 启动对网络资源进行枚举的过程
+ API之消息函数  BroadcastSystemMessage 将一条系统消息广播给系统中所有的顶级窗口 GetMessagePos 取得消息队列中上一条消息处理完毕时的鼠标指针屏幕位置 GetMessageTime 取得消息队列中上一条消息处理完毕时的时间 PostMessage 将一条消息投递到指定窗口的消息队列 PostThreadMessage 将一条消息投递给应用程序 RegisterWindowMessage 获取分配给一个字串标识符的消息编号 ReplyMessage 答复一个消息 SendMessage 调用一个窗口的窗口函数，将一条消息发给那个窗口 SendMessageCallback 将一条消息发给窗口 SendMessageTimeout 向窗口发送一条消息 SendNotifyMessage 向窗口发送一条消息
+ API之文件处理函数  CloseHandle 关闭一个内核对象。其中包括文件、文件映射、进程、线程、安全和同步对象等 CompareFileTime 对比两个文件的时间 CopyFile 复制文件 CreateDirectory 创建一个新目录 CreateFile 打开和创建文件、管道、邮槽、通信服务、设备以及控制台 CreateFileMapping 创建一个新的文件映射对象 DeleteFile 删除指定文件 DeviceIoControl 对设备执行指定的操作 DosDateTimeToFileTime 将DOS日期和时间值转换成一个 win32 FILETIME 值 FileTimeToDosDateTime 将一个 win32 FILETIME 值转换成DOS日期和时间值 FileTimeToLocalFileTime 将一个FILETIME结构转换成本地时间 FileTimeToSystemTime 根据一个FILETIME结构的内容，装载一个SYSTEMTIME结构 FindClose 关闭由FindFirstFile函数创建的一个搜索句柄 FindFirstFile 根据文件名查找文件 FindNextFile 根据调用FindFirstFile函数时指定的一个文件名查找下一个文件 FlushFileBuffers 针对指定的文件句柄，刷新内部文件缓冲区 FlushViewOfFile 将写入文件映射缓冲区的所有数据都刷新到磁盘 GetBinaryType 判断文件是否可以执行 GetCompressedFileSize 判断一个压缩文件在磁盘上实际占据的字节数 GetCurrentDirectory 在一个缓冲区中装载当前目录 GetDiskFreeSpace 获取与一个磁盘的组织有关的信息，以及了解剩余空间的容量 GetDiskFreeSpaceEx 获取与一个磁盘的组织以及剩余空间容量有关的信息 GetDriveType 判断一个磁盘驱动器的类型 GetExpandedName 取得一个压缩文件的全名 GetFileAttributes 判断指定文件的属性 GetFileInformationByHandle 这个函数提供了获取文件信息的一种机制 GetFileSize 判断文件长度 GetFileTime 取得指定文件的时间信息 GetFileType 在给出文件句柄的前提下，判断文件类型 GetFileVersionInfo 从支持版本标记的一个模块里获取文件版本信息 GetFileVersionInfoSize 针对包含了版本资源的一个文件，判断容纳文件版本信息需要一个多大的缓冲区 GetFullPathName 获取指定文件的完整路径名 GetLogicalDrives 判断系统中存在哪些逻辑驱动器字母 GetLogicalDriveStrings 获取一个字串，其中包含了当前所有逻辑驱动器的根驱动器路径 GetOverlappedResult 判断一个重叠操作当前的状态 GetPrivateProfileInt 为初始化文件（.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/ordinary/linuxapi/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/ordinary/linuxapi/</guid>
+      <description>Linux API函数总结 （一）文件操作篇
+1、creat（建立文件）
+头文件
+1 #include 2 #include 3 #include
+定义函数
+1 int creat(const char * pathname, mode_tmode);
+函数说明
+参数pathname指向欲建立的文件路径字符串。creat()相当于使用下列的调用方式调用open()
+1 open(const char * pathname ,(O_CREAT|O_WRONLY|O_TRUNC));
+错误代码
+关于参数mode请参考open（）函数。
+返回值
+creat()会返回新的文件描述词，若有错误发生则会返回-1，并把错误代码设给errno。
+EEXIST 参数pathname所指的文件已存在。
+EACCESS 参数pathname 所指定的文件不符合所要求测试的权限
+EROFS 欲打开写入权限的文件存在于只读文件系统内
+EFAULT 参数pathname 指针超出可存取的内存空间
+EINVAL 参数mode 不正确。
+ENAMETOOLONG 参数pathname太长。
+ENOTDIR 参数pathname为一目录
+ENOMEM 核心内存不足
+ELOOP 参数pathname有过多符号连接问题。
+EMFILE 已达到进程可同时打开的文件数上限
+ENFILE 已达到系统可同时打开的文件数上限
+附加说明
+creat()无法建立特别的装置文件，如果需要请使用mknod()。
+2、open（打开文件）
+头文件
+1 #include 2 #include 3 #include
+定义函数
+1 int open( const char * pathname, int flags); 2 int open( const char * pathname,int flags, mode_t mode);</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/ordinary/now/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/ordinary/now/</guid>
+      <description>plan stock anlysic sh and sz  from txd to struct save show anlysic   await webassembly  ** save struct ** // txd data encode ** get files at directory ** // from walkdir and struct to files.
+account anlysic struct daystyle { _date u32, _open u32, _high u32, _low u32, _close u32, _amount u32, _vol u32, _reservation u32 }  rust  Getting 32 bytes to a struct.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/ordinary/old-story/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/ordinary/old-story/</guid>
+      <description>平静的风浪 作品名称：平静的风浪 首发站点： 起点中文网 书号：3790161804832204 作品类型：都市 - 都市生活 授权级别： 公众作品 编辑分组： 都市编辑组
+字数： 0
+收藏： 2
+作品状态：锁定/屏蔽 作品标签： 作品介绍： 不可言物不可言事 地瓜语录：过去的日子总是慢慢的沉寂下来，变成某种不知道的物件，突然的闪现在眼前，一个又一个的迷茫或者机会到来的时候，你是放弃错过了还是自以为把握住了呢。
+扉页寄语：
+写在开始并给自己加油 　第一有意识的把自己想的一点东西变成文字并且放在一个能让公众看见的地方。
+　第一次在起点（别的地方也无）开始写个自己的小说。
+　因为是刚开始肯定有非常多不令人令自己满意的地方，但是既然开始做一件事情了那么尽力争取做好。
+　日子还长，岁月也沉重，路过能停下来散散步，就是对自己最大的鼓励。
+　第一次不求完美但求对得起自己，加油。
+资料1 　206块骨头名称
+　头部29块：包括脑颅骨8块，面颅骨15块，听小骨6块
+　脑颅骨：成对的：顶骨，颞骨
+　不成对的：额骨，枕骨，蝶骨，筛骨
+　面颅骨：成对的：上颌骨，颧骨，鼻骨，泪骨，下鼻甲骨，腭骨
+　不成对的：犁骨，下颌骨，舌骨
+　听小骨：锤骨，砧骨，镫骨（左右耳内各1块）
+　躯干骨51块：包括脊柱骨26块，肋骨24块，胸骨1块
+　脊柱骨：颈椎7块，胸椎12块，腰椎5块，骶骨1块，尾骨1块
+　上肢骨*块：每侧：肩胛骨，锁骨，肱骨，尺骨，桡骨，各1块。腕骨8块，分别为手舟骨，月骨，三角骨，豌豆骨，大多角骨，小多角骨，头状骨，钩骨。掌骨5块，从外侧向内侧依次为第1到第5掌骨。指骨14块，其中拇指2块，余为3块，分别称近节指骨，中节指骨和远节指骨。
+　下肢骨62块：每侧：髋骨，股骨，髌骨，胫骨，腓骨各1块。跗骨7块，分别为距骨，跟骨，足舟骨，骰骨，内侧楔骨，中间楔骨，外侧楔骨。跖骨5块，由内侧向外侧依次为第1到第5跖骨。趾骨14块，大拇趾2块，余为3块，分别称近节趾骨，中节趾骨和远节趾骨。
+2010年4月6日 　今天大盘高开之后到午盘回补缺口整体来看已经初步完成了3177的目标这几天算高位震荡大约要到15、16号才能确认下一个低点之后完成疯狂之旅目前大体是这样看的早盘看了个0001558.88大约是个买点现在冲高回落有点看不清胆子大的似乎可以关注9.78还是能冲过去的
+无题 　仔细琢磨了几天这个题材似乎拿来在网络上写会很辛苦毕竟天马行空的余地比较少自己想写的是一些生活中的积累可发挥的东西比较的固死所以也不求什么点击收藏推荐但是既然开了个头就希望好好的写出来所以现在似乎这书可以暂时放弃阅读等肥了以后或者完本以后再看也许再挖个坑哈哈有点过了
+实在抱歉 　开了头慢慢的发现实在是艰难拖了很久没有写下去大小就不喜欢看哭哭啼啼的东西和实际上那里有那么多的乐子即使有也很多的苦涩在那里虎头舍尾的事情确实的不能够干一定要写下去是自己的坚定的想法但是没法保证速度看看别人每日万字更新的实在是佩服得五体投地好在是刚刚的开始慢慢的养起来再说吧现在就已经阅读的读者实在是好人暂时别把精力放在这里等彻底完本了再看比较的好写在一个下雨的夜晚为玉树默哀为大盘默哀为房地产板块默哀为买不起房子的默哀
+2010年5月12日 　忧伤的时刻要用希望来抒写以便磨平记忆的伤痕虽然连续的下跌给满仓者带来的巨大的损失虽然在45个交易日的缓慢上涨之后存在了17个交易日的暴跌但是这里似乎是个相对的时间点比较的明显下个关键的日期点似乎落在了5月25日不过无论翻转还是反弹第一次肯定无法穿越3000点速度还需要时间来改变
+初始 　地瓜语录：过去的日子总是慢慢的沉寂下来，变成某种不知道的物件，突然的闪现在眼前，一个又一个的迷茫或者机会到来的时候，你是放弃错过了还是自以为把握住了呢。</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/ordinary/pwa/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/ordinary/pwa/</guid>
+      <description>PWA Progressive PWA(Progressive Web App)��һ������, ʹ�ö��ּ�������ǿweb app�Ĺ���, ��������վ���������ø���, �ܹ�ģ��һЩԭ������, ����֪ͨ���͡����ƶ������ñ�׼������, ����ҳӦ�ó��ֺ�ԭ��Ӧ�����Ƶ�����.
+Progressive Web Apps start with a traditional web site/application and progressively enhance with modern features. When sites are secure they can leverage ServiceWorkers to provider users with offline support, Push notifications can help re-engage users, and Web App Manifests let users install PWAs alongside native apps.
+ionic-team / ionic ionic-team / ionic
+freeCodeCamp / devdocs  freeCodeCamp / devdocs</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/ordinary/review-template/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/ordinary/review-template/</guid>
+      <description>Review Template To best write a book review, it is essential to keep track of the answers to the following questions, either as you read the book or as soon as you have finished it. All of the answers can then be incorporated into your review.
+SUMMARY  Narration
+ Who narrated the story?
+ Was it first-person narration or third-person narration?
+ Was the narrator a reliable source of information?</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/ordinary/summer/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/ordinary/summer/</guid>
+      <description>A blog about &amp;hellip; | history | technogic | working | plan | | 1968 | rust | &amp;hellip; |</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/ordinary/txdstyle/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/ordinary/txdstyle/</guid>
+      <description>通达信目录文件结构及说明 (2012-11-27 20:56:01)转载▼ http://blog.sina.com.cn/s/blog_674caeca0101bw5m.html
+标签： 通达信 指标 公式 目录文件 说明 分类： 一些研究总结
+vipdoc: 下载或缓存的历史数据目录
+diary: 投资日志目录
+RemoteSH: 缓存的上海F10
+RemoteSZ: 缓存的深圳F10
+Ycinfo: 缓存的公告消息
+安装目录下的SZ.*,SH.*是缓存的盘中数据文件
+T0002:个人信息目录,内有公式和自选股,个人设置等信息
+T0002\blocknew：该文件夹保存自定义板块的信息
+T0002\mark.dat:该文件保存标记文字的信息
+T0002\PriCS.dat 、 PriGS.dat 这两个文件是自定义指标模板的信息
+Advhq.dat 星空图相关个性化数据
+Block.cfg 板块设置文件
+cbset.dat 筹码分析个性化数据
+colwarn3.dat 行情栏目和预警个性化数据
+colwarnTj.dat 条件预警个性化数据
+CoolInfo.Txt 系统备忘录
+Line.dat 画线工具数据
+MyFavZX.dat 资讯收藏夹数据
+newmodem.ini 交易客户端个性化数据
+padinfo.dat 定制版面个性化数据
+PriCS.dat,PriGS.dat,PriText.dat 公式相关数据
+recentsearch.dat 最近资讯搜索数据
+Scheme.dat 配色方案
+tmptdx.css 临时网页CSS文件
+user.ini 全局个性化数据
+userfx.dat K线图个性化数据
+[blocknew] 板块目录
+[cache] 系统数据高速缓存
+[zst_cache] 分时图数据高速缓存
+[coolinfo] 系统备忘录目录</description>
+    </item>
+    
+  </channel>
+</rss>

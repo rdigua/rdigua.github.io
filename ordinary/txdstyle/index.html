@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="通达信目录文件结构及说明">通达信目录文件结构及说明</h1>
+
+<p>(2012-11-27 20:56:01)转载▼
+ <a href="http://blog.sina.com.cn/s/blog_674caeca0101bw5m.html">http://blog.sina.com.cn/s/blog_674caeca0101bw5m.html</a></p>
+
+<p><strong>标签： 通达信 指标 公式 目录文件 说明 分类： 一些研究总结</strong></p>
+
+<p>vipdoc: 下载或缓存的历史数据目录<br />
+diary: 投资日志目录<br />
+RemoteSH: 缓存的上海F10<br />
+RemoteSZ: 缓存的深圳F10<br />
+Ycinfo: 缓存的公告消息</p>
+
+<p>安装目录下的SZ.*,SH.*是缓存的盘中数据文件<br />
+T0002:个人信息目录,内有公式和自选股,个人设置等信息</p>
+
+<p>T0002\blocknew：该文件夹保存自定义板块的信息</p>
+
+<p>T0002\mark.dat:该文件保存标记文字的信息</p>
+
+<p>T0002\PriCS.dat  、  PriGS.dat     这两个文件是自定义指标模板的信息</p>
+
+<p>Advhq.dat 星空图相关个性化数据<br />
+Block.cfg 板块设置文件<br />
+cbset.dat 筹码分析个性化数据<br />
+colwarn3.dat 行情栏目和预警个性化数据<br />
+colwarnTj.dat 条件预警个性化数据<br />
+CoolInfo.Txt 系统备忘录<br />
+Line.dat 画线工具数据<br />
+MyFavZX.dat 资讯收藏夹数据<br />
+newmodem.ini 交易客户端个性化数据<br />
+padinfo.dat 定制版面个性化数据<br />
+PriCS.dat,PriGS.dat,PriText.dat 公式相关数据<br />
+recentsearch.dat 最近资讯搜索数据<br />
+Scheme.dat 配色方案<br />
+tmptdx.css 临时网页CSS文件<br />
+user.ini 全局个性化数据<br />
+userfx.dat K线图个性化数据<br />
+[blocknew] 板块目录<br />
+[cache] 系统数据高速缓存<br />
+[zst_cache] 分时图数据高速缓存<br />
+[coolinfo] 系统备忘录目录<br />
+[Invest] 个人理财数据目录<br />
+SUPERSTK下的文件:SYS.DTA 存放系统提供的公式;<br />
+USERDATA下的文件：AUTOBLK.CFG:自动板块设定;SELF.DTA 存放用户自编的公式;<br />
+BLOCK文件夹下的文件：<em>.IBK 板块指数定义;</em>.BLK 板块定义;*.EBK 条件选股结果;<br />
+SELF 文件夹下的文件：<br />
+    *.WSV 保存页面文件;ALERT.DAT<br />
+    历史预警纪录;EXTDATA.INF 扩展数据定义;
+    *.CEP 保存组合条件选股条件;
+    TEMPCMPD.CEP测试附加条件;
+    *.INV 用户个人投资纪录;
+    *.TPT 保存指标模板;
+    SELF年月日.DTA 每日自动公式备份文件;</p>
+
+<p>TEST 文件夹下的文件：<em>.TST 存放系统测试结果;</em>.OPT 存放参数优化的结果;<br />
+PARAM参数指引文件夹:<em>.PRM 存放参数指引的结果;<br />
+TABLE文件夹下的文件：</em>.ESS数据表文件;<em>.ESD数据表文件（带数据保存）;　　　
+SelfData文件夹下的文件：</em>.str　字符串数据;<em>.oth 与股票无关序列值数据;<br />
+Pattern 文件夹下的文件:</em>.PIN 模式匹配设计;*.PWT模式匹*<em>法;<br />
+SpotAna文件夹下的文件:</em>.SPT 定位分析结果;<br />
+Relate文件夹下的文件:<em>.RTL　相关分析结果;<br />
+Posible文件夹下的文件:</em>.PSB　预测分布设计;<br />
+DATA件夹下的文件：<br />
+    DAY.DAT 日线数据;<br />
+    EXTDAY.DAT 扩展数据;<br />
+    MIN.DAT 5分钟线数据;<br />
+    REPORT.DAT 当天的分笔成交数据;<br />
+    STKINFO.DAT 代码表/即时行情数据/财务数据/除权数据;<br />
+    <em>.PRP 历史回忆数据，一天一个文件;<br />
+NEWS文件夹下的文件：</em>.TXT 财经报道、上交所公告、深交所公告</p>
+
+<p>通达信自选股：T0002\blocknew\ZXG.blk</p>
+
+<hr />
+
+<h2 id="通达信软件系统目录结构-来自内部资料-仅供研究学习-不得用于商业用途-特此声明">通达信软件系统目录结构，来自内部资料，仅供研究学习，不得用于商业用途，特此声明</h2>
+
+<h3 id="一-通达信软件系统目录结构">一、通达信软件系统目录结构</h3>
+
+<p>┌ yxhj 运行环境目录，存放当日行情数据<br />
+├ vip8 分析系统执行程序和系统配置库<br />
+├ block 系统板块公用存盘文件<br />
+├ doc 通达信文档<br />
+│ ┌ fzline 分钟tdx 通达信
+┤ ├ lday 日线<br />
+│ ┌ sz 深圳
+┼ │ lwek 周线<br />
+│ └ lmon 月线<br />
+│ │ ┌ fzline 分钟线<br />
+│ │ ├ lday 日线
+└ vipdoc 历史数据
+┼ sh 上海 ┼ lwek 周线
+│ └ lmon 月线
+├ sav6 v6版工作站信息
+│ ┌ fzline 分钟线
+│ ├ lday 日线
+├ qh 期货<br />
+┼ lwek 周线<br />
+│ └ lmon 月线<br />
+├ tick 历史成交明细<br />
+└ sav 跨越2000工作站信息</p>
+
+<p>：若没有购买配套产品，以上有些目录可能不存在。
+1. yxhj运行环境目录下程序内容和作用:<br />
+   ldnetcfg.dbf 网卡配置文件,每个工作站必须用netcfg.exe将本工作站网卡地址写到该库中.</p>
+
+<ol>
+<li>vip8执行程序目录下程序内容和作用:i（网络版分析软件主目录）</li>
+</ol>
+
+<p>a : ldwscfg.dbf 系统配置库<br />
+tdx.ini 消息面配置文件<br />
+wt.ini 委托定义配置文件<br />
+netcfg.exe 网卡配置程序,将网卡号写到\dx\\yxhj\\ldnetcfg.dbf中<br />
+b : tdxp8.exe 系统执行程序<br />
+vga.drv 系统万能显卡驱动程序库<br />
+res.dat 系统资源文件<br />
+tdx.mov 通达信软件系统标志视频流<br />
+wb.sys 五笔输入法索引库<br />
+py.sys 拼音输入法索引库<br />
+config.exe tdx.ini系统配置程序<br />
+vgadect.exe 系统万能显卡测试程序<br />
+vgadect.bmp 显卡测试图象文件<br />
+online.txt 系统操作向导在线帮助文件<br />
+help.txt 系统操作说明<br />
+index.hlp 系统指标在线帮助文件<br />
+tdx.lnk 系统超级在线帮助文件<br />
+about.jpg 系统图象文件(系统说明用).<br />
+tdx.bmp 系统图象文件(系统启动用).<br />
+cjmask.dbf 成交回报隐藏配置库<br />
+c : tdxdt.exe 采数机(工作站式的数据转换机)<br />
+ldnwcfg.dbf 采数机网段配置库<br />
+jbzl.dbf 存放各股票的基本资料</p>
+
+<ol>
+<li>host目录下程序内容和作用（通达信远程主站产品使用）:<br /></li>
+</ol>
+
+<p>host.exe 主机端执行程序<br />
+modemcfg.dbf modem配置数据库<br />
+host.svr tsr登记文件<br />
+moxa卡随配程序集</p>
+
+<ol>
+<li>hqhost目录下程序内容和作用:<br /></li>
+</ol>
+
+<p>host.dbf 待传输文件配置库<br />
+hqhost.exe 主机端执行程序<br />
+modemcfg.dbf modem配置数据库<br />
+lharc.exe 打包文件<br />
+hqhost.hsg 通达信系统图象文件</p>
+
+<ol>
+<li>hqnode目录下程序内容和作用:<br /></li>
+</ol>
+
+<p>hqnode.exe 客户端执行程序<br />
+node.dbf 接收文件配置库<br />
+lharc.exe 打包文件<br />
+modemcfg.dbf modem配置文件<br />
+hqnode.hsg 通达信系统图象文件</p>
+
+<ol>
+<li>wthost目录下程序内容和作用:<br /></li>
+</ol>
+
+<p>wthost.exe 主机端执行程序<br />
+modemcfg.dbf modem配置数据库<br />
+commfile.dbf 委托交换库<br />
+list.dbf 委托列表库<br />
+cclibj.dot 系统用十六点阵字库文件<br />
+moxa卡随配程序集</p>
+
+<ol>
+<li>wtnode目录下程序内容和作用:</li>
+</ol>
+
+<p>wtnode.exe 客户端执行程序<br />
+modem.cfg modem配置文件<br />
+commfile.dbf 委托交换库<br />
+list.dbf 委托列表库<br />
+moxa卡随配程序集</p>
+
+<ol>
+<li>doc 通达信文档目录下文件(cword6.0):</li>
+</ol>
+
+<p>whsm.doc 维护说明
+wtjk.doc 委托接口
+sysm.doc 通达信股票期货系统使用说明
+ycsysm.doc 远程工作站使用说明</p>
+
+<h3 id="二-用户创建管理说明">二、用户创建管理说明</h3>
+
+<ul>
+<li>a. 建立tdxgroup组
+权限:</li>
+<li>对通达信目录\dx\\有读权限 (r f)<br /></li>
+<li>对通达信目录\dx\\vipdoc\\sav6\\有全部权限 (r w e m f)<br /></li>
+<li>对通达信目录\dx\\sav\\有全部权限 (r w e m f)<br /></li>
+<li>对通达信目录\dx\\yxhj\\有全部权限 (r w e m f)<br /></li>
+<li>对深圳上海行情目录有读权限 ( r f)<br /></li>
+<li>对深圳上海公告信息目录有读权限 ( r f)<br /></li>
+<li>对深圳上海成交回报目录有读权限 ( r f)<br /></li>
+
+<li><p>对个股资料目录有读权限 ( r f)</p></li>
+
+<li><p>b.在tdxgroup组下创建如下用户</p></li>
+</ul>
+
+<ol>
+<li><p>login tdx:进入通达信股票分析系统<br />
+注册脚本:<br />
+map o:=server_name/app:tdx\\vip<br />
+o:<br />
+netcfg<br />
+vip<br />
+logout</p></li>
+
+<li><p>login tdxdt:启动通达信行情转换机<br />
+注册脚本:<br />
+map o:=server_name/app:tdx\\vip<br />
+o:<br />
+tdxdt sz sh tick<br />
+logout</p></li>
+
+<li><p>login tdxph(限于v4.0以前版本):收市后,用于盘后数据转换
+注册脚本:<br />
+map o:=server_name/app:tdx\\vip<br />
+o:<br />
+panhou<br />
+logout</p></li>
+
+<li><p>login tdxhost:通达信远程分析系统所需用户名,启动远程分析主机端程序<br />
+注册脚本:<br />
+map o:=server_name/app:tdx\\host<br />
+o:<br />
+netcfg<br />
+c104-drv<br />
+host<br />
+logout</p></li>
+
+<li><p>login hqhost:通达信远程网际分析系统主机端用,启动远程网际分析系统
+行情传送主机端程序.
+注册脚本:
+map o:=server_name/app:tdx\\hqhost
+o:
+hqhost
+logout</p></li>
+
+<li><p>login hqnode: 通达信远程网际分析系统客户端用,启动远程网际分析系统
+客户端程序.
+注册脚本:
+map o:=server_name/app:tdx\\hqnode
+o:
+hqnode
+logout</p></li>
+
+<li><p>login wthost:通达信远程网际分析系统主机端用,启动远程网际分析系统
+委托处理主机端程序.
+注册脚本:
+map o:=server_name/app:tdx\\wthost
+o:
+c104-drv(std-drv)
+wthost
+logout</p></li>
+
+<li><p>login wtnode: 通达信远程网际分析系统客户端用,启动远程网际分析系统
+委托处理客户端程序.
+注册脚本:
+map o:=server_name/app:tdx\\wtnode
+o:
+std-drv
+wtnode
+logout</p></li>
+</ol>
+
+<ul>
+<li>c.通达信委托后台转换机由fox写的委托后台转换机)<br />
+权限:<br /></li>
+<li>对通达信目录\dx有全部权限 (r w e m f)<br /></li>
+<li>对柜台交易委托库,成交库,股东库等相关路径有读写权限 (r w)<br /></li>
+<li>有权限可使用dbase,fox系列软件 (r f)<br /></li>
+<li>有权限可使用ucdos,天汇,中国龙等汉字系统软件 (r f)<br />
+login tdxwt<br />
+注册脚本: map o:=server_name/app:tdx\dxwt<br />
+o:<br />
+tdxwt<br />
+logout<br /></li>
+</ul>
+
+<h3 id="三-机房日常操作说明">三、机房日常操作说明</h3>
+
+<ol>
+<li>数据转换机使用说明<br />
+早上开市时,必须先开交易所的行情接收机,待行情接收正常后,方可运行通达信数据
+转换机, 数据转换机的运行方法是:
+在工作站上键入login tdxdt
+数据转换机运行正常后,各用户即可通过键入login tdx进入通达信分析系统, 在数
+据转换机运行之前,用户不能进入分析系统.
+下午收市后,需要退出通达信数据转换机,数据转换机退出后用户不受影响,仍然可以
+使用通达信分析系统.</li>
+<li>盘后数据转档处理<br />
+下午收市后,需要将当天的临时数据转入历史数据, 在退出数据转换机时, 系统会提
+示是否做盘后处理, 这时如果确认就会做盘后作业, 如果是中途异常退出系统, 请选选取消. 如果误选择取消, 可以用supervisor在tdx\\vip\\目录下运行panhou.exe, 如果需要只
+转某个股票交易所的数据或者只转期货的数据,则必须用带参数的panhou.exe来完成盘
+后转档处理,参数/sz表示只转深圳, /sh表示只转上海, /qh表示只转期货.在tdx\\vip\\目录下直接运行:
+panhou /sz 或 panhou /sh 或 panhou /qh
+也可将参数搭配使用,如
+panhou /sz /sh 或 panhou /sz /qh 或 panhou /sh /qh
+panhou /nnn 只转档生成日周月线,不转分钟线
+panhou /nnn /d:yyyymmdd 插入yyyymmdd日的日线数据，但要求
+\dx\\yxhj下有 ??yymmdd.inf、??yymmdd.zhq文件，该命令用法只能插
+入日线不能添加日线。</li>
+</ol>
+
+<h3 id="四-系统配置">四、系统配置</h3>
+
+<ol>
+<li><p>播报网段配置
+通达信软件系统的数据转换机采用网络播报方式向各个使用通达信分析系统
+的工作站广播行情信息,因此需要对网段进行配置,网段配置库在tdx\\vip\\目
+录下,文件名为nwcfg.dbf,数据库结构为:
+字段名称 字段类型 字段长度 字段含义
+netnum character 8 网段号
+库中包括所有需要播报的网段,每一条记录表示一个网段,增加一个网段则需要
+增加一条记录.网段号为8位,不足8位前面补空格.</p></li>
+
+<li><p>通达信升级说明
+通达信软件系统的系统配置库在tdx\\vip\\下,文件名为ldwscfg.dbf,数据库结构:
+字段名称 字段类型 字段长度 字段含义
+szcjpath character 40 深圳成交库文件名
+shcjpath character 40 上海成交库文件名
+szbasepath character 40 深圳个股资料路径
+shbasepath character 40 上海个股资料路径
+commfile character 40 委托中间库
+listfile character 40 委托中间列表库
+workpath character 40
+szworkpath character 40
+shworkpath character 40
+docpath character 40
+shqsk numeric 5
+shqss numeric 5
+shhsk numeric 5
+shhss numeric 5
+szqsk numeric 5
+szqss numeric 5
+szhsk numeric 5
+szhss numeric 5
+shhqgap numeric 3
+szhqgap numeric 3
+gpfznum numeric 4
+qhfznum numeric 4
+szjbm1 character 40 深圳个股资料路径
+shjbm1 character 40 上海个股资料路径
+szjbm2 character 40 深圳个股资料路径
+shjbm2 character 40 上海个股资料路径
+szjbm3 character 40 深圳个股资料路径
+shjbm3 character 40 上海个股资料路径
+szjbm4 character 40 深圳个股资料路径
+shjbm4 character 40 上海个股资料路径
+jbmnum numeric 3 个股资料信息源数量
+jbmn1 character 16 个股资料题头
+jbmn2 character 16 个股资料题头
+jbmn3 character 16 个股资料题头
+jbmn4 character 16 个股资料题头</p></li>
+
+<li><p>消息面配置<br />
+通达信软件为客户提供灵活的消息面接口, 其配置库为tdx.ini, 结构为:
+xxmnum=5
+menuname1=深交所信息 .701
+type1=120
+path1=\\vsat\\info\<br />
+menuname2=上交所信息 .702
+type2=118
+path2=\emote\\msg\\infocent\<br />
+menuname3=券商信息 .703
+type3=117
+path3=\\ml30\\data\\mlinfo\\qsxx.txt
+menuname4=其它信息 .704
+type4=125
+path4=\\path\\yymmdd??.*
+menuname5=南方证券投资资讯 .705
+type5=126
+path5=\\path\yymmdd.szn
+type种类有:
+120 深交所信息
+118 上交所信息
+117 纯文本信息(如qsxx.txt)
+125 支持统配符的文件名
+126 南方证券信息(如t990409.*)
+-1 结束符
+以可用config.exe配置.</p></li>
+
+<li><p>远程用户密码设置<br />
+通达信系统为每个远程客户分配一个密码, 密码存放于\dx\\host\ele.dbf
+数据库中, mima字段存放密码, used字段标识拥有该密码的用户是否已进入系统.
+注意: 每个密码不能相同, used初始化为0, 当used为1时表示用户正在使用远程系统.</p></li>
+
+<li><p>网网行情传输配置库<br />
+网对网行情传输配置库分两部分: 一部分在行情发送端, 称为hqhost, 另一部分在行情接收端, 称为hqnode.
+hqhost端有两个数据库, host.dbf和modemcfg.dbf, host数据库含有准备发送的文件名, 该数据库有三个字段:
+filename character 40 待传输文件名
+dialflag character 1 传输标志 y&hellip;传输 n&hellip;不传输 w&hellip;只传输一次
+freq character 1 传输频率
+modemcfg数据库为modem配置文件, 各字段含义如下:
+reserved1 character 40
+initstr character 40 modem初始化串
+phonenum character 20 电话号码(如果为空, 则为被叫方)
+port numeric 2 串口号 0&hellip;com1 1&hellip;com2
+baudrate numeric 6 波特率
+linemode character 1
+dialtime numeric 10
+rectimeout numeric 10
+cachedisk character 1 临时数据交换盘, 应设置为虚盘
+hqnode端也有两个数据库, node.dbf和modemcfg.dbf, node数据库结构和host数据库结构一样, 存放接收行情文件名, modemcfg数据库的结构和含义与hqhost端一样.
+注意: 在hqhost和hqnode端都需建立1m的虚盘, 并将该虚盘配置到cachedisk字段.</p></li>
+
+<li><p>wt.ini的配置详见委托定义2.0规范</p></li>
+</ol>
+
+<h3 id="六-经常问到的问题">六、经常问到的问题</h3>
+
+<p>f.a.q. 原因 解决方法
+分析系统进入超级系统是提示 run vgadect.exe ?
+说明你的显卡不在显卡驱动库中
+运行vgadect.exe,如果你的显卡只有512k显存那么本系统只支持640*480 16色. 显存与显示模式对应关系如下:
+1m 640*480 15 bit
+640*480 16 bit
+640*480 24 bit
+800*600 15 bit
+800*600 16 bit
+2m ^^^
+800*600 15 bit
+800*600 16 bit
+1024*768 15 bit
+1024*768 16 bit
+4m ^^^
+1024*768 24 bit
+1024*768 32 bit
+1600*1200 15 bit
+&hellip;. 你可自行计算 公式 宽*高*位字节 = 所需显存
+位字节 15,16 = 2 24 =3 32 = 4
+^^^ 向上兼容
+数据转换机不动 ?
+网段配置不对 参见3.1网段配置
+分析系统行情不变化 ?
+工作站启动配置文件 net.cfg 中帧类型是否为802.3.
+工作站所在网段未配置在ldnwcfg.dbf库中.
+添加工作站所在网段号.
+不能看到交易所的消息 不能查阅个股资料 ?
+路径配置不对; 对该路径没有读的权限
+修改ldwscfg和xxmcfg配置库;
+改变用户权限
+远程工作站不能进入行情状态 ?
+有重复的远程客户密码;
+异常故障使used字段为1
+检查密码; 清used字段为0
+远程工作站不拨号 ?
+串口配置不对; modem连线接触不良;
+电话线插错插口 用setup重新配置串口;
+重新连接; 将电话线插入line或wall口.
+远程工作站显示线路超时并退出 ?
+电话线路质量不好 检查电话线的接头接触情况;
+更换另一号码的电话线.</p>
+
+<h3 id="七-通达信产品升级步骤">七. 通达信产品升级步骤</h3>
+
+<ol>
+<li>拷贝升级通达信产品
+a. 以 &ldquo;通达信系统所在容器管理员&rdquo;身份进入.
+运行升级盘上的[url=file://\\vip8up\\vip8up.exe]\\vip8up\\vip8up.exe[/url]
+输入通达信系统所在路径.
+系统将为你更新相应的执行程序和相应文档.</li>
+<li>系统配置
+使用foxpro修改以下数据库：
+1). \dx\\vip\\ldwscfg.dbf
+gpfznum 250
+qhffznum 360
+shhqgap 3
+szhqgap 5
+szbasepath深圳个股资料路径 &hellip;\\ml30\\data\\sznse\\base\<br />
+shbasepath上海个股资料路径 &hellip;\\ml30\\data\\shase\\base\<br />
+2).\dx\\vip\\ ldnwcfg 播报网段
+每一条记录表示一个网段, 网段号靠右对齐， 网段号为8位,不足8位前面补空格， 增加一个网段则需要增加一条记录.
+如果忘记配置此库，会导致数据转换极慢，行情不变化。
+3). \dx\\vip\dx.ini
+该库缺省配置了深圳和上海消息路径， 用户只需修改path字段。
+menuname type path
+深圳消息 .701 120 &hellip;&hellip;\\info\<br />
+上海消息 .702 118 &hellip;&hellip;\\infocent\<br />
+纯文本信息 .703 117 qsxx.txt
+万讯消息 .704 119 &hellip;&hellip;\\wxxx\<br />
+南方消息 .705 121
+期货通 .706 122
+sic(光兆) .707 123
+多文件消息 .708 125 &hellip;&hellip;\\yymmdd??.<em>\<br />
+南方证券信息 .709 126 &hellip;&hellip;\yymmdd.</em>\<br />
+-1
+note:type为-1时，表示结束；本库记录最多十六个。menuname字段长度不能超过22。<br />
+4). 如果购买了远程产品，配置\dx\\host\ele.dbf, 为远程客户分配密码（添加记录并修改mima字段)。<br /></li>
+</ol>
+
+<h3 id="五-系统售后维护">五、系统售后维护</h3>
+
+<p>通达信公司可以为客户提供远程服务, 该程序在\dx\dxwh目录下, 当客户通过tdxwh.exe拨通通达信公司的远程服务器后, 可以得到以下服务:
+- a.基于点对点<br />
+1. 版本更新: 选取该项可以免费获得最新的版本.<br />
+2. 信息接收: 选取该项可以获得最新的公司信息及文档.<br />
+3. 历史数据: 如果由于意外原因造成当日行情丢失, 客户可以通过该项从通达信公司获得行情数据.<br />
+- b.基于因特网<br />
+1. 版本更新:通过tendency选取该项可以获得最新的版本.<br />
+2. 信息下载:选取所需信息及文档,单击便可下栽.<br />
+3. 历史数据: 如果由于意外原因造成当日行情丢失, 客户可以通过从通达信公司主页获得行情数据.</p>
+
+<hr />
+
+<pre><code>文件存储路径：tdx\T0002\hq_cache\block.dat  
+文件存储格式： 
+    文件头：384字节  
+    板块个数：2字节  
+    各板块数据存储结构（紧跟板块数目依次存放）  
+        每个板块占据的存储空间为2812个字节，可最多包含399个个股  
+            板块名称：9字节  
+            该板块包含的个股个数：2字节  
+            板块类别：2字节  
+            该板块下个股代码列表（连续存放，直到代码为空）  
+                个股代码：7字节  
+</code></pre>
+
+<p>自定义板块存储数据结<br />
+板块名称文件：\tdx\T0002\block.cfg<br />
+    存储结构：<br />
+              空白：4字节<br />
+              板块名称：10字节字符串<br />
+              板块简码：5字节字符串<br />
+自定义的各板块个股存储<br />
+          文件名：tdx\T0002\blocknew\  +  自定义板块简码（与block.cfg文件中的各板块简码同）
+      数据存储结构：<br />
+             个股分隔符：2字节<br />
+             个股属性代码：1字节（1:表示上证；0:表示深证）<br />
+             个股名称：6字节</p>
+
+<p>日K线数据格式</p>
+
+<pre><code> 
+struct TdxRecord {     // 日K线数据结构
+  unsigned int date;   // e.g. 20100304
+  int _open;           // *0.01 开盘价
+  int _high;           // *0.01 最高价
+  int _low;            // *0.01 最低价
+  int _close;          // *0.01 收盘价
+  float amount;        // 成交额
+  int vol;             // 成交量(手)
+  int reserved;       
+ 
+  float open(){  return 0.01*_open; }
+  float high(){  return 0.01*_high; }
+  float low(){   return _low*0.01; }
+  float close(){ return _close*0.01; }
+};
+</code></pre>
+
+<p>日记文件数据格式</p>
+
+<pre><code> 
+struct TdxDiary_Idx {
+  int   id;        // 0xffffffff = deleted, auto incr
+  char  dummy1;    // = 0x00
+  char  symbol[7]; // 7 char = 6 char symbol + 1 char '\0'
+  int   date;      // 20110407
+  int   time;      // 13:14:25 = 131425
+  int   weather;   // 00 = 晴, 01=阴, 02=雨, 03=雪
+  char  title[64]; // title
+  int   offset;    // offset in &quot;symbol.cnt&quot;
+  int   length;    // content length
+  int   date2;     // date2 = date
+  int   time2;     // time2 = time
+ 
+  void set(const char *symbol, const char *title, int offset, int length){
+    memset(this-&gt;symbol, '\0', 7);
+    memset(this-&gt;title, '\0', 64);
+    this-&gt;dummy1 = '\0';
+    this-&gt;weather=0x03;
+    strcpy(this-&gt;symbol, symbol);
+    strcpy(this-&gt;title, title);
+    this-&gt;offset = offset;
+    this-&gt;length = length;
+  }
+  void datetime(int date, int time){
+    this-&gt;date  = date; this-&gt;time  = time;
+    this-&gt;date2 = date; this-&gt;time2  = time;
+  }
+};
+</code></pre>
+
+<p>股票代码和名称数据格式</p>
+
+<pre><code>
+struct TdxSymbolMap {
+  char symbol[6];    // 6 digits
+  char dummy1[18]
+  char name[8];      // 4 characters in GB2312
+  char dummy2[218];
+}
+
+</code></pre>
+
+<hr />
+
+<pre><code>//Type
+  TTDXDayInfo = packed record
+    nDate                     : integer;  //日期，     格式：yyyymmdd的整数 如20080101 20081229
+    nStartPrice               : integer;  //开盘价格， 格式：开盘价*100，取整
+    nMaxPrice                 : integer;  //最高价，   格式：~~
+    nMinPrice                 : integer;  //最低价，   格式：~~
+    nEndPrice                 : integer;  //收盘价，   格式：~~
+    nAmount                   : Single;   //成交总额，元
+    nCount                    : integer;  //总量，手
+    M                         : integer;  //保留 暂为分析出来，猜测是平均价格
+  end;
+</code></pre>
+
+<hr />
+
+<p>通达信数据格式
+2009年01月20日 14:53:00 winsky 阅读数 4855
+股票软件数据格式详解之&ndash;通达信数据格式</p>
+
+<p>通达信数据不是钱龙格式的。但很容易转化成钱龙格式，稍微懂点数据格式的朋友都容易转化。钱龙是长整型的数据，通达信是单精度型数据。钱龙一天数据占40个字节，通达信占32个字节。大智慧和钱龙的格式是一样的。</p>
+
+<p>通达信数据格式：</p>
+
+<p>1-4字节 Date:LongInt; //日期
+5-8字节 OPen:LongInt; //开盘*100(元)
+9-12字节 High:LongInt; //最高价*100(元)</p>
+
+<p>13-16字节 Low:LongInt; //最低价*100(元)
+17-20字节 Close:LongInt; //收盘*100(元)</p>
+
+<p>21-24字节 single; //Amount
+25-28字节 Volume:LongInt; //Volume 成交量(股)
+29-32字节 // Reserved
+其数据结构定义如下:</p>
+
+<p>typedef struct mystructtag
+{
+    int date;
+    int open;
+    int high;
+    int low;
+    int close;
+    int amount;
+    int vol;
+    int reservation;
+} StockData;</p>
+
+<p>基本声明<br />
+    Public NumBase(5) As Long &lsquo;通达信格式基数<br />
+    Public NumUnit(4) As Long &lsquo;每单位对应的16进制数
+    Public NumUnitPrice(4) As Long &lsquo;每单位对于的10进制数,已被从元为单位扩大1000倍</p>
+
+<p>基本模块</p>
+
+<pre><code>Public Sub intTDXelg()Sub intTDXelg()
+    NumBase(0) = 1065353216 : NumBase(1) = 1082130432 : NumBase(2) = 1090519040 : NumBase(3) = 1098907648 : NumBase(4) = 1109655552 ': NumBase(5) = 1118830592
+    NumUnit(0) = 4194304 : NumUnit(1) = 2097152 : NumUnit(2) = 1048576 : NumUnit(3) = 524288 ': NumUnit(4) = 262144
+    NumUnitPrice(0) = 0 : NumUnitPrice(1) = 4000 : NumUnitPrice(2) = 8000 : NumUnitPrice(3) = 16000 ': NumUnitPrice(4) = 32000
+End Sub
+</code></pre>
+
+<p>在ｆｏｒｍ　ｌｏａｄ　事件中调用ｉｎｔＴＤＸｅｌｇ</p>
+
+<pre><code>Public Structure stockDayRecordStructure stockDayRecord '保存一门股票的日数据信息
+    Dim stockdate As Date
+    Dim openor As Single
+    Dim hightor As Single
+    Dim lowor As Single
+    Dim endor As Single
+    Dim changor As Integer
+    Dim id As Integer
+    Dim VbP As Integer
+End Structure
+
+Public Function getRealPrice()Function getRealPrice(ByVal formerPrice As Long) As Long '注意移植此函数是要把公共变量NumBase预NumUnit移动移植
+    Dim i As Integer
+    For i = 1 To 4                                 '该函数可返回32元人民币以下对于的准确价格
+        If formerPrice &lt; NumBase(i) Then
+            getRealPrice = (Val((formerPrice - NumBase(i - 1)) &amp; &quot;000&quot;) / NumUnit(i - 1)) + NumUnitPrice(i - 1)
+            Exit For                                  ' &amp; 000 相当于 * 1000,以‰为单位
+        End If
+    Next i
+End Function
+</code></pre>
+
+<p>读取模块</p>
+
+<p>Function LoadDayData()Function LoadDayData(ByVal filename As String, ByRef dr() As stockDayRecord, ByVal t As Short) As Long
+&lsquo;股票读取接口,第一个参数为装载股票数据的结构体
+        Dim fs As FileStream = File.OpenRead(filename)
+        Dim br As New BinaryReader(fs)
+        Dim n As Integer
+        Dim i As Integer, j As Integer
+        Select Case t
+            Case 1 &lsquo;中天
+              Case 2 &lsquo;通达信 暂时不用
+                n = (fs.Length - 4) / 32
+                LoadDayData = n
+                ReDim dr(n)
+                br.ReadInt32() &lsquo;文件头到底是什么,另外是头天顺序颠放到了某个地方
+                For i = 1 To n
+                    Dim d As Integer = br.ReadInt32()
+                    dr(i).stockdate = DateSerial(d / 10000, (d Mod 10000) / 100, d Mod 100)
+                    dr(i).openor = getRealPrice(br.ReadInt32) / 1000
+                    dr(i).hightor = getRealPrice(br.ReadInt32) / 1000
+                    dr(i).lowor = getRealPrice(br.ReadInt32) / 1000
+                    dr(i).endor = getRealPrice(br.ReadInt32) / 1000
+                    br.ReadInt32()
+                    dr(i).changor = br.ReadInt32
+                    dr(i).id = i
+                    If (dr(i).hightor &lt;&gt; dr(i).lowor) Then dr(i).VbP = dr(i).changor / ((dr(i).hightor - dr(i).lowor) * 1000)
+                    br.ReadInt32()
+                Next
+        End Select
+        fs.Dispose()
+        LoadDayData = j
+    End Function</p>
+
+<h1 id="rust">rust</h1>
+
+<ul>
+<li>Getting 32 bytes to a struct.<br /></li>
+</ul>
+
+<ol>
+<li>bytes from byte file;<br /></li>
+<li>32 bytes to a u32 vec.<br /></li>
+<li>formating.<br />
+3.1 encode<br />
+3.2 decode<br />
+{
+d / 10000, (d Mod 10000) / 100, d Mod 100
+}
+{
+other / 1000
+}
+
+<br /></li>
+</ol>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

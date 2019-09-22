@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="jay-was-learning-rust-language">Jay was learning rust-language</h1>
+
+<p>Here is a log about a aged man to stduy a new language which is rust-language.</p>
+
+<ul>
+<li>Q0: Rust
+The rust-language is so difficult. How did it?</li>
+</ul>
+
+<p>&ndash;Answer&ndash;: Reading [Rust-book]<a href="https://doc.rust-lang.org/book/">https://doc.rust-lang.org/book/</a> . Is it feeled difficult too? To read again.</p>
+
+<ul>
+<li><p>Q1: Box
+In compliting get a place.</p></li>
+
+<li><p>Q2: ?</p></li>
+
+<li><p>Q3: binary</p></li>
+
+<li><p>Q4: How to do struct?
+&ndash;Answer&ndash;: A example: (* print it)</p>
+
+<pre><code>// First attempt: No explicit lifetimes
+// Error! Compiler needs explicit lifetime
+//struct Singleton {
+//one: &amp;mut int,
+//}
+// TODO ^ Try uncommenting this struct
+
+// Second attempt: Add lifetimes to all the references
+struct Pair&lt;'a, 'b&gt; {
+one: &amp;'a mut int,
+two: &amp;'b mut int,
+}
+
+fn main() {
+// Let's say that `one` has lifetime `o`
+let mut one = 1;
+
+{
+    // And that `two` has lifetime `t`
+    // `two` has a shorter (and different) lifetime than `one` (`'t &lt; 'o`)
+    let mut two = 2;
+
+    println!(&quot;Before: ({}, {})&quot;, one, two);
+
+    // `Pair` gets specialized for `'a = 'o` and `'b = 't`
+    let pair = Pair { one: &amp;mut one, two: &amp;mut two };
+
+    *pair.one = 2;
+    *pair.two = 1;
+
+    println!(&quot;After: ({}, {})&quot;, pair.one, pair.two);
+}
+}
+</code></pre></li>
+</ul>
+
+<p><a href="https://www.apache.org/dyn/closer.cgi?path=/kafka/1.0.0/kafka_2.11-1.0.0.tgz">https://www.apache.org/dyn/closer.cgi?path=/kafka/1.0.0/kafka_2.11-1.0.0.tgz</a></p>
+
+<hr />
+
+<h2 id="reading-today">Reading Today.</h2>
+
+<p>reqwest = &ldquo;0.9.18&rdquo;
+env_logger = &ldquo;0.6.1&rdquo;</p>
+
+<p>netease-cloud-music-gtk</p>
+
+<p>sled</p>
+
+<h3 id="books">books:</h3>
+
+<p>The Rust Programming Language
+Rust By Example
+Rustlings
+The Standard Library
+The Edition Guide
+The Rustc Book
+The Cargo Book
+The Reference
+The Rustonomicon
+The Unstable Book
+The rustc Guide
+Embedded Working Group
+The Embedded Rust Book</p>
+
+<p>Hands-On-Functional-Programming-in-Rust-2018
+Hands-OnConcurrencywithRust_ConfidentlyinRust2018
+Abhishek Chanda - Network Programming with Rust (2018, Packt Publishing)
+Rahul Sharma, Vesa Kaihlavirta - Mastering Rust (2019, Packt)
+<a href="http://llever.com/rustwasm-book/introduction.zh.html">http://llever.com/rustwasm-book/introduction.zh.html</a></p>
+
+<h3 id="reading">reading</h3>
+
+<p>StandardLibrary</p>
+
+<p>appendix-02-operators
+rust-err</p>
+
+<h3 id="try">Try</h3>
+
+<p><a href="https://github.com/rust-unofficial/too-many-lists">https://github.com/rust-unofficial/too-many-lists</a>
+<a href="https://github.com/mbrubeck/robinson">https://github.com/mbrubeck/robinson</a>
+<a href="https://github.com/phil-opp/blog_os">https://github.com/phil-opp/blog_os</a></p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

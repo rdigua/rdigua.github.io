@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="算法rust-go-python-js实现-leetcode之3-无重复字符的最长子串">[算法Rust,Go,Python,JS实现)]LeetCode之3-无重复字符的最长子串</h1>
+
+<p>给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。</p>
+
+<p>示例 1:</p>
+
+<p>输入: &ldquo;abcabcbb&rdquo;
+输出: 3
+解释: 因为无重复字符的最长子串是 &ldquo;abc&rdquo;，所以其长度为 3。
+示例 2:</p>
+
+<p>输入: &ldquo;bbbbb&rdquo;
+输出: 1
+解释: 因为无重复字符的最长子串是 &ldquo;b&rdquo;，所以其长度为 1。
+示例 3:</p>
+
+<p>输入: &ldquo;pwwkew&rdquo;
+输出: 3
+解释: 因为无重复字符的最长子串是 &ldquo;wke&rdquo;，所以其长度为 3。</p>
+
+<h2 id="请注意-你的答案必须是-子串-的长度-pwke-是一个子序列-不是子串">请注意，你的答案必须是 子串 的长度，&rdquo;pwke&rdquo; 是一个子序列，不是子串。</h2>
+
+<p>原文：<a href="https://blog.csdn.net/BaiHuaXiu123/article/details/89014971">https://blog.csdn.net/BaiHuaXiu123/article/details/89014971</a></p>
+
+<p>impl Solution {
+    pub fn length_of_longest_substring(s: String) -&gt; i32 {
+        let seq: Vec<char> = s.chars().collect();
+        let mut sum_str:Vec<char> = vec![];
+        let mut i = 0;
+        let mut k = 0;
+        let mut max = 0;
+        let len = s.len();
+        while i &lt; len &amp;&amp; k &lt; len {
+            if index_str(seq[k],sum_str.clone()) == -1 {
+                sum_str.push(seq[k]);
+                k += 1;
+            } else {
+                i += 1;
+                k = i;
+                sum_str = vec![];
+            }
+            if max &lt; sum_str.len(){
+                max = sum_str.len()
+            }
+        }
+       return max as i32;
+    }
+}
+fn index_str(c:char, vec:Vec<char>)-&gt; i32{
+        for item in vec {
+            if item == c {
+                return 1;
+            }
+        }
+        return -1
+    }</p>
+
+<hr />
+
+<p>func lengthOfLongestSubstring(s string) int {
+    sum_str := []byte{}
+    i := 0
+    j := 0
+    max := 0
+    lens := len(s)
+    for ;i &lt; lens &amp;&amp; j &lt; lens; {
+        if findIndex(s[j],sum_str) == -1 {
+            sum_str = append(sum_str, s[j])
+            j ++
+        } else {
+            i++
+            j = i
+            sum_str = []byte{}
+        }
+        if max &lt; len(sum_str){
+            max = len(sum_str)
+        }
+    }
+    return  max
+}
+/**
+查询在元素在切片的位置
+*/
+func findIndex(key byte,s []byte) int{
+    for i,value := range s {
+        if value == key {
+            return i
+        }
+    }
+    return -1</p>
+
+<h2 id="toc_2">}</h2>
+
+<p>class Solution:
+    def lengthOfLongestSubstring(self, s: str) -&gt; int:
+        sum_str = &ldquo;&rdquo;
+        i = k = 0
+        lens = len(s)
+        max = 0
+        while i &lt; lens and k &lt; lens:
+            if sum_str.find(s[k]) == -1:
+                sum_str += str(s[k])
+                k += 1
+            else:
+                i += 1
+                k = i
+                sum_str = &ldquo;&rdquo;
+            if max &lt; len(sum_str):
+                max = len(sum_str)</p>
+
+<pre><code>    return  max
+</code></pre>
+
+<hr />
+
+<p>/**
+ * @param {string} s
+ * @return {number}
+ */
+var lengthOfLongestSubstring = function(s) {
+  var sum=&ldquo;&rdquo;;
+  var max=0;
+  var i=0;
+  var k=i;
+  while(i&lt;s.length&amp;&amp;k&lt;s.length){
+      if(sum.indexOf(s[k])===-1){
+          sum+=s[k];
+          k++;
+      }else{
+          i++;
+          k=i;
+          sum=&ldquo;&rdquo;;
+      }
+      max=Math.max(max,sum.length);
+  }
+  return max;
+};</p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="rust-迭代器-iterator-详解">rust 迭代器 (iterator) 详解</h1>
+
+<p>2017年12月17日 11:33:43  <a href="https://me.csdn.net/guiqulaxi920">菜树人</a>  阅读数 2924</p>
+
+<h1 id="翻译来源">翻译来源</h1>
+
+<p><a href="https://github.com/rustomax/rust-iterators">https://github.com/rustomax/rust-iterators</a></p>
+
+<p>这篇文章的目的是为一些常见的iterator提供参考资料。并不能替代<a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html">Iterator<br />
+API</a>或者<a href="https://doc.rust-lang.org/book/second-edition/ch13-02-iterators.html">书中的Rust iterator核心概念</a> ，事实上这篇文章的内容来自以上两种内容。</p>
+
+<blockquote>
+<p>为了更好理解本篇文章内容，推荐读者至少粗略了解Rust</p>
+</blockquote>
+
+<h1 id="如何编译运行例子">如何编译运行例子</h1>
+
+<pre><code>git clone https://github.com/rustomax/rust-iterators.git
+cd rust-iterators/
+cargo run
+</code></pre>
+
+<p>代码中使用了<code>nightly</code>版本的特性，如果你的Rust 为<code>statble</code>版本，请注释相应的代码区域。</p>
+
+<h1 id="0介绍">0介绍</h1>
+
+<p>生活是重复的，其中的大部分事物都是成系列的。我们经常需要记录(count)、列举<br />
+(enumerate)、反复申明(iterate)这些事物。在编程中，有多种方式产生重复事物(repetition)，其中最为人熟知的是C风格的for循环。</p>
+
+<pre><code>for ( x = 0; x &lt; 10; ++x ) {
+  // do something
+}
+</code></pre>
+
+<p>虽然这种可行的方法足够强大而且足够灵活以适应多种情况，但它承担着对应的bug份额，例如错误分号放置、无意中在循环内部修改变量。本着与其他语言特性的安全和一致的精神，Rust中没有C风格的循环。 相反，Rust利用迭代器实现类似的目标（还有更多）。</p>
+
+<h1 id="1-基本range">1.基本Range</h1>
+
+<p>在Rust中循环一系列整数的最基本的方法是Range。Range由<code>..</code>标记产生，它生成步长为1的iterator 。</p>
+
+<pre><code>for i in 1..11 {
+    print!(&quot;{} &quot;, i);
+}
+// output: 1 2 3 4 5 6 7 8 9 10
+</code></pre>
+
+<p>上面的代码将打印从1到10的一系列数字，而不包括最后一个数字11.换句话说，<code>..</code>会产生一个iterator ，它包含左边的数，排除在右边的数。 为了得到一个包含两端的范围的iterator，你使用<code>...</code>符号。 包含两端的范围的iterator目前是一个不稳定的功能，需要<code>nightly</code>编译器</p>
+
+<pre><code>#![feature(inclusive_range_syntax)]
+
+for i in 1...10 {
+  print!(&quot;{} &quot;, i);
+}
+// output: 1 2 3 4 5 6 7 8 9 10
+</code></pre>
+
+<p>如果你不使用循环迭代器变量，你可以通过利用<code>_</code>来避免实例化它。 例如，下面的代码不需要实例化一个循环迭代器变量就可以输出迭代器中元素的数量：</p>
+
+<pre><code>let mut n: i32 = 0;
+for _ in 0..10 {
+  n += 1;
+}
+println!(&quot;num = {}&quot;, n);
+// output: num = 10
+</code></pre>
+
+<p>上面的例子是有些多余，因为Rust中的迭代器有count()函数，它返回迭代器中元素的数量，而不需要在循环中对它们进行计数：</p>
+
+<pre><code>println!(&quot;num = {}&quot;, (0..10).count());
+// output: num = 10
+</code></pre>
+
+<blockquote>
+<p>你会发现有经验的Rust程序员能够用非常简洁的迭代器语言来表达，而不是采用的传统循环代码行。 当我们谈论适配器(adaptor)，消费者(consumer)和将迭代器方法链接(chaining)到复杂的语句时，我们将覆盖下面的一些模式。</p>
+</blockquote>
+
+<h1 id="2-深层发掘-digging-deeper">2.深层发掘（Digging Deeper）</h1>
+
+<p>如果基本的增量顺序Range 不能满足你的需要，Rust中有很多方法来定制Range迭代器。 我们来看几个常见的问题。</p>
+
+<p>通常，Range递增不是1，而是增加一个不同的数字。 这可以通过<code>filter()</code>方法来实现。 它应用一个闭包(closure)，它可以为迭代器的每个元素返回true或false，并产生一个只包含闭包返回true的元素的迭代器。</p>
+
+<p>下面的迭代器将产生一个0到20之间的偶数序列。</p>
+
+<pre><code>for i in (0..21).filter(|x| (x % 2 == 0)) {
+  print!(&quot;{} &quot;, i);
+}
+// output: 0 2 4 6 8 10 12 14 16 18 20
+</code></pre>
+
+<p>因为<code>filter()</code>使用闭包，所以非常灵活，可以用来生成复杂迭代器。 例如，下面的迭代器产生0到20之间的一系列整数，它们除以2和3得到余数：</p>
+
+<pre><code>for i in (0..21).filter(|x| (x % 2 == 0) &amp;&amp; (x % 3 == 0)) {
+  print!(&quot;{} &quot;, i);
+}
+// output: 0 6 12 18
+</code></pre>
+
+<p>虽然默认范围是递增的，但是使用<code>rev()</code>方法可以很容易地将其反转。</p>
+
+<pre><code>for i in (0..11).rev() {
+  print!(&quot;{} &quot;, i);
+}
+// output: 10 9 8 7 6 5 4 3 2 1 0
+</code></pre>
+
+<p>另一个常见的迭代器适配器<code>map()</code>将闭包应用于每个元素，并返回结果迭代器。下面是一个迭代器的例子，它产生一个从1到10的数字的正方形序列：</p>
+
+<pre><code>for i in (1..11).map(|x| x * x) {
+    print!(&quot;{} &quot;, i);
+}
+// output: 1 4 9 16 25 36 49 64 81 100
+</code></pre>
+
+<p><code>fold()</code>是一个非常强大的方法。 它返回一个特殊的“累加器”类型闭包的结果给迭代器的所有元素，得到一个单一的值。 下面的迭代器产生从1到5的数字的平方和。</p>
+
+<pre><code>#![feature(inclusive_range_syntax)]
+
+let result = (1...5).fold(0, |acc, x| acc + x * x);
+println!(&quot;result = {}&quot;, result);
+
+// output: result = 55
+</code></pre>
+
+<p>也许理解这里发生的最简单的方法是以更程序化的方式重写上面的例子：</p>
+
+<pre><code>#![feature(inclusive_range_syntax)]
+
+let mut acc = 0;
+
+for x in 1...5 {
+  acc += x * x;
+}
+
+let result = acc;
+println!(&quot;result = {}&quot;, result);
+
+// output: result = 55
+</code></pre>
+
+<p>哇！<code>fold()</code>版本是不是更加简洁和可读？</p>
+
+<h1 id="3-数组迭代-iterating-over-arrays">3.数组迭代（Iterating over Arrays）</h1>
+
+<p>与迭代Range类似，我们可以迭代一个数组。 这样做的好处是数组可以包含任意类型的值，而不仅仅是整数。 唯一的警告是该数组不是一个迭代器。 我们需要使用<code>iter()</code>方法把它变成一个迭代器。</p>
+
+<pre><code>let cities = [&quot;Toronto&quot;, &quot;New York&quot;, &quot;Melbourne&quot;];
+
+for city in cities.iter() {
+  print!(&quot;{}, &quot;, city);
+}
+// output: Toronto, New York, Melbourne,
+</code></pre>
+
+<h1 id="4-组合迭代器适配器-combining-iterator-adaptors">4.组合迭代器适配器（Combining Iterator Adaptors）</h1>
+
+<p>在前面的章节中，我们介绍了各种各样的方法，可以让你生成许多不同类型的迭代器，当你开始结合这些方法的时候，Rust表现十分突出。</p>
+
+<p>如果你想要一个<code>10</code>到<code>0</code>之间以步长<code>2</code>Range呢？ 通过将一个特性和几个方法组合到一个迭代器中可以很容易地完成这个任务：</p>
+
+<pre><code>#![feature(inclusive_range_syntax)]
+
+for i in (0...10).rev().filter(|x| (x % 2 == 0)) {
+  print!(&quot;{} &quot;, i);
+}
+// output: 10 8 6 4 2 0
+</code></pre>
+
+<p>需要一个不连续的Range（基本上是两个不相Range的组合）？ 您可以使用<code>chain()</code>方法组合多个范围：</p>
+
+<pre><code>let c = (1..4).chain(6..9);
+
+for i in c {
+  print!(&quot;{} &quot;, i);
+}
+// output: 1 2 3 6 7 8
+</code></pre>
+
+<p>你可以得到很有创意的组合的东西！ 下面是一个迭代器，结合了两个范围：第一个递增和过滤，另一个 是递减。 不知道这样一个可憎的东西怎么产生，但在这里却是实现！</p>
+
+<pre><code>let r = (1..20)
+  .filter(|&amp;x| x % 5 == 0)
+  .chain((6..9).rev());
+
+for i in r {
+  print!(&quot;{} &quot;, i);
+}
+// output: 5 10 15 8 7 6
+</code></pre>
+
+<blockquote>
+<p>请注意，在上面的例子中，Rust允许我们通过将复杂的迭代器语句拆分为多行来更好地表示复杂的迭代器语句。</p>
+</blockquote>
+
+<p>另一个方便的方法是<code>zip()</code>。 它有点类似于<code>chain()</code>，因为它将两个迭代器合并为一个。 与<code>chain()</code>相比，<code>zip()</code>不产生连续的迭代器，而是产生元组(tuple)的迭代器：<br />
+<img src="https://cloud.githubusercontent.com/assets/20992642/17650212/185c5486-6216-11e6-8fd7-34d2aa976c07.PNG" alt="这里写图片描述" /></p>
+
+<pre><code>let cities = [&quot;Toronto&quot;, &quot;New York&quot;, &quot;Melbourne&quot;];
+let populations = [2_615_060, 8_550_405, ‎4_529_500];
+
+let matrix = cities.iter().zip(populations.iter());
+
+for (c, p) in matrix {
+  println!(&quot;{:10}: population = {}&quot;, c, p);
+}
+// output:
+// Toronto   : population = 2615060
+// New York  : population = 8550405
+// Melbourne : population = 4529500
+</code></pre>
+
+<h1 id="5-字符range-ranges-of-characters">5.字符Range（Ranges of Characters）</h1>
+
+<p>操作字符串或文本的字节数通常需要迭代字符Range的能力。  <code>char_iter</code>提供了方便的方法来产生这样的范围。  <code>char_iter</code>支持Unicode字符。</p>
+
+<p>要使用<code>char_iter</code>，请在<code>Cargo.toml</code>中添加以下内容</p>
+
+<pre><code>[dependencies]
+char-iter = &quot;0.1&quot;
+</code></pre>
+
+<p>接着通过<code>char_iter::new()</code>产生字符Range</p>
+
+<pre><code>extern crate char_iter;
+
+for c in char_iter::new('Д', 'П') {
+  print!(&quot;{} &quot;, c);
+}
+// output: Д Е Ж З И Й К Л М Н О П
+</code></pre>
+
+<h1 id="6-向量迭代-iterating-over-vectors">6.向量迭代（Iterating over Vectors）</h1>
+
+<p>向量是Rust的基本结构之一。 就其性质而言，它非常适合于表示一系列重复项目。 Rust中有许多语言工具允许使用向量作为迭代器，反之亦然。</p>
+
+<p>在最简单的情况下，类似于我们如何从数组创建迭代器，我们可以使用<code>iter()</code>方法从矢量创建迭代器。 事实上，这被认为是Rust在迭代向量中最习惯的方式。</p>
+
+<pre><code>let nums = vec![1, 2, 3, 4, 5];
+
+for i in nums.iter() {
+   print!(&quot;{} &quot;, i);
+}
+// output: 1 2 3 4 5
+</code></pre>
+
+<p>事实上，上面的模式非常普遍，Rust的引用操作符<code>＆</code>为其提供了句法糖。</p>
+
+<pre><code>let nums = vec![1, 2, 3, 4, 5];
+for i in &amp;nums {
+   print!(&quot;{} &quot;, i);
+}
+// output: 1 2 3 4 5
+</code></pre>
+
+<p>注意上面的借用(borrow)是不可改变的。 换句话说，它们是只读的。 如果我们想要改变我们的向量，我们必须使用可变的借用<code>＆mut</code>。 例如，下面的代码将可变地迭代一个矢量，使处理中的每个元素加倍。</p>
+
+<pre><code>let mut nums = vec![1, 2, 3, 4, 5];
+for i in &amp;mut nums {
+    *i *= 2;
+}
+println!(&quot;{:?}&quot;, nums);
+
+//output: [2, 4, 6, 8, 10]
+</code></pre>
+
+<p>然而，现在你是一个迭代忍者()，你不会使用上面的<code>for</code>循环语法。 你会用一个地<code>map()</code>来代替，对吗？</p>
+
+<pre><code>let nums = vec![1, 2, 3, 4, 5];
+let nums = nums.iter().map(|x| x * 2);
+println!(&quot;{:?}&quot;, nums);
+
+//output: [2, 4, 6, 8, 10]
+</code></pre>
+
+<blockquote>
+<p>轻微的离题。 如果我们想要使用可变的迭代器将元素添加到向量中，如下所示：</p>
+
+<pre><code>&gt; let mut nums = vec![1, 2, 3, 4, 5];
+&gt; for i in &amp;mut nums {
+&gt;     nums.push(*i);
+&gt; }
+&gt; println!(&quot;{:?}&quot;, nums);
+&gt; ```
+&gt; 
+&gt; 它不编译，并抛出错误信息``cannot borrow `nums` as mutable more than once at a time``。 你看，我们的迭代器（在`for`循环中实例化）已经借用nums作为可变。  `push`表达试图再次这样做，这是禁止的。 这是在Rust中著名的安全机制。 如果我们可以将某个`push`入向量中，同时迭代它，则会导致迭代器失效，从而导致未定义的行为。 Rust可以在编译时防止发生这种情况。 迭代器不仅强大，而且它们也是超级安全的。
+
+现在，我们做相反的事情 : 从迭代器创建一个向量。 为了做到这一点，我们需要所谓的消费者。 消费者迫使懒惰的迭代器实际产生值。`collect()`是一个普通的消费者。 它从一个迭代器获取值并将它们转换为所需类型的集合。 下面我们将从`1`到`10`的一系列数字变换成一个向量`i32`：
+
+</code></pre>
+
+<p>let v = (1..11).collect::<Vec<i32>&gt;();
+println!(&ldquo;{:?}&ldquo;, v);
+// output: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</p>
+
+<pre><code>
+为了获得向量的元素及其索引，可以使用`enumerate()`方法，该方法在每次迭代中返回一个包含索引和项目的元组：
+
+</code></pre>
+
+<p>let v = vec![1, 2, 3];
+for (i, n) in v.iter().enumerate() {
+    println!(&ldquo;v[{}] = {}&ldquo;, i, n);
+}
+// output:
+// v[0] = 1
+// v[1] = 2
+// v[2] = 3</p>
+
+<pre><code>
+还有一些其他的功能，使向量上的迭代器特别有用。  
+`min()`和`max()`，例如返回Option，分别包含向量元素的最小值和最大值：
+
+</code></pre>
+
+<p>let v = vec![3, 5, 0, -2, 3, 4, 1];
+let max = v.iter().max();
+let min = v.iter().min();</p>
+</blockquote>
+
+<p>println!(&ldquo;max = {:?}, min = {:?}&ldquo;, max, min);</p>
+
+<p>// output: max = Some(5), min = Some(-2)</p>
+
+<pre><code>
+`sum()`返回迭代器中所有值的总和。 以下程序利用`sum()`方法来计算一个相当平庸的学生的平均成绩：
+
+</code></pre>
+
+<p>let grades = vec![4, 5, 6, 9, 7, 4, 8];
+let sum: i32 = grades.iter().sum();
+let gpa = sum as f32 / grades.len() as f32;</p>
+
+<p>println!(&ldquo;sum = {}, gpa = {:.2}&ldquo;, sum, gpa);</p>
+
+<p>// output: sum = 43, gpa = 6.14</p>
+
+<pre><code>
+# 7.无限与超越(Infinity and Beyond)
+
+到目前为止，我们已经处理了在某些有限范围的值上运行的迭代器。 Rust以这种方式推广迭代器，实际上可以创建一个无限范围！ 让我们考虑下面的例子：
+
+</code></pre>
+
+<p>let r = (1..).collect::<Vec<i32>&gt;();</p>
+
+<pre><code>
+`(1..)`定义了一个从1开始并且无限增量的Range。 实际上，这样的程序编译和运行，但最终崩溃的错误消息：`fatal runtime error: out of memory`。 那么，你可能会说这不是很实际。 事实上，无限范围本身是无用的。 让他们有用的是将他们与其他适配器和消费者结合起来。
+
+一个特别有用的模式涉及使用`take()`方法来限制迭代器返回的项目数量。 下面的迭代器将返回可以被`5`整除的整数的正方形序列中的前`10`个。
+
+</code></pre>
+
+<p>let v = (1..)
+  .map(|x| x * x)
+  .filter(|x| x % 5 == 0 )
+  .take(10)
+  .collect::<Vec<i32>&gt;();</p>
+
+<p>println!(&ldquo;{:?} &ldquo;, v);</p>
+
+<p>// output: [25, 100, 225, 400, 625, 900, 1225, 1600, 2025, 2500]</p>
+
+<pre><code>
+# 8.Itertools
+
+[itertools](https://docs.rs/itertools/0.6.0/itertools)包含强大的附加迭代器适配器。 以下是一些例子。
+
+为了使用`itertools`，需要在`Cargo.toml`加入如下配置：
+
+</code></pre>
+
+<p>[dependencies]
+itertools = &ldquo;0.6&rdquo;</p>
+
+<pre><code>
+请回忆我们如何使用`filter()`生成一个偶数范围？  `Itertools`有一个方便的`step()`方法。
+
+</code></pre>
+
+<p>extern crate itertools;
+use itertools::Itertools;</p>
+
+<p>for i in (0..11).step(2) {
+    print!(&ldquo;{} &ldquo;, i);
+}</p>
+
+<p>//output: 0 2 4 6 8 10</p>
+
+<pre><code>
+`unique()`适配器消除了迭代器的重复。 重复项不需要顺序。
+
+</code></pre>
+
+<p>extern crate itertools;
+use itertools::Itertools;</p>
+
+<p>let data = vec![1, 4, 3, 1, 4, 2, 5];
+let unique = data.iter().unique();</p>
+
+<p>for d in unique {
+  print!(&ldquo;{} &ldquo;, d);
+}</p>
+
+<p>//output: 1 4 3 2 5</p>
+
+<pre><code>
+`join()`适配器将迭代器元素组合为单个字符串，元素之间有一个分隔符。
+
+</code></pre>
+
+<p>extern crate itertools;
+use itertools::Itertools;</p>
+
+<p>let creatures = vec![&ldquo;banshee&rdquo;, &ldquo;basilisk&rdquo;, &ldquo;centaur&rdquo;];
+let list = creatures.iter().join(&ldquo;, &ldquo;);
+println!(&ldquo;In the enchanted forest, we found {}.&rdquo;, list);</p>
+
+<p>// output: In the enchanted forest, we found banshee, basilisk, centaur.</p>
+
+<pre><code>
+`sorted_by()`适配器将自定义排序顺序应用于迭代器元素，返回排序后的向量。 根据2016年“世界幸福指数”，以下计划将打印出前5名最幸福的国家。
+
+&gt; sorted_by() 使用[Ordering trait](https://doc.rust-lang.org/nightly/core/cmp/enum.Ordering.html)排序
+
+</code></pre>
+
+<p>extern crate itertools;
+use itertools::Itertools;</p>
+
+<p>let happiness_index = vec![ (&ldquo;Austria&rdquo;, 12), (&ldquo;Costa Rica&rdquo;, 14), (&ldquo;Norway&rdquo;, 4),
+  (&ldquo;Australia&rdquo;, 9), (&ldquo;Netherlands&rdquo;, 7), (&ldquo;New Zealand&rdquo;, 8), (&ldquo;United States&rdquo;, 13),
+  (&ldquo;Israel&rdquo;, 11), (&ldquo;Denmark&rdquo;, 1), (&ldquo;Finland&rdquo;, 5), (&ldquo;Iceland&rdquo;, 3),
+  (&ldquo;Sweden&rdquo;, 10), (&ldquo;Canada&rdquo;, 6), (&ldquo;Puerto Rico&rdquo;, 15), (&ldquo;Switzerland&rdquo;, 2) ];</p>
+
+<p>let top_contries = happiness_index
+  .into_iter()
+  .sorted_by(|a, b| (&amp;a.1).cmp(&amp;b.1))
+  .into_iter()
+  .take(5);</p>
+
+<p>for (country, rating) in top_contries {
+  println!(&ldquo;# {}: {}&ldquo;, rating, country);
+}</p>
+
+<p>// output:
+// # 1: Denmark
+// # 2: Switzerland
+// # 3: Iceland
+// # 4: Norway
+// # 5: Finland</p>
+
+<pre><code>
+# 9.定制迭代器（Creating Your Own Iterators）
+
+Rust的优点在于，你可以使用通用语言工具来扩展它。 让我们利用这个强大的力量，创造我们自己的迭代器！ 我们将构建一个非常简单的迭代器，产生一系列由浮点数`(f32，f32)`组成的温度`(华氏，摄氏)`对。 温度使用公知的公式计算：`°C =(°F-32)/ 1.8`。
+
+迭代器以一个结构体(struct)开始。 我们命名的结构体名称也将是迭代器的名称。 我们将调用`FahrToCelc`。 该结构体包含一些有用的信息，这些信息在随后的迭代器调用之间保持不变。 我们将有两个  `f32 fields`  : 华氏温度和增量步长：
+
+</code></pre>
+
+<p>struct FahrToCelc {
+  fahr: f32,
+  step: f32,
+}</p>
+
+<pre><code>
+接下来，我们将创建一个的方法`new()`，它通过初始化迭代器的初始值以华氏温度和增量步长进行初始化。 这个方法严格来说不是必须的，不是迭代器实现的一部分，但是我觉得它是一个很好的语法糖，可以提高程序的整体可读性：
+
+</code></pre>
+
+<p>impl FahrToCelc {
+  fn new(fahr: f32, step: f32) -&gt; FahrToCelc {
+    FahrToCelc { fahr: fahr, step: step }
+  }
+}</p>
+
+<pre><code>
+最后，我们通过为结构实现`Iterator Trait`来编写迭代器的行为。 至少需要包含以下内容：
+
+-   定义`Item`类型。 它描述了迭代器将产生什么样的东西。 如前所述，我们的迭代器产生由浮点数`(f32，f32)`元组表示的温度对`(华氏，摄氏)`，所以我们的`Item`类型定义如下所示：
+
+</code></pre>
+
+<p>type Item = (f32, f32);</p>
+
+<pre><code>
+-   函数`next()`实际上会生成下一个`Item`。  `next()`对`self`进行可变引用( mutable reference)，并返回一个封装下一个值的`Option`。 我们必须返回一个选项而不是项目本身的原因是因为许多迭代器需要考虑它们已经达到序列结束的情况，在这种情况下它们返回`None`。 由于我们的迭代器生成一个无限序列，我们的next()方法将始终返回`Option &lt;Self :: Item&gt;`。 因此，我们的`next()`函数声明如下所示：
+
+</code></pre>
+
+<p>fn next (&amp;mut self) -&gt; Option<a href="Self::Item">Self::Item</a></p>
+
+<pre><code>
+`next()`函数通常也会进行一些内部管理。 我们逐步增加华氏温度`fahr`，以便在随后的迭代中返回。 对内部字段进行这些修改是我们需要将`self`的可变引用传递给`next()`作为参数的原因。  
+结合在一起，这里是迭代器特征的实现：
+
+</code></pre>
+
+<p>impl Iterator for FahrToCelc {
+  type Item = (f32, f32);</p>
+
+<p>fn next (&amp;mut self) -&gt; Option<a href="Self::Item">Self::Item</a> {
+    let curr_fahr = self.fahr;
+    let curr_celc = (self.fahr - 32.0) / 1.8;
+    self.fahr = self.fahr + self.step;
+    Some((curr_fahr, curr_celc))
+  }
+}</p>
+
+<pre><code>
+最终的完整程序如下：
+
+</code></pre>
+
+<p>struct FahrToCelc {
+  fahr: f32,
+  step: f32,
+}</p>
+
+<p>impl FahrToCelc {
+  fn new(fahr: f32, step: f32) -&gt; FahrToCelc {
+    FahrToCelc { fahr: fahr, step: step }
+  }
+}</p>
+
+<p>impl Iterator for FahrToCelc {
+  type Item = (f32, f32);</p>
+
+<p>fn next (&amp;mut self) -&gt; Option<a href="Self::Item">Self::Item</a> {
+    let curr_fahr = self.fahr;
+    let curr_celc = (self.fahr - 32.0) / 1.8;
+    self.fahr = self.fahr + self.step;
+    Some((curr_fahr, curr_celc))
+  }
+}</p>
+
+<p>fn main() {
+  // pass the starting temperature and step to the initializer function
+  let ftc = FahrToCelc::new(0.0, 5.0);</p>
+
+<p>// produce the iterator table of first 5 values
+  let temp_table = ftc.take(5);</p>
+
+<p>// print out the temperature table nicely
+  for (f, c) in temp_table {
+    println!(&ldquo;{:7.2} °F = {:7.2} °C&rdquo;, f, c);
+  }
+}</p>
+
+<p>// output:
+//  0.00 °F =  -17.78 °C
+//  5.00 °F =  -15.00 °C
+// 10.00 °F =  -12.22 °C
+// 15.00 °F =   -9.44 °C
+// 20.00 °F =   -6.67 °C
+```</p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

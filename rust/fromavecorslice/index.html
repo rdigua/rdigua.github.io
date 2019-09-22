@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="how-to-read-std-io-read-from-a-vec-or-slice-https-stackoverflow-com-questions-42240663-how-to-read-stdioread-from-a-vec-or-slice"><a href="https://stackoverflow.com/questions/42240663/how-to-read-stdioread-from-a-vec-or-slice">How to read (std::io::Read) from a Vec or Slice?</a></h1>
+
+<p><a href="https://stackoverflow.com/questions/ask">Ask Question</a></p>
+
+<p>Asked  2 years, 5 months ago</p>
+
+<p>Active  <a href="https://stackoverflow.com/questions/42240663/how-to-read-stdioread-from-a-vec-or-slice?lastactivity" title="2017-02-15 14:15:55Z">2 years, 5 months ago</a></p>
+
+<p>Viewed  3k times</p>
+
+<p>8</p>
+
+<p>1</p>
+
+<p><code>Vec</code>s support  <code>std::io::Write</code>, so code can be written that takes a  <code>File</code>  or  <code>Vec</code>, for example. From the API reference, it looks like neither  <code>Vec</code>  nor slices support  <code>std::io::Read</code>.</p>
+
+<p>Is there a convenient way to achieve this? Does it require writing a wrapper struct?</p>
+
+<p>Here is an example of working code, that reads and writes a file, with a single line commented that should read a vector.</p>
+
+<pre><code>use ::std::io;
+
+// Generic IO
+fn write_4_bytes&lt;W&gt;(mut file: W) -&gt; Result&lt;usize, io::Error&gt;
+    where W: io::Write,
+{
+    let len = file.write(b&quot;1234&quot;)?;
+    Ok(len)
+}
+
+fn read_4_bytes&lt;R&gt;(mut file: R) -&gt; Result&lt;[u8; 4], io::Error&gt;
+    where R: io::Read,
+{
+    let mut buf: [u8; 4] = [0; 4];
+    file.read(&amp;mut buf)?;
+    Ok(buf)
+}
+
+// Type specific
+
+fn write_read_vec() {
+    let mut vec_as_file: Vec&lt;u8&gt; = Vec::new();
+
+    {   // Write
+        println!(&quot;Writing Vec... {}&quot;, write_4_bytes(&amp;mut vec_as_file).unwrap());
+    }
+
+    {   // Read
+//      println!(&quot;Reading File... {:?}&quot;, read_4_bytes(&amp;vec_as_file).unwrap());
+        //                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        //                               Comment this line above to avoid an error!
+    }
+}
+
+fn write_read_file() {
+    let filepath = &quot;temp.txt&quot;;
+    {   // Write
+        let mut file_as_file = ::std::fs::File::create(filepath).expect(&quot;open failed&quot;);
+        println!(&quot;Writing File... {}&quot;, write_4_bytes(&amp;mut file_as_file).unwrap());
+    }
+
+    {   // Read
+        let mut file_as_file = ::std::fs::File::open(filepath).expect(&quot;open failed&quot;);
+        println!(&quot;Reading File... {:?}&quot;, read_4_bytes(&amp;mut file_as_file).unwrap());
+    }
+}
+
+fn main() {
+    write_read_vec();
+    write_read_file();
+}
+
+</code></pre>
+
+<p>This fails with the error:</p>
+
+<pre><code>error[E0277]: the trait bound `std::vec::Vec&lt;u8&gt;: std::io::Read` is not satisfied
+  --&gt; src/main.rs:29:42
+   |
+29 |         println!(&quot;Reading File... {:?}&quot;, read_4_bytes(&amp;vec_as_file).unwrap());
+   |                                          ^^^^^^^^^^^^ the trait `std::io::Read` is not implemented for `std::vec::Vec&lt;u8&gt;`
+   |
+   = note: required by `read_4_bytes`
+
+</code></pre>
+
+<p>I&rsquo;d like to write tests for a file format encoder/decoder, without having to write to the file-system.</p>
+
+<p><a href="https://stackoverflow.com/questions/tagged/io" title="show questions tagged 'io'">io</a>  <a href="https://stackoverflow.com/questions/tagged/rust" title="show questions tagged 'rust'">rust</a>  <a href="https://stackoverflow.com/questions/tagged/traits" title="show questions tagged 'traits'">traits</a></p>
+
+<p><a href="https://stackoverflow.com/q/42240663/8146671" title="short permalink to this question">share</a><a href="https://stackoverflow.com/posts/42240663/edit" title="revise and improve this post">edit</a></p>
+
+<p><a href="https://stackoverflow.com/posts/42240663/revisions" title="show all edits to this post">edited  Feb 15 &lsquo;17 at 14:14</a></p>
+
+<p>[](<a href="https://stackoverflow.com/users/155423/shepmaster">https://stackoverflow.com/users/155423/shepmaster</a>)</p>
+
+<p><img src="https://www.gravatar.com/avatar/419218774d04a581476ea1887a0921e0?s=32&amp;d=identicon&amp;r=PG" alt="" /></p>
+
+<p><a href="https://stackoverflow.com/users/155423/shepmaster">Shepmaster</a></p>
+
+<p>176k2121 gold badges388388 silver badges544544 bronze badges</p>
+
+<p>asked  Feb 15 &lsquo;17 at 4:17</p>
+
+<p>[](<a href="https://stackoverflow.com/users/432509/ideasman42">https://stackoverflow.com/users/432509/ideasman42</a>)</p>
+
+<p><img src="https://i.stack.imgur.com/2vl0v.png?s=32&amp;g=1" alt="" /></p>
+
+<p><a href="https://stackoverflow.com/users/432509/ideasman42">ideasman42</a></p>
+
+<p>14.2k88 gold badges8181 silver badges157157 bronze badges</p>
+
+<ul>
+<li><p>I have deleted my answer. This question is now  <em>substantially bigger</em>  and provides  <em>alot more context</em>  than when originally asked.  – <a href="https://stackoverflow.com/users/1517578/simon-whitehead" title="50,614 reputation">Simon Whitehead</a>  Feb 15 &lsquo;17 at 5:33</p></li>
+
+<li><p>@simon-whitehead, apologies for not giving a comprehensive question initially, I thought there might be some totally obvious thing I was missing which didn&rsquo;t require working code example.  – <a href="https://stackoverflow.com/users/432509/ideasman42" title="14,236 reputation">ideasman42</a>  Feb 15 &lsquo;17 at 8:59</p></li>
+</ul>
+
+<p>add a comment</p>
+
+<h2 id="1-answer">1 Answer</h2>
+
+<p><a href="https://stackoverflow.com/questions/42240663/how-to-read-stdioread-from-a-vec-or-slice?answertab=active#tab-top" title="Answers with the latest activity first">active</a><a href="https://stackoverflow.com/questions/42240663/how-to-read-stdioread-from-a-vec-or-slice?answertab=oldest#tab-top" title="Answers in the order they were provided">oldest</a><a href="https://stackoverflow.com/questions/42240663/how-to-read-stdioread-from-a-vec-or-slice?answertab=votes#tab-top" title="Answers with the highest score first">votes</a></p>
+
+<p>15</p>
+
+<p>While vectors don&rsquo;t support  <code>std::io::Read</code>, slices do.</p>
+
+<p>There is some confusion here caused by Rust being able to coerce a  <code>Vec</code>  into a slice in some situations but not others.</p>
+
+<p>In this case, an explicit coercion to a slice is needed because at the stage coercions are applied, the compiler doesn&rsquo;t know that  <code>Vec&lt;u8&gt;</code>  <em>doesn&rsquo;t</em>  implement  <code>Read</code>.</p>
+
+<hr />
+
+<p>The code in the question will work when the vector is coerced into a slice, either as:  <code>read_4_bytes(&amp;*vec_as_file)</code>  or  <code>read_4_bytes(&amp;vec_as_file[..])</code>.</p>
+
+<hr />
+
+<p>Note:</p>
+
+<ul>
+<li>When asking the question initially, I was taking  <code>&amp;Read</code>  instead of  <code>Read</code>. This made passing a reference to a slice fail, unless I&rsquo;d passed in  <code>&amp;&amp;*vec_as_file</code>  which I didn&rsquo;t think to do.</li>
+<li><em>Thanks to @arete on  <code>#rust</code>  for finding the solution!</em></li>
+</ul>
+
+<p><a href="https://stackoverflow.com/a/42241174/8146671" title="short permalink to this answer">share</a><a href="https://stackoverflow.com/posts/42241174/edit" title="revise and improve this post">edit</a></p>
+
+<p><a href="https://stackoverflow.com/posts/42241174/revisions" title="show all edits to this post">edited  Feb 15 &lsquo;17 at 14:15</a></p>
+
+<p>[](<a href="https://stackoverflow.com/users/155423/shepmaster">https://stackoverflow.com/users/155423/shepmaster</a>)</p>
+
+<p><img src="https://www.gravatar.com/avatar/419218774d04a581476ea1887a0921e0?s=32&amp;d=identicon&amp;r=PG" alt="" /></p>
+
+<p><a href="https://stackoverflow.com/users/155423/shepmaster">Shepmaster</a></p>
+
+<p>176k2121 gold badges388388 silver badges544544 bronze badges</p>
+
+<p>answered  Feb 15 &lsquo;17 at 5:11</p>
+
+<p>[](<a href="https://stackoverflow.com/users/432509/ideasman42">https://stackoverflow.com/users/432509/ideasman42</a>)</p>
+
+<p><img src="https://i.stack.imgur.com/2vl0v.png?s=32&amp;g=1" alt="" /></p>
+
+<p><a href="https://stackoverflow.com/users/432509/ideasman42">ideasman42</a></p>
+
+<p>14.2k88 gold badges8181 silver badges157157 bronze badges</p>
+
+<p>add a comment</p>
+
+<p>Got a question that you can’t ask on public Stack Overflow?  <a href="https://stackoverflow.com/teams">Learn more</a>  about sharing private information with Stack Overflow for Teams.</p>
+
+<h2 id="your-answer">Your Answer</h2>
+
+<hr />
+
+<pre><code>use std::fs::File;
+use std::io::Read;
+
+fn read_a_file() -&gt; std::io::Result&lt;Vec&lt;u8&gt;&gt; {
+    let mut file = try!(File::open(&quot;example.data&quot;));
+
+    let mut data = Vec::new();
+    try!(file.read_to_end(&amp;mut data));
+
+    return Ok(data);
+}
+</code></pre>
+
+<pre><code>use std::env;
+use std::fs::File;
+use std::io::Write;
+
+fn main() {
+    // Create a temporary file.
+    let temp_directory = env::temp_dir();
+    let temp_file = temp_directory.join(&quot;file&quot;);
+
+    // Open a file in write-only (ignoring errors).
+    // This creates the file if it does not exist (and empty the file if it exists).
+    let mut file = File::create(temp_file).unwrap();
+
+    // Write a &amp;str in the file (ignoring the result).
+    writeln!(&amp;mut file, &quot;Hello World!&quot;).unwrap();
+
+    // Write a byte string.
+    file.write(b&quot;Bytes\n&quot;).unwrap();
+}
+</code></pre>
+
+<p>rust writing vecu16 to a file</p>
+
+<h1 id="what-is-the-correct-way-to-write-vec-u16-content-to-a-file-https-stackoverflow-com-questions-30838358-what-is-the-correct-way-to-write-vecu16-content-to-a-file"><a href="https://stackoverflow.com/questions/30838358/what-is-the-correct-way-to-write-vecu16-content-to-a-file">What is the correct way to write <code>Vec&lt;u16&gt;</code> content to a file?</a></h1>
+
+<p><a href="https://stackoverflow.com/questions/ask">Ask Question</a></p>
+
+<p>Asked  4 years, 1 month ago</p>
+
+<p>Active  <a href="https://stackoverflow.com/questions/30838358/what-is-the-correct-way-to-write-vecu16-content-to-a-file?lastactivity" title="2017-08-14 22:04:00Z">1 year, 11 months ago</a></p>
+
+<p>Viewed  3k times</p>
+
+<p>6</p>
+
+<p>2</p>
+
+<p>I&rsquo;m having trouble writing  <code>Vec&lt;u16&gt;</code>  content to a file:</p>
+
+<pre><code>use std::fs::File;
+use std::io::{Write, BufWriter};
+use std::mem;
+
+#[derive(Debug, Copy, Clone, PartialEq)]
+pub enum ImageFormat {
+    GrayScale,
+    Rgb32,
+}
+
+#[derive(Debug, Copy, Clone, PartialEq)]
+pub struct ImageHeader {
+    pub width: usize,
+    pub height: usize,
+    pub format: ImageFormat,
+}
+
+pub struct Image {
+    pub header: ImageHeader,
+    pub data: Vec&lt;u16&gt;,
+}
+
+fn write_to_file(path: &amp;str, img: &amp;Image) -&gt; std::io::Result&lt;()&gt; {
+    let f = try!(File::create(path));
+    let mut bw = BufWriter::new(f);
+    let slice = &amp;img.data[..];
+    println!(&quot;before length: {}&quot;, slice.len());
+    let sl: &amp;[u8];
+    unsafe {
+        sl = mem::transmute::&lt;&amp;[u16], &amp;[u8]&gt;(slice);
+    }
+    println!(&quot;after length: {}&quot;, sl.len());
+    try!(bw.write_all(sl));
+    return Ok(());
+}
+
+fn main() {}
+
+</code></pre>
+
+<p>Since  <code>write_all()</code>  asks for a  <code>&amp;[u8]</code>, I&rsquo;m doing an unsafe conversion of  <code>&amp;[u16]</code>  to  <code>&amp;[u8]</code>. Because the conversion does not change the slice length (<code>slice.len()</code>  and  <code>sl.len()</code>  have the same values), only half of the image data is output to the file.</p>
+
+<p>It would be better if I don&rsquo;t need any unsafe conversion or copying.</p>
+
+<p><a href="https://stackoverflow.com/questions/tagged/rust" title="show questions tagged 'rust'">rust</a></p>
+
+<p><a href="https://stackoverflow.com/q/30838358/8146671" title="short permalink to this question">share</a><a href="https://stackoverflow.com/posts/30838358/edit" title="revise and improve this post">edit</a></p>
+
+<p><a href="https://stackoverflow.com/posts/30838358/revisions" title="show all edits to this post">edited  Aug 14 &lsquo;17 at 21:52</a></p>
+
+<p>[](<a href="https://stackoverflow.com/users/155423/shepmaster">https://stackoverflow.com/users/155423/shepmaster</a>)</p>
+
+<p><img src="https://www.gravatar.com/avatar/419218774d04a581476ea1887a0921e0?s=32&amp;d=identicon&amp;r=PG" alt="" /></p>
+
+<p><a href="https://stackoverflow.com/users/155423/shepmaster">Shepmaster</a></p>
+
+<p>176k2121 gold badges388388 silver badges544544 bronze badges</p>
+
+<p>asked  Jun 15 &lsquo;15 at 6:08</p>
+
+<p>[](<a href="https://stackoverflow.com/users/2432759/rillomas">https://stackoverflow.com/users/2432759/rillomas</a>)</p>
+
+<p><img src="https://i.stack.imgur.com/Pw79B.jpg?s=32&amp;g=1" alt="" /></p>
+
+<p><a href="https://stackoverflow.com/users/2432759/rillomas">rillomas</a></p>
+
+<p>9311 silver badge88 bronze badges</p>
+
+<p>add a comment</p>
+
+<h2 id="2-answers">2 Answers</h2>
+
+<p><a href="https://stackoverflow.com/questions/30838358/what-is-the-correct-way-to-write-vecu16-content-to-a-file?answertab=active#tab-top" title="Answers with the latest activity first">active</a><a href="https://stackoverflow.com/questions/30838358/what-is-the-correct-way-to-write-vecu16-content-to-a-file?answertab=oldest#tab-top" title="Answers in the order they were provided">oldest</a><a href="https://stackoverflow.com/questions/30838358/what-is-the-correct-way-to-write-vecu16-content-to-a-file?answertab=votes#tab-top" title="Answers with the highest score first">votes</a></p>
+
+<p>7</p>
+
+<p>To do it directly you&rsquo;d want to use  <a href="https://doc.rust-lang.org/std/slice/fn.from_raw_parts.html"><code>std::slice::from_raw_parts()</code></a>:</p>
+
+<pre><code>use std::slice;
+use std::mem;
+
+fn main() {
+    let slice_u16: &amp;[u16] = &amp;*vec![1, 2, 3, 4, 5, 6];
+    println!(&quot;u16s: {:?}&quot;, slice_u16);
+
+    let slice_u8: &amp;[u8] = unsafe {
+        slice::from_raw_parts(
+            slice_u16.as_ptr() as *const u8,
+            slice_u16.len() * mem::size_of::&lt;u16&gt;(),
+        )
+    };
+
+    println!(&quot;u8s: {:?}&quot;, slice_u8);
+}
+
+</code></pre>
+
+<p>It does require  <code>unsafe</code>  because  <code>from_raw_parts()</code>  can&rsquo;t guarantee that you can only pass a valid pointer to it, and it also can create slices with arbitrary lifetime.</p>
+
+<p>However, this approach is not only potentially unsafe, it is also not portable. When you work with integers larger than one byte, endianness issues immediately arise. If you write a file in this way on a x86 machine, you would then read garbage on an ARM machine. The proper way is to use libraries like  <a href="https://crates.io/crates/byteorder"><code>byteorder</code></a>  which allow you to specify endianness explicitly:</p>
+
+<pre><code>extern crate byteorder;
+
+use byteorder::{WriteBytesExt, LittleEndian};
+
+fn main() {
+    let slice_u16: &amp;[u16] = &amp;*vec![1, 2, 3, 4, 5, 6];
+    println!(&quot;u16s: {:?}&quot;, slice_u16);
+
+    let mut result: Vec&lt;u8&gt; = Vec::new();
+    for &amp;n in slice_u16 {
+        let _ = result.write_u16::&lt;LittleEndian&gt;(n);
+    }
+
+    println!(&quot;u8s: {:?}&quot;, result);
+}
+
+</code></pre>
+
+<p>Note that I&rsquo;ve used  <code>Vec&lt;u8&gt;</code>  here, but it implements  <code>Write</code>, and  <code>write_u16()</code>  and other methods from  <code>WriteBytesExt</code>  trait are defined on any  <code>Write</code>, so you could use these methods directly on a  <code>BufWriter</code>, for example.</p>
+
+<p>While this may be slightly less efficient than reinterpreting a piece of memory, it is safe and portable.</p>
+
+<p><a href="https://stackoverflow.com/a/30838655/8146671" title="short permalink to this answer">share</a><a href="https://stackoverflow.com/posts/30838655/edit" title="revise and improve this post">edit</a></p>
+
+<p><a href="https://stackoverflow.com/posts/30838655/revisions" title="show all edits to this post">edited  Aug 14 &lsquo;17 at 22:04</a></p>
+
+<p>[](<a href="https://stackoverflow.com/users/155423/shepmaster">https://stackoverflow.com/users/155423/shepmaster</a>)</p>
+
+<p><img src="https://www.gravatar.com/avatar/419218774d04a581476ea1887a0921e0?s=32&amp;d=identicon&amp;r=PG" alt="" /></p>
+
+<p><a href="https://stackoverflow.com/users/155423/shepmaster">Shepmaster</a></p>
+
+<p>176k2121 gold badges388388 silver badges544544 bronze badges</p>
+
+<p>answered  Jun 15 &lsquo;15 at 6:33</p>
+
+<p>[](<a href="https://stackoverflow.com/users/788207/vladimir-matveev">https://stackoverflow.com/users/788207/vladimir-matveev</a>)</p>
+
+<p><img src="https://i.stack.imgur.com/KQmlY.jpg?s=32&amp;g=1" alt="" /></p>
+
+<p><a href="https://stackoverflow.com/users/788207/vladimir-matveev">Vladimir Matveev</a></p>
+
+<p>75.7k1818 gold badges194194 silver badges229229 bronze badges</p>
+
+<ul>
+<li>Thanks! I tried your method of using  <code>slice::from_raw_parts()</code>  and it worked perfectly.  – <a href="https://stackoverflow.com/users/2432759/rillomas" title="93 reputation">rillomas</a>  Jun 16 &lsquo;15 at 0:14
+<br /></li>
+</ul>
+
+<p>add a comment</p>
+
+<p>5</p>
+
+<p>I recommend using existing libraries for serialization such as  <a href="https://crates.io/crates/serde">serde</a>  and  <a href="https://crates.io/crates/bincode">bincode</a>:</p>
+
+<pre><code>extern crate bincode;
+extern crate serde;
+#[macro_use]
+extern crate serde_derive;
+
+use std::error::Error;
+
+#[derive(Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
+pub enum ImageFormat {
+    GrayScale,
+    Rgb32,
+}
+
+#[derive(Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
+pub struct ImageHeader {
+    pub width: usize,
+    pub height: usize,
+    pub format: ImageFormat,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct Image {
+    pub header: ImageHeader,
+    pub data: Vec&lt;u16&gt;,
+}
+
+impl Image {
+    fn save_to_disk(&amp;self, path: &amp;str) -&gt; Result&lt;(), Box&lt;Error&gt;&gt; {
+        use std::fs::File;
+        use std::io::Write;
+        let bytes: Vec&lt;u8&gt; = try!(bincode::serialize(self, bincode::Infinite));
+        let mut file = try!(File::create(path));
+        file.write_all(&amp;bytes).map_err(|e| e.into())
+    }
+}
+
+fn main() {
+    let image = Image {
+        header: ImageHeader {
+            width: 2,
+            height: 2,
+            format: ImageFormat::GrayScale,
+        },
+        data: vec![0, 0, 0, 0],
+    };
+
+    match image.save_to_disk(&quot;image&quot;) {
+        Ok(_) =&gt; println!(&quot;Saved image to disk&quot;),
+        Err(e) =&gt; println!(&quot;Something went wrong: {:?}&quot;, e.description()),
+    }
+}
+
+</code></pre>
+
+<p><a href="https://stackoverflow.com/a/30840849/8146671" title="short permalink to this answer">share</a><a href="https://stackoverflow.com/posts/30840849/edit" title="revise and improve this post">edit</a></p>
+
+<p><a href="https://stackoverflow.com/posts/30840849/revisions" title="show all edits to this post">edited  Aug 14 &lsquo;17 at 22:02</a></p>
+
+<p>[](<a href="https://stackoverflow.com/users/155423/shepmaster">https://stackoverflow.com/users/155423/shepmaster</a>)</p>
+
+<p><img src="https://www.gravatar.com/avatar/419218774d04a581476ea1887a0921e0?s=32&amp;d=identicon&amp;r=PG" alt="" /></p>
+
+<p><a href="https://stackoverflow.com/users/155423/shepmaster">Shepmaster</a></p>
+
+<p>176k2121 gold badges388388 silver badges544544 bronze badges</p>
+
+<p>answered  Jun 15 &lsquo;15 at 8:45</p>
+
+<p>[](<a href="https://stackoverflow.com/users/2301531/a-b">https://stackoverflow.com/users/2301531/a-b</a>)</p>
+
+<p><img src="https://www.gravatar.com/avatar/0e05b25685a72ab6268dce396da1b76f?s=32&amp;d=identicon&amp;r=PG" alt="" /></p>
+
+<p><a href="https://stackoverflow.com/users/2301531/a-b">A.B.</a></p>
+
+<p>8,81511 gold badge3434 silver badges4949 bronze badges</p>
+
+<ul>
+<li><p>1</p>
+
+<p>Thanks! I also tried your method of using bincode + rustc-serialize, and personally I prefer this method more than dumping raw data to a file (no  <code>unsafe</code>, no need to worry about endianness). I&rsquo;m accepting Vladimir&rsquo;s answer because it was more on topic, but like you said using serialization is probably the better way.  – <a href="https://stackoverflow.com/users/2432759/rillomas" title="93 reputation">rillomas</a>Jun 16 &lsquo;15 at 0:26</p></li>
+</ul>
+
+<p>add a comment</p>
+
+<h2 id="your-answer-1">Your Answer</h2>
+
+<pre><code>use std::io::prelude::*;
+use std::io::{self, SeekFrom};
+use std::fs::File;
+
+// a library function we've written
+fn write_ten_bytes_at_end&lt;W: Write + Seek&gt;(writer: &amp;mut W) -&gt; io::Result&lt;()&gt; {
+    writer.seek(SeekFrom::End(-10))?;
+
+    for i in 0..10 {
+        writer.write(&amp;[i])?;
+    }
+
+    // all went well
+    Ok(())
+}
+
+// Here's some code that uses this library function.
+//
+// We might want to use a BufReader here for efficiency, but let's
+// keep this example focused.
+let mut file = File::create(&quot;foo.txt&quot;)?;
+
+write_ten_bytes_at_end(&amp;mut file)?;
+
+// now let's write a test
+#[test]
+fn test_writes_bytes() {
+    // setting up a real File is much slower than an in-memory buffer,
+    // let's use a cursor instead
+    use std::io::Cursor;
+    let mut buff = Cursor::new(vec![0; 15]);
+
+    write_ten_bytes_at_end(&amp;mut buff).unwrap();
+
+    assert_eq!(&amp;buff.get_ref()[5..15], &amp;[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+}
+</code></pre>
+
+<hr />
+
+<p><a href="https://www.reddit.com/r/rust/comments/4ml1fw/want_to_use_stdioreadwrite_for_my_vecu8/">https://www.reddit.com/r/rust/comments/4ml1fw/want_to_use_stdioreadwrite_for_my_vecu8/</a></p>
+
+<p><a href="http://databasefaq.com/index.php/answer/2851/rust-writing-vecu16-to-a-file">http://databasefaq.com/index.php/answer/2851/rust-writing-vecu16-to-a-file</a></p>
+
+<hr />
+
+<h1 id="how-to-create-a-binary-file-with-rust-https-stackoverflow-com-questions-53826371-how-to-create-a-binary-file-with-rust"><a href="https://stackoverflow.com/questions/53826371/how-to-create-a-binary-file-with-rust">How to create a binary file with Rust?</a></h1>
+
+<p><a href="https://stackoverflow.com/questions/ask">Ask Question</a></p>
+
+<p>Asked  7 months ago</p>
+
+<p>Active  <a href="https://stackoverflow.com/questions/53826371/how-to-create-a-binary-file-with-rust?lastactivity" title="2018-12-19 14:09:20Z">7 months ago</a></p>
+
+<p>Viewed  2k times</p>
+
+<p>2</p>
+
+<p>I can write binary code to file with Rust. However, when I create a file, the file created is a text file, not binary. I can create a binary file with C++ like this:</p>
+
+<pre><code>ofstream is(&quot;1.in&quot;, ofstream::binary | ofstream::out | ofstream:: trunc);
+
+</code></pre>
+
+<p>How about in Rust? This is my attempt:</p>
+
+<pre><code>struct IndexDataStructureInt {
+    row: u32,
+    key_value: u32,
+}
+
+let mut index_arr: Vec&lt;IndexDataStructureInt&gt; = Vec::new();
+// doing something push 100 IndexDataStructureInt to index_arr
+let mut fileWrite = File::create(tableIndexName).unwrap();
+for i in 0..index_arr.len() {
+    write!(
+        fileWrite,
+        &quot;{:b}{:b}&quot;,
+        index_arr[i].row, index_arr[i].key_value
+    );
+}
+
+</code></pre>
+
+<p>After running this code, it writes 200 u32 integer binary number to the file  <code>tableIndexName</code>. However, the file size is not 800bytes. It is about 4KB.</p>
+
+<p><a href="https://stackoverflow.com/questions/tagged/file" title="show questions tagged 'file'">file</a>  <a href="https://stackoverflow.com/questions/tagged/rust" title="show questions tagged 'rust'">rust</a>  <a href="https://stackoverflow.com/questions/tagged/binaryfiles" title="show questions tagged 'binaryfiles'">binaryfiles</a></p>
+
+<p><a href="https://stackoverflow.com/q/53826371/8146671" title="short permalink to this question">share</a><a href="https://stackoverflow.com/posts/53826371/edit" title="revise and improve this post">edit</a></p>
+
+<p><a href="https://stackoverflow.com/posts/53826371/revisions" title="show all edits to this post">edited  Dec 19 &lsquo;18 at 14:09</a></p>
+
+<p>[](<a href="https://stackoverflow.com/users/493729/peter-hall">https://stackoverflow.com/users/493729/peter-hall</a>)</p>
+
+<p><img src="https://i.stack.imgur.com/bU0Kx.jpg?s=32&amp;g=1" alt="" /></p>
+
+<p><a href="https://stackoverflow.com/users/493729/peter-hall">Peter Hall</a></p>
+
+<p>20.6k88 gold badges4747 silver badges102102 bronze badges</p>
+
+<p>asked  Dec 18 &lsquo;18 at 4:24</p>
+
+<p>[](<a href="https://stackoverflow.com/users/10804208/yen-chun-lee">https://stackoverflow.com/users/10804208/yen-chun-lee</a>)</p>
+
+<p><img src="https://graph.facebook.com/2049227995120319/picture?type=large" alt="" /></p>
+
+<p><a href="https://stackoverflow.com/users/10804208/yen-chun-lee">Yen Chun Lee</a></p>
+
+<p>1633 bronze badges</p>
+
+<ul>
+<li><p>2</p>
+
+<p>Can you share the sample code you are currently using to write &amp; read the file? What makes you think the file is not &ldquo;binary&rdquo;?  – <a href="https://stackoverflow.com/users/1411457/harmic" title="16,861 reputation">harmic</a>  Dec 18 &lsquo;18 at 4:49</p></li>
+
+<li><p>@harmic hi thank you for response. I add some code in my question.  – <a href="https://stackoverflow.com/users/10804208/yen-chun-lee" title="16 reputation">Yen Chun Lee</a>  Dec 18 &lsquo;18 at 5:34</p></li>
+
+<li><p>Welcome to Stack Overflow! Idiomatic Rust uses  <code>snake_case</code>  for variables, methods, macros, and fields;  <code>UpperCamelCase</code>  for types and enum variants; and  <code>SCREAMING_SNAKE_CASE</code>  for statics and constants. Use  <code>file_write</code>  and  <code>table_index_name</code>  instead, please.  – <a href="https://stackoverflow.com/users/155423/shepmaster" title="175,799 reputation">Shepmaster</a>  Dec 18 &lsquo;18 at 15:13</p></li>
+</ul>
+
+<p>add a comment</p>
+
+<h2 id="1-answer-1">1 Answer</h2>
+
+<p><a href="https://stackoverflow.com/questions/53826371/how-to-create-a-binary-file-with-rust?answertab=active#tab-top" title="Answers with the latest activity first">active</a><a href="https://stackoverflow.com/questions/53826371/how-to-create-a-binary-file-with-rust?answertab=oldest#tab-top" title="Answers in the order they were provided">oldest</a><a href="https://stackoverflow.com/questions/53826371/how-to-create-a-binary-file-with-rust?answertab=votes#tab-top" title="Answers with the highest score first">votes</a></p>
+
+<p>9</p>
+
+<p>Rust&rsquo;s  <code>std::fs::File</code>  does not have a concept of opening files in text or binary mode. All files are opened as &ldquo;binary&rdquo; files, and no translation of characters such as line feed and carriage return is performed.</p>
+
+<p>Your problem stems from using the  <a href="https://doc.rust-lang.org/core/macro.write.html"><code>write!</code></a>  macro. This macro is for formatting data into printable format, and should not be used if you want to write binary data. In fact the  <a href="https://doc.rust-lang.org/std/fmt/trait.Binary.html"><code>{:b}</code>  format specifier</a>  you have used will convert the value into a printable binary string of ASCII  <code>1</code>  and  <code>0</code>  characters.</p>
+
+<p>Instead, use the functions provided by trait  <a href="https://doc.rust-lang.org/std/io/trait.Write.html"><code>std::io::Write</code></a>. This trait is implemented directly by  <code>File</code>, or you can use a  <code>BufWriter</code>  for potentially better performance.</p>
+
+<p>For example: here I am using  <code>write_all</code>  to write a slice of  <code>u8</code>  to a file, then using  <code>read_to_end</code>  to read the same file back into a  <code>Vec</code>.</p>
+
+<pre><code>use std::fs::File;
+use std::io::prelude::*;
+
+fn main() -&gt; std::io::Result&lt;()&gt; {
+    {
+        let mut file = File::create(&quot;test&quot;)?;
+        // Write a slice of bytes to the file
+        file.write_all(&amp;[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])?;
+    }
+
+    {
+        let mut file = File::open(&quot;test&quot;)?;
+        // read the same file back into a Vec of bytes
+        let mut buffer = Vec::&lt;u8&gt;::new();
+        file.read_to_end(&amp;mut buffer)?;
+        println!(&quot;{:?}&quot;, buffer);
+    }
+
+    Ok(())
+}
+
+</code></pre>
+
+<p><a href="https://stackoverflow.com/a/53827079/8146671" title="short permalink to this answer">share</a><a href="https://stackoverflow.com/posts/53827079/edit" title="revise and improve this post">edit</a></p>
+
+<p><a href="https://stackoverflow.com/posts/53827079/revisions" title="show all edits to this post">edited  Dec 18 &lsquo;18 at 15:15</a></p>
+
+<p>[](<a href="https://stackoverflow.com/users/155423/shepmaster">https://stackoverflow.com/users/155423/shepmaster</a>)</p>
+
+<p><img src="https://www.gravatar.com/avatar/419218774d04a581476ea1887a0921e0?s=32&amp;d=identicon&amp;r=PG" alt="" /></p>
+
+<p><a href="https://stackoverflow.com/users/155423/shepmaster">Shepmaster</a></p>
+
+<p>176k2121 gold badges388388 silver badges544544 bronze badges</p>
+
+<p>answered  Dec 18 &lsquo;18 at 5:51</p>
+
+<p>[](<a href="https://stackoverflow.com/users/1411457/harmic">https://stackoverflow.com/users/1411457/harmic</a>)</p>
+
+<p><img src="https://i.stack.imgur.com/XqssD.png?s=32&amp;g=1" alt="" /></p>
+
+<p><a href="https://stackoverflow.com/users/1411457/harmic">harmic</a></p>
+
+<p>16.9k22 gold badges3838 silver badges6262 bronze badges</p>
+
+<ul>
+<li><p>Why the unnecessary curly braces inside of  <code>main</code>?  – <a href="https://stackoverflow.com/users/155423/shepmaster" title="175,799 reputation">Shepmaster</a>  Dec 18 &lsquo;18 at 15:15</p></li>
+
+<li><p>2</p>
+
+<p>@Shepmaster The first pair of braces makes sure the file is closed before it&rsquo;s opened and read again. This is not strictly needed, since the code is using unbuffered I/O, so you would be able to read the file contents back even before the file is closed. However, this is kind of beside the point for this question, so I think the version including the braces is less confusing.  – <a href="https://stackoverflow.com/users/279627/sven-marnach" title="378,862 reputation">Sven Marnach</a>  Dec 18 &lsquo;18 at 16:06</p></li>
+</ul>
+
+<p>add a comment</p>
+
+<p>Got a question that you can’t ask on public Stack Overflow?  <a href="https://stackoverflow.com/teams">Learn more</a>  about sharing private information with Stack Overflow for Teams.</p>
+
+<h2 id="your-answer-2">Your Answer</h2>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

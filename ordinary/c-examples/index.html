@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="example">example</h1>
+
+<h2 id="the-point">the point</h2>
+
+<ol>
+<li><pre><code class="language-c">
+#include &lt;stdio.h&gt;
+
+void main()
+{
+  int a, b;
+  int *pointer_1, *pointer_2;
+
+  a = 100; 
+  b = 10;
+  pointer_1 = &amp;a;
+  pointer_2 = &amp;b;
+      
+  printf(&quot;%d,%d\n&quot;, a, b);
+  printf(&quot;%d,%d\n&quot;, *pointer_1, *pointer_2);
+}
+
+</code></pre></li>
+</ol>
+
+<p>42.</p>
+
+<pre><code class="language-c">
+#include &lt;stdio.h&gt;
+
+void main()
+{ 
+      int *p1, *p2, *p, a, b;
+
+      scanf(&quot;%d %d&quot;, &amp;a, &amp;b);
+      p1 = &amp;a;
+      p2 = &amp;b;
+      
+      if( a &lt; b)     
+      {
+            p = p1;
+            p1 = p2;
+            p2 = p;
+      } //此后，p1指向b, p2指向a ^_^
+      
+      printf(&quot;a = %d, b = %d\n&quot;, a, b);
+      printf(&quot;max = %d, min = %d\n&quot;, *p1, *p2);
+}
+
+</code></pre>
+
+<pre><code class="language-c">
+#include &lt;stdio.h&gt;
+
+void swap(int *p1, int *p2);
+
+void main()
+{ 
+      int a, b;
+      int *pointer_1, *pointer_2;
+      
+      scanf(&quot;%d %d&quot;, &amp;a, &amp;b);
+      
+      pointer_1 = &amp;a;
+      pointer_2 = &amp;b;
+      
+      if(a &lt; b) 
+      {
+            swap(pointer_1, pointer_2); //swap实现的是交换……
+      }
+      
+      printf(&quot;\n%d &gt; %d\n&quot;, a, b);
+      
+}
+
+void swap(int *p1, int *p2)
+{
+      int temp;
+
+      printf(&quot;I'm swapping……\n&quot;);
+      printf(&quot;Please wait^_^&quot;);
+      
+      temp = *p1;  //temp = a;
+      *p1 = *p2;   //a = b;
+      *p2 = temp;  //b = temp;
+      
+}
+
+</code></pre>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+void main()
+{
+      void  exchange(int *q1, int *q2, int *q3);
+
+      int a, b, c, *p1, *p2, *p3;
+
+      scanf(&quot;%d %d %d&quot;, &amp;a, &amp;b, &amp;c);
+      p1 = &amp;a;
+      p2 = &amp;b; 
+      p3 = &amp;c;
+
+      exchange(p1, p2, p3);  //确保a &gt; b &gt; c
+      printf(&quot;%d %d %d\n&quot;, a, b, c);
+}
+
+
+void  exchange(int *q1, int *q2, int *q3) //int *q1 = p1;
+{
+      void swap(int *pt1, int *pt2); //用于交换&amp;……&amp;%
+
+      if( *q1 &lt; *q2 )
+      {
+            swap(q1, q2);
+      }
+      if( *q1 &lt; *q3 )
+      {
+            swap(q1, q3);
+      }
+      if( *q2 &lt; *q3 )
+      {
+            swap(q2, q3);
+      }
+}
+ 
+void  swap(int *pt1, int *pt2)
+{
+      int temp;
+
+      temp = *pt1;
+      *pt1 = *pt2;
+      *pt2 = temp;
+}
+
+</code></pre>
+
+<p>43.</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int max, min;      /*全局变量*/
+
+void max_min_value(int array[], int n);
+
+void main()
+{
+      int i, number[10];
+
+      printf(&quot;enter 10 integer umbers:\n&quot;);
+
+      for( i=0; i &lt; 10; i++)
+      {
+            scanf(&quot;%d&quot;, &amp;number[i]);
+      }
+
+      max_min_value(number, 10);
+
+      printf(&quot;\nmax=%d, min=%d\n&quot;, max, min);
+
+}
+
+void max_min_value(int array[], int n)
+{
+      int *p, *array_end;
+      
+      array_end = array + n;
+      
+      max = min = *array;
+      
+      for( p=array+1; p &lt; array_end; p++)
+      {
+            if( *p &gt; max )
+            {
+                  max = *p;
+            }
+            else if( *p &lt; min ) 
+            {
+                  min = *p;
+            }     
+      }
+}
+</code></pre>
+
+<pre><code class="language-c```"></code></pre>
+
+<p>c```</p>
+
+<pre><code class="language-c```"></code></pre>
+
+<p>c```</p>
+
+<pre><code class="language-c```"></code></pre>
+
+<p>c```</p>
+
+<pre><code class="language-c```"></code></pre>
+
+<p>c```</p>
+
+<pre><code class="language-c```"></code></pre>
+
+<p>c```</p>
+
+<pre><code class="language-c```"></code></pre>
+
+<p>c```</p>
+
+<pre><code class="language-c```"></code></pre>
+
+<p>c```</p>
+
+<pre><code class="language-c```"></code></pre>
+
+<p>c```</p>
+
+<pre><code class="language-c```"></code></pre>
+
+<p>c```</p>
+
+<pre><code class="language-c```"></code></pre>
+
+<p>c```</p>
+
+<pre><code class="language-c```"></code></pre>
+
+<p>c```</p>
+
+<pre><code class="language-c```"></code></pre>
+
+<p>c```</p>
+
+<pre><code class="language-c```"></code></pre>
+
+<p>c```</p>
+
+<pre><code class="language-c```"></code></pre>
+
+<p>c```</p>
+
+<pre><code class="language-c```"></code></pre>
+
+<p>c```</p>
+
+<pre><code class="language-c```"></code></pre>
+
+<p>c```<code>c</code></p>
+
+<pre><code class="language-c```"></code></pre>
+
+<p>c```</p>
+
+<pre><code class="language-c```"></code></pre>
+
+<p>c```</p>
+
+<pre><code class="language-c```"></code></pre>
+
+<p>c```</p>
+
+<pre><code class="language-c```"></code></pre>
+
+<p>c```</p>
+
+<pre><code class="language-c```"></code></pre>
+
+<p>c```</p>
+
+<pre><code class="language-c```"></code></pre>
+
+<p>c```</p>
+
+<pre><code class="language-c```"></code></pre>
+
+<p>c```</p>
+
+<pre><code class="language-c```"></code></pre>
+
+<p>c```</p>
+
+<pre><code class="language-c```"></code></pre>
+
+<p>c```</p>
+
+<pre><code class="language-c```"></code></pre>
+
+<p>c```</p>
+
+<pre><code class="language-c```"></code></pre>
+
+<p>c<code>
+</code>c```</p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

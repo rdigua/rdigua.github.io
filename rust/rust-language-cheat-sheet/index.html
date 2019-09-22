@@ -1,0 +1,1796 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="rust-language-cheat-sheet">Rust Language Cheat Sheet</h1>
+
+<p>06.08.2019</p>
+
+<blockquote>
+<p>Contains clickable links to  <strong>The Book</strong>  <a href="https://doc.rust-lang.org/book/">BK</a>,  <strong>Rust by Example</strong>  <a href="https://doc.rust-lang.org/stable/rust-by-example/">EX</a>,  <strong>Std Docs</strong>  <a href="https://doc.rust-lang.org/std">STD</a>,  <strong>Nomicon</strong>  <a href="https://doc.rust-lang.org/nightly/nomicon/">NOM</a>,  <strong>Reference</strong>  <a href="https://doc.rust-lang.org/stable/reference/">REF</a>. Other symbols used: largely  <strong>deprecated</strong>  🗑️, has a  <strong>minimum edition</strong>  &lsquo;18, is  <strong>work in progress</strong>  🚧, or  <strong>bad</strong>  🛑.</p>
+</blockquote>
+
+<p>Night Mode 💡</p>
+
+<p>Language Constructs</p>
+
+<ul>
+<li><a href="https://cheats.rs/#data-structures">Data Structures</a></li>
+<li><a href="https://cheats.rs/#references-pointers">References &amp; Pointers</a></li>
+<li><a href="https://cheats.rs/#functions-behavior">Functions &amp; Behavior</a></li>
+<li><a href="https://cheats.rs/#control-flow">Control Flow</a></li>
+<li><a href="https://cheats.rs/#organizing-code">Organizing Code</a></li>
+<li><a href="https://cheats.rs/#type-aliases-and-casts">Type Aliases and Casts</a></li>
+<li><a href="https://cheats.rs/#code-generation">Code Generation</a></li>
+<li><a href="https://cheats.rs/#pattern-matching">Pattern Matching</a></li>
+<li><a href="https://cheats.rs/#generics-constraints">Generics &amp; Constraints</a></li>
+<li><a href="https://cheats.rs/#strings-chars">Strings &amp; Chars</a></li>
+<li><a href="https://cheats.rs/#comments">Comments</a></li>
+<li><a href="https://cheats.rs/#miscellaneous">Miscellaneous</a></li>
+</ul>
+
+<p>Guides</p>
+
+<ul>
+<li><a href="https://cheats.rs/#invisible-sugar">Invisible Sugar</a></li>
+<li><a href="https://cheats.rs/#closures">Closures</a></li>
+<li><a href="https://cheats.rs/#idiomatic-rust">Idiomatic Rust</a></li>
+<li><a href="https://cheats.rs/#a-guide-to-reading-lifetimes">A Guide to Reading Lifetimes</a></li>
+<li><a href="https://cheats.rs/#formatting-strings">Formatting Strings</a></li>
+<li><a href="https://cheats.rs/#tooling">Tooling</a></li>
+</ul>
+
+<p>Misc</p>
+
+<ul>
+<li><a href="https://cheats.rs/#links-services">Links &amp; Services</a></li>
+<li><a href="https://cheats.rs/#printing-pdf">Printing &amp; PDF</a></li>
+</ul>
+
+<h2 id="hello-rust">Hello, Rust!</h2>
+
+<p>If you have never seen Rust before, or if you want to try the things below:</p>
+
+<pre><code class="language-rust">fn main() {
+    println!(&quot;Hello, world!&quot;);
+}
+
+</code></pre>
+
+<p>▶️ Edit &amp; Run</p>
+
+<h3 id="data-structures">Data Structures</h3>
+
+<p>Data types and memory locations defined via keywords.</p>
+
+<p>Example</p>
+
+<p>Explanation</p>
+
+<p><code>struct  S  {}</code></p>
+
+<p>Define a  <strong>struct</strong>  <a href="https://doc.rust-lang.org/book/ch05-00-structs.html">BK</a>  <a href="https://doc.rust-lang.org/stable/rust-by-example/custom_types/structs.html">EX</a>  <a href="https://doc.rust-lang.org/std/keyword.struct.html">STD</a>  <a href="https://doc.rust-lang.org/stable/reference/expressions/struct-expr.html">REF</a>  with named fields.</p>
+
+<p><code>struct  S  {  x:  T  }</code></p>
+
+<p>Define struct with named field  <code>x</code>  of type  <code>T</code>.</p>
+
+<p><code>struct  S</code> ​<code>(T)</code></p>
+
+<p>Define &ldquo;tupled&rdquo; struct with numbered field  <code>.0</code>  of type  <code>T</code>.</p>
+
+<p><code>struct  S;</code></p>
+
+<p>Define zero sized unit struct.</p>
+
+<p><code>enum  E  {}</code></p>
+
+<p>Define an  <strong>enum</strong>  <a href="https://doc.rust-lang.org/book/ch06-01-defining-an-enum.html">BK</a>  <a href="https://doc.rust-lang.org/stable/rust-by-example/custom_types/enum.html#enums">EX</a>  <a href="https://doc.rust-lang.org/stable/reference/items/enumerations.html">REF</a>  ,  <em>c</em>.  <a href="https://en.wikipedia.org/wiki/Algebraic_data_type">algebraic data types</a>,  <a href="https://en.wikipedia.org/wiki/Tagged_union">tagged unions</a>.</p>
+
+<p><code>enum  E  {  A,  B</code>​<code>(),  C  {}  }</code></p>
+
+<p>Define variants of enum; can be unit-  <code>A</code>, tuple-  <code>B</code> ​<code>()</code>  and struct-like  <code>C{}</code>.</p>
+
+<p><code>enum  E  {  A  =  1  }</code></p>
+
+<p>If variants are only unit-like, allow discriminant values, e.g., for FFI.</p>
+
+<p><code>union  U  {}</code></p>
+
+<p>Unsafe C-like  <strong>union</strong>  <a href="https://doc.rust-lang.org/stable/reference/items/unions.html">REF</a>  for FFI compatibility.</p>
+
+<p><code>static  X:  T  =  T();</code></p>
+
+<p><strong>Global variable</strong>  <a href="https://doc.rust-lang.org/book/ch19-01-unsafe-rust.html#accessing-or-modifying-a-mutable-static-variable">BK</a>  <a href="https://doc.rust-lang.org/stable/rust-by-example/custom_types/constants.html#constants">EX</a>  <a href="https://doc.rust-lang.org/stable/reference/items/static-items.html#static-items">REF</a>  with  <code>'static</code>  lifetime, single memory location.</p>
+
+<p><code>const  X:  T  =  T();</code></p>
+
+<p>Defines  <strong>constant</strong>,  <a href="https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html#differences-between-variables-and-constants">BK</a>  <a href="https://doc.rust-lang.org/stable/rust-by-example/custom_types/constants.html">EX</a>  <a href="https://doc.rust-lang.org/stable/reference/items/constant-items.html">REF</a>. Copied into a temporary when used.</p>
+
+<p><code>let  x:  T;</code></p>
+
+<p>Allocate  <code>T</code>  bytes on stack bound as  <code>x</code>. Assignable once, not mutable.</p>
+
+<p><code>let  mut  x:  T;</code></p>
+
+<p>Like  <code>let</code>, but allow for mutability and mutable borrow.  *</p>
+
+<p><code>x  =  y</code></p>
+
+<p>Moves  <code>y</code>  to  <code>x</code>, invalidating  <code>y</code>  if  <code>T</code>  is not  <code>Copy</code>, and copying  <code>y</code>  otherwise.</p>
+
+<ul>
+<li>Note that technically  <em>mutable</em>  and  <em>immutable</em>  are a bit of a misnomer. Even if you have an immutable binding or shared reference, it might contain a  <a href="https://doc.rust-lang.org/std/cell/index.html">Cell</a>, which supports so called  <em>interior mutability</em>.</li>
+</ul>
+
+<p>Creating and accessing data structures; and some more  <em>sigilic</em>  types.</p>
+
+<p>Example</p>
+
+<p>Explanation</p>
+
+<p><code>S  {  x:  y  }</code></p>
+
+<p>Create  <code>struct  S  {}</code>  or  <code>use</code>&lsquo;ed  <code>enum  E::S  {}</code>  with field  <code>x</code>  set to  <code>y</code>.</p>
+
+<p><code>S  {  x  }</code></p>
+
+<p>Same, but use local variable  <code>x</code>  for field  <code>x</code>.</p>
+
+<p><code>S  {  ..s  }</code></p>
+
+<p>Fill remaining fields from  <code>s</code>, esp. useful with  <a href="https://doc.rust-lang.org/std/default/trait.Default.html">Default</a>.</p>
+
+<p><code>S  {  0:  x  }</code></p>
+
+<p>Like  <code>S</code> ​<code>(x)</code>  below, but set field  <code>.0</code>  with struct syntax.</p>
+
+<p><code>S</code>​ <code>(x)</code></p>
+
+<p>Create  <code>struct  S</code> ​<code>(T)</code>  or  <code>use</code>&lsquo;ed  <code>enum  E::S</code>​ <code>()</code>  with field  <code>.0</code>  set to  <code>x</code>.</p>
+
+<p><code>S</code></p>
+
+<p>If  <code>S</code>  is unit  <code>struct  S;</code>  or  <code>use</code>&lsquo;ed  <code>enum  E::S</code>  create value of  <code>S</code>.</p>
+
+<p><code>E::C  {  x:  y  }</code></p>
+
+<p>Create enum variant  <code>C</code>. Other methods above also work.</p>
+
+<p><code>()</code></p>
+
+<p>Empty tuple, both literal and type, aka  <strong>unit</strong>  <a href="https://doc.rust-lang.org/std/primitive.unit.html">STD</a></p>
+
+<p><code>(x)</code></p>
+
+<p>Parenthesized expression.</p>
+
+<p><code>(x,)</code></p>
+
+<p>Single-element  <strong>tuple</strong>  expression.  <a href="https://doc.rust-lang.org/stable/rust-by-example/primitives/tuples.html">EX</a>  <a href="https://doc.rust-lang.org/std/primitive.tuple.html">STD</a>  <a href="https://doc.rust-lang.org/stable/reference/expressions/tuple-expr.html">REF</a></p>
+
+<p><code>(S,)</code></p>
+
+<p>Single-element tuple type.</p>
+
+<p><code>[S]</code></p>
+
+<p>Array type of unspecified length, i.e.,  <strong>slice</strong>.  <a href="https://doc.rust-lang.org/std/primitive.slice.html">STD</a>  <a href="https://doc.rust-lang.org/stable/rust-by-example/primitives/array.html">EX</a>  <a href="https://doc.rust-lang.org/stable/reference/types.html#array-and-slice-types">REF</a>  Can&rsquo;t live on stack.  *</p>
+
+<p><code>[S;  n]</code></p>
+
+<p><strong>Array type</strong>  <a href="https://doc.rust-lang.org/stable/rust-by-example/primitives/array.html">EX</a>  <a href="https://doc.rust-lang.org/std/primitive.array.html">STD</a>  of fixed length  <code>n</code>  holding elements of type  <code>S</code>.</p>
+
+<p><code>[x;  n]</code></p>
+
+<p>Array instance with  <code>n</code>  copies of  <code>x</code>.  <a href="https://doc.rust-lang.org/stable/reference/expressions/array-expr.html">REF</a></p>
+
+<p><code>[x,  y]</code></p>
+
+<p>Array instance with given elements  <code>x</code>  and  <code>y</code>.</p>
+
+<p><code>x[0]</code></p>
+
+<p>Collection indexing. Overloadable  <a href="https://doc.rust-lang.org/std/ops/trait.Index.html">Index</a>,  <a href="https://doc.rust-lang.org/std/ops/trait.IndexMut.html">IndexMut</a></p>
+
+<p><code>x[..]</code></p>
+
+<p>Collection slice-like indexing via  <a href="https://doc.rust-lang.org/std/ops/struct.RangeFull.html">RangeFull</a>,  <em>c</em>. slices.</p>
+
+<p><code>x[a..]</code></p>
+
+<p>Collection slice-like indexing via  <a href="https://doc.rust-lang.org/std/ops/struct.RangeFrom.html">RangeFrom</a>.</p>
+
+<p><code>x[..b]</code></p>
+
+<p>Collection slice-like indexing  <a href="https://doc.rust-lang.org/std/ops/struct.RangeTo.html">RangeTo</a>.</p>
+
+<p><code>x[a..b]</code></p>
+
+<p>Collection slice-like indexing via  <a href="https://doc.rust-lang.org/std/ops/struct.Range.html">Range</a>.</p>
+
+<p><code>a..b</code></p>
+
+<p>Right-exclusive  <strong>range</strong>  <a href="https://doc.rust-lang.org/stable/reference/expressions/range-expr.html">REF</a>  creation, also seen as  <code>..b</code>.</p>
+
+<p><code>a..=b</code></p>
+
+<p>Inclusive range creation, also seen as  <code>..=b</code>.</p>
+
+<p><code>s.x</code></p>
+
+<p>Named  <strong>field access</strong>,  <a href="https://doc.rust-lang.org/stable/reference/expressions/field-expr.html">REF</a>  might try to  <a href="https://doc.rust-lang.org/std/ops/trait.Deref.html">Deref</a>  if  <code>x</code>  not part of type  <code>S</code>.</p>
+
+<p><code>s.0</code></p>
+
+<p>Numbered field access, used for tuple types  <code>S</code> ​<code>(T)</code>.</p>
+
+<ul>
+<li>For now, see  <a href="https://github.com/rust-lang/rust/issues/48055">tracking issue</a>  and corresponding  <a href="https://github.com/rust-lang/rfcs/pull/1909">RFC 1909</a>.</li>
+</ul>
+
+<h3 id="references-pointers">References &amp; Pointers</h3>
+
+<p>Granting access to un-owned memory. Also see section on Generics &amp; Constraints.</p>
+
+<p>Example</p>
+
+<p>Explanation</p>
+
+<p><code>&amp;S</code></p>
+
+<p>Shared  <strong>reference</strong>  <a href="https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html">BK</a>  <a href="https://doc.rust-lang.org/std/primitive.reference.html">STD</a>  <a href="https://doc.rust-lang.org/nightly/nomicon/references.html">NOM</a>  <a href="https://doc.rust-lang.org/stable/reference/types.html#pointer-types">REF</a>  (space for holding  <em>any</em>  <code>&amp;s</code>).</p>
+
+<p><code>&amp;[S]</code></p>
+
+<p>Special slice reference that contains (<code>address</code>,  <code>length</code>).</p>
+
+<p><code>&amp;str</code></p>
+
+<p>Special string reference that contains (<code>address</code>,  <code>length</code>).</p>
+
+<p><code>&amp;dyn  S</code></p>
+
+<p>Special  <strong>trait object</strong>  <a href="https://doc.rust-lang.org/book/ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types">BK</a>  reference that contains (<code>address</code>,  <code>vtable</code>).</p>
+
+<p><code>&amp;mut  S</code></p>
+
+<p>Exclusive reference to allow mutability (also  <code>&amp;mut  [S]</code>,  <code>&amp;mut  dyn  S</code>, &hellip;)</p>
+
+<p><code>*const  S</code></p>
+
+<p>Immutable  <strong>raw pointer type</strong>  <a href="https://doc.rust-lang.org/book/ch19-01-unsafe-rust.html#dereferencing-a-raw-pointer">BK</a>  <a href="https://doc.rust-lang.org/std/primitive.pointer.html">STD</a>  <a href="https://doc.rust-lang.org/stable/reference/types.html#raw-pointers-const-and-mut">REF</a>  w/o memory safety.</p>
+
+<p><code>*mut  S</code></p>
+
+<p>Mutable raw pointer type w/o memory safety.</p>
+
+<p><code>&amp;s</code></p>
+
+<p>Shared  <strong>borrow</strong>  <a href="https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html">BK</a>  <a href="https://doc.rust-lang.org/stable/rust-by-example/scope/borrow.html">EX</a>  <a href="https://doc.rust-lang.org/std/borrow/trait.Borrow.html">STD</a>  (e.g., address, len, vtable, &hellip; of  <em>this</em>  <code>s</code>, like  <code>0x1234</code>).</p>
+
+<p><code>&amp;mut  s</code></p>
+
+<p>Exclusive borrow that allows  <strong>mutability</strong>.  <a href="https://doc.rust-lang.org/stable/rust-by-example/scope/borrow/mut.html">EX</a></p>
+
+<p><code>ref  s</code></p>
+
+<p><strong>Bind by reference</strong>.  <a href="https://doc.rust-lang.org/book/ch18-03-pattern-syntax.html#legacy-patterns-ref-and-ref-mut">BK</a>  <a href="https://doc.rust-lang.org/stable/rust-by-example/scope/borrow/ref.html">EX</a>  🗑️</p>
+
+<p><code>*r</code></p>
+
+<p><strong>Dereference</strong>  <a href="https://doc.rust-lang.org/book/ch15-02-deref.html">BK</a>  <a href="https://doc.rust-lang.org/std/ops/trait.Deref.html">STD</a>  <a href="https://doc.rust-lang.org/nightly/nomicon/vec-deref.html">NOM</a>  a reference  <code>r</code>  to access what it points to.</p>
+
+<p><code>*r  =  s</code></p>
+
+<p>If  <code>r</code>  is a mutable reference, move or copy  <code>s</code>  to target memory.</p>
+
+<p><code>s  =  *r</code></p>
+
+<p>Make  <code>s</code>  a copy of whatever  <code>r</code>  references, if that is  <code>Copy</code>.</p>
+
+<p><code>s  =  *my_box</code></p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/b4so6i/what_is_exactly/ej8xwg8/">Special case</a>  for  <code>Box</code>  that can also move out Box&rsquo;ed content if it isn&rsquo;t  <code>Copy</code>.</p>
+
+<p><code>'a</code></p>
+
+<p>A  <strong>lifetime parameter</strong>,  <a href="https://doc.rust-lang.org/book/ch10-00-generics.html">BK</a>  <a href="https://doc.rust-lang.org/stable/rust-by-example/scope/lifetime.html">EX</a>  <a href="https://doc.rust-lang.org/nightly/nomicon/lifetimes.html">NOM</a>  <a href="https://doc.rust-lang.org/stable/reference/items/generics.html#type-and-lifetime-parameters">REF</a>, duration of a flow in static analysis.</p>
+
+<p><code>&amp;'a  S</code></p>
+
+<p>Only accepts a  <code>s</code>  with an address that lives  <code>'a</code>  or longer.</p>
+
+<p><code>&amp;'a  mut  S</code></p>
+
+<p>Same, but allow content of address to be changed.</p>
+
+<p><code>S&lt;'a&gt;</code></p>
+
+<p>Signals  <code>S</code>  will contain address with lifetime  <code>'a</code>. Creator of  <code>S</code>  decides  <code>'a</code>.</p>
+
+<p><code>fn  f&lt;'a&gt;(t:  &amp;'a  T)</code></p>
+
+<p>Same, for function. Caller decides  <code>'a</code>.</p>
+
+<p><code>'static</code></p>
+
+<p>Special lifetime lasting the entire program execution.</p>
+
+<h3 id="functions-behavior">Functions &amp; Behavior</h3>
+
+<p>Define units of code and their abstractions.</p>
+
+<p>Sigil</p>
+
+<p>Explanation</p>
+
+<p><code>trait  T  {}</code></p>
+
+<p>Define a  <strong>trait</strong>.  <a href="https://doc.rust-lang.org/book/ch10-02-traits.html">BK</a>  <a href="https://doc.rust-lang.org/stable/rust-by-example/trait.html">EX</a>  <a href="https://doc.rust-lang.org/stable/reference/items/traits.html">REF</a></p>
+
+<p><code>trait  T  :  R  {}</code></p>
+
+<p><code>T</code>  is subtrait of  <strong>supertrait</strong>  <a href="https://doc.rust-lang.org/stable/reference/items/traits.html#supertraits">REF</a>  <code>R</code>. Any  <code>S</code>  must  <code>impl  R</code>  before it can  <code>impl  T</code>.</p>
+
+<p><code>impl  S  {}</code></p>
+
+<p><strong>Implementation</strong>  <a href="https://doc.rust-lang.org/stable/reference/items/implementations.html">REF</a>  of functionality for a type  <code>S</code>.</p>
+
+<p><code>impl  T  for  S  {}</code></p>
+
+<p>Implement trait  <code>T</code>  for type  <code>S</code>.</p>
+
+<p><code>impl  !T  for  S  {}</code></p>
+
+<p>Disable an automatically derived  <strong>auto trait</strong>  <a href="https://doc.rust-lang.org/nightly/nomicon/send-and-sync.html">NOM</a>  <a href="https://doc.rust-lang.org/stable/reference/special-types-and-traits.html#auto-traits">REF</a>.</p>
+
+<p><code>fn  f()  {}</code></p>
+
+<p>Definition of a  <strong>function</strong>  <a href="https://doc.rust-lang.org/book/ch03-03-how-functions-work.html">BK</a>  <a href="https://doc.rust-lang.org/stable/rust-by-example/fn.html">EX</a>  <a href="https://doc.rust-lang.org/stable/reference/items/functions.html">REF</a>; or associated function if inside  <code>impl</code>.</p>
+
+<p><code>fn  f()  -&gt;  S  {}</code></p>
+
+<p>Same, returning a value of type S.</p>
+
+<p><code>fn  f(&amp;self)  {}</code></p>
+
+<p>Define a method as part of an  <code>impl</code>.</p>
+
+<p><code>const  fn  f()  {}</code></p>
+
+<p>Constant  <code>fn</code>  usable at compile time, e.g.,  <code>const  X:  u32  =  f(Y)</code>.  &lsquo;18</p>
+
+<p><code>async  fn  f()  {}</code></p>
+
+<p><strong>Async</strong>  🚧  &lsquo;18  function transformation, makes  <code>f</code>  return an  <code>impl  Future</code>.  <a href="https://doc.rust-lang.org/std/future/trait.Future.html">STD</a></p>
+
+<p><code>async  fn  f()  -&gt;  S  {}</code></p>
+
+<p>The call  <code>f()</code>  returns an  <code>impl  Future&lt;Output=S&gt;</code>, does not execute  <code>f</code>!</p>
+
+<p><code>async  {}</code></p>
+
+<p>Block  <code>async  {  x  }</code>  transforms last expression  <code>x</code>  into  <code>Future&lt;Output=X&gt;</code>.</p>
+
+<p><code>fn()  -&gt;  S</code></p>
+
+<p><strong>Function pointers</strong>,  <a href="https://doc.rust-lang.org/book/ch19-05-advanced-functions-and-closures.html#function-pointers">BK</a>  <a href="https://doc.rust-lang.org/std/primitive.fn.html">STD</a>  <a href="https://doc.rust-lang.org/stable/reference/types.html#function-pointer-types">REF</a>  don&rsquo;t confuse with trait  <a href="https://doc.rust-lang.org/std/ops/trait.Fn.html">Fn</a>.</p>
+
+<p><code>||  {}</code></p>
+
+<p>A  <strong>closure</strong>  <a href="https://doc.rust-lang.org/book/ch13-01-closures.html">BK</a>  <a href="https://doc.rust-lang.org/stable/rust-by-example/fn/closures.html">EX</a>  <a href="https://doc.rust-lang.org/stable/reference/expressions/closure-expr.html">REF</a>  that borrows its captures.</p>
+
+<p><code>|x|  {}</code></p>
+
+<p>Closure with a bound parameter  <code>x</code>.</p>
+
+<p><code>|x|  x  +  x</code></p>
+
+<p>Closure without block expression.</p>
+
+<p><code>move  |x|  x  +  y</code></p>
+
+<p>Closure taking ownership of its captures.</p>
+
+<p><code>return  ||  true</code></p>
+
+<p>Closures may sometimes look like logical ORs (here: return a closure).</p>
+
+<p><code>f()</code></p>
+
+<p>Invoke callable  <code>f</code>  (e.g., a function, closure, function pointer,  <code>Fn</code>, &hellip;).</p>
+
+<p><code>x.f()</code></p>
+
+<p>Call member function, requires  <code>f</code>  takes  <code>self</code>,  <code>&amp;self</code>, &hellip; as first argument.</p>
+
+<p><code>X::f(x)</code></p>
+
+<p>Same as  <code>x.f()</code>. Unless  <code>impl  Copy  for  X  {}</code>,  <code>f</code>  can only be called once.</p>
+
+<p><code>X::f(&amp;x)</code></p>
+
+<p>Same as  <code>x.f()</code>.</p>
+
+<p><code>X::f(&amp;mut  x)</code></p>
+
+<p>Same as  <code>x.f()</code>.</p>
+
+<p><code>S::f(&amp;x)</code></p>
+
+<p>Same as  <code>x.f()</code>  if  <code>X</code>  <a href="https://doc.rust-lang.org/std/ops/trait.Deref.html">derefs</a>  to  <code>S</code>  (i.e.,  <code>x.f()</code>  finds methods of  <code>S</code>).</p>
+
+<p><code>T::f(&amp;x)</code></p>
+
+<p>Same as  <code>x.f()</code>  if  <code>X  impl  T</code>  (i.e.,  <code>x.f()</code>  finds methods of  <code>T</code>  if in scope).</p>
+
+<p><code>X::f()</code></p>
+
+<p>Call associated function, e.g.,  <code>X::new()</code>.</p>
+
+<p><code>&lt;X  as  T&gt;::f()</code></p>
+
+<p>Call trait method  <code>T::f()</code>  implemented for  <code>X</code>.</p>
+
+<p><code>unsafe  {}</code></p>
+
+<p>If you need to crash your code in production;  <strong>unsafe code</strong>.  <a href="https://doc.rust-lang.org/book/ch19-01-unsafe-rust.html?highlight=unsafe#unsafe-superpowers">BK</a>  <a href="https://doc.rust-lang.org/stable/rust-by-example/unsafe.html#unsafe-operations">EX</a>  <a href="https://doc.rust-lang.org/nightly/nomicon/meet-safe-and-unsafe.html">NOM</a>  <a href="https://doc.rust-lang.org/stable/reference/unsafe-blocks.html#unsafe-blocks">REF</a></p>
+
+<h3 id="control-flow">Control Flow</h3>
+
+<p>Control execution within a function.</p>
+
+<p>Sigil</p>
+
+<p>Explanation</p>
+
+<p><code>while  x  {}</code></p>
+
+<p><strong>Loop</strong>  <a href="https://doc.rust-lang.org/stable/reference/expressions/loop-expr.html#predicate-loops">REF</a>, run while expression  <code>x</code>  is true.</p>
+
+<p><code>loop  {}</code></p>
+
+<p><strong>Loop infinitely</strong>  <a href="https://doc.rust-lang.org/stable/reference/expressions/loop-expr.html#infinite-loops">REF</a>  until  <code>break</code>. Can yield value with  <code>break  x</code>.</p>
+
+<p><code>for  x  in  iter  {}</code></p>
+
+<p>Syntactic sugar to loop over  <strong>iterators</strong>.  <a href="https://doc.rust-lang.org/book/ch13-02-iterators.html">BK</a>  <a href="https://doc.rust-lang.org/std/iter/index.html">STD</a>  <a href="https://doc.rust-lang.org/stable/reference/expressions/loop-expr.html#iterator-loops">REF</a></p>
+
+<p><code>if  x  {}  else  {}</code></p>
+
+<p><strong>Conditional branch</strong>  <a href="https://doc.rust-lang.org/stable/reference/expressions/if-expr.html">REF</a>  if expression is true.</p>
+
+<p><code>'label:  loop  {}</code></p>
+
+<p><strong>Loop label</strong>  <a href="https://doc.rust-lang.org/stable/rust-by-example/flow_control/loop/nested.html">EX</a>  <a href="https://doc.rust-lang.org/stable/reference/expressions/loop-expr.html#loop-labels">REF</a>, useful for flow control in nested loops.</p>
+
+<p><code>break</code></p>
+
+<p><strong>Break expression</strong>  <a href="https://doc.rust-lang.org/stable/reference/expressions/loop-expr.html#break-expressions">REF</a>  to exit a loop.</p>
+
+<p><code>break  x</code></p>
+
+<p>Same, but make  <code>x</code>  value of the loop expression (only in actual  <code>loop</code>).</p>
+
+<p><code>break  'label</code></p>
+
+<p>Exit not only this loop, but the enclosing one marked with  <code>'label</code>.</p>
+
+<p><code>continue</code></p>
+
+<p><strong>Continue expression</strong>  <a href="https://doc.rust-lang.org/stable/reference/expressions/loop-expr.html#continue-expressions">REF</a>  to the next loop iteration of this loop.</p>
+
+<p><code>continue  'label</code></p>
+
+<p>Same, but instead of enclosing loop marked with  <code>'label</code>.</p>
+
+<p><code>x.await</code></p>
+
+<p>Only works inside  <code>async</code>. Yield flow until  <a href="https://doc.rust-lang.org/std/future/trait.Future.html">Future</a>  or Stream  ?  <code>x</code>  ready.  🚧  &lsquo;18</p>
+
+<p><code>return  x</code></p>
+
+<p>Early return from function. More idiomatic way is to end with expression.</p>
+
+<p><code>x?</code></p>
+
+<p>If  <code>x</code>  is  <a href="https://doc.rust-lang.org/std/result/enum.Result.html#variant.Err">Err</a>  or  <a href="https://doc.rust-lang.org/std/option/enum.Option.html#variant.None">None</a>,  <strong>return and propagate</strong>.  <a href="https://doc.rust-lang.org/book/ch09-02-recoverable-errors-with-result.html#propagating-errors">BK</a>  <a href="https://doc.rust-lang.org/stable/rust-by-example/error/result/enter_question_mark.html">EX</a>  <a href="https://doc.rust-lang.org/std/result/index.html#the-question-mark-operator-">STD</a>  <a href="https://doc.rust-lang.org/stable/reference/expressions/operator-expr.html#the-question-mark-operator">REF</a></p>
+
+<h3 id="organizing-code">Organizing Code</h3>
+
+<p>Segment projects into smaller units and minimize dependencies.</p>
+
+<p>Sigil</p>
+
+<p>Explanation</p>
+
+<p><code>mod  m  {}</code></p>
+
+<p>Define a  <strong>module</strong>  <a href="https://doc.rust-lang.org/book/ch07-02-defining-modules-to-control-scope-and-privacy.html">BK</a>  <a href="https://doc.rust-lang.org/stable/rust-by-example/mod.html#modules">EX</a>  <a href="https://doc.rust-lang.org/stable/reference/items/modules.html#modules">REF</a>, get definition from inside  <code>{}</code>.</p>
+
+<p><code>mod  m;</code></p>
+
+<p>Define a module, get definition from  <code>m.rs</code>  or  <code>m/mod.rs</code>.</p>
+
+<p><code>a::b</code></p>
+
+<p>Namespace  <strong>path</strong>  <a href="https://doc.rust-lang.org/stable/rust-by-example/mod/use.html">EX</a>  <a href="https://doc.rust-lang.org/stable/reference/paths.html">REF</a>  to element  <code>b</code>  within  <code>a</code>  (<code>mod</code>,  <code>enum</code>, &hellip;).</p>
+
+<p><code>::b</code></p>
+
+<p>Search  <code>b</code>  relative to crate root.  🗑️</p>
+
+<p><code>crate::b</code></p>
+
+<p>Search  <code>b</code>  relative to crate root.  &lsquo;18</p>
+
+<p><code>self::b</code></p>
+
+<p>Search  <code>b</code>  relative to current module.</p>
+
+<p><code>super::b</code></p>
+
+<p>Search  <code>b</code>  relative to parent module.</p>
+
+<p><code>use  a::b;</code></p>
+
+<p><strong>Use</strong>  <a href="https://doc.rust-lang.org/stable/rust-by-example/mod/use.html#the-use-declaration">EX</a>  <a href="https://doc.rust-lang.org/stable/reference/items/use-declarations.html">REF</a>  <code>b</code>  directly in this scope without requiring  <code>a</code>  anymore.</p>
+
+<p><code>use  a::{b,  c};</code></p>
+
+<p>Same, but bring  <code>b</code>  and  <code>c</code>  into scope.</p>
+
+<p><code>use  a::b  as  x;</code></p>
+
+<p>Bring  <code>b</code>  into scope but name  <code>x</code>, like  <code>use  std::error::Error  as  E</code>.</p>
+
+<p><code>use  a::b  as  _;</code></p>
+
+<p>Bring  <code>b</code>  anonymously into scope, useful for traits with conflicting names.</p>
+
+<p><code>use  a::*;</code></p>
+
+<p>Bring everything from  <code>a</code>  into scope.</p>
+
+<p><code>pub  use  a::b;</code></p>
+
+<p>Bring  <code>a::b</code>  into scope and reexport from here.</p>
+
+<p><code>pub  T</code></p>
+
+<p>&ldquo;Public if parent path is public&rdquo;  <strong>visibility</strong>  <a href="https://doc.rust-lang.org/book/ch07-02-defining-modules-to-control-scope-and-privacy.html">BK</a>  for  <code>T</code>.</p>
+
+<p><code>pub(crate)  T</code></p>
+
+<p>Visible at most in current crate.</p>
+
+<p><code>pub(self)  T</code></p>
+
+<p>Visible at most in current module.</p>
+
+<p><code>pub(super)  T</code></p>
+
+<p>Visible at most in parent.</p>
+
+<p><code>pub(in  a::b)  T</code></p>
+
+<p>Visible at most in  <code>a::b</code>.</p>
+
+<p><code>extern  crate  a</code>;</p>
+
+<p>Declare dependency on external  <strong>crate</strong>  <a href="https://doc.rust-lang.org/book/ch02-00-guessing-game-tutorial.html#using-a-crate-to-get-more-functionality">BK</a>  <a href="https://doc.rust-lang.org/stable/rust-by-example/crates/link.html#extern-crate">EX</a>  <a href="https://doc.rust-lang.org/stable/reference/items/extern-crates.html#extern-crate-declarations">REF</a>  🗑️  ; just  <code>use  a::b</code>  in  &lsquo;18.</p>
+
+<p><code>extern  &quot;C&quot;  fn</code></p>
+
+<p>External dependency for  <strong>FFI</strong>.  <a href="https://doc.rust-lang.org/book/ch19-01-unsafe-rust.html#using-extern-functions-to-call-external-code">BK</a>  <a href="https://doc.rust-lang.org/stable/rust-by-example/std_misc/ffi.html#foreign-function-interface">EX</a>  <a href="https://doc.rust-lang.org/nightly/nomicon/ffi.html#calling-foreign-functions">NOM</a>  <a href="https://doc.rust-lang.org/stable/reference/items/external-blocks.html#external-blocks">REF</a></p>
+
+<h3 id="type-aliases-and-casts">Type Aliases and Casts</h3>
+
+<p>Short-hand names of types, and methods to convert one type to another.</p>
+
+<p>Sigil</p>
+
+<p>Explanation</p>
+
+<p><code>type  T  =  S;</code></p>
+
+<p>Create a  <strong>type alias</strong>  <a href="https://doc.rust-lang.org/book/ch19-04-advanced-types.html#creating-type-synonyms-with-type-aliases">BK</a>  <a href="https://doc.rust-lang.org/stable/reference/items/type-aliases.html?highlight=alias#type-aliases">REF</a>, i.e., another name for  <code>S</code>.</p>
+
+<p><code>Self</code></p>
+
+<p>Type alias for  <strong>implementing type</strong>  <a href="https://doc.rust-lang.org/stable/reference/types.html#self-types">REF</a>, e.g.  <code>fn  new()  -&gt;  Self</code>.</p>
+
+<p><code>self</code></p>
+
+<p>Method subject in  <code>fn  f(self)  {}</code>, same as  <code>fn  f(self:  Self)  {}</code>.</p>
+
+<p><code>&amp;self</code></p>
+
+<p>Same, but refers to self as borrowed, same as  <code>f(self:  &amp;Self)</code></p>
+
+<p><code>&amp;mut  self</code></p>
+
+<p>Same, but mutably borrowed, same as  <code>f(self:  &amp;mut  Self)</code></p>
+
+<p><code>self:  Box&lt;Self&gt;</code></p>
+
+<p><a href="https://github.com/withoutboats/rfcs/blob/arbitray-receivers/text/0000-century-of-the-self-type.md">Arbitrary self type</a>, add methods to smart pointers (<code>my_box.f_of_self()</code>).</p>
+
+<p><code>S  as  T</code></p>
+
+<p><strong>Disambiguate</strong>  <a href="https://doc.rust-lang.org/book/ch19-03-advanced-traits.html#fully-qualified-syntax-for-disambiguation-calling-methods-with-the-same-name">BK</a>  <a href="https://doc.rust-lang.org/stable/reference/expressions/call-expr.html#disambiguating-function-calls">REF</a>  type  <code>S</code>  as trait  <code>T</code>, e.g.,  <code>&lt;X  as  T&gt;::f()</code>.</p>
+
+<p><code>S  as  R</code></p>
+
+<p>In  <code>use</code>  of symbol, import  <code>S</code>  as  <code>R</code>, e.g.,  <code>use  a::b  as  x</code>.</p>
+
+<p><code>x  as  u32</code></p>
+
+<p>Primitive  <strong>cast</strong>  <a href="https://doc.rust-lang.org/stable/rust-by-example/types/cast.html#casting">EX</a>  <a href="https://doc.rust-lang.org/stable/reference/expressions/operator-expr.html#type-cast-expressions">REF</a>, may truncate and be a bit surprising.  <a href="https://doc.rust-lang.org/nightly/nomicon/casts.html">NOM</a></p>
+
+<h3 id="code-generation">Code Generation</h3>
+
+<p>Constructs expanded before the actual compilation happens.</p>
+
+<p>Example</p>
+
+<p>Explanation</p>
+
+<p><code>m!()</code></p>
+
+<p><strong>Macro</strong>  <a href="https://doc.rust-lang.org/book/ch19-06-macros.html">BK</a>  <a href="https://doc.rust-lang.org/std/index.html#macros">STD</a>  <a href="https://doc.rust-lang.org/stable/reference/macros.html">REF</a>  invocation, also  <code>m!{}</code>,  <code>m![]</code>  (depending on macro).</p>
+
+<p><code>$x:ty</code></p>
+
+<p>Macro capture, also  <code>$x:expr</code>,  <code>$x:ty</code>,  <code>$x:path</code>, &hellip; see next table.</p>
+
+<p><code>$x</code></p>
+
+<p>Macro substitution in  <strong>macros by example</strong>.  <a href="https://doc.rust-lang.org/book/ch19-06-macros.html">BK</a>  <a href="https://doc.rust-lang.org/stable/rust-by-example/macros.html#macro_rules">EX</a>  <a href="https://doc.rust-lang.org/stable/reference/macros-by-example.html">REF</a></p>
+
+<p><code>$(x),*</code></p>
+
+<p>Macro repetition &ldquo;zero or more times&rdquo; in macros by example.</p>
+
+<p><code>$(x),?</code></p>
+
+<p>Same, but &ldquo;zero or one time&rdquo;.</p>
+
+<p><code>$(x),+</code></p>
+
+<p>Same, but &ldquo;one or more times&rdquo;.</p>
+
+<p><code>$(x)&lt;&lt;+</code></p>
+
+<p>In fact separators other than  <code>,</code>  are also accepted. Here:  <code>&lt;&lt;</code>.</p>
+
+<p><code>$crate</code></p>
+
+<p>Special hygiene variable, crate where macros is defined.  ?</p>
+
+<p><code>#[attr]</code></p>
+
+<p>Outer  <strong>attribute</strong>.  <a href="https://doc.rust-lang.org/stable/rust-by-example/attribute.html">EX</a>  <a href="https://doc.rust-lang.org/stable/reference/attributes.html">REF</a>, annotating the following item.</p>
+
+<p><code>#![attr]</code></p>
+
+<p>Inner attribute, annotating the surrounding item.</p>
+
+<p>In a  <code>macro_rules!</code>  implementation, the following macro captures can be used:</p>
+
+<p>Macro Capture</p>
+
+<p>Explanation</p>
+
+<p><code>$x:item</code></p>
+
+<p>An item, like a function, struct, module, etc.</p>
+
+<p><code>$x:block</code></p>
+
+<p>A block  <code>{}</code>  of statements or expressions, e.g.,  <code>{  let  x  =  5;  }</code></p>
+
+<p><code>$x:stmt</code></p>
+
+<p>A statement, e.g.,  <code>let  x  =  1  +  1;</code>,  <code>String::new();</code>  or  <code>vec![];</code></p>
+
+<p><code>$x:expr</code></p>
+
+<p>An expression, e.g.,  <code>x</code>,  <code>1  +  1</code>,  <code>String::new()</code>  or  <code>vec![]</code></p>
+
+<p><code>$x:pat</code></p>
+
+<p>A pattern, e.g.,  <code>Some(t)</code>,  <code>(17,  'a')</code>  or  <code>_</code>.</p>
+
+<p><code>$x:ty</code></p>
+
+<p>A type, e.g.,  <code>String</code>,  <code>usize</code>  or  <code>Vec&lt;u8&gt;</code>.</p>
+
+<p><code>$x:ident</code></p>
+
+<p>An identifier, for example in  <code>let  x  =  0;</code>  the identifier is  <code>x</code>.</p>
+
+<p><code>$x:path</code></p>
+
+<p>A path (e.g.  <code>foo</code>,  <code>::std::mem::replace</code>,  <code>transmute::&lt;_,  int&gt;</code>, …).</p>
+
+<p><code>$x:literal</code></p>
+
+<p>A literal (e.g.  <code>3</code>,  <code>&quot;foo&quot;</code>,  <code>b&quot;bar&quot;</code>, etc.).</p>
+
+<p><code>$x:meta</code></p>
+
+<p>A meta item; the things that go inside  <code>#[...]</code>  and  <code>#![...]</code>  attributes.</p>
+
+<p><code>$x:tt</code></p>
+
+<p>A single token tree,  <a href="https://stackoverflow.com/a/40303308">see here</a>  for more details.</p>
+
+<h3 id="pattern-matching">Pattern Matching</h3>
+
+<p>Constructs found in  <code>match</code>  or  <code>let</code>  expressions, or function parameters.</p>
+
+<p>Example</p>
+
+<p>Explanation</p>
+
+<p><code>match  m  {}</code></p>
+
+<p>Initiate  <strong>pattern matching</strong>  <a href="https://doc.rust-lang.org/book/ch06-02-match.html">BK</a>  <a href="https://doc.rust-lang.org/stable/rust-by-example/flow_control/match.html">EX</a>  <a href="https://doc.rust-lang.org/stable/reference/expressions/match-expr.html">REF</a>, then use match arms,  <em>c</em>. next table.</p>
+
+<p><code>let  Some(x)  =  Some(5)</code></p>
+
+<p>Notably,  <code>let</code>  also pattern matches similar to the table below.</p>
+
+<p><code>let  S  {  x  }  =  s</code></p>
+
+<p>Only  <code>x</code>  will be bound to value  <code>s.x</code>.</p>
+
+<p><code>let  (_,  b,  _)  =  abc</code></p>
+
+<p>Only  <code>b</code>  will be bound to value  <code>abc.1</code>.</p>
+
+<p><code>let  (a,  ..)  =  abc</code></p>
+
+<p>Ignoring &lsquo;the rest&rsquo; also works.</p>
+
+<p><code>let  Some(x)  =  get()</code></p>
+
+<p>Will  <strong>not</strong>  work  🛑  if pattern can be  <strong>refuted</strong>  <a href="https://doc.rust-lang.org/stable/reference/expressions/if-expr.html#if-let-expressions">REF</a>, use  <code>if  let</code>  instead.</p>
+
+<p><code>if  let  Some(x)  =  get()</code></p>
+
+<p>Branch if pattern can actually be assigned (e.g.,  <code>enum</code>  variant).</p>
+
+<p><code>fn  f(S  {  x  }:  S)</code></p>
+
+<p>Function parameters also work like  <code>let</code>, here  <code>x</code>  bound to  <code>s.x</code>  of  <code>f(s)</code>.</p>
+
+<p>Pattern matching arms in  <code>match</code>  expressions. The left side of these arms can also be found in  <code>let</code>  expressions.</p>
+
+<p>Example</p>
+
+<p>Explanation</p>
+
+<p><code>E::A  =&gt;  {}</code></p>
+
+<p>Match enum variant  <code>A</code>,  <em>c</em>.  <strong>pattern matching</strong>.  <a href="https://doc.rust-lang.org/book/ch06-02-match.html">BK</a>  <a href="https://doc.rust-lang.org/stable/rust-by-example/flow_control/match.html">EX</a>  <a href="https://doc.rust-lang.org/stable/reference/expressions/match-expr.html">REF</a></p>
+
+<p><code>E::B  (  ..  )  =&gt;  {}</code></p>
+
+<p>Match enum tuple variant  <code>B</code>, wildcard any index.</p>
+
+<p><code>E::C  {  ..  }  =&gt;  {}</code></p>
+
+<p>Match enum struct variant  <code>C</code>, wildcard any field.</p>
+
+<p><code>S  {  x:  0,  y:  1  }  =&gt;  {}</code></p>
+
+<p>Match struct with specific params.</p>
+
+<p><code>S  {  x,  y  }  =&gt;  {}</code></p>
+
+<p>Match struct with any values, bind respective fields as variables  <code>x</code>  and  <code>y</code>.</p>
+
+<p><code>S  {  ..  }  =&gt;  {}</code></p>
+
+<p>Match struct with any values.</p>
+
+<p><code>D  =&gt;  {}</code></p>
+
+<p>Match enum variant  <code>E::D</code>  if  <code>D</code>  in  <code>use</code>.</p>
+
+<p><code>D  =&gt;  {}</code></p>
+
+<p>Match anything, bind  <code>D</code>; possibly false friend  🛑  of  <code>E::D</code>  if  <code>D</code>  not in  <code>use</code>.</p>
+
+<p><code>_  =&gt;  {}</code></p>
+
+<p>Proper wildcard that matches anything / &ldquo;all the rest&rdquo;.</p>
+
+<p><code>[a,  0]  =&gt;  {}</code></p>
+
+<p>Match array with any value for  <code>a</code>  and  <code>0</code>  for second.</p>
+
+<p><code>(a,  0)  =&gt;  {}</code></p>
+
+<p>Match tuple with any value for  <code>a</code>  and  <code>0</code>  for second.</p>
+
+<p><code>x  @  1..=5  =&gt;  {}</code></p>
+
+<p>Bind matched to  <code>x</code>;  <strong>pattern binding</strong>  <a href="https://doc.rust-lang.org/book/ch18-03-pattern-syntax.html#a-bindings">BK</a>  <a href="https://doc.rust-lang.org/stable/rust-by-example/flow_control/match/binding.html#binding">EX</a>.</p>
+
+<p><code>0  |  1  =&gt;  {}</code></p>
+
+<p>Pattern alternatives (or-patterns).</p>
+
+<p><code>E::A  |  E::Z</code></p>
+
+<p>Same, but on enum variants.</p>
+
+<p><code>E::C  {x}  |  E::D  {x}</code></p>
+
+<p>Same, but bind  <code>x</code>  if all variants have it.</p>
+
+<p><code>S  {  x  }  if  x  &gt;  10</code></p>
+
+<p>Pattern match  <strong>guards</strong>.  <a href="https://doc.rust-lang.org/book/ch18-03-pattern-syntax.html#extra-conditionals-with-match-guards">BK</a>  <a href="https://doc.rust-lang.org/stable/rust-by-example/flow_control/match/guard.html#guards">EX</a></p>
+
+<h3 id="generics-constraints">Generics &amp; Constraints</h3>
+
+<p>Generics combine with many other constructs such as  <code>struct  S&lt;T&gt;</code>,  <code>fn  f&lt;T&gt;()</code>, &hellip;</p>
+
+<p>Example</p>
+
+<p>Explanation</p>
+
+<p><code>S&lt;T&gt;</code></p>
+
+<p>A  <strong>generic</strong>  <a href="https://doc.rust-lang.org/book/ch10-01-syntax.html">BK</a>  <a href="https://doc.rust-lang.org/stable/rust-by-example/generics.html">EX</a>  type with a type parameter (<code>T</code>  is placeholder name here).</p>
+
+<p><code>S&lt;T:  R&gt;</code></p>
+
+<p>Type short hand  <strong>trait bound</strong>  <a href="https://doc.rust-lang.org/book/ch10-02-traits.html#using-trait-bounds-to-conditionally-implement-methods">BK</a>  <a href="https://doc.rust-lang.org/stable/rust-by-example/generics/bounds.html">EX</a>  specification (<code>R</code>  <em>must</em>  be actual trait).</p>
+
+<p><code>T:  R,  P:  S</code></p>
+
+<p><strong>Independent trait bounds</strong>  (here one for  <code>T</code>  and one for  <code>P</code>).</p>
+
+<p><code>T:  R,  S</code></p>
+
+<p>Compile error  🛑, you probably want compound bound  <code>R  +  S</code>  below.</p>
+
+<p><code>T:  R  +  S</code></p>
+
+<p><strong>Compound trait bound</strong>  <a href="https://doc.rust-lang.org/book/ch10-02-traits.html#multiple-trait-bounds-with-">BK</a>  <a href="https://doc.rust-lang.org/stable/rust-by-example/generics/multi_bounds.html">EX</a>,  <code>T</code>  must fulfill  <code>R</code>  and  <code>S</code>.</p>
+
+<p><code>T:  R  +  'a</code></p>
+
+<p>Same, but w. lifetime.  <code>T</code>  must fulfill  <code>R</code>, if  <code>T</code>  has lifetimes, must outlive  <code>'a</code>.</p>
+
+<p><code>T:  ?Sized</code></p>
+
+<p>Opt out of a pre-defined trait bound, here  <code>Sized</code>.  ?</p>
+
+<p><code>T:  'a</code></p>
+
+<p>Type  <strong>lifetime bound</strong>  <a href="https://doc.rust-lang.org/stable/rust-by-example/scope/lifetime/lifetime_bounds.html">EX</a>; if T has references, they must outlive  <code>'a</code>.</p>
+
+<p><code>'b:  'a</code></p>
+
+<p>Lifetime  <code>'b</code>  must live at least as long as (i.e.,  <em>outlive</em>)  <code>'a</code>  bound.</p>
+
+<p><code>S&lt;T&gt;  where  T:  R</code></p>
+
+<p>Same as  <code>S&lt;T:  R&gt;</code>  but more pleasant to read for longer bounds.</p>
+
+<p><code>S&lt;T  =  R&gt;</code></p>
+
+<p><strong>Default type parameter</strong>  <a href="https://doc.rust-lang.org/book/ch19-03-advanced-traits.html#default-generic-type-parameters-and-operator-overloading">BK</a>  for associated type.</p>
+
+<p><code>S&lt;'_&gt;</code></p>
+
+<p>Inferred  <strong>anonymous lifetime</strong>.</p>
+
+<p><code>S&lt;_&gt;</code></p>
+
+<p>Inferred  <strong>anonymous type</strong>, e.g., as  <code>let  x:  Vec&lt;_&gt;  =  iter.collect()</code></p>
+
+<p><code>S::&lt;T&gt;</code></p>
+
+<p><strong>Turbofish</strong>  <a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.collect">STD</a>  call site type disambiguation, e.g.  <code>f::&lt;u32&gt;()</code>.</p>
+
+<p><code>trait  T&lt;X&gt;  {}</code></p>
+
+<p>A trait generic over  <code>X</code>. Can have multiple  <code>impl  T  for  S</code>  (one per  <code>X</code>).</p>
+
+<p><code>trait  T  {  type  X;  }</code></p>
+
+<p>Defines  <strong>associated type</strong>  <a href="https://doc.rust-lang.org/book/ch19-03-advanced-traits.html#specifying-placeholder-types-in-trait-definitions-with-associated-types">BK</a>  <a href="https://doc.rust-lang.org/stable/reference/items/associated-items.html#associated-types">REF</a>  <code>X</code>. Only one  <code>impl  T  for  S</code>  possible.</p>
+
+<p><code>type  X  =  R;</code></p>
+
+<p>Set associated type within  <code>impl  T  for  S  {  type  X  =  R;  }</code>.</p>
+
+<p><code>impl&lt;T&gt;  S&lt;T&gt;  {}</code></p>
+
+<p>Implement functionality for any  <code>T</code>  in  <code>S&lt;T&gt;</code>.</p>
+
+<p><code>impl  S&lt;T&gt;  {}</code></p>
+
+<p>Implement functionality for exactly  <code>S&lt;T&gt;</code>  (e.g.,  <code>S&lt;u32&gt;</code>).</p>
+
+<p><code>fn  f()  -&gt;  impl  T</code></p>
+
+<p><strong>Existential types</strong>  <a href="https://doc.rust-lang.org/book/ch10-02-traits.html#returning-traits">BK</a>, returns an unknown-to-caller  <code>S</code>  that  <code>impl  T</code>.</p>
+
+<p><code>fn  f(x:  &amp;impl  T)</code></p>
+
+<p>Trait bound,&rdquo;<strong>impl traits</strong>&rdquo;  <a href="https://doc.rust-lang.org/book/ch10-02-traits.html#trait-bounds">BK</a>, somewhat similar to  <code>fn  f&lt;S:T&gt;(x:  &amp;S)</code>.</p>
+
+<p><code>fn  f(x:  &amp;dyn  T)</code></p>
+
+<p>Marker for  <strong>dynamic dispatch</strong>  <a href="https://doc.rust-lang.org/book/ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types">BK</a>  <a href="https://doc.rust-lang.org/stable/reference/types.html#trait-objects">REF</a>,  <code>f</code>  will not be monomorphized.</p>
+
+<p><code>fn  f()  where  Self:  R</code></p>
+
+<p>In a  <code>trait  T  {}</code>, mark  <code>f</code>  as accessible only on types that also  <code>impl  R</code>.</p>
+
+<p><code>for&lt;'a&gt;</code></p>
+
+<p><strong>Higher-rank trait bounds.</strong>  <a href="https://doc.rust-lang.org/nightly/nomicon/hrtb.html">NOM</a>  <a href="https://doc.rust-lang.org/stable/reference/trait-bounds.html#higher-ranked-trait-bounds">REF</a></p>
+
+<h3 id="strings-chars">Strings &amp; Chars</h3>
+
+<p>Rust has several ways to create string or char literals, depending on your needs.</p>
+
+<p>Example</p>
+
+<p>Explanation</p>
+
+<p><code>&quot;...&quot;</code></p>
+
+<p><strong>String literal</strong>  <a href="https://doc.rust-lang.org/stable/reference/tokens.html#string-literals">REF</a>, will escape  <code>\n</code>, &hellip;</p>
+
+<p><code>r&quot;...&quot;</code>,</p>
+
+<p><strong>Raw string literal</strong>.  <a href="https://doc.rust-lang.org/stable/reference/tokens.html#raw-string-literals">REF</a>, won&rsquo;t escape  <code>\n</code>, &hellip;</p>
+
+<p><code>r#&quot;...&quot;#</code>, etc.</p>
+
+<p>Raw string literal, but can also contain  <code>&quot;</code>.</p>
+
+<p><code>b&quot;...&quot;</code></p>
+
+<p><strong>Byte string literal</strong>  <a href="https://doc.rust-lang.org/stable/reference/tokens.html#byte-and-byte-string-literals">REF</a>; constructs ASCII  <code>[u8]</code>, not a string.</p>
+
+<p><code>br&quot;...&quot;</code>,  <code>br#&quot;...&quot;#</code>, etc.</p>
+
+<p>Raw byte string literal, combination of the above.</p>
+
+<p><code>'🦀'</code></p>
+
+<p><strong>Character literal</strong>  <a href="https://doc.rust-lang.org/stable/reference/tokens.html#character-and-string-literals">REF</a>, can contain unicode.</p>
+
+<p><code>b'x'</code></p>
+
+<p>ASCII  <strong>byte literal</strong>.  <a href="https://doc.rust-lang.org/stable/reference/tokens.html#byte-literals">REF</a></p>
+
+<h3 id="comments">Comments</h3>
+
+<p>No comment.</p>
+
+<p>Example</p>
+
+<p>Explanation</p>
+
+<p><code>//</code></p>
+
+<p>Line comment, use these to document code flow or  <em>internals</em>.</p>
+
+<p><code>//!</code></p>
+
+<p>Inner line  <strong>doc comment</strong>  <a href="https://doc.rust-lang.org/book/ch14-02-publishing-to-crates-io.html#making-useful-documentation-comments">BK</a>  <a href="https://doc.rust-lang.org/stable/rust-by-example/meta/doc.html#documentation">EX</a>  <a href="https://doc.rust-lang.org/stable/reference/comments.html#doc-comments">REF</a>  for auto generated documentation.</p>
+
+<p><code>///</code></p>
+
+<p>Outer line doc comment, use these on types.</p>
+
+<p><code>/*...*/</code></p>
+
+<p>Block comment.</p>
+
+<p><code>/*!...*/</code></p>
+
+<p>Inner block doc comment.</p>
+
+<p><code>/**...*/</code></p>
+
+<p>Outer block doc comment.</p>
+
+<p><code>rust  ...</code></p>
+
+<p>In doc comments, include a  <a href="https://doc.rust-lang.org/rustdoc/documentation-tests.html">doc test</a>  (doc code running on  <code>cargo test</code>).</p>
+
+<p><code>#</code></p>
+
+<p>In doc tests, hide line from documentation (<code>#  use  x::hidden;</code>).</p>
+
+<h3 id="miscellaneous">Miscellaneous</h3>
+
+<p>These sigils did not fit any other category but are good to know nonetheless.</p>
+
+<p>Example</p>
+
+<p>Explanation</p>
+
+<p><code>!</code></p>
+
+<p>Always empty  <strong>never type</strong>.  🚧  <a href="https://doc.rust-lang.org/book/ch19-04-advanced-types.html#the-never-type-that-never-returns">BK</a>  <a href="https://doc.rust-lang.org/stable/rust-by-example/fn/diverging.html#diverging-functions">EX</a>  <a href="https://doc.rust-lang.org/std/primitive.never.html">STD</a>  <a href="https://doc.rust-lang.org/stable/reference/types.html?highlight=never#never-type">REF</a></p>
+
+<p><code>_</code></p>
+
+<p>Unnamed variable binding, e.g.,  <code>|x,  _|  {}</code>.</p>
+
+<p><code>_x</code></p>
+
+<p>Variable binding explicitly marked as unused.</p>
+
+<p><code>1_234_567</code></p>
+
+<p>Numeric separator for visual clarity.</p>
+
+<p><code>1_u8</code></p>
+
+<p>Type specifier for  <strong>numeric literals</strong>  <a href="https://doc.rust-lang.org/stable/rust-by-example/types/literals.html#literals">EX</a>  <a href="https://doc.rust-lang.org/stable/reference/tokens.html#number-literals">REF</a>  (also  <code>i8</code>,  <code>u16</code>, &hellip;).</p>
+
+<p><code>0xBEEF</code>,  <code>0o777</code>,  <code>0b1001</code></p>
+
+<p>Hexadecimal (<code>0x</code>), octal (<code>0o</code>) and binary (<code>0b</code>) integer literals.</p>
+
+<p><code>r#foo</code></p>
+
+<p>A  <strong>raw identifier</strong>  <a href="https://doc.rust-lang.org/book/appendix-01-keywords.html?highlight=raw,iten#raw-identifiers">BK</a>  <a href="https://doc.rust-lang.org/stable/rust-by-example/compatibility/raw_identifiers.html?highlight=raw,iden#raw-identifiers">EX</a>  for edition compatibility.</p>
+
+<p><code>x;</code></p>
+
+<p><strong>Statement</strong>  <a href="https://doc.rust-lang.org/stable/reference/statements.html">REF</a>  terminator,  <em>c</em>.  <strong>expressions</strong>  <a href="https://doc.rust-lang.org/stable/rust-by-example/expression.html">EX</a>  <a href="https://doc.rust-lang.org/stable/reference/expressions.html">REF</a></p>
+
+<h3 id="common-operators">Common Operators</h3>
+
+<p>Rust supports all common operators you would expect to find in a language (<code>+</code>,  <code>*</code>,  <code>%</code>,  <code>=</code>,  <code>==</code>&hellip;). Since they behave no differently in Rust we do not list them here. For some of them Rust also supports  <strong>operator overloading</strong>.  <a href="https://doc.rust-lang.org/std/ops/index.html">STD</a></p>
+
+<h2 id="invisible-sugar">Invisible Sugar</h2>
+
+<p>If something works that &ldquo;shouldn&rsquo;t work now that you think about it&rdquo;, it might be due to one of these.</p>
+
+<p>Name</p>
+
+<p>Description</p>
+
+<p><strong>Coercions</strong>  <a href="https://doc.rust-lang.org/nightly/nomicon/coercions.html">NOM</a></p>
+
+<p>&lsquo;Weaken&rsquo; types to match signature, e.g.,  <code>&amp;mut  T</code>  to  <code>&amp;T</code>.</p>
+
+<p><strong>Deref</strong>  <a href="https://doc.rust-lang.org/nightly/nomicon/vec-deref.html#deref">NOM</a></p>
+
+<p><a href="https://doc.rust-lang.org/std/ops/trait.Deref.html">Deref</a>  <code>x:  T</code>  until  <code>*x</code>,  <code>**x</code>, &hellip; compatible with some target  <code>S</code>.</p>
+
+<p><strong>Prelude</strong>  <a href="https://doc.rust-lang.org/std/prelude/index.html">STD</a></p>
+
+<p>Automatic import of basic types.</p>
+
+<p><strong>Reborrow</strong></p>
+
+<p>Since  <code>x:  &amp;mut  T</code>  can&rsquo;t be copied; move new  <code>&amp;mut  *x</code>  instead.</p>
+
+<p><strong>Lifetime Elision</strong>  <a href="https://doc.rust-lang.org/book/ch10-03-lifetime-syntax.html#lifetime-elision">BK</a>  <a href="https://doc.rust-lang.org/nightly/nomicon/lifetime-elision.html#lifetime-elision">NOM</a>  <a href="https://doc.rust-lang.org/stable/reference/lifetime-elision.html?highlight=lifetime,el#lifetime-elision">REF</a></p>
+
+<p>Automatically annotate  <code>f(x:  &amp;T)</code>  to  <code>f&lt;'a&gt;(x:  &amp;'a  T)</code>.</p>
+
+<p><strong>Method Resolution</strong>  <a href="https://doc.rust-lang.org/stable/reference/expressions/method-call-expr.html">REF</a></p>
+
+<p>Deref or borrow  <code>x</code>  until  <code>x.f()</code>  works.</p>
+
+<h2 id="closures">Closures</h2>
+
+<p>There is a subtrait relationship  <code>Fn</code>  :  <code>FnMut</code>  :  <code>FnOnce</code>. That means, a closure that implements  <code>Fn</code>, also implements  <code>FnMut</code>  and  <code>FnOnce</code>. Likewise, a closure that implements  <code>FnMut</code>, also implements  <code>FnOnce</code>.</p>
+
+<p>From a call site perspective that means:</p>
+
+<p>Signature</p>
+
+<p>Function  <code>g</code>  can call &hellip;</p>
+
+<p>Function  <code>g</code>  accepts &hellip;</p>
+
+<p><code>g&lt;F:  FnOnce()&gt;(f:  F)</code></p>
+
+<p>&hellip;  <code>f()</code>  once.</p>
+
+<p><code>Fn</code>,  <code>FnMut</code>,  <code>FnOnce</code></p>
+
+<p><code>g&lt;F:  FnMut()&gt;(mut  f:  F)</code></p>
+
+<p>&hellip;  <code>f()</code>  multiple times.</p>
+
+<p><code>Fn</code>,  <code>FnMut</code></p>
+
+<p><code>g&lt;F:  Fn()&gt;(f:  F)</code></p>
+
+<p>&hellip;  <code>f()</code>  multiple times.</p>
+
+<p><code>Fn</code></p>
+
+<p>Notice how  <strong>asking</strong>  for a  <code>Fn</code>  closure as a function is most restrictive for the caller; but  <strong>having</strong>  a  <code>Fn</code>  closure as a caller is most compatible with any function.</p>
+
+<p>From the perspective of someone defining a closure:</p>
+
+<p>Closure</p>
+
+<p>Implements*</p>
+
+<p>Comment</p>
+
+<p><code>||  {  moved_s;  }</code></p>
+
+<p><code>FnOnce</code></p>
+
+<p>Caller must give up ownership of  <code>moved_s</code>.</p>
+
+<p><code>||  {  &amp;mut  s;  }</code></p>
+
+<p><code>FnOnce</code>,  <code>FnMut</code></p>
+
+<p>Allows  <code>g()</code>  to change caller&rsquo;s local state  <code>s</code>.</p>
+
+<p><code>||  {  &amp;s;  }</code></p>
+
+<p><code>FnOnce</code>,  <code>FnMut</code>,  <code>Fn</code></p>
+
+<p>May not mutate state; but can share and reuse  <code>s</code>.</p>
+
+<ul>
+<li>Rust  <a href="https://doc.rust-lang.org/stable/reference/expressions/closure-expr.html">prefers capturing</a>  by reference (resulting in the most &ldquo;compatible&rdquo;  <code>Fn</code>  closures from a caller perspective), but can be forced to capture its environment by copy or move via the  <code>move  ||  {}</code>  syntax.</li>
+</ul>
+
+<p>That gives the following advantages and disadvantages:</p>
+
+<p>Requiring</p>
+
+<p>Advantage</p>
+
+<p>Disadvantage</p>
+
+<p><code>F:  FnOnce</code></p>
+
+<p>Easy to satisfy as caller.</p>
+
+<p>Single use only,  <code>g()</code>  may call  <code>f()</code>  just once.</p>
+
+<p><code>F:  FnMut</code></p>
+
+<p>Allows  <code>g()</code>  to change caller state.</p>
+
+<p>Caller may not reuse captures during  <code>g()</code>.</p>
+
+<p><code>F:  Fn</code></p>
+
+<p>Many can exist at same time.</p>
+
+<p>Hardest to produce for caller.</p>
+
+<h2 id="idiomatic-rust">Idiomatic Rust</h2>
+
+<p>If you are used to programming Java or C, consider these.</p>
+
+<p>Idiom</p>
+
+<p>Code</p>
+
+<p><strong>Think in Expressions</strong></p>
+
+<p><code>x  =  if  x  {  a  }  else  {  b  };</code></p>
+
+<p><code>x  =  loop  {  break  5  };</code></p>
+
+<p><code>fn  f()  -&gt;  u32  {  0  }</code></p>
+
+<p><strong>Think in Iterators</strong></p>
+
+<p><code>(1..10).map(f).collect()</code></p>
+
+<p><code>names.iter().filter(|x|  x.starts_with(&quot;A&quot;))</code></p>
+
+<p><strong>Handle Absence with  <code>?</code></strong></p>
+
+<p><code>x  =  try_something()?;</code></p>
+
+<p><code>get_option()?.run()?</code></p>
+
+<p><strong>Use Strong Types</strong></p>
+
+<p><code>enum  E  {  Invalid,  Valid  {  ...  }  }</code>  over  <code>ERROR_INVALID  =  -1</code></p>
+
+<p><code>enum  E  {  Visible,  Hidden  }</code>  over  <code>visible:  bool</code></p>
+
+<p><code>struct  Charge(f32)</code>  over  <code>f32</code></p>
+
+<p><strong>Provide Builders</strong></p>
+
+<p><code>Car::new(&quot;Model T&quot;).hp(20).run();</code></p>
+
+<p><strong>Split Implementations</strong></p>
+
+<p>Generic types  <code>S&lt;T&gt;</code>  can have a separate  <code>impl</code>  per  <code>T</code>.</p>
+
+<p>Rust doesn&rsquo;t have OO, but with separate  <code>impl</code>  you can get specialization.</p>
+
+<p><strong>Unsafe</strong></p>
+
+<p>Avoid  <code>unsafe  {}</code>, often safer, faster solution without it. Exception: FFI.</p>
+
+<p><strong>Implement Traits</strong></p>
+
+<p><code>#[derive(Debug, Copy, ...)]</code>  and custom  <code>impl</code>  where needed.</p>
+
+<p><strong>Tooling</strong></p>
+
+<p>With  <a href="https://github.com/rust-lang/rust-clippy"><strong>clippy</strong></a>  you can improve your code quality.</p>
+
+<p>Formatting with  <a href="https://github.com/rust-lang/rustfmt"><strong>rustfmt</strong></a>  helps others to read your code.</p>
+
+<p>Add  <strong>unit tests</strong>  <a href="https://doc.rust-lang.org/book/ch11-01-writing-tests.html">BK</a>  (<code>#[test]</code>) to ensure your code works.</p>
+
+<p>Add  <strong>doc tests</strong>  <a href="https://doc.rust-lang.org/book/ch14-02-publishing-to-crates-io.html">BK</a>  (<code>my_api::f()</code>) to ensure docs match code.</p>
+
+<p><strong>Documentation</strong></p>
+
+<p>Annotate your APIs with doc comments that can show up on  <a href="https://docs.rs/"><strong>docs.rs</strong></a>.</p>
+
+<p>Don&rsquo;t forget to include a  <strong>summary sentence</strong>  and the  <strong>Examples</strong>  heading.</p>
+
+<p>If applicable:  <strong>Panics</strong>,  <strong>Errors</strong>,  <strong>Safety</strong>,  <strong>Abort</strong>  and  <strong>Undefined Behavior</strong>.</p>
+
+<blockquote>
+<p>🔥 We  <strong>highly</strong>  recommend you also follow the  <a href="https://rust-lang-nursery.github.io/api-guidelines/"><strong>API Guidelines</strong></a>  (<a href="https://rust-lang-nursery.github.io/api-guidelines/checklist.html"><strong>Checklist</strong></a>) for any shared project! 🔥</p>
+</blockquote>
+
+<h2 id="a-guide-to-reading-lifetimes">A Guide to Reading Lifetimes</h2>
+
+<p>Lifetimes can be overwhelming at times. Here is a simplified guide on how to read and interpret constructs containing lifetimes if you are familiar with C.</p>
+
+<p>Construct</p>
+
+<p>How to read</p>
+
+<p><code>let  s:  S  =  S(0)</code></p>
+
+<p>A location that is  <code>S</code>-sized, named  <code>s</code>, and contains the value  <code>S(0)</code>.</p>
+
+<p>If declared with  <code>let</code>, that location lives on the stack.</p>
+
+<p>Generally,  <code>s</code>  can mean  <em>location of  <code>s</code></em>, and  <em>value within  <code>s</code></em>.</p>
+
+<p>As a location,  <code>s  =  S(1)</code>  means, assign value  <code>S(1)</code>  to location  <code>s</code>.</p>
+
+<p>As a value,  <code>f(s)</code>  means call  <code>f</code>  with value inside of  <code>s</code>.</p>
+
+<p>To explicitly talk about its location (address) we do  <code>&amp;s</code>.</p>
+
+<p>To explicitly talk about a location that can hold such a location we do  <code>&amp;S</code>.</p>
+
+<p><code>&amp;'a  S</code></p>
+
+<p>A  <code>&amp;S</code>  is a  <strong>location that can hold</strong>  (at least)  <strong>an address</strong>, called reference.</p>
+
+<p>Any address stored in here must be that of a valid  <code>S</code>.</p>
+
+<p>Any address stored must  <em>live</em>  at least for (<em>outlive</em>) duration  <code>'a</code>.</p>
+
+<p>That means during  <code>'a</code>  memory targeted by  <code>&amp;S</code>  can&rsquo;t be invalidated.</p>
+
+<p>During  <code>'a</code>  target of  <code>&amp;S</code>  may switch as long as new one also lives for  <code>'a</code>.</p>
+
+<p>Also, this  <code>&amp;S</code>  must be stopped being used before  <code>'a</code>  ends.</p>
+
+<p>Duration of  <code>'a</code>  is purely compile time view, based on static analysis.</p>
+
+<p><code>&amp;S</code></p>
+
+<p>Sometimes  <code>'a</code>  might be elided (or can&rsquo;t be specified) but it still exists.</p>
+
+<p>Within methods bodies, lifetimes are determined automatically.</p>
+
+<p>Within signatures, lifetimes may be &lsquo;elided&rsquo; (annotated automatically).</p>
+
+<p><code>&amp;s</code></p>
+
+<p>This will produce the  <strong>actual address of location  <code>s</code></strong>, called &lsquo;borrow&rsquo;.</p>
+
+<p>The moment  <code>&amp;s</code>  is produced, location  <code>s</code>  is put into a  <strong>borrowed state</strong>.</p>
+
+<p>Checking if in borrowed state is based on compile-time analysis.</p>
+
+<p>This analysis is based on all possible address propagation paths.</p>
+
+<p>As long as  <strong>any</strong>  <code>&amp;s</code>  could be around,  <code>s</code>  cannot be altered directly.</p>
+
+<p>For example, in  <code>let  a  =  &amp;s;  let  b  =  a;</code>, also  <code>b</code>  needs to go.</p>
+
+<p>Borrowing of  <code>s</code>  stops once last  <code>&amp;s</code>  is last used, not when  <code>&amp;s</code>  dropped.</p>
+
+<p><code>&amp;mut  s</code></p>
+
+<p>Same, but will produce a mutable borrow.</p>
+
+<p>A  <code>&amp;mut</code>  will allow the  <em>owner of the borrow</em>  (address) to change  <code>s</code>  content.</p>
+
+<p>This reiterates that not the value in  <code>s</code>, but location of  <code>s</code>  is borrowed.</p>
+
+<p><code>S&lt;'a&gt;  {}</code></p>
+
+<p>Signals that  <code>S</code>  will hold at least one address (i.e., reference).</p>
+
+<p><code>'a</code>  will be determined automatically by the user of this struct.</p>
+
+<p><code>'a</code>  will be chosen as small as possible.</p>
+
+<p><code>f&lt;'a&gt;(x:  &amp;'a  T)</code></p>
+
+<p>Signals this function will accept an address (i.e., reference).</p>
+
+<p><code>-&gt;  &amp;'a  S</code></p>
+
+<p>&hellip; and that it returns one.</p>
+
+<p><code>'a</code>  will be determined automatically by the caller.</p>
+
+<p><code>'a</code>  will be chosen as small as possible.</p>
+
+<p><code>'a</code>  will be picked so that it  <strong>satisfies input and output</strong>  at call site.</p>
+
+<p><code>'a</code>  is mix of where  <code>x</code>  comes from and  <code>f(x)</code>  goes.</p>
+
+<p><strong>In addition, propagate borrow state</strong>  according to lifetime names!</p>
+
+<p>So while result address with  <code>'a</code>  is used, input address with  <code>'a</code>  is locked.</p>
+
+<p>Here: while  <code>s</code>  from  <code>let  s  =  f(&amp;x)</code>  is around,  <code>x</code>  counts as &lsquo;borrowed&rsquo;.</p>
+
+<p><code>&lt;'a,  'b:  'a&gt;</code></p>
+
+<p>The lifetimes declared in  <code>S&lt;&gt;</code>  and  <code>f&lt;&gt;</code>  can also have bounds.</p>
+
+<p>The  <code>&lt;'a,  'b&gt;</code>  part means the type will handle at least 2 addresses.</p>
+
+<p>The  <code>'b:  'a</code>  part is a  <strong>lifetime bound</strong>, and means  <code>'b</code>  must  <strong>outlive</strong>  <code>'a</code>.</p>
+
+<p>Any address in an  <code>&amp;'b  X</code>  must exist at least as long as any in an  <code>&amp;'a  Y</code>.</p>
+
+<h2 id="formatting-strings">Formatting Strings</h2>
+
+<p>Formatting applies to  <code>print!</code>,  <code>eprint!</code>,  <code>write!</code>  (and their -<code>ln</code>  siblings like  <code>println!</code>). The  <code>format!</code>  macro can create a formatted  <code>String</code>.</p>
+
+<p>Each format argument follows a basic grammar:</p>
+
+<pre><code class="language-rust">{[argument][':'[[fill]align][sign]['#']['0'][width]['.' precision][type]]}
+
+</code></pre>
+
+<p>The full grammar is  <a href="https://doc.rust-lang.org/std/fmt/index.html#syntax">specified in the  <code>std::fmt</code></a>  documentation, but here are some commonly used flags:</p>
+
+<p>Element</p>
+
+<p>Meaning</p>
+
+<p><code>argument</code></p>
+
+<p>Omitted (next  <code>{}</code>), number (<code>0</code>,  <code>1</code>, &hellip;) or identifier for named arguments.</p>
+
+<p><code>align</code></p>
+
+<p>Left (<code>&lt;</code>), center (<code>^</code>), or right (<code>&gt;</code>) , if width is specified, fills with  <code>fill</code>.</p>
+
+<p><code>#</code></p>
+
+<p><a href="https://doc.rust-lang.org/std/fmt/index.html#sign0">Alternate formatting</a>. Pretty-print with  <code>{:#?}</code>, for example.</p>
+
+<p><code>0</code></p>
+
+<p>Zero-pads numeric values.</p>
+
+<p><code>width</code></p>
+
+<p>Minimum width (≥ 0), padding with  <code>fill</code>  (default to space).</p>
+
+<p><code>precision</code></p>
+
+<p>Decimal digits (≥ 0) for numerics, or max width for non-numerics.</p>
+
+<p><code>type</code></p>
+
+<p><a href="https://doc.rust-lang.org/std/fmt/trait.Debug.html">Debug</a>  (<code>?</code>), hex (<code>x</code>), binary (<code>b</code>), or octal (<code>o</code>) (<a href="https://doc.rust-lang.org/std/fmt/index.html#traits">there are more, using Traits</a>).</p>
+
+<p>Note that  <a href="https://doc.rust-lang.org/std/fmt/index.html#width">width</a>  and  <a href="https://doc.rust-lang.org/std/fmt/index.html#precision">precision</a>  can use other arguments as their values, allowing for dynamic sizing of fields.</p>
+
+<p>Examples:</p>
+
+<p>Example</p>
+
+<p>Explanation</p>
+
+<p><code>{#?}</code></p>
+
+<p>Pretty-print the next argument using  <a href="https://doc.rust-lang.org/std/fmt/trait.Debug.html">Debug</a>.</p>
+
+<p><code>{2:#?}</code></p>
+
+<p>Pretty-print the 3rd argument using  <a href="https://doc.rust-lang.org/std/fmt/trait.Debug.html">Debug</a>.</p>
+
+<p><code>{val:^2$}</code></p>
+
+<p>Center the  <code>val</code>  named argument, width specified by the 3rd argument.</p>
+
+<p><code>{:&lt;10.3}</code></p>
+
+<p>Left align with width 10 and a precision of 3.</p>
+
+<p><code>{val:#x}</code></p>
+
+<p>Format  <code>val</code>  argument as hex, with a leading  <code>0x</code>  (alternate format for  <code>x</code>).</p>
+
+<h2 id="tooling">Tooling</h2>
+
+<p>Some commands and tools that are good to know.</p>
+
+<p>Command</p>
+
+<p>Description</p>
+
+<p><code>cargo init</code></p>
+
+<p>Create a new project for the latest edition.</p>
+
+<p><code>cargo  build</code></p>
+
+<p>Build the project in debug mode (<code>--release</code>  for all optimization).</p>
+
+<p><code>cargo  check</code></p>
+
+<p>Check if project would compile (much faster).</p>
+
+<p><code>cargo  test</code></p>
+
+<p>Run tests for the project.</p>
+
+<p><code>cargo  run</code></p>
+
+<p>Run your project, if a binary is produced (main.rs).</p>
+
+<p><code>cargo doc  --open</code></p>
+
+<p>Locally generate documentation for your code and dependencies.</p>
+
+<p><code>cargo rustc  --  -Zunpretty=X</code></p>
+
+<p>Show more desugared Rust code, in particular with X being:</p>
+
+<p><code>expanded</code></p>
+
+<p>Show with expanded macros, &hellip;</p>
+
+<p><code>cargo  +{nightly,  stable}  ...</code></p>
+
+<p>Runs command with given toolchain, e.g., for &lsquo;nightly only&rsquo; tools.</p>
+
+<p><code>rustup docs</code></p>
+
+<p>Open offline Rust documentation (incl. the books), good on a plane!</p>
+
+<p>A command like  <code>cargo  build</code>  means you can either type  <code>cargo build</code>  or just  <code>cargo b</code>.</p>
+
+<p>These are optional  <code>rustup</code>  components. Install them with  <code>rustup component add  [tool]</code>.</p>
+
+<p>Tool</p>
+
+<p>Description</p>
+
+<p><code>cargo clippy</code></p>
+
+<p>Additional (<a href="https://rust-lang.github.io/rust-clippy/master/">lints</a>) catching common API misuses and unidiomatic code.  <a href="https://github.com/rust-lang/rust-clippy">🔗</a></p>
+
+<p><code>cargo fmt</code></p>
+
+<p>Automatic code formatter (<code>rustup component add rustfmt</code>).  <a href="https://github.com/rust-lang/rustfmt">🔗</a></p>
+
+<p>These are 3rd party tools and usually need to be installed with  <code>cargo install cargo-[tool]</code>  first. They often require unstable and are subject to break.</p>
+
+<p>Command</p>
+
+<p>Description</p>
+
+<p><code>cargo asm</code></p>
+
+<p>Show generated assembly instructions for code.  <a href="https://github.com/gnzlbg/cargo-asm">🔗</a></p>
+
+<p><code>cargo outdated</code></p>
+
+<p>List upgradable dependencies.  <a href="https://github.com/kbknapp/cargo-outdated">🔗</a></p>
+
+<p><code>cargo tree</code></p>
+
+<p>Print dependencies as a tree.  <a href="https://github.com/sfackler/cargo-tree">🔗</a></p>
+
+<p><code>cargo-edit</code></p>
+
+<p>Meta package (<code>cargo install cargo-edit</code>)  <a href="https://github.com/killercup/cargo-edit">🔗</a>. Provides:</p>
+
+<p><code>cargo add  &lt;crate&gt;</code></p>
+
+<p>Add latest version of  <code>&lt;crate&gt;</code>  to your  <code>Cargo.toml</code>.</p>
+
+<p><code>cargo rm  &lt;crate&gt;</code></p>
+
+<p>Remove  <code>&lt;crate&gt;</code>  from your  <code>Cargo.toml</code>.</p>
+
+<p><code>cargo upgrade  &lt;crate&gt;</code></p>
+
+<p>Upgrade the version of  <code>&lt;crate&gt;</code>  to the latest.</p>
+
+<p><code>cargo flamegraph</code></p>
+
+<p>Visualize CPU time (<code>cargo install flamegraph</code>).  <a href="https://github.com/ferrous-systems/flamegraph">🔗</a>  OSX, Linux only</p>
+
+<h2 id="links-services">Links &amp; Services</h2>
+
+<p>These are other great visual guides and tables.</p>
+
+<p>[](<a href="https://docs.google.com/presentation/d/1q-c7UAyrUlM-eZyTo1pd8SZ0qwA_wYxmPZVOQkoDmH4/edit">https://docs.google.com/presentation/d/1q-c7UAyrUlM-eZyTo1pd8SZ0qwA_wYxmPZVOQkoDmH4/edit</a>)</p>
+
+<p><img src="https://cheats.rs/link_containers.png" alt="" /></p>
+
+<p><strong>Containers</strong></p>
+
+<p>[](<a href="https://lukaslueg.github.io/macro_railroad_wasm_demo/">https://lukaslueg.github.io/macro_railroad_wasm_demo/</a>)</p>
+
+<p><img src="https://cheats.rs/link_railroad.png" alt="" /></p>
+
+<p><strong>Macro Railroad</strong></p>
+
+<p>[](<a href="https://rufflewind.com/2017-02-15/rust-move-copy-borrow">https://rufflewind.com/2017-02-15/rust-move-copy-borrow</a>)</p>
+
+<p><img src="https://cheats.rs/link_lifetimes.png" alt="" /></p>
+
+<p><strong>Lifetimes</strong></p>
+
+<p>Cheat Sheets</p>
+
+<p>Description</p>
+
+<p><a href="https://github.com/ctjhoa/rust-learning">Rust Learning⭐</a></p>
+
+<p>Probably the best collection of links about learning Rust.</p>
+
+<p><a href="https://github.com/JasonShin/functional-programming-jargon.rs">Functional Jargon in Rust</a></p>
+
+<p>A collection of functional programming jargon explained in Rust.</p>
+
+<p><a href="https://docs.google.com/spreadsheets/d/19vSPL6z2d50JlyzwxariaYD6EU2QQUQqIDOGbiGQC7Y/pubhtml?gid=0&amp;single=true">String Conversions</a></p>
+
+<p>How to get type of string from another.</p>
+
+<p><a href="http://cosmic.mearie.org/2014/01/periodic-table-of-rust-types">Periodic Table of Types</a></p>
+
+<p>How various types and references correlate.</p>
+
+<p><a href="https://rufflewind.com/img/rust-futures-cheatsheet.html">Futures</a></p>
+
+<p>How to construct and work with futures.</p>
+
+<p><a href="https://danielkeep.github.io/itercheat_baked.html">Rust Iterator Cheat Sheet</a></p>
+
+<p>Summary of iterator-related methods from  <code>std::iter</code>  and  <code>itertools</code>.</p>
+
+<p><a href="https://upsuper.github.io/rust-cheatsheet/">Type-Based Rust Cheat Sheet</a></p>
+
+<p>Lists common types and how they convert.</p>
+
+<p>All major Rust books developed by the community.</p>
+
+<p>Books ️📚</p>
+
+<p>Description</p>
+
+<p><a href="https://doc.rust-lang.org/stable/book/">The Rust Programming Language</a></p>
+
+<p>Standard introduction to Rust,  <strong>start here if you are new</strong>.</p>
+
+<p><a href="https://rust-lang-nursery.github.io/api-guidelines/">The API Guidelines</a></p>
+
+<p>How to write idiomatic and re-usable Rust.</p>
+
+<p><a href="https://rust-lang.github.io/async-book/">The Async Book</a>  🚧</p>
+
+<p>Explains  <code>async</code>  code,  <code>Futures</code>, &hellip;</p>
+
+<p><a href="https://doc.rust-lang.org/nightly/edition-guide/">The Edition Guide</a></p>
+
+<p>Working with Rust 2015, Rust 2018, and beyond.</p>
+
+<p><a href="https://danielkeep.github.io/tlborm/book/index.html">The Little Book of Rust Macros</a>  🚧</p>
+
+<p>Community&rsquo;s collective knowledge of Rust macros.</p>
+
+<p><a href="https://doc.rust-lang.org/stable/reference/">The Reference</a>  🚧</p>
+
+<p>Reference of the Rust language.</p>
+
+<p><a href="https://rust-lang.github.io/rfcs/">The RFC Book</a></p>
+
+<p>Look up accepted RFCs and how they change the language.</p>
+
+<p><a href="https://rust-lang.github.io/rustc-guide/index.html">The Rustc Guide</a></p>
+
+<p>Explains how the compiler works internally.</p>
+
+<p><a href="https://doc.rust-lang.org/stable/rustdoc/">The Rustdoc Book</a></p>
+
+<p>Tips how to customize  <code>cargo doc</code>  and  <code>rustdoc</code>.</p>
+
+<p><a href="https://doc.rust-lang.org/nomicon/">The Rustonomicon</a></p>
+
+<p>Dark Arts of Advanced and Unsafe Rust Programming.</p>
+
+<p><a href="https://rust-lang-nursery.github.io/packed_simd/perf-guide/">The SIMD Performance Guide</a>  🚧</p>
+
+<p>Work with  <code>u8x32</code>  or  <code>f32x8</code>  to speed up your computations.</p>
+
+<p><a href="https://rust-lang.github.io/unsafe-code-guidelines/">The Unsafe Code Guidelines</a>  🚧</p>
+
+<p>Concise information about writing  <code>unsafe</code>  code.</p>
+
+<p><a href="https://doc.rust-lang.org/unstable-book/index.html">The Unstable Book</a></p>
+
+<p>Information about unstable items, e.g,  <code>#![feature(...)]</code>.</p>
+
+<p><a href="https://doc.rust-lang.org/cargo/">The Cargo Book</a></p>
+
+<p>How to use  <code>cargo</code>  and write  <code>Cargo.toml</code>.</p>
+
+<p><a href="https://rust-lang-nursery.github.io/cli-wg/">The CLI Book</a></p>
+
+<p>Information about creating CLI tools.</p>
+
+<p><a href="https://docs.rust-embedded.org/book/intro/index.html">The Embedded Book</a></p>
+
+<p>Working with embedded and  <code>#![no_std]</code>  devices.</p>
+
+<p><a href="https://docs.rust-embedded.org/embedonomicon/">The Embedonomicon</a></p>
+
+<p>First  <code>#![no_std]</code>  from scratch on a Cortex-M.</p>
+
+<p><a href="https://rustwasm.github.io/docs/book/">The WebAssembly Book</a></p>
+
+<p>Working with the web and producing  <code>.wasm</code>  files.</p>
+
+<p><a href="https://rustwasm.github.io/docs/wasm-bindgen/">The  <code>wasm-bindgen</code>  Guide</a></p>
+
+<p>How to bind Rust and JavaScript APIs in particular.</p>
+
+<p>Comprehensive lookup tables for common components.</p>
+
+<p>Tables 📋</p>
+
+<p>Description</p>
+
+<p><a href="https://doc.rust-lang.org/error-index.html">Compiler Error Index</a></p>
+
+<p>Ever wondered what  <code>E0404</code>  means?</p>
+
+<p><a href="https://rust-lang.github.io/rust-clippy/master/">ALL the Clippy Lints</a></p>
+
+<p>All the  <a href="https://github.com/rust-lang/rust-clippy"><strong>clippy</strong></a>  lints you might be interested in.</p>
+
+<p><a href="https://rust-lang.github.io/rustfmt/">Configuring Rustfmt</a></p>
+
+<p>All  <a href="https://github.com/rust-lang/rustfmt"><strong>rustfmt</strong></a>  options you can use in  <code>rustfmt.toml</code>.</p>
+
+<p><a href="https://github.com/rust-lang/rust/blob/master/RELEASES.md">Rust Changelog</a></p>
+
+<p>See all the things that changed in a particular version.</p>
+
+<p><a href="https://forge.rust-lang.org/">Rust Forge</a></p>
+
+<p>Lists release train and links for people working on the compiler.</p>
+
+<p><a href="https://forge.rust-lang.org/platform-support.html">Rust Platform Support</a></p>
+
+<p>All supported platforms and their Tier.</p>
+
+<p><a href="https://rust-lang.github.io/rustup-components-history/">Rust Component History</a></p>
+
+<p>Check  <strong>nightly</strong>  status of various Rust tools for a platform.</p>
+
+<p>Online services which provide information or tooling.</p>
+
+<p>Services ⚙️</p>
+
+<p>Description</p>
+
+<p><a href="https://crates.io/">crates.io</a></p>
+
+<p>All 3rd party libraries for Rust.</p>
+
+<p><a href="https://docs.rs/">docs.rs</a></p>
+
+<p>Documentation for 3rd party libraries, automatically generated from source.</p>
+
+<p><a href="https://libs.rs/">libs.rs</a></p>
+
+<p>Unofficial overview of quality Rust libraries and applications.</p>
+
+<p><a href="https://play.rust-lang.org/">Rust Playground</a></p>
+
+<p>Try and share snippets of Rust code.</p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

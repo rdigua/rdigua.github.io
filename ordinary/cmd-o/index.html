@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h2 id="version">version:</h2>
+
+<ul>
+<li>lsb_release -a</li>
+<li>uname -a</li>
+<li>cat /proc/version</li>
+</ul>
+
+<h2 id="cls">cls</h2>
+
+<ul>
+<li>clear</li>
+<li>Ctrl+L</li>
+</ul>
+
+<h2 id="system">system</h2>
+
+<ul>
+<li>sudo dmidecode -t system</li>
+</ul>
+
+<p>sudo apt-get remove fcitx*</p>
+
+<h2 id="uninstall">uninstall</h2>
+
+<p>查看是否卸载：sudo dpkg &ndash;get-selections | grep fcitx</p>
+
+<p>sudo apt-get autoremove  要移除的软件包名
+sudo apt-get install  要安装的软件包名</p>
+
+<h2 id="qemu">qemu</h2>
+
+<p>jayhu@jayhu-Dell-System-Inspiron-N4120:/usr/share/doc/qemu$ pwd
+/usr/share/doc/qemu
+jayhu@jayhu-Dell-System-Inspiron-N4120:/usr/share/doc/qemu$ qemu</p>
+
+<p>Command &lsquo;qemu&rsquo; not found, did you mean:</p>
+
+<p>command &lsquo;aqemu&rsquo; from deb aqemu</p>
+
+<p>Try: sudo apt install <deb name></p>
+
+<ul>
+<li>qemu-system-x86_64</li>
+<li>qemu-x86_64</li>
+</ul>
+
+<h2 id="vistual">vistual:</h2>
+
+<ul>
+<li>file /bin/ls</li>
+
+<li><p>egrep -o &lsquo;(vmx|svm)&rsquo; /proc/cpuinfo</p></li>
+
+<li><p>sudo apt-get install qemu-kvm qemu-system libvirt-bin  bridge-utils</p></li>
+
+<li><p>kvm-ok</p></li>
+
+<li><p>sudo lsmod | grep kvm</p></li>
+</ul>
+
+<p>if not<br />
+excute it:
+- sudo modprobe kvm</p>
+
+<ul>
+<li>sudo apt install virt-manager</li>
+</ul>
+
+<h2 id="zip-tar">zip-tar</h2>
+
+<h3 id="zip">ZIP</h3>
+
+<p>zip可能是目前使用得最多的文档压缩格式。它最大的优点就是在不同的操作系统平台，比如Linux， Windows以及Mac OS，上使用。缺点就是支持的压缩率不是很高，而tar.gz和tar.gz2在压缩率方面做得非常好。闲话少说，我们步入正题吧：</p>
+
+<p>我们可以使用下列的命令压缩一个目录：</p>
+
+<ul>
+<li>zip -r archive_name.zip directory_to_compress</li>
+</ul>
+
+<p>下面是如果解压一个zip文档：</p>
+
+<ul>
+<li>unzip archive_name.zip</li>
+</ul>
+
+<h3 id="tar">TAR</h3>
+
+<p>Tar是在Linux中使用得非常广泛的文档打包格式。它的好处就是它只消耗非常少的CPU以及时间去打包文件，他仅仅只是一个打包工具，并不负责压缩。下面是如何打包一个目录：</p>
+
+<ul>
+<li>tar -cvf archive_name.tar directory_to_compress</li>
+</ul>
+
+<p>如何解包：</p>
+
+<ul>
+<li>tar -xvf archive_name.tar.gz</li>
+</ul>
+
+<p>上面这个解包命令将会将文档解开在当前目录下面。当然，你也可以用这个命令来捏住解包的路径：</p>
+
+<ul>
+<li>tar -xvf archive_name.tar -C /tmp/extract_here/</li>
+</ul>
+
+<p>TAR.GZ</p>
+
+<p>这种格式是我使用得最多的压缩格式。它在压缩时不会占用太多CPU的，而且可以得到一个非常理想的压缩率。使用下面这种格式去压缩一个目录：</p>
+
+<ul>
+<li>tar -zcvf archive_name.tar.gz directory_to_compress</li>
+</ul>
+
+<p>解压缩：</p>
+
+<ul>
+<li>tar -zxvf archive_name.tar.gz</li>
+</ul>
+
+<p>上面这个解包命令将会将文档解开在当前目录下面。当然，你也可以用这个命令来捏住解包的路径：</p>
+
+<ul>
+<li>tar -zxvf archive_name.tar.gz -C /tmp/extract_here/</li>
+</ul>
+
+<p>TAR.BZ2</p>
+
+<p>这种压缩格式是我们提到的所有方式中压缩率最好的。当然，这也就意味着，它比前面的方式要占用更多的CPU与时间。这个就是你如何使用tar.bz2进行压缩。</p>
+
+<ul>
+<li>tar -jcvf archive_name.tar.bz2 directory_to_compress</li>
+</ul>
+
+<p>上面这个解包命令将会将文档解开在当前目录下面。当然，你也可以用这个命令来捏住解包的路径：</p>
+
+<ul>
+<li>tar -jxvf archive_name.tar.bz2 -C /tmp/extract_here/</li>
+</ul>
+
+<h1 id="memory">Memory</h1>
+
+<ul>
+<li>free -m</li>
+</ul>
+
+<h1 id="chinese-english">Chinese-English</h1>
+
+<ul>
+<li>Ctrl+空格</li>
+</ul>
+
+<h1 id="vim">Vim</h1>
+
+<ul>
+<li>:w //save</li>
+<li>:q //quite</li>
+<li>Insert //Edit ins-replace</li>
+<li>number //行号</li>
+<li>:set nu //Show Number</li>
+</ul>
+
+<h1 id="ubuntu设置文件权限问题">ubuntu设置文件权限问题</h1>
+
+<p>文件权限：
+r==&gt;可读 w==&gt;可写 x==&gt;可执行
+r=4 w=2 x=1
+777 代表 rwxr-rwx-rwx 所有用户都可读可写可执行</p>
+
+<p>修改某个目录下所有文件的权限，如果子目录中的文件权限也要修改，则使用参数－R启动递归处理。
+例如：把/home/user目录的权限设置为rwxrwxrwx，不包括子目录：
+[root@localhost ~]# chmod 777 /home/user
+把/home/user目录的权限设置为rwxrwxrwx，包括子目录：
+[root@localhost ~]# chmod -R 777 /home/user</p>
+
+<p>对于网站目录我们一般设置目录的权限是755，而文件的权限是644  ，上传目录另设
+比如我们要设置当前目录下的所有目录的权限是755，文件的目录是644
+就是使用find命令配合exec命令来执行：
+find .  -type d -exec chmod 755 {} \;
+find .  -type  f -exec chmod 644 {} \;</p>
+
+<p>其中的{} 可以理解为前面找的目录或者文件,  \;  是固定格式！</p>
+
+<h2 id="ssh">ssh</h2>
+
+<ul>
+<li>apt-get install openssh-server</li>
+<li>udo ps -e |grep ssh</li>
+<li>sudo nano /etc/ssh/sshd_config</li>
+<li>sudo service ssh stop</li>
+<li>sudo service ssh start</li>
+</ul>
+
+<h2 id="fuchsia">fuchsia:</h2>
+
+<p>sudo apt-get install golang git-all build-essential curl texinfo libglib2.0-dev autoconf libtool libsdl-dev
+sudo apt-get install git-all build-essential curl texinfo libglib2.0-dev autoconf libtool libsdl-dev</p>
+
+<h2 id="scp">scp:</h2>
+
+<p>scp -P port usrname@ipaddr:path dest-path
+ scp -P xxx root@xxx.xxx.xxx.xxx:/tmp/dl/fuchsia/fuchsia.tar.gz .</p>
+
+<p><a href="https://github.com/erguotou520/electron-ssr/releases/download/v0.2.5/electron-ssr-0.2.5.deb">https://github.com/erguotou520/electron-ssr/releases/download/v0.2.5/electron-ssr-0.2.5.deb</a>
+ <a href="https://github.com/erguotou520/electron-ssr/releases/download/v0.2.5/electron-ssr-0.2.5.deb">https://github.com/erguotou520/electron-ssr/releases/download/v0.2.5/electron-ssr-0.2.5.deb</a></p>
+
+<h2 id="ssh-clent">ssh-clent</h2>
+
+<p>xxx.xxx.xxx.xxx
+xxx.xxx.xxx.xxx
+- ssh -q -l root -p 1234 xxx.xxx.xxx.xxx</p>
+
+<ul>
+<li><p>ssh -p 1234 root@xxx.xxx.xxx.xxx</p></li>
+
+<li><p>ssh -p 1234 root@xxx.xxx.xxx.xxx</p></li>
+
+<li><p>ssh -q -l root -p 1234 xxx.xxx.xxx.xxx
+ssh: connect to host xxx.xxx.xxx.xxx port 1234: Connection timed out</p></li>
+</ul>
+
+<p>ssh -q -l root -p 22 150.109.184.187</p>
+
+<h2 id="ssr">ssr</h2>
+
+<p>[electron-ssr]<a href="https://github.com/erguotou520/electron-ssr/releases">https://github.com/erguotou520/electron-ssr/releases</a>
+   sudo dpkg -i electron-ssr_0.2.3_amd64.deb</p>
+
+<ul>
+<li>wget <a href="http://www.texfox.com/ssr">http://www.texfox.com/ssr</a></li>
+<li>/usr/local/share/shadowsocksr/config.json</li>
+<li>ssr install</li>
+<li>ssr start</li>
+<li>ssr stop</li>
+<li>ssr help</li>
+<li>sudo dpkg -i electron-ssr-0.2.5.deb</li>
+</ul>
+
+<h1 id="netsat">netsat</h1>
+
+<ul>
+<li>netstat -a</li>
+<li>netstat -an | grep LISTEN
+  0.0.0.0的就是每个IP都有的服务，写明哪个IP的就是绑定那个IP的服务。</li>
+</ul>
+
+<ol>
+<li><p>netstat -tln
+  用来查看linux的端口使用情况</p></li>
+
+<li><p>/etc/init.d/vsftp start
+  是用来启动ftp端口~！</p></li>
+
+<li><p>netstat
+  查看已经连接的服务端口（ESTABLISHED）</p></li>
+
+<li><p>netstat -a
+  查看所有的服务端口（LISTEN，ESTABLISHED）</p></li>
+
+<li><p>sudo netstat -ap
+  查看所有的服务端口并显示对应的服务程序名</p></li>
+
+<li><p>nmap ＜扫描类型＞＜扫描参数＞
+例如：
+   nmap localhost
+nmap -p 1024-65535 localhost
+nmap -PT 192.168.1.127-245
+当我们使用　netstat -apn　查看网络连接的时候，会发现很多类似下面的内容：
+Proto Recv-Q Send-Q Local Address Foreign Address State PID/Program name
+tcp 0 52 218.104.81.152：7710 211.100.39.250：29488 ESTABLISHED <sup>6111</sup>&frasl;<sub>1</sub>
+显示这台服务器开放了7710端口，那么这个端口属于哪个程序呢？我们可以使用　lsof -i ：7710　命令来查询：
+COMMAND PID USER FD TYPE DEVICE SIZE NODE NAME
+sshd 1990 root 3u IPv4 4836 TCP *：7710 （LISTEN） 54com.cn</p></li>
+</ol>
+
+<p>这样，我们就知道了7710端口是属于sshd程序的。</p>
+
+<h1 id="deb">deb</h1>
+
+<p>deb是debian linus的安装格式，跟red hat的rpm非常相似，最基本的安装命令是：dpkg -i file.deb</p>
+
+<h1 id="dns">dns</h1>
+
+<p>**  forward only;
+            _forwarders {server<em>ip}</em></p>
+
+<p>listen-on port 53   { any; };
+    listen-on-v6 port 53    { any; };
+    allow-query     { any; };
+    recursion yes;
+  / forward first;            #本机不能解析的转发给202.96.209.5做解析#first：首先转发；转发器不响应时，自行去迭代查询；only:只转发;
+    forwarders  {
+        202.96.209.5;
+        210.22.84.3;
+        202.96.209.133;
+        223.5.5.5;
+    #   114.114.114.114;
+    #   8.8.8.8;
+         };
+    dnssec-enable yes;
+    dnssec-validation yes</p>
+
+<ul>
+<li>ns17.domaincontrol.com</li>
+
+<li><h2 id="ns18-domaincontrol-com">ns18.domaincontrol.com</h2>
+
+<pre><code>   control to limit queries to your legitimate users. Failing to do so will
+   cause your server to become part of large scale DNS amplification
+   attacks. Implementing BCP38 within your network would greatly
+   reduce such attack surface
+*/
+recursion yes;
+forware only;
+forwarders {
+            1.1.1.1;
+            8.8.8.8;
+           };
+dnssec-enable yes;
+</code></pre>
+
+<p>1 //
+2 // named.conf
+3 //
+4 // Provided by Red Hat bind package to configure the ISC BIND named(8) DNS
+5 // server as a caching only nameserver (as a localhost DNS resolver only).
+6 //
+7 // See /usr/share/doc/bind<em>/sample/ for example named configuration files.
+8 //
+9 // See the BIND Administrator&rsquo;s Reference Manual (ARM) for details about the
+10 // configuration located in /usr/share/doc/bind-{version}/Bv9ARM.html
+11
+12 options {
+13 //      listen-on port 53 { 127.0.0.1; };
+14         listen-on port 53 { any; };
+15         listen-on-v6 port 53 { ::1; };
+16         directory       &ldquo;/var/named&rdquo;; 17         dump-file       &ldquo;/var/named/data/cache_dump.db&rdquo;;
+18         statistics-file &ldquo;/var/named/data/named_stats.txt&rdquo;;
+19         memstatistics-file &ldquo;/var/named/data/named_mem_stats.txt&rdquo;;
+20         recursing-file  &ldquo;/var/named/data/named.recursing&rdquo;;
+21         secroots-file   &ldquo;/var/named/data/named.secroots&rdquo;;
+22 //      allow-query     { localhost; };
+23         allow-query     { any; };
+24         /</em>
+25          - If you are building an AUTHORITATIVE DNS server, do NOT enable recursion.
+26          - If you are building a RECURSIVE (caching) DNS server, you need to enable
+27            recursion.
+28          - If your recursive DNS server has a public IP address, you MUST enable access
+29            control to limit queries to your legitimate users. Failing to do so will
+30            cause your server to become part of large scale DNS amplification
+31            attacks. Implementing BCP38 within your network would greatly
+32            reduce such attack surface
+33         */
+34         recursion yes;
+35         forward only;
+36         forwarders {
+37                     1.1.1.1;
+38                     8.8.8.8;
+39                    };
+40         dnssec-enable yes;
+41         dnssec-validation yes;
+42
+[root@VM_0_13_centos ~]# systemctl status named.service
+● named.service - Berkeley Internet Name Domain (DNS)
+Loaded: loaded (/usr/lib/systemd/system/named.service; disabled; vendor preset: disabled)
+Active: failed (Result: exit-code) since Wed 2019-01-30 22:25:19 CST; 5min ago
+Process: 27883 ExecStartPre=/bin/bash -c if [ ! &ldquo;$DISABLE_ZONE_CHECKING&rdquo; == &ldquo;yes&rdquo; ]; then /usr/sbin/named-checkconf -z &ldquo;$NAMEDCONF&rdquo;; else echo &ldquo;Ch
+ecking of zone files is disabled&rdquo;; fi (code=exited, status=1/FAILURE)</p></li>
+</ul>
+
+<p>Jan 30 22:25:18 VM_0_13_centos systemd[1]: Starting Berkeley Internet Name Domain (DNS)&hellip;
+Jan 30 22:25:19 VM_0_13_centos bash[27883]: /etc/named.conf:35: unknown option &lsquo;forware&rsquo;
+Jan 30 22:25:19 VM_0_13_centos systemd[1]: named.service: control process exited, code=exited status=1
+Jan 30 22:25:19 VM_0_13_centos systemd[1]: Failed to start Berkeley Internet Name Domain (DNS).
+Jan 30 22:25:19 VM_0_13_centos systemd[1]: Unit named.service entered failed state.
+Jan 30 22:25:19 VM_0_13_centos systemd[1]: named.service failed.
+[root@VM_0_13_centos ~]# systemctl start named.service
+[root@VM_0_13_centos ~]#</p>
+
+<hr />
+
+<h1 id="atom">atom</h1>
+
+<p>Ubuntu下安装Atom
+2017年11月24日 19:08:55 <em>icrazy</em> 阅读数：4031
+1. 安装：
+在Ubuntu16.04的机器下安装Atom，使用下列命令
+[PPA方式]</p>
+
+<p>sudo add-apt-repository ppa:webupd8team/atom<br />
+sudo apt-get update<br />
+sudo apt-get install atom</p>
+
+<p>[安装包方式]</p>
+
+<p>wget <a href="https://github.com/atom/atom/releases/download/v1.7.4/atom-amd64.deb">https://github.com/atom/atom/releases/download/v1.7.4/atom-amd64.deb</a>
+sudo dpkg -i atom-amd64.deb</p>
+
+<ol>
+<li>问题
+使用VNC方式访问时，无法正常使用Atom，提示信息：
+Xlib: extension “XInputExtension” missing on display “:1”.
+解决方法：</li>
+</ol>
+
+<p>sudo cp /usr/lib/x86_64-linux-gnu/libxcb.so.1 /usr/share/atom/
+cd /usr/share/atom
+sudo sed -i &rsquo;s/BIG-REQUESTS/_IG-REQUESTS/&rsquo; libxcb.so.1
+<a href="http://ppa.launchpad.net/webupd8team/atom/ubuntu">http://ppa.launchpad.net/webupd8team/atom/ubuntu</a> bionic/main amd64 atom amd64 1.26.1-1~webupd8~0</p>
+
+<hr />
+
+<p>Assuming your OS is Ubuntu and you installed the latest build of atom by building from source, to remove the application itself:</p>
+
+<p>rm /usr/local/bin/atom
+The following commands remove the folder you git cloned the repo, the atom config files, and the atom-shell config files respectively.</p>
+
+<p>rm -rf ~/atom
+rm -rf ~/.atom
+rm -rf ~/.config/Atom-Shell
+And if you happened to use a dock (unity, plank, and so on) you may need to remove the atom.desktop file.</p>
+
+<p>rm ~/.local/share/applications/atom.desktop
+Any dependencies you installed to build and run atom (for example node.js) will still be on your system.</p>
+
+<p>I don&rsquo;t know if the above code removes everything Atom related, but it should be at least the majority.
+There&rsquo;s also /usr/local/bin/apm and /usr/local/share/atom/.
+sudo apt-get remove atom
+ <a href="https://npm.taobao.org/mirrors/atom/">atom mirror</a></p>
+
+<ol>
+<li>插件GitHub 地址</li>
+<li><a href="https://github.com/JoelBesada/activate-power-mode">https://github.com/JoelBesada/activate-power-mode</a>
+ 进入 .atom/packages/ 目录<br />
+　　　cd ~/.atom/packages/   或者 在/home文件夹下Ctrl + h(显示隐藏文件，找到.atom文件夹)</li>
+</ol>
+
+<p>　　3. git clone <a href="https://github.com/JoelBesada/activate-power-mode.git">https://github.com/JoelBesada/activate-power-mode.git</a></p>
+
+<p>　　4. apm install activate-power-mode</p>
+
+<p>　　5. 打开 Atom 激活</p>
+
+<p>　　　　//按下 ctrl + shift + P
+　　　　//输入 window:Reload
+　　　　//回车
+　　　　//按下 ctrl + alt + o (o 不是 零)</p>
+
+<p>Install dependencies (on Ubuntu): sudo apt install git gconf2 gconf-service libgtk2.0-0 libudev1 libgcrypt20 libnotify4 libxtst6 libnss3 python gvfs-bin xdg-utils libcap2
+Download atom-amd64.tar.gz from the Atom releases page.
+Run tar xf atom-amd64.tar.gz in the directory where you want to extract the Atom folder.
+Launch Atom using the installed atom command from the newly extracted directory.</p>
+
+<p>// go-plus-6.1.0</p>
+
+<h2 id="typescripte">typescripte</h2>
+
+<ul>
+<li>npm install typescript@2.4.2</li>
+<li>npm install -g typescript
+2019-01 TypeScript 3.2 is now available. Download our latest version today!</li>
+</ul>
+
+<p>npm install -g typescript
+  Unhandled rejection Error: EACCES: permission denied, mkdir &lsquo;/home/jayhu/.npm/_cacache/index-v5/84/cd&rsquo;</p>
+
+<p>npm ERR! cb() never called!</p>
+
+<p>npm ERR! This is an error with npm itself. Please report this error at:
+  npm ERR!     <a href="https://npm.community">https://npm.community</a></p>
+
+<p>npm ERR! A complete log of this run can be found in:
+  npm ERR!     /home/jayhu/.npm/_logs/2019-01-27T13_38_10_909Z-debug.log
+  [~/dl]gedit /home/jayhu/.npm/_logs/2019-01-27T13_38_10_909Z-debug.log
+  [~/dl]sudo npm install -g typescript
+   /usr/local/bin/tsc -&gt; /usr/local/lib/node_modules/typescript/bin/tsc
+   /usr/local/bin/tsserver -&gt; /usr/local/lib/node_modules/typescript/bin/tsserver
+   + typescript@3.2.4
+   + added 1 package from 1 contributor in 5.91s
+   + [~/dl]tsc -v
+   + Version 3.2.4</p>
+
+<h2 id="flutter">Flutter:</h2>
+
+<ol>
+<li>install<br /></li>
+</ol>
+
+<p>Operating Systems: Linux (64-bit)
+Disk Space: 600 MB (does not include disk space for IDE/tools).
+Tools: Flutter depends on these command-line tools being available in your environment.
+bash
+curl
+git 2.x
+mkdir
+rm
+unzip
+which
+xz-utils
+Shared libraries: Flutter test command depends on this library being available in your environment.
+libGLU.so.1 - provided by mesa packages e.g. libglu1-mesa on Ubuntu/Debian</p>
+
+<h2 id="dart">Dart:</h2>
+
+<ol>
+<li><p>install</p></li>
+
+<li><p>install package
+If you’re using Debian/Ubuntu on AMD64 (64-bit Intel), you can choose one of the following options, both of which can update the SDK automatically when new versions are released.</p></li>
+</ol>
+
+<p>Install using apt-get
+   Install a Debian package
+   Install using apt-get
+   Perform the following one-time setup:</p>
+
+<p>&rdquo;&lsquo;sh
+$ sudo apt-get update
+$ sudo apt-get install apt-transport-https
+$ sudo sh -c &lsquo;curl <a href="https://dl-ssl.google.com/linux/linux_signing_key.pub">https://dl-ssl.google.com/linux/linux_signing_key.pub</a> | apt-key add -&rsquo;
+$ sudo sh -c &lsquo;curl <a href="https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list">https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list</a> &gt; /etc/apt/sources.list.d/dart_stable.list&rsquo;
+&ldquo;&rsquo;</p>
+
+<p>Then install the stable release of the Dart SDK:</p>
+
+<p>&rdquo;&lsquo;sh
+$ sudo apt-get update
+$ sudo apt-get install dart
+&ldquo;&rsquo;</p>
+
+<p>Or, to install the dev release of the Dart SDK, run the one-time setup commands followed by:
+&ldquo;&lsquo;sh
+$ sudo sh -c &lsquo;curl <a href="https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_unstable.list">https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_unstable.list</a> &gt; /etc/apt/sources.list.d/dart_unstable.list&rsquo;
+$ sudo apt-get update
+$ sudo apt-get install dart
+&ldquo;&rsquo;</p>
+
+<p>Install a Debian package
+Alternatively, download Dart SDK as Debian package in the .deb package format.</p>
+
+<p>Stable channel
+Dev channel
+Modify PATH for access to all Dart binaries
+After installing the SDK, add its bin directory to your PATH. For example, use the following command to change PATH in your active terminal session:</p>
+
+<p>$ export PATH=&ldquo;$PATH:/usr/lib/dart/bin&rdquo;
+To change the PATH for future terminal sessions, use a command like this:</p>
+
+<p>$ echo &lsquo;export PATH=&ldquo;$PATH:/usr/lib/dart/bin&rdquo;&rsquo; &gt;&gt; ~/.profile</p>
+
+<h2 id="deb-1">Deb</h2>
+
+<p>deb是debian linus的安装格式，跟red hat的rpm非常相似，最基本的安装命令是：dpkg -i file.deb</p>
+
+<p>dpkg 是Debian Package的简写，是为Debian 专门开发的套件管理系统，方便软件的安装. 更新及移除。所有源自Debian的Linux发行版都使用dpkg，例如Ubuntu. Knoppix 等。
+以下是一些 Dpkg 的普通用法：</p>
+
+<ol>
+<li><p>dpkg -i <package.deb>
+安装一个 Debian 软件包，如你手动下载的文件。</p></li>
+
+<li><p>dpkg -c <package.deb>
+列出 <package.deb> 的内容。</p></li>
+
+<li><p>dpkg -I <package.deb>
+从 <package.deb> 中提取包裹信息。</p></li>
+
+<li><p>dpkg -r <package>
+移除一个已安装的包裹。</p></li>
+
+<li><p>dpkg -P <package>
+完全清除一个已安装的包裹。和 remove 不同的是，remove 只是删掉数据和可执行文件，purge 另外还删除所有的配制文件。</p></li>
+
+<li><p>dpkg -L <package>
+列出 <package> 安装的所有文件清单。同时请看 dpkg -c 来检查一个 .deb 文件的内容。</p></li>
+
+<li><p>dpkg -s <package>
+显示已安装包裹的信息。同时请看 apt-cache 显示 Debian 存档中的包裹信息，以及 dpkg -I 来显示从一个 .deb 文件中提取的包裹信息。</p></li>
+
+<li><p>dpkg-reconfigure <package>
+重新配制一个已经安装的包裹，如果它使用的是 debconf (debconf 为包裹安装提供了一个统一的配制界面)。</p></li>
+</ol>
+
+<h2 id="wget">Wget</h2>
+
+<p>-a&lt;日志文件&gt;：在指定的日志文件中记录资料的执行过程；
+-A&lt;后缀名&gt;：指定要下载文件的后缀名，多个后缀名之间使用逗号进行分隔；
+-b：进行后台的方式运行wget；
+-B&lt;连接地址&gt;：设置参考的连接地址的基地地址；
+-c：继续执行上次终端的任务；
+-C&lt;标志&gt;：设置服务器数据块功能标志on为激活，off为关闭，默认值为on；
+-d：调试模式运行指令；
+-D&lt;域名列表&gt;：设置顺着的域名列表，域名之间用“，”分隔；
+-e&lt;指令&gt;：作为文件“.wgetrc”中的一部分执行指定的指令；
+-h：显示指令帮助信息；
+-i&lt;文件&gt;：从指定文件获取要下载的URL地址；
+-l&lt;目录列表&gt;：设置顺着的目录列表，多个目录用“，”分隔；
+-L：仅顺着关联的连接；
+-r：递归下载方式；
+-nc：文件存在时，下载文件不覆盖原有文件；
+-nv：下载时只显示更新和出错信息，不显示指令的详细执行过程；
+-q：不显示指令执行过程；
+-nh：不查询主机名称；
+-v：显示详细执行过程；
+-V：显示版本信息；
+&ndash;passive-ftp：使用被动模式PASV连接FTP服务器；
+&ndash;follow-ftp：从HTML文件中下载FTP连接文件。</p>
+
+<h2 id="github">github</h2>
+
+<p>要获得最新版本的Git，你需要在Ubuntu中添加Git的维护者团队PPA（归档包）到您的软件源列表。使用以下命令添加PPA：</p>
+
+<pre><code class="language-bash">$ sudo add-apt-repository ppa:git-core/ppa # 然后更新源列表并升级git：
+$ sudo apt-get update
+$ sudo apt-get install -y git 
+#现在，你应该已经是最新版本，使用以下命令查看git版本：
+git --version
+</code></pre>
+
+<h3 id="mono">mono:</h3>
+
+<p>sudo apt-key adv &ndash;keyserver hkp://keyserver.ubuntu.com:80 &ndash;recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+echo &ldquo;deb <a href="https://download.mono-project.com/repo/ubuntu">https://download.mono-project.com/repo/ubuntu</a> stable-bionic main&rdquo; | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
+sudo apt update</p>
+
+<h3 id="nslookup">nslookup</h3>
+
+<p>nslookup -qt=A huj.cn xxx.xxx.xxx.xxx
+Connection to xxx.xxx.xxx.xxx#53(xxx.xxx.xxx.xxx) for baidu.com failed: timed out.</p>
+
+<h3 id="source">source</h3>
+
+<p>Ubuntu下查看命令的源码</p>
+
+<ol>
+<li>首先确认一下配置文件里是有包含 src 相关的源的</li>
+</ol>
+
+<p>$ cat /etc/apt/sources.list |grep -v &ldquo;^#&rdquo; | grep &ldquo;deb-src&rdquo;
+deb-src <a href="http://cn.archive.ubuntu.com/ubuntu/">http://cn.archive.ubuntu.com/ubuntu/</a> precise main restricted
+deb-src <a href="http://cn.archive.ubuntu.com/ubuntu/">http://cn.archive.ubuntu.com/ubuntu/</a> precise universe
+deb-src <a href="http://cn.archive.ubuntu.com/ubuntu/">http://cn.archive.ubuntu.com/ubuntu/</a> precise multiverse</p>
+
+<ol>
+<li>获取源代码</li>
+</ol>
+
+<p>$ apt-get source pkg_name</p>
+
+<ol>
+<li>参考</li>
+</ol>
+
+<p>这里写了一个简单的脚本用于自动获取对应的命令的源文件。</p>
+
+<p>/bin/sh</p>
+
+<p>match_line=$(dpkg -S &ldquo;$1&rdquo; | grep &ldquo;:&rdquo; | head -1)
+if [ $? != 0 ]; then
+    echo &ldquo;no pkg found!&rdquo;
+    exit 1
+fi
+match_pkg=$(echo $match_line | sed -e &rsquo;s/:.*//&lsquo;)
+echo &ldquo;start to get source of $match_pkg &hellip;&rdquo;
+apt-get source $match_pkg</p>
+
+<p>使用说明：</p>
+
+<p>$ sh /tmp/test.sh /usr/bin/msgfmt</p>
+
+<p>sh /tmp/test.sh /usr/bin/msgfmt
+start to get source of gettext &hellip;
+正在读取软件包列表&hellip; 完成
+正在分析软件包的依赖关系树
+正在读取状态信息&hellip; 完成
+需要下载 15.2 MB 的源代码包。
+获取：1 <a href="http://cn.archive.ubuntu.com/ubuntu/">http://cn.archive.ubuntu.com/ubuntu/</a> precise/main gettext 0.18.1.1-5ubuntu3 (dsc) [1,342 B]
+获取：2 <a href="http://cn.archive.ubuntu.com/ubuntu/">http://cn.archive.ubuntu.com/ubuntu/</a> precise/main gettext 0.18.1.1-5ubuntu3 (tar) [15.1 MB]</p>
+
+<h3 id="在ubuntu启动时自动关闭蓝牙">在Ubuntu启动时自动关闭蓝牙</h3>
+
+<p>Ubuntu本身对蓝牙的支持非常好，但是每次启动都自动打开蓝牙。即使关闭蓝牙，下次重新启动Ubuntu之后还是会自动打开，也就是说Ubuntu不会记录蓝牙状态。</p>
+
+<p>看了Ubuntu论坛中的一些帖子，大家给的解决方案一般都是在 系统-&gt;首选项-&gt;启动 中关闭 蓝牙管理程序。这样做的结果是蓝牙管理程序没有启动，但蓝牙指示灯还亮着，并没有真正的关闭蓝牙功能。还有朋友给出的方法是在BIOS中设置关闭蓝牙，这样在想要使用的时候还要重启后在BIOS中打开，很麻烦。</p>
+
+<p>我现在的做法是保留蓝牙管理程序的自动启动，然后通过配置关闭蓝牙，想要使用的时候在蓝牙管理程序中打开，便方便。</p>
+
+<p>sudo gedit /etc/rc.local</p>
+
+<p>然后，加入下面一行</p>
+
+<p>rfkill block bluetooth</p>
+
+<p>重启后，默认蓝牙是关闭状态。</p>
+
+<hr />
+
+<h2 id="ubuntu终端命令行播放音乐-mp3">Ubuntu终端命令行播放音乐(mp3)</h2>
+
+<p>有很多在终端命令行播放mp3的工具，有的甚至可以生成播放列表。也只有命令行重度使用者有这个需求，下面我们来看一看这些工具。</p>
+
+<h3 id="sox">Sox</h3>
+
+<p>Sox（Sound eXchange）是操作声音文件的瑞士军刀，它可以播放、转换音频文件，添加效果。</p>
+
+<p>在Ubuntu上安装sox：</p>
+
+<p>$ sudo apt-get install sox libsox-fmt-all</p>
+
+<p>libsox-fmt-all包含mp3的解码器和其它格式的解码器。</p>
+
+<p>播放音乐：</p>
+
+<p>$ play Crystals.mp3</p>
+
+<h3 id="moc">Moc</h3>
+
+<p>Moc（Music on Console）播放器是专门为终端命令行开发的，它允许用户通过基于文本的文件浏览器选择要播放的文件。</p>
+
+<p>安装moc：</p>
+
+<p>$ sudo apt-get install moc</p>
+
+<p>打开播放器：</p>
+
+<p>$ mocp</p>
+
+<p>选择要播放的文件，会车播放：</p>
+
+<p>Moc播放器可以使用快捷键控制播放， S停止、P暂停，左右箭头倒退和快进。</p>
+
+<h3 id="vlc播放器">Vlc播放器</h3>
+
+<p>Vlc提供了播放音频的命令行工具。</p>
+
+<p>安装vlc：</p>
+
+<p>$ sudo apt-get install vlc-nox</p>
+
+<p>启动vlc：</p>
+
+<p>$ vlc -I ncurses</p>
+
+<p>h查看帮助，它列出所有播放控制的快捷键。</p>
+
+<h3 id="cmus">CMUS</h3>
+
+<p>cmus也是基于命令行的播放器。</p>
+
+<p>安装cmus：</p>
+
+<p>$ sudo apt-get install cmus</p>
+
+<p>启动：</p>
+
+<p>$ cmus</p>
+
+<h2 id="ubuntu18-04-关闭和开启图形用户界面">Ubuntu18.04 关闭和开启图形用户界面</h2>
+
+<ol>
+<li><p>关闭用户图形界面<br />
+sudo systemctl set-default multi-user.target
+sudo reboot</p></li>
+
+<li><p>开启用户图形界面<br />
+sudo systemctl set-default graphical.target
+sudo reboot</p></li>
+</ol>
+
+<h3 id="docker">docker</h3>
+
+<p>sudo apt remove docker docker-engine docker.io containerd runc</p>
+
+<p>sudo apt-get update</p>
+
+<p>sudo apt-get install <br />
+    apt-transport-https <br />
+    ca-certificates <br />
+    curl <br />
+    gnupg-agent <br />
+    software-properties-common</p>
+
+<p>curl -fsSL <a href="https://download.docker.com/linux/ubuntu/gpg">https://download.docker.com/linux/ubuntu/gpg</a> | sudo apt-key add -</p>
+
+<p>sudo apt-key fingerprint 0EBFCD88</p>
+
+<p>pub   rsa4096 2017-02-22 [SCEA]
+      9DC8 5822 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88
+uid           [ unknown] Docker Release (CE deb) <a href="mailto:docker@docker.com">docker@docker.com</a>
+sub   rsa4096 2017-02-22 [S]</p>
+
+<p>sudo add-apt-repository <br />
+   &ldquo;deb [arch=amd64] <a href="https://download.docker.com/linux/ubuntu">https://download.docker.com/linux/ubuntu</a> <br />
+   $(lsb_release -cs) <br />
+   stable&rdquo;</p>
+
+<hr />
+
+<p>sudo apt remove docker docker-engine docker.io containerd runc</p>
+
+<p>sudo apt-get update</p>
+
+<p>sudo apt-get install docker-ce docker-ce-cli containerd.io</p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

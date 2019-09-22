@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="用-mkcert-搭建本地开发受信-https-证书环境">用 mkcert 搭建本地开发受信 HTTPS 证书环境</h1>
+
+<h2 id="前言">前言</h2>
+
+<p>在<a href="https://letsencrypt.org/">Let&rsquo;s Encrypt</a>推出免费证书以后，越来越多的网站都用上了免费的证书，HTTPS网站已然成为了标配。</p>
+
+<p>我博客的出现时机跟 Let&rsquo;s Encrypt 差不多，当时自己不知道怎么安全传输登录密钥，于是直接就不支持HTTP，仅支持HTTPS。</p>
+
+<p>这样一来，就算在本地，也需要启用HTTPS，但这些证书以往多数是手动调用 OpenSSL 生成自签的证书，然后添加到浏览器的受信证书列表，很麻烦，且不方便使用。</p>
+
+<h2 id="mkcert">mkcert</h2>
+
+<p>最近发现了一款用 Go 写的小工具，<a href="https://github.com/FiloSottile/mkcert">mkcert</a>，作者是 Google 员工。它用于在本地搭建受信证书环境。试用了一下，非常便捷。</p>
+
+<p>首次运行时，它会生成一个<strong>本地CA</strong>，即本地公证机构根证书，然后<strong>把此CA添加到系统受信列表</strong>。最后，由此CA颁发（签名）新的下级证书给各网站使用。</p>
+
+<h2 id="安装">安装</h2>
+
+<h3 id="macos">macOS</h3>
+
+<p>使用 HomeBrew 进行安装：</p>
+
+<pre><code class="language-bash">brew install mkcert
+brew install nss # 如果使用的是火狐浏览器需要安装这个
+
+</code></pre>
+
+<h3 id="linux">Linux</h3>
+
+<p>直接到  <a href="https://github.com/FiloSottile/mkcert/releases">https://github.com/FiloSottile/mkcert/releases</a>  下载预编译的二进制。</p>
+
+<h3 id="windows">Windows</h3>
+
+<p>暂时不支持 😂</p>
+
+<h2 id="创建证书">创建证书</h2>
+
+<p>首次运行时，先生成并安装根证书：</p>
+
+<pre><code>$ mkcert ---install
+Created a new local CA at &quot;/Users/tao/Library/Application Support/mkcert&quot; 💥
+The local CA is now installed in the system trust store! ⚡️
+The local CA is now installed in the Firefox trust store (requires restart)! 🦊
+
+</code></pre>
+
+<p>然后就可以签名啦：</p>
+
+<pre><code>$ mkcert localhost 127.0.0.1 taoblog.local phpmyadmin.local
+Using the local CA at &quot;/Users/tao/Library/Application Support/mkcert&quot; ✨
+
+Created a new certificate valid for the following names 📜
+ - &quot;localhost&quot;
+ - &quot;127.0.0.1&quot;
+ - &quot;taoblog.local&quot;
+ - &quot;phpmyadmin.local&quot;
+
+The certificate is at &quot;./localhost+3.pem&quot; and the key at &quot;./localhost+3-key.pem&quot; ✅
+
+</code></pre>
+
+<p>证书已经生成：</p>
+
+<pre><code>$ ls -l *.pem
+-rw-------  1 tao  staff  1704 Jul  6 10:42 localhost+3-key.pem
+-rw-r--r--  1 tao  staff  1480 Jul  6 10:42 localhost+3.pem
+
+</code></pre>
+
+<h2 id="使用证书">使用证书</h2>
+
+<p>我仅以 nginx 为例。</p>
+
+<pre><code class="language-nginx">
+server {
+    listen          443 ssl http2; # 启用HTTPS
+    server_name     taoblog.local; # 这里是刚才的域名
+
+    ## 这里现行就是填写刚才生成的证书
+    ## 可以是绝对路径，也可以是nginx的配置文件相对路径
+    ## 注意不要把公钥、私钥弄混了，带key的是私钥
+    ssl_certificate         localhost+3.pem;
+    ssl_certificate_key     localhost+3-key.pem;
+
+    ...
+}
+
+</code></pre>
+
+<h2 id="查看浏览器证书">查看浏览器证书</h2>
+
+<p>可以看到已经是 HTTPS 啦，没有任何警告。</p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="determining-if-a-rust-vector-has-all-equal-elements">Determining if a Rust Vector has all equal elements</h1>
+
+<p>Jun 6, 2019</p>
+
+<p>Earlier today, I  <a href="https://octodon.social/@schlink/102226540877408178">tooted out a Rust question</a>: How would you write a function to determine if a Vector of integers are all the same, or not.</p>
+
+<pre><code>fn main() {
+    let all_eq = vec![2,2,2,2];
+    let not_eq = vec![1,6,5,1,6];
+    
+    assert_eq!(is_all_same(all_eq), true);
+    assert_eq!(is_all_same(not_eq), false);
+}
+
+fn is_all_same(vec: Vec&lt;usize&gt;) -&gt; bool {
+    // ???
+}
+
+</code></pre>
+
+<p>Now, I should note that right off the bat I screwed up a bit in how I laid out the sample code. I should have had the  <code>is_all_same</code>  function accept a slice, rather than a Vector. That way, we could pass a slice of the Vector to multiple functions.</p>
+
+<p>So the challenge should have looked like this:</p>
+
+<pre><code>fn main() {
+    let all_eq = vec![2,2,2,2];
+    let not_eq = vec![1,6,5,1,6];
+    
+    assert_eq!(is_all_same(&amp;all_eq), true);
+    assert_eq!(is_all_same(&amp;not_eq), false);
+}
+
+fn is_all_same(arr: &amp;[usize]) -&gt; bool {
+    // ???
+}
+
+</code></pre>
+
+<p>Anyway, the Fediverse is wonderful and full of helpful Rust friends – I ended up getting about a dozen solutions (none exactly the same I don’t think?)</p>
+
+<p>If you want to run them with appropriate tests, I also put them all in  <a href="https://play.rust-lang.org/?version=nightly&amp;mode=debug&amp;edition=2018&amp;gist=57c76200984607a01f4de5e06557759d">a fresh Rust Playground, with tests</a>.</p>
+
+<h2 id="answers">Answers</h2>
+
+<pre><code>// https://mastodon.technology/@bugaevc/102226605331136063
+fn is_all_same1(arr: &amp;[usize]) -&gt; bool {
+    if arr.is_empty() {
+        return true;
+    }
+    let first = arr[0];
+    arr.iter().all(|&amp;item| item == first)
+}
+
+// https://mastodon.technology/@bugaevc/102226605331136063
+fn is_all_same2(arr: &amp;[usize]) -&gt; bool {
+    arr.iter().min() == arr.iter().max()
+}
+
+</code></pre>
+
+<pre><code>// https://mastodon.technology/@bugaevc/102226666945763586
+fn is_all_same3(arr: &amp;[usize]) -&gt; bool {
+    arr.windows(2).all(|w| w[0] == w[1])
+}
+
+</code></pre>
+
+<pre><code>// https://cybre.space/@popefucker/102226716362389708
+fn is_all_same4(vec: &amp;[usize]) -&gt; bool {
+    for c in vec.windows(2) {
+        if c[0] != c[1] {
+            return false;
+        }
+    }
+    true
+}
+
+</code></pre>
+
+<p>This one requires Rust Nightly!</p>
+
+<pre><code>// https://weirder.earth/@Eden/102226720432099086
+// requires nightly (run with: `cargo +nightly run`)
+fn is_all_same5(vec: &amp;[usize]) -&gt; bool {
+    match vec {
+        [] =&gt; true,
+        [_elem] =&gt; true,
+        [head, second, ..] if (head != second) =&gt; false,
+        [_head, rest..] =&gt; is_all_same5(rest),
+    }
+}
+
+</code></pre>
+
+<pre><code>// https://asonix.dog/@asonix/102226712612355882
+fn is_all_same6(vec: &amp;Vec&lt;usize&gt;) -&gt; bool {
+    let mut iter = vec.iter();
+
+    let first = iter.next();
+
+    iter.fold(first, |acc, item| {
+        acc.and_then(|stored| if stored == item { Some(stored) } else { None })
+    })
+    .is_some()
+}
+
+</code></pre>
+
+<p>7 is the same as 6, but works for multiple types:</p>
+
+<pre><code>// https://asonix.dog/@asonix/102226729246023587
+fn is_all_same7&lt;T&gt;(vec: &amp;[T]) -&gt; bool
+where
+    T: PartialEq,
+{
+    let mut iter = vec.iter();
+
+    let first = iter.next();
+
+    iter.fold(first, |acc, item| {
+        acc.and_then(|stored| if stored == item { Some(stored) } else { None })
+    })
+    .is_some()
+}
+
+</code></pre>
+
+<pre><code>// https://cmpwn.com/@pounce/102226770364267196
+fn is_all_same8&lt;T: Eq&gt;(arr: &amp;[T]) -&gt; bool {
+    match arr.split_first() {
+        Some((first, remaining)) =&gt; remaining.iter().all(|item| *item == *first),
+        None =&gt; true,
+    }
+}
+
+</code></pre>
+
+<pre><code>// https://functional.cafe/@juliobiason/1022268706680954231
+fn is_all_same9(vec: Vec&lt;usize&gt;) -&gt; bool {
+    vec.iter()
+        .fold((true, None), {
+            |acc, elem| {
+                if acc.1.is_some() {
+                    (acc.0 &amp;&amp; (acc.1.unwrap() == elem), Some(elem))
+                } else {
+                    (true, Some(elem))
+                }
+            }
+        })
+        .0
+}
+
+</code></pre>
+
+<p>10 here improves on 9  <a href="https://mastodon.social/@pingveno/102227440756639165">by removing an  <code>unwrap()</code>  and instead using  <code>if let</code></a>:</p>
+
+<pre><code>// https://mastodon.social/@pingveno/102227440756639165
+fn is_all_same10(vec: Vec&lt;usize&gt;) -&gt; bool {
+    vec.iter()
+        .fold((true, None), {
+            |acc, elem| {
+                if let Some(prev) = acc.1 {
+                    (acc.0 &amp;&amp; (prev == elem), Some(elem))
+                } else {
+                    (true, Some(elem))
+                }
+            }
+        })
+        .0
+}
+
+</code></pre>
+
+<p>Maybe the most concise option, which uses  <a href="https://doc.rust-lang.org/std/slice/struct.Windows.html">windows</a>:</p>
+
+<pre><code>// https://mastodon.technology/@bugaevc/102226891784062955
+fn is_all_same11&lt;T: PartialEq&gt;(arr: &amp;[T]) -&gt; bool {
+    arr.windows(2).all(|w| w[0] == w[1])
+}
+
+</code></pre>
+
+<pre><code>// https://mastodon.social/@pingveno/102227428277791031
+fn is_all_same12&lt;T: Eq&gt;(slice: &amp;[T]) -&gt; bool {
+    slice
+        .get(0)
+        .map(|first| slice.iter().all(|x| x == first))
+        .unwrap_or(true)
+}
+
+</code></pre>
+
+<p>Again, if you want to run these answers with appropriate tests, I also put them all in  <a href="https://play.rust-lang.org/?version=nightly&amp;mode=debug&amp;edition=2018&amp;gist=57c76200984607a01f4de5e06557759d">a fresh Rust Playground</a>.</p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="heterogeneous">Heterogeneous</h1>
+
+<h3 id="the-tuples">The Tuples</h3>
+
+<ol>
+<li><pre><code class="language-rust">/* It prints:
+10000000, 183.19, Q*/
+fn main() {
+let data = (10000000, 183.19, 'Q');
+let copy_of_data = data;
+print!(&quot;{}, {}, {}&quot;,
+    data.0, copy_of_data.1, data.2);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">// It does nothing.
+fn main() {
+let data: (i32, f64, char) = (10000000, 183.19, 'Q');
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+-5, 183.19, x*/
+fn main() {
+let mut data = (10000000, 183.19, 'Q');
+data.0 = -5;
+data.2 = 'x';
+print!(&quot;{}, {}, {}&quot;, data.0, data.1, data.2);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+*/
+fn main() {
+let array = [12, 13, 14];
+let tuple = (12, 13, 14);
+let i = 0;
+print!(&quot;{}&quot;, array[i]);
+print!(&quot;{}&quot;, tuple.i);
+}
+</code></pre></li>
+</ol>
+
+<p>### The Structs
+ 5.</p>
+
+<pre><code class="language-rust">/* It prints:
+3*/
+fn main() {
+    let data = (10, 'x', 12, 183.19, 'Q', false, -9);
+    print!(&quot;{}&quot;, data.2 + data.6);
+}
+</code></pre>
+
+<ol>
+<li><pre><code class="language-rust">// ILLEGAL
+fn main() {
+let data1 = (10, 'x', 12, 183.19, 'Q', false, -9);
+let mut data2: (u16, char, i16, f64, bool, char, i16);
+data2 = data1;
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+60, 10000000, 183.19, Q*/
+fn main() {
+struct SomeData {
+    integer: i32,
+    fractional: f32,
+    character: char,
+    five_bytes: [u8; 5],
+}
+let data = SomeData {
+    integer: 10_000_000,
+    fractional: 183.19,
+    character: 'Q',
+    five_bytes: [9, 0, 250, 60, 200],
+};
+print!(&quot;{}, {}, {}, {}&quot;,
+    data.five_bytes[3], data.integer,
+    data.fractional, data.character);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+60, 10000000, 183.19, Q*/
+#include &lt;stdio.h&gt;
+int main() {
+struct SomeData {
+    int integer;
+    float fractional;
+    char character;
+    unsigned char five_bytes[5];
+};
+struct SomeData data = {
+    10000000,
+    183.19,
+    'Q',
+    {9, 0, 250, 60, 200},
+};
+printf(&quot;%d, %d, %g, %c&quot;,
+    data.five_bytes[3], data.integer,
+    data.fractional, data.character);
+return 0;
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+8.2, 10*/
+fn main() {
+struct SomeData {
+    integer: i32,
+    fractional: f32,
+}
+let mut data = SomeData {
+    integer: 10,
+    fractional: 183.19,
+};
+data.fractional = 8.2;
+print!(&quot;{}, {}&quot;, data.fractional, data.integer);
+}
+</code></pre></li>
+</ol>
+
+<p>### The Tuple-Structs
+ 10.</p>
+
+<pre><code class="language-rust">/* It prints:
+Q, 10000000, 183.19, 250*/
+fn main() {
+    struct SomeData (
+        i32,
+        f32,
+        char,
+        [u8; 5],
+    );
+    let data = SomeData (
+        10_000_000,
+        183.19,
+        'Q',
+        [9, 0, 250, 60, 200],
+    );
+    print!(&quot;{}, {}, {}, {}&quot;,
+        data.2, data.0, data.1, data.3[2]);
+}
+</code></pre>
+
+<p>### Lexical Conventions
+ 11.</p>
+
+<pre><code class="language-rust">// It does nothing.
+fn main() {
+    const MAXIMUM_POWER: u16 = 600;
+    enum VehicleKind {
+        Motorcycle,
+        Car,
+        Truck,
+    }
+    struct VehicleData {
+        kind: VehicleKind,
+        registration_year: u16,
+        registration_month: u8,
+        power: u16,
+    }
+    let vehicle = VehicleData {
+        kind: VehicleKind::Car,
+        registration_year: 2003,
+        registration_month: 11,
+        power: 120,
+    };
+    if vehicle.power &gt; MAXIMUM_POWER {
+        println!(&quot;Too powerful&quot;);
+    }
+}
+</code></pre>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

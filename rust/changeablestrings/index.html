@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="changeable-strings">Changeable Strings</h1>
+
+<p>可变字符串</p>
+
+<ol>
+<li><p>字符串</p>
+
+<pre><code class="language-rust">/* It prints:
+Hello*/
+fn main() {
+let mut a = &quot;Hel&quot;;
+print!(&quot;{}&quot;, a);
+a = &quot;lo&quot;;
+print!(&quot;{}&quot;, a);
+}
+</code></pre></li>
+
+<li><p>占用字节</p>
+
+<pre><code class="language-rust">/* It prints:
+0 10 6*/
+fn main() {
+use std::mem::*;
+let a: &amp;str = &quot;&quot;;
+let b: &amp;str = &quot;0123456789&quot;;
+let c: &amp;str = &quot;abcdè&quot;;
+print!(&quot;{} {} {}&quot;,
+    size_of_val(a),
+    size_of_val(b),
+    size_of_val(c));
+}
+</code></pre></li>
+
+<li><p>非法</p>
+
+<pre><code class="language-rust">// ILLEGAL
+fn main() {
+let a: str;
+fn f(a: str) {}
+print!(&quot;{}&quot;, std::mem::size_of::&lt;str&gt;());
+}
+</code></pre></li>
+
+<li><p>不同系统</p>
+
+<pre><code class="language-rust">/* In a 32-bit system, it prints:
+8 8 8; 4 4 4*/
+/* In a 64-bit system, it prints:
+16 16 16; 8 8 8*/
+fn main() {
+use std::mem::*;
+let a: &amp;str = &quot;&quot;;
+let b: &amp;str = &quot;0123456789&quot;;
+let c: &amp;str = &quot;abcdè&quot;;
+print!(&quot;{} {} {}; &quot;,
+    size_of_val(&amp;a),
+    size_of_val(&amp;b),
+    size_of_val(&amp;c));
+print!(&quot;{} {} {}&quot;,
+    size_of_val(&amp;&amp;a),
+    size_of_val(&amp;&amp;b),
+    size_of_val(&amp;&amp;c));
+}
+</code></pre></li>
+
+<li><p>压入</p>
+
+<pre><code class="language-rust">/* It prints:
+Hello*/
+fn main() {
+let mut a: String = &quot;He&quot;.to_string();
+a.push('l');
+a.push('l');
+a.push('o');
+print!(&quot;{}&quot;, a);
+}
+</code></pre></li>
+
+<li><p>压入弹出</p>
+
+<pre><code class="language-rust">/* It prints:
+Hi*/
+fn main() {
+let mut a: String = &quot;Xy&quot;.to_string(); // &quot;Xy&quot;
+a.remove(0); // &quot;y&quot;
+a.insert(0, 'H'); // &quot;Hy&quot;
+a.pop(); // &quot;H&quot;
+a.push('i'); // &quot;Hi&quot;
+print!(&quot;{}&quot;, a);
+}
+</code></pre></li>
+
+<li><p>容量</p>
+
+<pre><code class="language-rust">/* It prints:
+4 1; 2 2; 3 3*/
+fn main() {
+let mut s1 = &quot;&quot;.to_string();
+s1.push('e');
+let mut s2 = &quot;&quot;.to_string();
+s2.push('è');
+let mut s3 = &quot;&quot;.to_string();
+s3.push('€');
+print!(&quot;{} {}; &quot;, s1.capacity(), s1.len());
+print!(&quot;{} {}; &quot;, s2.capacity(), s2.len());
+print!(&quot;{} {}&quot;, s3.capacity(), s3.len());
+}
+</code></pre></li>
+
+<li><p>容量和长度</p>
+
+<pre><code class="language-rust">/* It prints:
+0x1 0 0
+&lt;an exedecimal number&gt; 4 1
+&lt;an exedecimal number&gt; 4 2
+&lt;an exedecimal number&gt; 4 3
+&lt;an exedecimal number&gt; 4 4
+&lt;an exedecimal number&gt; 8 5
+&lt;an exedecimal number&gt; 8 6
+&lt;an exedecimal number&gt; 8 7
+&lt;an exedecimal number&gt; 8 8
+&lt;an exedecimal number&gt; 16 9
+&lt;an exedecimal number&gt; 16 10: aaaaaaaaaa
+*/
+fn main() {
+let mut s = &quot;&quot;.to_string();
+for _ in 0..10 {
+    println!(&quot;{:?} {} {}&quot;,
+        s.as_ptr(), s.capacity(), s.len());
+    s.push('a');
+}
+println!(&quot;{:?} {} {}: {}&quot;,
+    s.as_ptr(), s.capacity(), s.len(), s);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+()*/
+fn main() {
+let s1 = String::new();
+let s2 = String::from(&quot;&quot;);
+let s3 = &quot;&quot;.to_string();
+let s4 = &quot;&quot;.to_owned();
+let s5 = format!(&quot;&quot;);
+print!(&quot;({}{}{}{}{})&quot;, s1, s2, s3, s4, s5);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+(a,a,a,a,)*/
+fn main() {
+let s = &quot;a,&quot;;
+let s1 = String::from(s);
+let s2 = s.to_string();
+let s3 = s.to_owned();
+//let s4 = format!(s);
+//let s5 = format!(&quot;a,{}&quot;);
+let s6 = format!(&quot;{}&quot;, s);
+print!(&quot;({}{}{}{})&quot;, s1, s2, s3, s6);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+Hello Hello Hello Hello */
+fn main() {
+let ss1 = &quot;He&quot;;
+let ss2 = &quot;llo &quot;;
+let ds1 = ss1.to_string();
+let ds2 = ss2.to_string();
+let ds3 = format!(&quot;{}{}&quot;, ss1, ss2);
+print!(&quot;{}&quot;, ds3);
+let ds3 = format!(&quot;{}{}&quot;, ss1, ds2);
+print!(&quot;{}&quot;, ds3);
+let ds3 = format!(&quot;{}{}&quot;, ds1, ss2);
+print!(&quot;{}&quot;, ds3);
+let ds3 = format!(&quot;{}{}&quot;, ds1, ds2);
+print!(&quot;{}&quot;, ds3);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+Hello, world!*/
+fn main() {
+let mut dyn_str = &quot;Hello&quot;.to_string();
+dyn_str = format!(&quot;{}{}&quot;, dyn_str, &quot;, &quot;);
+dyn_str = format!(&quot;{}{}&quot;, dyn_str, &quot;world&quot;);
+dyn_str = format!(&quot;{}{}&quot;, dyn_str, &quot;!&quot;);
+print!(&quot;{}&quot;, dyn_str);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+Hello, world!*/
+fn main() {
+let mut dyn_str = &quot;Hello&quot;.to_string();
+dyn_str.push_str(&quot;, &quot;);
+dyn_str.push_str(&quot;world&quot;);
+dyn_str.push_str(&quot;!&quot;);
+print!(&quot;{}&quot;, dyn_str);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+Hello, world!*/
+fn main() {
+let mut dyn_str = &quot;Hello&quot;.to_string();
+dyn_str += &quot;, &quot;;
+dyn_str += &quot;world&quot;;
+dyn_str += &quot;!&quot;;
+print!(&quot;{}&quot;, dyn_str);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+Hello, world!*/
+fn main() {
+let comma = &quot;, &quot;.to_string();
+let world = &quot;world&quot;.to_string();
+let excl_point = '!';
+let mut dyn_str = &quot;Hello&quot;.to_string();
+dyn_str += &amp;comma;
+dyn_str.push_str(&amp;world);
+dyn_str.push(excl_point);
+print!(&quot;{}&quot;, dyn_str);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+bye bye*/
+fn main() {
+let word = &quot;bye&quot;.to_string();
+let w1: &amp;str = &amp;word;
+let w2: &amp;String = &amp;word;
+print!(&quot;{} {}&quot;, w1, w2);
+}
+</code></pre></li>
+</ol>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

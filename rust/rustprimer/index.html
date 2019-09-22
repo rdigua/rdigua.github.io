@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="learning-rustprimer">learning rustprimer</h1>
+
+<p>熟练使用Option和Result是编写 Rust 代码的关键，Rust 优雅的错误处理离不开值返回的错误形式，编写代码时提供给使用者详细的错误信息是值得推崇的。
+①完美数即所有的真因子（除了自身以外的约数）的和，恰好等于本身的数字，有6、28、496等。到2018年1月为止，共发现了50个完美数，均为偶数，第50个完美数有4649，8850位。</p>
+
+<pre><code class="language-rust">fn main() {
+  let f = get_func();
+  println!(&quot;{}&quot;, f(3));
+}
+
+fn get_func() -&gt; fn(i32)-&gt;i32 {
+  let a = 1;
+  fn inc(n:i32) -&gt; i32 {
+    n + a //errors a is not pushed here.
+  }
+  inc
+}
+</code></pre>
+
+<pre><code class="language-rust">fn main() {
+   let a = [1,2,3,4,5,6,7];
+   let mut b = Vec::&lt;i32&gt;::new();
+   for i in &amp;a {
+       b.push(get_func(*i)(*i));
+   }
+   println!(&quot;{:?}&quot;, b);
+}
+
+fn get_func(n: i32) -&gt; fn(i32) -&gt; i32 {
+    fn inc(n: i32) -&gt; i32 {
+        n + 1
+    }
+    fn dec(n: i32) -&gt; i32 {
+        n - 1
+    }
+    if n % 2 == 0 {
+        inc
+    } else {
+        dec
+    }
+}
+</code></pre>
+
+<pre><code class="language-rust">enum Action {
+    Say(String),
+    MoveTo(i32, i32),
+    ChangeColorRGB(u16, u16, u16),
+}
+
+fn main() {
+    let action = Action::Say(&quot;Hello Rust&quot;.to_string());
+    match action {
+        Action::Say(s) =&gt; {
+            println!(&quot;{}&quot;, s);
+        },
+        Action::MoveTo(x, y) =&gt; {
+            println!(&quot;point from (0, 0) move to ({}, {})&quot;, x, y);
+        },
+        Action::ChangeColorRGB(r, g, _) =&gt; {
+            println!(&quot;change color into '(r:{}, g:{}, b:0)', 'b' has been ignored&quot;,
+                r, g,
+            );
+        }
+    }
+}
+</code></pre>
+
+<p>&lt;!DOCTYPE html&gt;
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <title>Measures of different models of Lamborghini cars</title>
+ </head>
+ <body>
+  {{models.main|D3ParallelCoordinates:&ldquo;carLabel,wheelbase,carWidth,carLength,transmission&rdquo;}}
+ </body>
+</html></p>
+
+<p><html>
+    <head>
+        <title>Web App Template</title>
+        <script src="main.js" async></script>
+    </head></p>
+
+<pre><code>&lt;body&gt;
+    Web App Template
+&lt;/body&gt;
+</code></pre>
+
+<p></html></p>
+
+<hr />
+
+<h3 id="ref">ref</h3>
+
+<p>let mut x = 5;</p>
+
+<p>match x {
+    ref mut mr =&gt; println!(&ldquo;mut ref :{}&ldquo;, mr),
+}
+// 当然了……在let表达式里也能用
+let ref mut mrx = x;</p>
+
+<p>let x = 1u32;
+match x {
+    e @ 1 &hellip; 5 | e @ 10 &hellip; 15 =&gt; println!(&ldquo;get:{}&ldquo;, e),
+    _ =&gt; (),
+}</p>
+
+<pre><code class="language-rust">let x = 4;
+let y = false;
+
+match x {
+    4 | 5 if y =&gt; println!(&quot;yes&quot;),
+    _ =&gt; println!(&quot;no&quot;),
+}
+// 伪代码表示
+//IF y AND (x IN List[4, 5])
+</code></pre>
+
+<h3 id="where">where</h3>
+
+<p>```rust
+use std::fmt::Debug;
+fn foo<T: Clone, K: Clone + Debug>(x: T, y: K) {
+    x.clone();
+    y.clone();
+    println!(&ldquo;{:?}&ldquo;, y);
+}</p>
+
+<p>// where 从句
+fn foo<T, K>(x: T, y: K) where T: Clone, K: Clone + Debug {
+    x.clone();
+    y.clone();
+    println!(&ldquo;{:?}&ldquo;, y);
+}</p>
+
+<p>// 或者
+fn foo<T, K>(x: T, y: K)
+    where T: Clone,
+          K: Clone + Debug {
+    x.clone();
+    y.clone();
+    println!(&ldquo;{:?}&ldquo;, y);
+}```</p>
+
+<h4 id="derive属性">derive属性</h4>
+
+<p><a href="https://rustcc.gitbooks.io/rustprimer/content/trait/trait.html">https://rustcc.gitbooks.io/rustprimer/content/trait/trait.html</a></p>
+
+<h3 id="trait对象-trait-object">trait对象 （trait object）</h3>
+
+<p><a href="https://rustcc.gitbooks.io/rustprimer/content/trait/trait-object.html">https://rustcc.gitbooks.io/rustprimer/content/trait/trait-object.html</a></p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

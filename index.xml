@@ -1,0 +1,1341 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Jay Blog</title>
+    <link>http://blog.jaytogo.com/</link>
+    <description>Recent content on Jay Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    
+	<atom:link href="http://blog.jaytogo.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/ordinary/1968/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/ordinary/1968/</guid>
+      <description>1968 1968 was a leap year starting on Monday of the Gregorian calendar, the 1968th year of the Common Era and Anno Domini designations, the 968th year of the 2nd millennium, the 68th year of the 20th century, and the 9th year of the 1960s decade. This was the year of the Protests of 1968.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/ordinary/20190813/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/ordinary/20190813/</guid>
+      <description>52 19680813-20190813</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/ordinary/20190814/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/ordinary/20190814/</guid>
+      <description>&amp;hellip; mind-list-do:100-10-1</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/ordinary/20190815/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/ordinary/20190815/</guid>
+      <description>&amp;hellip; mind-list-do:100-10-1
+20190815
+days 10465 numbers 7006 start
+It&amp;rsquo;s not you, it&amp;rsquo;s us Bing isn&amp;rsquo;t available right now, but everything should be back to normal very soon.
+Ref A: EA8EF21A257240AF88C6C33F704006A9 Ref B: BJ1EDGE0118 Ref C: 2019-08-13T15:33:03Z</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/ordinary/at-time/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/ordinary/at-time/</guid>
+      <description>at time Linux中计划任务、周期性任务设置 计划任务：指在未来的特定时间里，执行一次某一特定任务。当然，如果同一任务需要在不同时间点执行执行两次、三次或多次，可以视为多个一次看待。
+周期性任务：指某一任务需要周期性的执行。周期性可以是以分、时、天等为单位，但又不限于这些单位。
+常用于执行计划任务的命令——at, batch, 与周期性任务相关的的命令crontabs。
+1.at命令和batch命令的区别。
+　at命令旨在特定的之间执行任务；batch命令设置的任务由系统选择空闲时间去执行，空闲时间默认为cpu利用率小于0.8的时候
+2.at命令　复制代码 格式　at [option] TIME
+选项
+-l atq命令的别名，显示用户的计划任务　-d atrm命令的别名，清空计划任务 -c 查看特定的计划任务 -f FILE 从文件中读取计划任务命令　TIME，有如下几种格式 HH:MM [YYYY-mm-dd] noon, midnight, teatime tomorrow now+#{minutes,hours,days, weeks}
+注：batch命令使用方法和at类似，这里不再赘述 复制代码 3. crontabs命令 a. 与cron服务相关的程序包有三个：
+　cronie:主程序包，提供crond守护进程及相关辅助工具
+　cronie-anacron：cronie的补充程序，用于监控cronie任务执行
+　crontabs： 包含CentOS提供系统维护任务
+b. 周期任务分类。根据用户级别，可分为系统周期任务和用户周期任务。
+c. 系统周期任务一般直接直接修改/etc/crontab文件，即可配置周期任务, 可查看该文件中的内容
+复制代码 [root@vathe-pc tmp]#cat /etc/crontab
+SHELL=/bin/bash PATH=/sbin:/bin:/usr/sbin:/usr/bin # 环境变量路径 MAILTO=root # 周期任务执行之后，邮件接受者 HOME=/
+For details see man 4 crontabs Example of job definition: # 计划任务书写格式 .</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/ordinary/c-examples/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/ordinary/c-examples/</guid>
+      <description>example the point  #include &amp;lt;stdio.h&amp;gt; void main() { int a, b; int *pointer_1, *pointer_2; a = 100; b = 10; pointer_1 = &amp;amp;a; pointer_2 = &amp;amp;b; printf(&amp;quot;%d,%d\n&amp;quot;, a, b); printf(&amp;quot;%d,%d\n&amp;quot;, *pointer_1, *pointer_2); }   42.
+#include &amp;lt;stdio.h&amp;gt; void main() { int *p1, *p2, *p, a, b; scanf(&amp;quot;%d %d&amp;quot;, &amp;amp;a, &amp;amp;b); p1 = &amp;amp;a; p2 = &amp;amp;b; if( a &amp;lt; b) { p = p1; p1 = p2; p2 = p; } //此后，p1指向b, p2指向a ^_^ printf(&amp;quot;a = %d, b = %d\n&amp;quot;, a, b); printf(&amp;quot;max = %d, min = %d\n&amp;quot;, *p1, *p2); }  #include &amp;lt;stdio.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/ordinary/cmd-o/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/ordinary/cmd-o/</guid>
+      <description>version:  lsb_release -a uname -a cat /proc/version  cls  clear Ctrl+L  system  sudo dmidecode -t system  sudo apt-get remove fcitx*
+uninstall 查看是否卸载：sudo dpkg &amp;ndash;get-selections | grep fcitx
+sudo apt-get autoremove 要移除的软件包名 sudo apt-get install 要安装的软件包名
+qemu jayhu@jayhu-Dell-System-Inspiron-N4120:/usr/share/doc/qemu$ pwd /usr/share/doc/qemu jayhu@jayhu-Dell-System-Inspiron-N4120:/usr/share/doc/qemu$ qemu
+Command &amp;lsquo;qemu&amp;rsquo; not found, did you mean:
+command &amp;lsquo;aqemu&amp;rsquo; from deb aqemu
+Try: sudo apt install  qemu-system-x86_64 qemu-x86_64  vistual:  file /bin/ls egrep -o &amp;lsquo;(vmx|svm)&amp;rsquo; /proc/cpuinfo</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/ordinary/linuxapi-c-rust/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/ordinary/linuxapi-c-rust/</guid>
+      <description>linux API函数大全 还没有认真研读过，今晚在其他博客上找了比较久，今晚时间也不多了，等有空再细看
+先复制先
+获取当前执行路径:getcwd
+ API之网络函数  WNetAddConnection 创建同一个网络资源的永久性连接 WNetAddConnection2 创建同一个网络资源的连接 WNetAddConnection3 创建同一个网络资源的连接 WNetCancelConnection 结束一个网络连接 WNetCancelConnection2 结束一个网络连接 WNetCloseEnum 结束一次枚举操作 WNetConnectionDialog 启动一个标准对话框，以便建立同网络资源的连接 WNetDisconnectDialog 启动一个标准对话框，以便断开同网络资源的连接 WNetEnumResource 枚举网络资源 WNetGetConnection 获取本地或已连接的一个资源的网络名称 WNetGetLastError 获取网络错误的扩展错误信息 WNetGetUniversalName 获取网络中一个文件的远程名称以及/或者UNC（统一命名规范）名称 WNetGetUser 获取一个网络资源用以连接的名字 WNetOpenEnum 启动对网络资源进行枚举的过程
+ API之消息函数  BroadcastSystemMessage 将一条系统消息广播给系统中所有的顶级窗口 GetMessagePos 取得消息队列中上一条消息处理完毕时的鼠标指针屏幕位置 GetMessageTime 取得消息队列中上一条消息处理完毕时的时间 PostMessage 将一条消息投递到指定窗口的消息队列 PostThreadMessage 将一条消息投递给应用程序 RegisterWindowMessage 获取分配给一个字串标识符的消息编号 ReplyMessage 答复一个消息 SendMessage 调用一个窗口的窗口函数，将一条消息发给那个窗口 SendMessageCallback 将一条消息发给窗口 SendMessageTimeout 向窗口发送一条消息 SendNotifyMessage 向窗口发送一条消息
+ API之文件处理函数  CloseHandle 关闭一个内核对象。其中包括文件、文件映射、进程、线程、安全和同步对象等 CompareFileTime 对比两个文件的时间 CopyFile 复制文件 CreateDirectory 创建一个新目录 CreateFile 打开和创建文件、管道、邮槽、通信服务、设备以及控制台 CreateFileMapping 创建一个新的文件映射对象 DeleteFile 删除指定文件 DeviceIoControl 对设备执行指定的操作 DosDateTimeToFileTime 将DOS日期和时间值转换成一个 win32 FILETIME 值 FileTimeToDosDateTime 将一个 win32 FILETIME 值转换成DOS日期和时间值 FileTimeToLocalFileTime 将一个FILETIME结构转换成本地时间 FileTimeToSystemTime 根据一个FILETIME结构的内容，装载一个SYSTEMTIME结构 FindClose 关闭由FindFirstFile函数创建的一个搜索句柄 FindFirstFile 根据文件名查找文件 FindNextFile 根据调用FindFirstFile函数时指定的一个文件名查找下一个文件 FlushFileBuffers 针对指定的文件句柄，刷新内部文件缓冲区 FlushViewOfFile 将写入文件映射缓冲区的所有数据都刷新到磁盘 GetBinaryType 判断文件是否可以执行 GetCompressedFileSize 判断一个压缩文件在磁盘上实际占据的字节数 GetCurrentDirectory 在一个缓冲区中装载当前目录 GetDiskFreeSpace 获取与一个磁盘的组织有关的信息，以及了解剩余空间的容量 GetDiskFreeSpaceEx 获取与一个磁盘的组织以及剩余空间容量有关的信息 GetDriveType 判断一个磁盘驱动器的类型 GetExpandedName 取得一个压缩文件的全名 GetFileAttributes 判断指定文件的属性 GetFileInformationByHandle 这个函数提供了获取文件信息的一种机制 GetFileSize 判断文件长度 GetFileTime 取得指定文件的时间信息 GetFileType 在给出文件句柄的前提下，判断文件类型 GetFileVersionInfo 从支持版本标记的一个模块里获取文件版本信息 GetFileVersionInfoSize 针对包含了版本资源的一个文件，判断容纳文件版本信息需要一个多大的缓冲区 GetFullPathName 获取指定文件的完整路径名 GetLogicalDrives 判断系统中存在哪些逻辑驱动器字母 GetLogicalDriveStrings 获取一个字串，其中包含了当前所有逻辑驱动器的根驱动器路径 GetOverlappedResult 判断一个重叠操作当前的状态 GetPrivateProfileInt 为初始化文件（.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/ordinary/linuxapi/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/ordinary/linuxapi/</guid>
+      <description>Linux API函数总结 （一）文件操作篇
+1、creat（建立文件）
+头文件
+1 #include 2 #include 3 #include
+定义函数
+1 int creat(const char * pathname, mode_tmode);
+函数说明
+参数pathname指向欲建立的文件路径字符串。creat()相当于使用下列的调用方式调用open()
+1 open(const char * pathname ,(O_CREAT|O_WRONLY|O_TRUNC));
+错误代码
+关于参数mode请参考open（）函数。
+返回值
+creat()会返回新的文件描述词，若有错误发生则会返回-1，并把错误代码设给errno。
+EEXIST 参数pathname所指的文件已存在。
+EACCESS 参数pathname 所指定的文件不符合所要求测试的权限
+EROFS 欲打开写入权限的文件存在于只读文件系统内
+EFAULT 参数pathname 指针超出可存取的内存空间
+EINVAL 参数mode 不正确。
+ENAMETOOLONG 参数pathname太长。
+ENOTDIR 参数pathname为一目录
+ENOMEM 核心内存不足
+ELOOP 参数pathname有过多符号连接问题。
+EMFILE 已达到进程可同时打开的文件数上限
+ENFILE 已达到系统可同时打开的文件数上限
+附加说明
+creat()无法建立特别的装置文件，如果需要请使用mknod()。
+2、open（打开文件）
+头文件
+1 #include 2 #include 3 #include
+定义函数
+1 int open( const char * pathname, int flags); 2 int open( const char * pathname,int flags, mode_t mode);</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/ordinary/now/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/ordinary/now/</guid>
+      <description>plan stock anlysic sh and sz  from txd to struct save show anlysic   await webassembly  ** save struct ** // txd data encode ** get files at directory ** // from walkdir and struct to files.
+account anlysic struct daystyle { _date u32, _open u32, _high u32, _low u32, _close u32, _amount u32, _vol u32, _reservation u32 }  rust  Getting 32 bytes to a struct.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/ordinary/old-story/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/ordinary/old-story/</guid>
+      <description>平静的风浪 作品名称：平静的风浪 首发站点： 起点中文网 书号：3790161804832204 作品类型：都市 - 都市生活 授权级别： 公众作品 编辑分组： 都市编辑组
+字数： 0
+收藏： 2
+作品状态：锁定/屏蔽 作品标签： 作品介绍： 不可言物不可言事 地瓜语录：过去的日子总是慢慢的沉寂下来，变成某种不知道的物件，突然的闪现在眼前，一个又一个的迷茫或者机会到来的时候，你是放弃错过了还是自以为把握住了呢。
+扉页寄语：
+写在开始并给自己加油 　第一有意识的把自己想的一点东西变成文字并且放在一个能让公众看见的地方。
+　第一次在起点（别的地方也无）开始写个自己的小说。
+　因为是刚开始肯定有非常多不令人令自己满意的地方，但是既然开始做一件事情了那么尽力争取做好。
+　日子还长，岁月也沉重，路过能停下来散散步，就是对自己最大的鼓励。
+　第一次不求完美但求对得起自己，加油。
+资料1 　206块骨头名称
+　头部29块：包括脑颅骨8块，面颅骨15块，听小骨6块
+　脑颅骨：成对的：顶骨，颞骨
+　不成对的：额骨，枕骨，蝶骨，筛骨
+　面颅骨：成对的：上颌骨，颧骨，鼻骨，泪骨，下鼻甲骨，腭骨
+　不成对的：犁骨，下颌骨，舌骨
+　听小骨：锤骨，砧骨，镫骨（左右耳内各1块）
+　躯干骨51块：包括脊柱骨26块，肋骨24块，胸骨1块
+　脊柱骨：颈椎7块，胸椎12块，腰椎5块，骶骨1块，尾骨1块
+　上肢骨*块：每侧：肩胛骨，锁骨，肱骨，尺骨，桡骨，各1块。腕骨8块，分别为手舟骨，月骨，三角骨，豌豆骨，大多角骨，小多角骨，头状骨，钩骨。掌骨5块，从外侧向内侧依次为第1到第5掌骨。指骨14块，其中拇指2块，余为3块，分别称近节指骨，中节指骨和远节指骨。
+　下肢骨62块：每侧：髋骨，股骨，髌骨，胫骨，腓骨各1块。跗骨7块，分别为距骨，跟骨，足舟骨，骰骨，内侧楔骨，中间楔骨，外侧楔骨。跖骨5块，由内侧向外侧依次为第1到第5跖骨。趾骨14块，大拇趾2块，余为3块，分别称近节趾骨，中节趾骨和远节趾骨。
+2010年4月6日 　今天大盘高开之后到午盘回补缺口整体来看已经初步完成了3177的目标这几天算高位震荡大约要到15、16号才能确认下一个低点之后完成疯狂之旅目前大体是这样看的早盘看了个0001558.88大约是个买点现在冲高回落有点看不清胆子大的似乎可以关注9.78还是能冲过去的
+无题 　仔细琢磨了几天这个题材似乎拿来在网络上写会很辛苦毕竟天马行空的余地比较少自己想写的是一些生活中的积累可发挥的东西比较的固死所以也不求什么点击收藏推荐但是既然开了个头就希望好好的写出来所以现在似乎这书可以暂时放弃阅读等肥了以后或者完本以后再看也许再挖个坑哈哈有点过了
+实在抱歉 　开了头慢慢的发现实在是艰难拖了很久没有写下去大小就不喜欢看哭哭啼啼的东西和实际上那里有那么多的乐子即使有也很多的苦涩在那里虎头舍尾的事情确实的不能够干一定要写下去是自己的坚定的想法但是没法保证速度看看别人每日万字更新的实在是佩服得五体投地好在是刚刚的开始慢慢的养起来再说吧现在就已经阅读的读者实在是好人暂时别把精力放在这里等彻底完本了再看比较的好写在一个下雨的夜晚为玉树默哀为大盘默哀为房地产板块默哀为买不起房子的默哀
+2010年5月12日 　忧伤的时刻要用希望来抒写以便磨平记忆的伤痕虽然连续的下跌给满仓者带来的巨大的损失虽然在45个交易日的缓慢上涨之后存在了17个交易日的暴跌但是这里似乎是个相对的时间点比较的明显下个关键的日期点似乎落在了5月25日不过无论翻转还是反弹第一次肯定无法穿越3000点速度还需要时间来改变
+初始 　地瓜语录：过去的日子总是慢慢的沉寂下来，变成某种不知道的物件，突然的闪现在眼前，一个又一个的迷茫或者机会到来的时候，你是放弃错过了还是自以为把握住了呢。</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/ordinary/pwa/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/ordinary/pwa/</guid>
+      <description>PWA Progressive PWA(Progressive Web App)��һ������, ʹ�ö��ּ�������ǿweb app�Ĺ���, ��������վ���������ø���, �ܹ�ģ��һЩԭ������, ����֪ͨ���͡����ƶ������ñ�׼������, ����ҳӦ�ó��ֺ�ԭ��Ӧ�����Ƶ�����.
+Progressive Web Apps start with a traditional web site/application and progressively enhance with modern features. When sites are secure they can leverage ServiceWorkers to provider users with offline support, Push notifications can help re-engage users, and Web App Manifests let users install PWAs alongside native apps.
+ionic-team / ionic ionic-team / ionic
+freeCodeCamp / devdocs  freeCodeCamp / devdocs</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/ordinary/review-template/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/ordinary/review-template/</guid>
+      <description>Review Template To best write a book review, it is essential to keep track of the answers to the following questions, either as you read the book or as soon as you have finished it. All of the answers can then be incorporated into your review.
+SUMMARY  Narration
+ Who narrated the story?
+ Was it first-person narration or third-person narration?
+ Was the narrator a reliable source of information?</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/ordinary/summer/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/ordinary/summer/</guid>
+      <description>A blog about &amp;hellip; | history | technogic | working | plan | | 1968 | rust | &amp;hellip; |</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/ordinary/txdstyle/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/ordinary/txdstyle/</guid>
+      <description>通达信目录文件结构及说明 (2012-11-27 20:56:01)转载▼ http://blog.sina.com.cn/s/blog_674caeca0101bw5m.html
+标签： 通达信 指标 公式 目录文件 说明 分类： 一些研究总结
+vipdoc: 下载或缓存的历史数据目录
+diary: 投资日志目录
+RemoteSH: 缓存的上海F10
+RemoteSZ: 缓存的深圳F10
+Ycinfo: 缓存的公告消息
+安装目录下的SZ.*,SH.*是缓存的盘中数据文件
+T0002:个人信息目录,内有公式和自选股,个人设置等信息
+T0002\blocknew：该文件夹保存自定义板块的信息
+T0002\mark.dat:该文件保存标记文字的信息
+T0002\PriCS.dat 、 PriGS.dat 这两个文件是自定义指标模板的信息
+Advhq.dat 星空图相关个性化数据
+Block.cfg 板块设置文件
+cbset.dat 筹码分析个性化数据
+colwarn3.dat 行情栏目和预警个性化数据
+colwarnTj.dat 条件预警个性化数据
+CoolInfo.Txt 系统备忘录
+Line.dat 画线工具数据
+MyFavZX.dat 资讯收藏夹数据
+newmodem.ini 交易客户端个性化数据
+padinfo.dat 定制版面个性化数据
+PriCS.dat,PriGS.dat,PriText.dat 公式相关数据
+recentsearch.dat 最近资讯搜索数据
+Scheme.dat 配色方案
+tmptdx.css 临时网页CSS文件
+user.ini 全局个性化数据
+userfx.dat K线图个性化数据
+[blocknew] 板块目录
+[cache] 系统数据高速缓存
+[zst_cache] 分时图数据高速缓存
+[coolinfo] 系统备忘录目录</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/1/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/1/</guid>
+      <description> tmp         </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/async/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/async/</guid>
+      <description>Async-await status report[](http://smallcultfollowing.com/babysteps/blog/2019/03/01/async-await-status-report/#async-await-status-report) Mar 1, 2019
+I wanted to post a quick update on the status of the async-await effort. The short version is that we’re in the home stretch for some kind of stabilization, but there remain some significant questions to overcome.
+Announcing the implementation working group[](http://smallcultfollowing.com/babysteps/blog/2019/03/01/async-await-status-report/#announcing-the-implementation-working-group) As part of this push, I’m happy to announce we’ve formed a async-await implementation working group. This working group is part of the whole async-await effort, but focused on the implementation, and is part of the compiler team.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/augus-days/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/augus-days/</guid>
+      <description>August rust System 76 发布了用Rust编写的新GTK固件管理器 System76一直在开发一个简单易用的工具来更新Pop!_OS和System76硬件。今天终于发布了，该工具可以通过设置检查和更新固件上的Pop!_OS并通过固件管理器GTK应用程序在System76硬件上运行其他基于debian的发行版。
+文章：https://blog.system76.com/post/187072707563/the-new-firmware-manager-updating-firmware-across
+TiSpark v2.1.3 - TiSpark 是 PingCAP 为解决用户复杂 OLAP 需求而推出的产品 TiSpark 是 PingCAP 为解决用户复杂 OLAP 需求而推出的产品。它借助 Spark 平台，同时融合 TiKV 分布式集群的优势，和 TiDB 一起为用户一站式解决 HTAP (Hybrid Transactional/Analytical Processing) 的需求。TiSpark 依赖于 TiKV 集群和 Placement Driver (PD)，也需要你搭建一个 Spark 集群。
+该版本主要添加的特性：
+ 修复表扫描中的成本模型 修复固定索引Bug 通过双读下推来禁止聚合或分组 修复了HDP版本的反射错误 修复scala编译器版本  GitHub：https://github.com/pingcap/tispark
+Meuse v0.1.0 - 免费的私人Rust Registry 该项目是用Clojure编写的Rust私有仓库项目，并提供了API来管理用户、Token、类别，目前处于alpha状态，尚未准备好用于生产，谨慎使用。 该版本主要添加的特性：
+ 新的API 修复了很多小问题 集成测试 改进搜索 添加了healthz端点 更换数据库连接池为HikariCP 更多  GitHub：https://github.com/mcorbin/meuse
+PingCAP 周报 在过去的TiDB一周合并了41个PR，TiKV合并了31个PR，具体细节可阅读原文</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/august/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/august/</guid>
+      <description>August 【Rust日报】 2019-08-22：Libra 中使用 async/await 的心路历程 Mike Tang 发表于 2019-08-22 21:19
+Tags：rust
+vaccum - 系统全局配置文件搜集工具 系统中装的软件/组件/服务多了，难免会有很多配置文件。这样，就会有一些工具来帮助统一管理这些配置文件。vaccum 就是这样一个工具。项目刚启动，还不成熟。
+Repo: https://github.com/idursun/vacuum
+cargo-play - 本地用的 Rust Playground https://play.rust-lang.org/ 是 Rust 官方提供的用于在云端就可以玩（演示）rust 代码的服务。cargo play 也起到同样的功能，但是是在本地，这样，本地不用创建一个 cargo 工程就可以快速看到代码效果了（节约了两分钟）。
+Repo: https://github.com/fanzeyi/cargo-play
+polsim - 物理偏振模拟库 作者的物理学PhD论文是关于偏振研究的，他写了一个库来进行模拟计算。这个库也可以算作是小规模科学计算的尝试。
+作者的心路历程在这里：https://tinkering.xyz/polsim/
+祭图镇楼：
+Repo: https://github.com/zmitchell/polsim
+https://github.com/zmitchell/polarization
+Libra 中使用 async/await 的心路历程 Libra 核心开发者 bmwill，在 libra 的论坛上总结了这篇帖子，讲了为什么在 libra 中直接上 async/await 的心路历程：缘由，过程，体会，仍然存在的不足。
+强烈推荐看原文。
+Read More: https://community.libra.org/t/async-await-in-libra-core/1566
+raspicam - 控制树莓派 webcam 的库 这个库可以用来打开树莓派摄相头，然后拍一张照存储到磁盘上。
+Repo: https://github.com/pawanbisht62/raspicam</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/changeablestrings/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/changeablestrings/</guid>
+      <description>Changeable Strings 可变字符串
+ 字符串
+/* It prints: Hello*/ fn main() { let mut a = &amp;quot;Hel&amp;quot;; print!(&amp;quot;{}&amp;quot;, a); a = &amp;quot;lo&amp;quot;; print!(&amp;quot;{}&amp;quot;, a); }  占用字节
+/* It prints: 0 10 6*/ fn main() { use std::mem::*; let a: &amp;amp;str = &amp;quot;&amp;quot;; let b: &amp;amp;str = &amp;quot;0123456789&amp;quot;; let c: &amp;amp;str = &amp;quot;abcdè&amp;quot;; print!(&amp;quot;{} {} {}&amp;quot;, size_of_val(a), size_of_val(b), size_of_val(c)); }  非法
+// ILLEGAL fn main() { let a: str; fn f(a: str) {} print!</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/clawer/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/clawer/</guid>
+      <description>list Hyper ：一个快速和正确的 Rust HTTP实现。 https://github.com/hyperium/hyper reqwest : rust http client实现 https://github.com/seanmonstar/reqwest html5ever：Rust html解析库 https://github.com/servo/html5ever select :基于html5ever 的html解析库，类似于python的 beautifulsoap https://github.com/utkarshkukreti/select.rs crates.io https://crates.io/crates/select 附：https：//github.com/carllerche/curl-rust</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/closures/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/closures/</guid>
+      <description>Closures rust普通方法排序数组： /* It prints: [0, 1, 4, 7, 8, 10, 12, 45]*/ fn main() { let mut arr = [4, 8, 1, 10, 0, 45, 12, 7]; arr.sort(); print!(&amp;quot;{:?}&amp;quot;, arr); } /* It prints: [45, 12, 10, 8, 7, 4, 1, 0]*/ fn main() { let mut arr = [4, 8, 1, 10, 0, 45, 12, 7]; use std::cmp::Ordering; fn desc(a: &amp;amp;i32, b: &amp;amp;i32) -&amp;gt; Ordering { if a &amp;lt; b { Ordering::Greater } else if a &amp;gt; b { Ordering::Less } else { Ordering::Equal } } arr.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/cpp-vs-rust/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/cpp-vs-rust/</guid>
+      <description>现代化的内存管理：Cpp vs Rust Which is safer? Posted by Hexi on July 18, 2019
+Rust 自诞生起就以它独特、现代化的内存管理机制闻名于世；而其指定的竞争对手 Cpp 自 C++11 以来在内存管理现代化的道路上也下了很大功夫。笔者平时写 Rust 比较多，最近在写 Cpp 便试图给脑中零散的概念做个总结，并使用 Rust 与其作对比，也算是一篇面向 Cpp 用户的 Rust 推销文章吧。
+本文主要讨论四点内容，引用（reference）、拷贝（copy）、移动（move）和智能指针（smart pointer）。
+本文代码地址
+ 引用  Cpp  左值引用 不可变引用 没解决的问题  Rust  引用的生命期 对可变引用的约束   拷贝和移动  Cpp  拷贝 移动 为什么需要拷贝和移动 不足之处  Rust  移动 拷贝  Clone Copy    智能指针  Cpp  unique_ptr shared_ptr  weak_ptr   Rust  Box Arc(Rc)  对比  总结  引用[](https://hexilee.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/dataimplementation/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/dataimplementation/</guid>
+      <description>Data Implementation 对象大小  /* It prints: 4 4 */ fn main() { print!(&amp;quot;{} &amp;quot;, std::mem::size_of::&amp;lt;i32&amp;gt;()); print!(&amp;quot;{} &amp;quot;, std::mem::size_of_val(&amp;amp;12)); }   use  /* It prints: 4 4 */ fn main() { use std::mem; print!(&amp;quot;{} &amp;quot;, mem::size_of::&amp;lt;i32&amp;gt;()); print!(&amp;quot;{} &amp;quot;, mem::size_of_val(&amp;amp;12)); }  /* It prints: 4 4 */ fn main() { use std::mem::size_of; use std::mem::size_of_val; print!(&amp;quot;{} &amp;quot;, size_of::&amp;lt;i32&amp;gt;()); print!(&amp;quot;{} &amp;quot;, size_of_val(&amp;amp;12)); }  /* It prints: 4 4 */ fn main() { use std::mem::*; print!</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/e-q/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/e-q/</guid>
+      <description>[](https://doc.rust-lang.org/book/ch09-02-recoverable-errors-with-result.html#recoverable-errors-with-result)
+Recoverable Errors with Result Most errors aren’t serious enough to require the program to stop entirely. Sometimes, when a function fails, it’s for a reason that you can easily interpret and respond to. For example, if you try to open a file and that operation fails because the file doesn’t exist, you might want to create the file instead of terminating the process.
+Recall from “Handling Potential Failure with the Result Type” in Chapter 2 that the Result enum is defined as having two variants, Ok and Err, as follows:</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/encrypt/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/encrypt/</guid>
+      <description>用 mkcert 搭建本地开发受信 HTTPS 证书环境 前言 在Let&amp;rsquo;s Encrypt推出免费证书以后，越来越多的网站都用上了免费的证书，HTTPS网站已然成为了标配。
+我博客的出现时机跟 Let&amp;rsquo;s Encrypt 差不多，当时自己不知道怎么安全传输登录密钥，于是直接就不支持HTTP，仅支持HTTPS。
+这样一来，就算在本地，也需要启用HTTPS，但这些证书以往多数是手动调用 OpenSSL 生成自签的证书，然后添加到浏览器的受信证书列表，很麻烦，且不方便使用。
+mkcert 最近发现了一款用 Go 写的小工具，mkcert，作者是 Google 员工。它用于在本地搭建受信证书环境。试用了一下，非常便捷。
+首次运行时，它会生成一个本地CA，即本地公证机构根证书，然后把此CA添加到系统受信列表。最后，由此CA颁发（签名）新的下级证书给各网站使用。
+安装 macOS 使用 HomeBrew 进行安装：
+brew install mkcert brew install nss # 如果使用的是火狐浏览器需要安装这个  Linux 直接到 https://github.com/FiloSottile/mkcert/releases 下载预编译的二进制。
+Windows 暂时不支持 😂
+创建证书 首次运行时，先生成并安装根证书：
+$ mkcert ---install Created a new local CA at &amp;quot;/Users/tao/Library/Application Support/mkcert&amp;quot; 💥 The local CA is now installed in the system trust store! ⚡️ The local CA is now installed in the Firefox trust store (requires restart)!</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/enum/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/enum/</guid>
+      <description>Virtual Structs Part 1: Where Rust&amp;rsquo;s enum shines[](http://smallcultfollowing.com/babysteps/blog/2015/05/05/where-rusts-enum-shines/#virtual-structs-part-1-where-rusts-enum-shines) May 5, 2015
+One priority for Rust after 1.0 is going to be incorporating some kind of support for “efficient inheritance” or “virtual structs”. In order to motivate and explain this design, I am writing a series of blog posts examining how Rust’s current abstractions compare with those found in other languages.
+The way I see it, the topic of “virtual structs” has always had two somewhat orthogonal components to it.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/error-handling/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/error-handling/</guid>
+      <description>Error Handling in Rust From: rust-error-handling
+May 14, 2015
+Like most programming languages, Rust encourages the programmer to handle errors in a particular way. Generally speaking, error handling is divided into two broad categories: exceptions and return values. Rust opts for return values.
+In this article, I intend to provide a comprehensive treatment of how to deal with errors in Rust. More than that, I will attempt to introduce error handling one piece at a time so that you’ll come away with a solid working knowledge of how everything fits together.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/ffi/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/ffi/</guid>
+      <description>Rust语言中文入门教程-rust调用ffi函数 中文入门教程-rust调用ffi函数。
+调用ffi函数  下文提到的ffi皆指cffi。
+ Rust作为一门系统级语言，自带对ffi调用的支持。
+Getting Start 引入libc库 由于cffi的数据类型与rust不完全相同，我们需要引入libc库来表达对应ffi函数中的类型。
+在Cargo.toml中添加以下行:
+[dependencies] libc = &amp;ldquo;0.2.9&amp;rdquo;
+在你的rs文件中引入库:
+extern crate libc
+在以前libc库是和rust一起发布的，后来libc被移入了crates.io通过cargo安装。
+声明你的ffi函数 就像c语言需要#include声明了对应函数的头文件一样，rust中调用ffi也需要对对应函数进行声明。
+use libc::c_int; use libc::c_void; use libc::size_t;
+#[link(name = &amp;ldquo;yourlib&amp;rdquo;)] extern { fn your_func(arg1: c_int, arg2: *mut c_void) -&amp;gt; size_t; // 声明ffi函数 fn your_func2(arg1: c_int, arg2: *mut c_void) -&amp;gt; size_t; static ffi_global: c_int; // 声明ffi全局变量 }
+声明一个ffi库需要一个标记有#[link(name = &amp;ldquo;yourlib&amp;rdquo;)]的extern块。name为对应的库(so/dll/dylib/a)的名字。 如：如果你需要snappy库(libsnappy.so/libsnappy.dll/libsnappy.dylib/libsnappy.a), 则对应的name为snappy。 在一个extern块中你可以声明任意多的函数和变量。
+调用ffi函数 声明完成后就可以进行调用了。 由于此函数来自外部的c库，所以rust并不能保证该函数的安全性。因此，调用任何一个ffi函数需要一个unsafe块。
+let result: size_t = unsafe { your_func(1 as c_int, Box::into_raw(Box::new(3)) as *mut c_void) };</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/file-io/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/file-io/</guid>
+      <description>挖掘 Rust &amp;ndash; 文件读写 
+蔡洪宇 关注
+2018.06.17 09:49* 字数 832 阅读 824评论 0喜欢 0
+注：因为 Rust 有些结构重名，读起来不容易理解，本文解释部分不会省略任何一个 std 命名空间
+示例 用途 以行为单位读写文件
+代码及输出 use std::fs::File; use std::io; use std::io::prelude::*; use std::io::BufReader; fn main() -&amp;gt; io::Result&amp;lt;()&amp;gt; { let path: &amp;amp;str = &amp;quot;lines.txt&amp;quot;; let mut output: File = File::create(path)?; write!(output, &amp;quot;Rust\n:)\nFun&amp;quot;); let input: File = File::open(path)?; let buffered: BufReader&amp;lt;File&amp;gt; = BufReader::new(input); for line in buffered.lines().map(|x| x.unwrap()) { // line: String x:Result&amp;lt;String, Error&amp;gt; println!</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/file/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/file/</guid>
+      <description>file Creates a new file and write bytes to it 创建 1.
+//Creates a new file and write bytes to it: use std::fs::File; use std::io::prelude::*; fn main() -&amp;gt; std::io::Result&amp;lt;()&amp;gt; { let mut file = File::create(&amp;quot;foo.txt&amp;quot;)?; file.write_all(b&amp;quot;Hello, world!&amp;quot;)?; Ok(()) }  Read the contents of a file into a String 读入 2.
+//Read the contents of a file into a String: use std::fs::File; use std::io::prelude::*; fn main() -&amp;gt; std::io::Result&amp;lt;()&amp;gt; { let mut file = File::open(&amp;quot;foo.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/fromavecorslice/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/fromavecorslice/</guid>
+      <description>How to read (std::io::Read) from a Vec or Slice? Ask Question
+Asked 2 years, 5 months ago
+Active 2 years, 5 months ago
+Viewed 3k times
+8
+1
+Vecs support std::io::Write, so code can be written that takes a File or Vec, for example. From the API reference, it looks like neither Vec nor slices support std::io::Read.
+Is there a convenient way to achieve this? Does it require writing a wrapper struct?</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/golang-rust-db/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/golang-rust-db/</guid>
+      <description>Dlang、Rust 以及 Golang 数据库操作方式对比 时间 2019-02-20 20:36:38 Go语言中文网
+原文 https://studygolang.com/articles/18362
+主题 数据库 Rust Go语言
+我们使用 Dlang / Rust / Golang 在服务端开发的时候对数据库操作是家常便饭，而对于所谓的系统级编译型语言来说操作数据库可能没那么方便，不像 PHP 和 JAVA 那样，对于比较新的三个编译型语言我们来看看效果，刚好这三个语言的语法差异比较大。
+一、数据插入 - INSERT 1.1 : Dlang 插入数据 import std.stdio;
+import hunt.database;
+void main() { auto db = new Database(&amp;ldquo;mysql://root:123456@localhost:3306/test?charset=utf8mb4&amp;rdquo;);
+int result = db.execute(`INSERT INTO user(username) VALUES(&amp;quot;test&amp;quot;)`); // 打印插入的ID writeln(result); db.close();  }
+1.2 : Rust 插入数据 extern crate postgres;
+use postgres::{Connection, SslMode};
+fn main() { let conn = Connection::connect(&amp;ldquo;postgres://postgres@localhost&amp;rdquo;, SslMode::None).</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/heterogeneous/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/heterogeneous/</guid>
+      <description>Heterogeneous The Tuples  /* It prints: 10000000, 183.19, Q*/ fn main() { let data = (10000000, 183.19, &#39;Q&#39;); let copy_of_data = data; print!(&amp;quot;{}, {}, {}&amp;quot;, data.0, copy_of_data.1, data.2); }  // It does nothing. fn main() { let data: (i32, f64, char) = (10000000, 183.19, &#39;Q&#39;); }  /* It prints: -5, 183.19, x*/ fn main() { let mut data = (10000000, 183.19, &#39;Q&#39;); data.0 = -5; data.2 = &#39;x&#39;; print!</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/how-does-tokio-schedule-tasks/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/how-does-tokio-schedule-tasks/</guid>
+      <description>How does Tokio schedule tasks? https://www.reddit.com/r/rust/comments/co5uop/how_does_tokio_schedule_tasks/
+Hello everyone,
+I am currently working on a Certificate Transparency log scraper using HTTP2.
+Now the problem that I run into is that if I create too many tasks (20+ network IO tasks) the first ones will await at some point during task but will never get called again to finish because other (newly) spawned tasks seem to be prioritized. When looking at tokio&amp;rsquo;s docs I was not able to figure out what kind of scheduling algorithm Tokio uses and if the user can somehow change this.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/if-s/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/if-s/</guid>
+      <description>Rust 控制流 if 表达式 fn main() { let number = 3; if number &amp;lt; 5 { println!(&amp;quot;condition was true&amp;quot;); } else { println!(&amp;quot;condition was false&amp;quot;); } }  使用 else if 处理多重条件 fn main() { let number = 6; if number % 4 == 0 { println!(&amp;quot;number is divisible by 4&amp;quot;); } else if number % 3 == 0 { println!(&amp;quot;number is divisible by 3&amp;quot;); } else if number % 2 == 0 { println!</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/iterator/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/iterator/</guid>
+      <description>rust 迭代器 (iterator) 详解 2017年12月17日 11:33:43 菜树人 阅读数 2924
+翻译来源 https://github.com/rustomax/rust-iterators
+这篇文章的目的是为一些常见的iterator提供参考资料。并不能替代Iterator
+API或者书中的Rust iterator核心概念 ，事实上这篇文章的内容来自以上两种内容。
+ 为了更好理解本篇文章内容，推荐读者至少粗略了解Rust
+ 如何编译运行例子 git clone https://github.com/rustomax/rust-iterators.git cd rust-iterators/ cargo run  代码中使用了nightly版本的特性，如果你的Rust 为statble版本，请注释相应的代码区域。
+0介绍 生活是重复的，其中的大部分事物都是成系列的。我们经常需要记录(count)、列举
+(enumerate)、反复申明(iterate)这些事物。在编程中，有多种方式产生重复事物(repetition)，其中最为人熟知的是C风格的for循环。
+for ( x = 0; x &amp;lt; 10; ++x ) { // do something }  虽然这种可行的方法足够强大而且足够灵活以适应多种情况，但它承担着对应的bug份额，例如错误分号放置、无意中在循环内部修改变量。本着与其他语言特性的安全和一致的精神，Rust中没有C风格的循环。 相反，Rust利用迭代器实现类似的目标（还有更多）。
+1.基本Range 在Rust中循环一系列整数的最基本的方法是Range。Range由..标记产生，它生成步长为1的iterator 。
+for i in 1..11 { print!(&amp;quot;{} &amp;quot;, i); } // output: 1 2 3 4 5 6 7 8 9 10  上面的代码将打印从1到10的一系列数字，而不包括最后一个数字11.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/iterators/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/iterators/</guid>
+      <description>Iterators 使用Iterators读取字符串-字符-串字节  /* It prints: 0: 97 1: 98 2: 99 3: 48 4: 49 5: 50 6: 195 7: 168 8: 226 9: 130 10: 172 */ fn main() { let s = &amp;quot;abc012è€&amp;quot;; for i in 0..s.len() { println!(&amp;quot;{}: {}&amp;quot;, i, s.as_bytes()[i]); } }  /* It prints: e*/ fn main() { fn print_nth_char(s: &amp;amp;str, mut n: u32) { let mut iter: std::str::Chars = s.chars(); loop { let item: Option&amp;lt;char&amp;gt; = iter.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/july-days/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/july-days/</guid>
+      <description>July Rust 关于Rust依赖安全的最新思考 #RestSec
+很高兴有人在帮我们思考这个问题：当一个crate依赖越来越多的crates时，我们有什么办法可以审计它们？
+Read More
+paperclip: OpenAPI的代码生成工具 #openapi #WIP
+0.3发布，支持OpenAPI V2接口。
+paperclip
+rocket-lamb: 方便在aws lambda上面跑rocket的库 #rocket
+rocket-lamb
+[](https://www.yuque.com/chaosbot/rustnews/xr1l3u#5e6ee71b)到目前为止，Rust编译器的速度已经全面提高了30-40% #Rustc
+从2019-01-01到2019-07-17，Rust编译器的速度已经全面提高了30-40%，一些项目的速度提高了45%以上
+Read More
+[](https://www.yuque.com/chaosbot/rustnews/xr1l3u#def35272)HOWTO: mem::MaybeUninit代替 mem::uninitialized #std
+Rust 1.36稳定了mem::MaybeUninit，本帖教你如何使用它来替代mem::uninitialized。使用uninitialized()函数容易出现UB。一般是在FFi的时候需要使用uninitialized()，因为在C/C++中允许创建未初始化的变量，而Rust不允许。
+可以参考该贴作者给自己维护的库升级MaybeUninit的PR来查看如何使用。
+ Read More PR  [](https://www.yuque.com/chaosbot/rustnews/xr1l3u#5008d4c7)「视频」使用 RISC-V 和 Rust 来构建安全的系统 #RiscV
+ Read More  [](https://www.yuque.com/chaosbot/rustnews/xr1l3u#2906bb93)rustarok： 适合开发多人快节奏Moba风格游戏的框架 #game
+rustarok
+[](https://www.yuque.com/chaosbot/rustnews/xr1l3u#ff2b098e)「非官方」用于收集Rust孤儿规则设计问题的仓库 #orphan
+rust-orphan-rules
+[](https://www.yuque.com/chaosbot/rustnews/xr1l3u#c269d852)Pushrod 0.4.1 发布 #GUI
+Pushrod 是一個利用piston_window做GUI库。
+Read More
+[](https://www.yuque.com/chaosbot/rustnews/udenu7#9c9550ab)SCalc - 保证不会溢出的计算库 很简单的思路，如果发现溢出了，结果就置为 1。一定程度上，可保证计算安全，不会由于偶然的原因，导致系统崩溃。
+比如：
+use scalc::SCell; fn main() { let a = SCell::::new(12) * SCell::::new(3); assert_eq!</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/july/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/july/</guid>
+      <description>July 【Rust日报】 2019-07-31 ZhangHanDong 发表于 2019-07-31 21:57
+Tags：rust
+「SO问答」既然两个可变引用不能别名为啥Rust编译器没有对其进行优化 #Rust #stackoverflow
+该问题的作者描述，比如C代码中：
+void adds(int *a, int *b) { *a += *b; *a += *b; }  两个指针a和b有可能互为别名（俩指针指向同一数据），所以clang在编译该代码的时候，会在寄存器中存储两次(%rsi),%eax来防止这种情况。当然也可以使用restrict关键字来对参数进行约束，显式地告诉编译器这俩指针不可能互为别名（但在C语言中，restrict关键字仅仅是告诉编译器可以优化，它不会帮助开发者进行检查，也就是说，很可能因为开发者没有遵循此契约而引发未定义行为）。从而生成的优化代码中只存储一次寄存器。
+但是作者发现在Rust中虽然有编译器检查，两个可变引用不存在互为别名的情况，但是编译器并没有因此而进行任何优化：
+#![crate_type = &amp;quot;staticlib&amp;quot;] #[no_mangle] fn adds(a: &amp;amp;mut i32, b: &amp;amp;mut i32) { *a += *b; *a += *b; }  所以他比较担忧，是不是在Safe Rust之下也可能存在别名？
+该贴的回复给出了答案：
+Rust最初启用了LLVM的noalias属性，但这导致了非预期的编译结果（算是LLVM的一个Bug，等issues 54878修复以后就正常了）。现在也可以使用-Zmutable-noalias=yes参数进行编译就能得到预期结果。
+ Read More issues/54878  「学术」使用类型化指针反转进行高效析构 #TypedPointerReversal #paper
+HAL INRIA貌似是法国国家信息及自动化研究院。该论文提出了ML风格编程语言的资源管理模型，旨在兼容OCmal理念和运行时模型，提议使用析构函数扩展OCmal，在系统编程所有权和借用模式之上来提升OCmal的安全性、效率。
+没错，借用了Rust/C++中的一些概念。感兴趣的可以看看，对资源管理应该会有深入的了解。
+该组织已经发布了多篇关于Rust研究的论文了。
+Read More
+Python和Rust实现神经网络 #NeuralNetworks</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/june-days/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/june-days/</guid>
+      <description>Rust-June Rust recloser - 使用 Rust 实现的一个融断库 融断是这样一个东西，它属于质量控制中的一环。如果一个组件发生多次失败调用，那这个组件就被融断了。调用这个组件中的东西，直接就返回拒绝服务的结果。（不知道小编理解得对不）。这里有讲 ，还是看原文吧。
+Book: Release it!
+Repo
+cbs - 在命令行中管理剪贴板 可以在 Linux，macOS 和 Windows（暂不确定）上工作。如何使用：
+ copy text to clipboard: cbs -c &amp;ldquo;Text to be copied to clipboard&amp;rdquo; paste copied text: cbs -p copy from stdin: cat exmaple-file.txt | cbs  Repo
+tracing: 程式級別的追踪程式執行 裡面對不同的crate做特化
+tracing-fmt, tracing-futures, tracing-macros, tracing-proc-macros
+tracing-log, tracing-env-logger, tracing-serde, tracing-subscriber
+tracing-tower, tracing-tower-http
+read more
+segmentio/analytics-rust Rust的分析客戶端
+https://segment.com/
+是一個分析網站，透過這個crate，你可以把你的程式資料上傳上去
+進行進階的資料分析
+read more</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/june/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/june/</guid>
+      <description>June 【Rust日报】 2019-06-30：basic-http-server - 另一个静态 http 服务器的示例教程 2019-06-30 21:00 责任编辑：Mike
+标签：rust
+cbs - 在命令行中管理剪贴板 可以在 Linux，macOS 和 Windows（暂不确定）上工作。如何使用：
+ copy text to clipboard: cbs -c &amp;ldquo;Text to be copied to clipboard&amp;rdquo; paste copied text: cbs -p copy from stdin: cat exmaple-file.txt | cbs  Repo
+例子：使用 Rust Async/Await 和 Epoll 配合使用写一个简单的 http 服务器 这个例子写得非常清晰，详细，是作者为了学习 Rust 异步开发的一个尝试。强烈推荐学习。当然，它只能在 Linux 上运行（因为 epoll）。
+另外，Reddit 上的大神们给了一些改进建议
+Repo
+basic-http-server - 另一个静态 http 服务器的示例教程 由 brson 大佬维护，代码中给了详尽的注释，是很好的学习教项目。其实平时测试时也是可以用的：</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/learning-the-rust-book-1/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/learning-the-rust-book-1/</guid>
+      <description>Learning the rust book Network Programming with Rust
+Who this book is for This book&amp;rsquo;s target audience is a software engineer who is interested in writing networking software using Rust.
+What this book covers What this book covers
+Chapter 1, Introduction to Client/Server Networking, starts the book with a gentle introduction to computer networking from the ground up. This includes IP addressing, TCP/UDP, and DNS. This forms the basis of our discussions in later chapters.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/learning-the-rust-book-2/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/learning-the-rust-book-2/</guid>
+      <description>Learning the rust book Hands-On Data Structures and Algorithms with Rust
+Preface Who this book is for What this book covers To get the most out of this book Download the color images Download the example code files Conventions used Get in touch Reviews
+1. Hello Rust! Rust in 2018 The 2018 edition The Rust language Objects and behavior Going wrong Macros Unsafe Borrowing and ownership Exceptional lifetimes Multiple owners Concurrency and mutability Immutable variables Shadowing Interior mutability Moving data Sharing data Send and Sync Deeper into Rust Requests for Comments (RFCs) Summary Questions Further reading</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/learning-the-rust-book-3/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/learning-the-rust-book-3/</guid>
+      <description>Learning the rust book Beginning Rust From Novice to Professional
+ebook
+Why deterministic and implicit destruction of objects is a big plus of Rust
+Preface Who this book is for What this book covers To get the most out of this book Download the color images Download the example code files Conventions used Get in touch Reviews
+1. Printing on the Terminal In this chapter, you will learn: - How to write and run your first program in the Rust Language</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/lock/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/lock/</guid>
+      <description>Rust语言并发模型 　Rust语言项目初始是为了解决两个棘手问题：
+ 如何进行安全的系统编程？  2.如何实现无痛苦的并发编程
+最初，这些问题似乎是正交的不相关，但是让我们惊讶的是，最终解决方案被证明是相同的：同样使Rust安全的工具也帮助你正面解决并发。
+内存的安全错误和并发错误往往归结为代码访问数据引起的问题，这是不应该的。Rust秘密武器是ownership，系统程序员需要服从的访问控制纪律，Rust编译器也会为你静态地检查。
+对于内存安全，意味着你在一个没有垃圾回收机制下编程，不用害怕segfault，因为Rust会抓住这些错误。
+对于并发，这意味着你可以选择各种各样的并发范式（消息传递、共享状态、无锁、纯函数式），而Rust会帮助你避免常见的陷阱。
+下面是Rust的并发风格：
+ channel只传送属于其的消息，你能从一个线程发送指针到另外一个线程，而不用担心这两个线程因为同时访问这个指针产生竞争争夺，Rust的channel通道是线程隔离的。
+ lock知道其保护哦数据，当一个锁被一个线程hold住，Rust确保数据只能被这个线程访问，状态从来不会意外地被分享，&amp;ldquo;锁住数据，而不是代码&amp;rdquo; 是Rust特点
+ 每个数据类型都能知晓其是否可以在多线程之间安全传输或访问，Rust增强这种安全用途；也就没有数据访问争夺，即使对于无锁的数据结构，线程安全不只是文档上写写，而是其实在的法律规则。
+ 你能在线程之间分享stack frames , Rust会确保这个frame在其他线程还在使用它时一直活跃，在Rust中即使最大胆的共享也会确保安全。
+  所有这些好处都是得益于Rust的所有权模型，和事实上锁、通道channel和无锁数据结构等之类的库包，这意味着Rust的并发目标是开放的，新的库包对新的范式编程更有力，也能捕获更多bug，这些都只要使用Rust的所有权特性来增加拓展API。
+背景：所有权ownership 　在Rust中，每个值都有一个所有作用域（owning scope），传送或返回一个值意味着传送ownership所有权到一个新的作用域。当作用域结束自动销毁时，值还是被拥有的。
+　让我们看看简单案例，假设我们创建一个vector，放入一些元素：
+fn make_vec() {
+let mut vec = Vec::new(); // owned by make_vec&amp;rsquo;s scope
+vec.push(0);
+vec.push(1);
+// scope ends, vec is destroyed
+}
+这个作用域创建一个值并开始拥有它，make_vec的整个部分是vec的拥有作用域，拥有者能使用vec做任何事情，包括改变它，作用域结束后，也就是到该方法结束处，vec还是被拥有，直到其自动被释放。
+如果这个vector返回或被传送时更有趣：
+fn make_vec() -&amp;gt; Vec {
+let mut vec = Vec::new();
+vec.push(0);
+vec.push(1);</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/may-days/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/may-days/</guid>
+      <description>Rust_May Rust metrics: 高性能metrics库 #metrics
+基于trait抽象，提供稳定API，支持Prometheus
+metrics
+toast: 支持在docker容器中运行任务的工具 #task #docker
+image: ubuntu tasks: greet: command: echo &#39;Hello, World!&#39; # Toast will run this in a container.  当然你还可以用它完成更多更复杂的任务：交叉编译、监控文件变化等等。但是Toast不会并行运行任务，而必须使用顺序执行计划，这是受Docker限制的，但是在单个任务中使用并行。
+toast
+ccl - 据说是目前为止性能最高的并发哈希库 ccl 目前包含一个并发hashmap和一个并发时限缓存，初步的评测很强力。
+20k inserts + 20k mut lookups with replace 16C/32T Xeon 2.1Ghz Hetzner CXX51 hashbrown_rwlock time: [64.199 ms 64.234 ms 64.266 ms] chashmap time: [15.190 ms 15.220 ms 15.251 ms] dhashmap_ccl time: [1.0199 ms 1.0244 ms 1.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/may/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/may/</guid>
+      <description>May Rust Diary.
+【Rust日报】 2019-05-31 damody 发表于 2019-05-31 17:18
+Tags：rust
+Enum的值如何作为类型 這位寫C++的老兄想寫以前的Enum
+fn pet(_: Animal::Whale) {} fn pet(_: Animal::Dog) {} // or somehow describe a trait that forces its implementors to impl specific enum variants; not allow them to impl the whole enum trait Petter&amp;lt;T&amp;gt; { fn pet(_: Animal::T); }  rust的近似方案1
+struct Dog {} struct Whale {} enum Animal { Dog(Dog), Whale(Whale), }  rust的近似方案2
+// given there is a trait Bar, and types A and B implement it: enum Foo { A(A), B(B), } impl Bar for Foo { fn bar(&amp;amp;self) { match self { A(a) =&amp;gt; a.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/memory/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/memory/</guid>
+      <description>Allocating Memory  // It does nothing. fn main() { static _A: u32 = 3; static _B: i32 = -1_000_000; static _C: f64 = 5.7e10; static _D: u8 = 200; }  // It does nothing. fn main() { let _a: u32 = 3; let _b: i32 = -1_000_000; let _c: f64 = 5.7e10; let _d: u8 = 200; }  // It does nothing. fn main() { fn f1(x1: i32) { let y1 = 2 + x1; } fn f2(x2: i32) { f1(x2 + 7); } let k = 20; f1(k + 4); f2(30); }  /* It prints: 1 0 2 0 3 0 4 0 and so on, until a stack overflow runtime error.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/move/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/move/</guid>
+      <description>Rust : 闭包、move 与自由变量的穿越 2017年01月02日 21:22:04 songroom 阅读数 1641
+版权声明：本文为博主原创文章，未经博主允许不得转载。 https://blog.csdn.net/wowotuo/article/details/53982307
+ 核心：闭包是什么，闭包是能控制环境变量的特殊函数。正因为此，环境变量被闭包捕获了，原作用域下的环境变量的所有权就没了，完全由闭包控制。当然，个别情况不一样，下面会讲到。但实质就是这样。
+这个是理解闭包的关键。也是理解move的关键。
+ 闭包对进入其中的自由变量而言，有点象黑洞。自由变量进去了，很难再逃脱了。除非，有特别的力量。move，你该上场了，开始你的表演…
+let f = | j:i32 | i =i+j ; // j为输入参数，i为环境变量 等价于 =&amp;gt;Fn(j:i32)-&amp;gt;() let g = || a+b ; // a,b为环境变量，无输入参数 ,等价于 =&amp;gt;Fn() -&amp;gt;T  一、copy trait 下move
+我们知道，象i32,i64,等实现了copy trait。在赋值等行为是会自动copy一份。
+move在闭包中的作用是，可以强制获取环境变量的所有权：
+情景1 ：有move, 作用域相同
+ let mut num1 = 5; let mut f1 = move |x: i32| num1 = x + num1; let data1 = f1(2_i32); println!</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/newsql/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/newsql/</guid>
+      <description>分布式 NewSQL 对比 1、TiDB： 说明：
+PingCAP 公司基于 Google Spanner / F1 论文实现的开源分布式 NewSQL 数据库。
+开源分布式 NewSQL 关系型数据库 TiDB 是新一代开源分布式 NewSQL 数据库，模型受 Google Spanner / F1 论文的启发，实现了自动的水平伸缩，强一致性的分布式事务，基于 Raft 算法的多副本复制等重要 NewSQL 特性。TiDB 结合了 RDBMS 和 NoSQL 的优点，部署简单，在线弹性扩容和异步表结构变更不影响业务， 真正的异地多活及自动故障恢复保障数据安全，同时兼容 MySQL 协议，使迁移使用成本降到极低
+特性：
+SQL支持（TiDB 是 MySQL 兼容的） 水平弹性扩展（吞吐可线性扩展） 分布式事务 跨数据中心数据强一致性保证 故障自恢复的高可用 海量数据高并发实时写入与实时查询（HTAP 混合负载） TiDB 的设计目标是 100% 的 OLTP 场景和 80% 的 OLAP 场景，更复杂的 OLAP 分析可以通过 TiSpark 项目来完成。
+2、CockroachDB： 说明：
+构建于事务处理及强一致性KV存储上的分布式SQL数据库，支持水平扩展、自动容错处理、强一致性事务，并且提供SQL接口用于数据处理，是Google Spanner/F1的开源实现。 CockroachDB适用于应用对数据要求精确、可靠、完全正确的场景，支持自动复制、均匀分布、基于极小配置的数据恢复，可用于分布式的、可复制的联机事务处理（OLTP），多数据中心的部署，私有云的基础构建，它不适用于读少写多的场景，可以用内存数据库来代替，也不适用于复杂的join查询，重量级的数据分析及联机分析处理（OLAP）。
+特性：</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/option-and-result/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/option-and-result/</guid>
+      <description>Option and Result [](https://github.com/learning-rust/site/edit/master/source/docs/e3.option_and_result.md &amp;ldquo;Improve this doc&amp;rdquo;)
+[](https://learning-rust.github.io/docs/e3.option_and_result.html#Why-Option-and-Result &amp;ldquo;Why Option and Result?&amp;rdquo;)Why Option and Result? Many languages use null\ nil\ undefined types to represent empty outputs, and Exceptions to handle errors. Rust skips using both, especially to prevent issues like null pointer exceptions, sensitive data leakages through exceptions and etc. Instead, Rust provides two special generic enums;Optionand Result to deal with above cases.
+ 💭 In the previous sections, we have discussed about the basics of enums, generics and Result&amp;amp; Option types.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/postgresql-server/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/postgresql-server/</guid>
+      <description>使用 Rust 开发 PostgreSQL 存储过程  编程语言 PostgreSQL 数据库 高性能 存储过程 github Bash Rust 扩展函数  摘要： pgxr 使用 Rust 来编写 PostgreSQL 的扩展函数（相当于存储过程）。 项目地址：https://github.com/clia/pgxr 使用这个星球上最快的、高效、安全、有趣的编程语言，来为世界上功能最强大的开源关系数据库编写库内的程序！ 试想，当你从数据库中查询出 1000 条记录用于程序处理时，当你的程序是数据库内的程序时，你根本无需将这 1000 条结果通过 PostgreSQL 的通讯协议走网络传输到应用程序里，在应用程序里分配这么大一块内存来装这些数据，再来进行处理。
+pgxr 使用 Rust 来编写 PostgreSQL 的扩展函数（相当于存储过程）。
+项目地址：
+https://github.com/clia/pgxr
+使用这个星球上最快的、高效、安全、有趣的编程语言，来为世界上功能最强大的开源关系数据库编写库内的程序！
+试想，当你从数据库中查询出 1000 条记录用于程序处理时，当你的程序是数据库内的程序时，你根本无需将这 1000 条结果通过 PostgreSQL 的通讯协议走网络传输到应用程序里，在应用程序里分配这么大一块内存来装这些数据，再来进行处理。你可以直接读取数据库内这 1000 条结果的内存，在上面进行分析，直接进行逻辑处理或是返回结果！
+又或者，你有一个复杂的逻辑，要查询出一些数据来，根据这些数据进行一些逻辑处理，然后还要更新一些数据，整个过程需要连接数据库次数达到数十次之多。如果你把程序写在数据库内，你只需要连接一次数据库！
+通过把程序写在数据库内，你节省了应用程序所需要使用的内存，也节省了数据需要在网络间传输的时间。
+而最适合用来进行这项工作的开发语言，应该就是 Rust 了！高性能、强表达能力、拒绝程序 BUG、无损耗 C 接口，让你的程序极速飞驰！同时让你的开发过程轻松愉悦！
+经测试，用 Rust 开发的存储过程比用 PL/pgSQL 开发的存储过程要快 30~40 倍之多！
+代码示例 #[macro_use] extern crate pgxr; use pgxr::bindings::*; PG_MODULE_MAGIC!</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/ranges-slices/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/ranges-slices/</guid>
+      <description>Ranges and Slices The Ranges  /* It prints: 0 1 2 3 4 5 6 7 8 9 10 11 */ fn main() { for i in 0..12 { println!(&amp;quot;{}&amp;quot;, i); } }  /* It prints: 0 1 2 3 4 5 6 7 8 9 10 11 */ fn main() { let dozen = 0..12; for i in dozen { println!(&amp;quot;{}&amp;quot;, i); } }  /* It prints: 3.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/reference-guide/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/reference-guide/</guid>
+      <description>The-Complete-Rust-Programming-Reference-Guide (learning) Pascal: Assigned
+rust: assert!</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/rust-clouse-note/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/rust-clouse-note/</guid>
+      <description>Rust 闭包笔记 2019-03-15 11:06
+TagsRust闭包函数式编程 Categories笔记
+This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License
+近日在学习 Rust 语言。Rust 语言的闭包设计非常有趣，一方面，它看起来非常复杂，为了支持闭包设计了三种不同的 trait，Fn、FnMut 和 FnOnce；一方面其设计又透露出了语言设计中闭包的本质。通过考察 Rust 闭包的设计，我们能更好的理解闭包到底是什么，在拥有生存期和借用检查的语言 Rust 中，闭包如何工作。
+本文将在 Rust 下实现一个能够阐述闭包工作原理的朴素版闭包（也是一个 Boxed Closure）。并在实现的基础上对 Rust 闭包作进一步探究。
+🔗 闭包的概念 闭包（Closure）是一个在计算机科学中广泛使用的概念，又叫词法闭包（Lexical Closure）。即闭包能够“捕获”词法作用域中的变量，这是与编译时代码的结构直接相关的。也就是说，在声明闭包而不是闭包被调用的时候，其函数体可以捕获外围词法作用域中的变量。
+🔗 闭包是匿名函数吗？ 这两个概念之间没有什么关系，就以维基百科 Closure 词条上举的一个常见的 adder 例子来说：
+Python def f(x): def g(y): return x + y return g def h(x): return lambda y: x + y a = f(1) b = h(1)  在这两个例子中，a 和 b 均为闭包，JavaScript 中的 function 也是一样，是不是闭包当然和没有名字并没有理论和实践上的联系。当然，可以说对于将函数设计为一等对象（First class object）的语言，函数是否匿名一般不产生任何实际区别。</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/rust-error-handling/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/rust-error-handling/</guid>
+      <description>Rust错误处理 From: Rust错误处理 
+krircc
+天真-浪漫
+11 人赞同了该文章
+Rust错误处理  本文同步于Rust中文社区专栏文章：Rust错误处理 ,本文时间：2018-12-14, 译者：krircc，简介：天青色，原文出处
+ 欢迎加入Rust中文社区,共建Rust语言中文网络！欢迎向Rust中文社区专栏投稿,投稿地址 ,好文在以下地方直接展示, 欢迎访问Rust中文论坛，QQ群：570065685
+ Rust中文社区首页
+ Rust中文社区专栏文章
+  智能编译器 Rust编译器最重要的工作是防止Rust程序中的错误。如果代码没有正确遵循内存管理规则或生命周期注释，它会在编译时分析代码并发出警告。例如，
+#[allow(unused_variables)] //💡 A lint attribute used to suppress the warning; unused variable: `b` fn main() { let a = vec![1, 2, 3]; let b = a; println!(&amp;quot;{:?}&amp;quot;, a); } // ------ Compile time error ------ error[E0382]: use of moved value: `a` --&amp;gt; src/main.rs:6:22 | 3 | let b = a; | - value moved here 4 | 5 | println!</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/rust-for-python/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/rust-for-python/</guid>
+      <description>Rust for Python Programmers Rust for Python Programmers
+written on Wednesday, May 27, 2015
+Now that Rust 1.0 is out and quite stable, I thought it might be interesting to write an introduction to Rust for Python programmers. This guide goes over the basics of the language and compares different constructs and how they behave.
+Rust language wise is a completely different beast compared to Python. Not just because one is a compiled language and the other one is interpreted, but also because the principles that go into them are completely different.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/rust-language-cheat-sheet/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/rust-language-cheat-sheet/</guid>
+      <description>Rust Language Cheat Sheet 06.08.2019
+ Contains clickable links to The Book BK, Rust by Example EX, Std Docs STD, Nomicon NOM, Reference REF. Other symbols used: largely deprecated 🗑️, has a minimum edition &amp;lsquo;18, is work in progress 🚧, or bad 🛑.
+ Night Mode 💡
+Language Constructs
+ Data Structures References &amp;amp; Pointers Functions &amp;amp; Behavior Control Flow Organizing Code Type Aliases and Casts Code Generation Pattern Matching Generics &amp;amp; Constraints Strings &amp;amp; Chars Comments Miscellaneous  Guides</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/rust-s/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/rust-s/</guid>
+      <description>Rust 编程语言的核心部件  庄晓立  Rust是一门强调安全、并发、高效的系统编程语言。无 GC 实现内存安全机制、无数据竞争的并发机制、无运行时开销的抽象机制，是 Rust 独特的优越特性。它声称解决了传统 C 语言和 C++ 语言几十年来饱受责难的内存安全问题，同时还保持了很高的运行效率、很深的底层控制、很广的应用范围，在系统编程领域具有强劲的竞争力和广阔的应用前景。
+从狭义的角度说，Rust 编程语言，就是其语言本身，一份以人类语言描述的计算机编程语言的规范文档。然而单单语言本身，仅具有理论价值；要发挥其实用价值，往往还要有编译器、标准库、运行环境等一系列配套设施，共同组成一套完整的生态体系。
+从广义的角度说，Rust 编程语言包括了：语言规范 (reference)、编译器 (rustc)、运行时 (runtime)、标准库 (std)、核心库 (core)、库 (crates)、包管理器 (cargo)、社区 (communities) 等等。
+本文将详细介绍广义上的 Rust 编程语言之各个组成部分。
+语言规范
+Rust 语言规范规定了 Rust 编程语言的语法和语义。跟其他语言规范一样，充满枯燥的文字，真正愿意通读下来的人很少。大多数人通过初级教程学习语言的基本语法和语义，仅在必要时翻阅或查阅语言规范的局部内容。不过严格来说，Rust 目前提供的这份文档并不算是语言规范 (specification)，而仅仅只是参考文档。
+编译器 (rustc)
+官方的 rustc 是目前唯一的 Rust 编译器（之前的 rustboot 编译器早就被废弃了），它负责把 Rust 源代码编译为可执行文件、Rust 库 (crates) 或其他库文件 (.a/.lib/.so/.dll)。
+ rustc 是跨平台的应用程序，其可执行文件名是 rustc (for Unix/Linux/&amp;hellip;) 或 rustc.exe (for Windows)，最基本的命令行调用方法是 rustc hello.rs。 rustc 具有交叉编译功能，可以在当前平台下编译出可运行于其他平台的应用程序和库（但需要事先编译或安装目标平台的工具链）。 rustc 采用 LLVM 作为编译器后端，具有很好的代码生成和优化技术，支持许多目标平台。 rustc 目前使用 gcc 作为链接器（同时也运行时依赖 glibc 运行库，今后可换用 MUSL 静态库，相关开发工作在进行中）；今后在 Windows 平台将支持使用 MSVC 作为链接器（相关开发工作在进行中）。 rustc 编译出来的程序，支持用 GDB 和 LLDB 调试运行。用户不需要更换自己已经熟悉的调试工具，Rust 没有也不需要自己专属的调试器。 rustc 是用 Rust 语言开发的，并且是开源的，最新源代码在这里。https://github.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/rustc-cn-1/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/rustc-cn-1/</guid>
+      <description>编译器参数 本章将介绍Rust编译器的参数。
+Rust编译器程序的名字是rustc，使用它的方法很简单：
+$ rustc [OPTIONS] INPUT 其中，[OPTIONS]表示编译参数，而INPUT则表示输入文件。而编译参数有以下可选：
+-h, &amp;ndash;help - 输出帮助信息到标准输出；
+&amp;ndash;cfg SPEC - 传入自定义的条件编译参数，使用方法如
+fn main() { if cfg!(hello) { println!(&amp;ldquo;world!&amp;rdquo;); } } 如上例所示，若cfg!(hello)成立，则运行程序就会输出&amp;rdquo;world&amp;rdquo;到标准输出。我们把这个文件保存为hello.rs然后编译它
+$ rustc &amp;ndash;cfg hello hello.rs 运行它就会看到屏幕中输出了world!。
+-L [KIND=]PATH - 往链接路径中加入一个文件夹，并且可以指定这个路径的类型（Kind），这些类型包括
+dependency - 在这个路径下找依赖的文件，比如说mod； crate - 只在这个路径下找extern crate中定义的库； native - 只在这个路径下找Native库； framework - 只在OS X下有用，只在这个路径下找Framework； all - 默认选项。 -l [KIND=]NAME - 链接一个库，这个库可以指定类型（Kind）
+static - 静态库； dylib - 动态库； framework - OS X的Framework。 如果不传，默认为dylib。
+此处举一个例子如何手动链接一个库，我们先创建一个文件叫myhello.rs，在里面写一个函数</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/rustc-cn/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/rustc-cn/</guid>
+      <description>Rustc-cn [](https://doc.rust-lang.org/rustc/print.html#what-is-rustc)
+What is rustc? Welcome to &amp;ldquo;The rustc book&amp;rdquo;! rustc is the compiler for the Rust programming language, provided by the project itself. Compilers take your source code and produce binary code, either as a library or executable. 欢迎! rustc 是rust编程语言的编译器。它通过编译rust源码产生库文件或可执行文件。 Most Rust programmers don&amp;rsquo;t invoke rustc directly, but instead do it through Cargo. It&amp;rsquo;s all in service of rustc though! If you want to see how Cargo calls rustc, you can 开发人员一般可以通过Cargo来调用rustc, 当然这都是由 rustc 来提供支持.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/rustc/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/rustc/</guid>
+      <description>Rustc [](https://doc.rust-lang.org/rustc/print.html#what-is-rustc)
+What is rustc? Welcome to &amp;ldquo;The rustc book&amp;rdquo;! rustc is the compiler for the Rust programming language, provided by the project itself. Compilers take your source code and produce binary code, either as a library or executable.
+Most Rust programmers don&amp;rsquo;t invoke rustc directly, but instead do it through Cargo. It&amp;rsquo;s all in service of rustc though! If you want to see how Cargo calls rustc, you can</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/rustlearning/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/rustlearning/</guid>
+      <description>Jay was learning rust-language Here is a log about a aged man to stduy a new language which is rust-language.
+ Q0: Rust The rust-language is so difficult. How did it?  &amp;ndash;Answer&amp;ndash;: Reading [Rust-book]https://doc.rust-lang.org/book/ . Is it feeled difficult too? To read again.
+ Q1: Box In compliting get a place.
+ Q2: ?
+ Q3: binary
+ Q4: How to do struct? &amp;ndash;Answer&amp;ndash;: A example: (* print it)</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/rustprimer/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/rustprimer/</guid>
+      <description>learning rustprimer 熟练使用Option和Result是编写 Rust 代码的关键，Rust 优雅的错误处理离不开值返回的错误形式，编写代码时提供给使用者详细的错误信息是值得推崇的。 ①完美数即所有的真因子（除了自身以外的约数）的和，恰好等于本身的数字，有6、28、496等。到2018年1月为止，共发现了50个完美数，均为偶数，第50个完美数有4649，8850位。
+fn main() { let f = get_func(); println!(&amp;quot;{}&amp;quot;, f(3)); } fn get_func() -&amp;gt; fn(i32)-&amp;gt;i32 { let a = 1; fn inc(n:i32) -&amp;gt; i32 { n + a //errors a is not pushed here. } inc }  fn main() { let a = [1,2,3,4,5,6,7]; let mut b = Vec::&amp;lt;i32&amp;gt;::new(); for i in &amp;amp;a { b.push(get_func(*i)(*i)); } println!(&amp;quot;{:?}&amp;quot;, b); } fn get_func(n: i32) -&amp;gt; fn(i32) -&amp;gt; i32 { fn inc(n: i32) -&amp;gt; i32 { n + 1 } fn dec(n: i32) -&amp;gt; i32 { n - 1 } if n % 2 == 0 { inc } else { dec } }  enum Action { Say(String), MoveTo(i32, i32), ChangeColorRGB(u16, u16, u16), } fn main() { let action = Action::Say(&amp;quot;Hello Rust&amp;quot;.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/rustwithjulia/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/rustwithjulia/</guid>
+      <description>Interaction Rust with Julia 
+Hasan Yousef
+Published 5 months ago
+RustJulia
+Rust and Julia are two promising languages focusing on speed, integrating them will help achieving great results.
+Let&amp;rsquo;s say we have the below Julia code, and we want to cal it from Rust code:
+# __precompile__() # If required to be kept precompiled for faster execution # name = isempty(ARGS) ? &amp;quot;name&amp;quot; : ARGS[1] # To check input arguments println(&amp;quot;hello from Julia function&amp;quot;)  Then we can call it using the below:</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/rustwithjuliazn/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/rustwithjuliazn/</guid>
+      <description>Interaction Rust with Julia Rust 和 Julia 的交互
+
+Hasan Yousef
+Published 5 months ago
+RustJulia
+Rust 和 Julia 都快速发展着也同样致力于效率的提高，两者之间的结合一定会有高回报。
+让我们来尝试从 Rust调用下面的 Julia 代码:
+# __precompile__() # If required to be kept precompiled for faster execution # name = isempty(ARGS) ? &amp;quot;name&amp;quot; : ARGS[1] # To check input arguments println(&amp;quot;hello from Julia function&amp;quot;)  可以采用下面rust调用：
+use std::process::Command; fn main() { println!(&amp;quot;Hello from Rust&amp;quot;); let mut cmd = Command::new(&amp;quot;Julia&amp;quot;); cmd.arg(&amp;quot;main.jl&amp;quot;); // cmd.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/rust%E9%97%AD%E5%8C%85%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/rust%E9%97%AD%E5%8C%85%E7%AC%94%E8%AE%B0/</guid>
+      <description>Rust 闭包笔记 2019-03-15 11:06
+TagsRust闭包函数式编程 Categories笔记
+This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License
+近日在学习 Rust 语言。Rust 语言的闭包设计非常有趣，一方面，它看起来非常复杂，为了支持闭包设计了三种不同的 trait，Fn、FnMut 和 FnOnce；一方面其设计又透露出了语言设计中闭包的本质。通过考察 Rust 闭包的设计，我们能更好的理解闭包到底是什么，在拥有生存期和借用检查的语言 Rust 中，闭包如何工作。
+本文将在 Rust 下实现一个能够阐述闭包工作原理的朴素版闭包（也是一个 Boxed Closure）。并在实现的基础上对 Rust 闭包作进一步探究。
+🔗 闭包的概念 闭包（Closure）是一个在计算机科学中广泛使用的概念，又叫词法闭包（Lexical Closure）。即闭包能够“捕获”词法作用域中的变量，这是与编译时代码的结构直接相关的。也就是说，在声明闭包而不是闭包被调用的时候，其函数体可以捕获外围词法作用域中的变量。
+🔗 闭包是匿名函数吗？ 这两个概念之间没有什么关系，就以维基百科 Closure 词条上举的一个常见的 adder 例子来说：
+Python def f(x): def g(y): return x + y return g def h(x): return lambda y: x + y a = f(1) b = h(1)  在这两个例子中，a 和 b 均为闭包，JavaScript 中的 function 也是一样，是不是闭包当然和没有名字并没有理论和实践上的联系。当然，可以说对于将函数设计为一等对象（First class object）的语言，函数是否匿名一般不产生任何实际区别。</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/save/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/save/</guid>
+      <description>rust-save let output = sentence.replace(&amp;quot;$noun&amp;quot;,noun.trim()) .replace(&amp;quot;$verb&amp;quot;,verb.trim()) .replace(&amp;quot;$adjective&amp;quot;,adjective.trim()) .replace(&amp;quot;$adverb&amp;quot;,adverb.trim());  let mut build = cc::Build::new(); build .flag(&amp;quot;-fvisibility=hidden&amp;quot;) .include(&amp;quot;../libbacktrace&amp;quot;) .include(&amp;amp;native.out_dir) .out_dir(&amp;amp;native.out_dir) .warnings(false) .file(&amp;quot;../libbacktrace/alloc.c&amp;quot;) .file(&amp;quot;../libbacktrace/backtrace.c&amp;quot;) // ...一堆.c文件  // rustup component add clippy
+impl Solution { pub fn count_and_say(n: i32) -&amp;gt; String { if n ==1 { String::from(&amp;quot;1&amp;quot;) } else { let beg: String = Solution::count_and_say(n-1); let mut res: String = String::new(); let mut rev = vec![]; let mut cont: u32 = 1; for c in beg.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/sqlite/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/sqlite/</guid>
+      <description>db Sqlite // tombasche/rando_ts.rs //gist //rando_ts.rs extern crate sqlite; use std::fs::File; use std::io::{BufRead, BufReader}; fn db_connection(db_name: &amp;amp;String) -&amp;gt; sqlite::Connection { let connection = sqlite::open(db_name).unwrap(); connection.execute(&amp;quot;CREATE TABLE teas (name text, variety text, last_used date)&amp;quot;).unwrap(); connection } fn main() { let db_name: &amp;amp;String = &amp;amp;&amp;quot;tea.db&amp;quot;.to_string(); let connection = db_connection(&amp;amp;db_name); let f = File::open(&amp;quot;tea.txt&amp;quot;).expect(&amp;quot;Unable to open file&amp;quot;); let f = BufReader::new(f); for line in f.lines() { let line = line.expect(&amp;quot;Unable to read line&amp;quot;); let mut splittable_line = line.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/standardlibrary/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/standardlibrary/</guid>
+      <description>Standard Library Collections 执行时间  /* It prints all the integer numbers from 0 to 9999, followed by a fractional number.*/ fn main() { use std::time::Instant; fn elapsed_ms(t1: Instant, t2: Instant) -&amp;gt; f64 { let t = t2 - t1; t.as_secs() as f64 * 1000. + t.subsec_nanos() as f64 / 1e6 } let time0 = Instant::now(); for i in 0..10_000 { println!(&amp;quot;{}&amp;quot;, i); } let time1 = Instant::now(); println!(&amp;quot;{}&amp;quot;, elapsed_ms(time0, time1)); }  /* After some time of computation, it prints three fractional numbers.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/stringdup/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/stringdup/</guid>
+      <description>[算法Rust,Go,Python,JS实现)]LeetCode之3-无重复字符的最长子串 给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。
+示例 1:
+输入: &amp;ldquo;abcabcbb&amp;rdquo; 输出: 3 解释: 因为无重复字符的最长子串是 &amp;ldquo;abc&amp;rdquo;，所以其长度为 3。 示例 2:
+输入: &amp;ldquo;bbbbb&amp;rdquo; 输出: 1 解释: 因为无重复字符的最长子串是 &amp;ldquo;b&amp;rdquo;，所以其长度为 1。 示例 3:
+输入: &amp;ldquo;pwwkew&amp;rdquo; 输出: 3 解释: 因为无重复字符的最长子串是 &amp;ldquo;wke&amp;rdquo;，所以其长度为 3。
+请注意，你的答案必须是 子串 的长度，&amp;rdquo;pwke&amp;rdquo; 是一个子序列，不是子串。 原文：https://blog.csdn.net/BaiHuaXiu123/article/details/89014971
+impl Solution { pub fn length_of_longest_substring(s: String) -&amp;gt; i32 { let seq: Vec = s.chars().collect(); let mut sum_str:Vec = vec![]; let mut i = 0; let mut k = 0; let mut max = 0; let len = s.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/t/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/t/</guid>
+      <description>T (泛型) Defining Generic Functions and Structs 通用的&amp;hellip;
+Need  /* It prints: 37*/ fn main() { // Library code fn f(ch: char, num1: i16, num2: i16) -&amp;gt; i16 { if ch == &#39;a&#39; { num1 } else { num2 } } // Application code print!(&amp;quot;{}&amp;quot;, f(&#39;a&#39;, 37, 41)); }   Defining and Using  /* It prints: 37 41.1*/ fn main() { // Library code fn f&amp;lt;T&amp;gt;(ch: char, num1: T, num2: T) -&amp;gt; T { if ch == &#39;a&#39; { num1 } else { num2 } } // Application code let a: i16 = f::&amp;lt;i16&amp;gt;(&#39;a&#39;, 37, 41); let b: f64 = f::&amp;lt;f64&amp;gt;(&#39;b&#39;, 37.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/tidb/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/tidb/</guid>
+      <description>TiDB 架构的演进和开发哲学  sql rust golang   本文来自 CSDN《程序员》2017 年 2 月的封面报道。
+对于一个从零开始的数据库来说：选择什么语言，整体架构怎么做，要不要开源，如何去测试…太多的问题需要去考量。
+ 在本篇文章中，PingCAP 联合创始人兼 CTO 黄东旭对 TiDB 的开发历程进行了详细简介，为大家还原 TiDB 的架构演进全过程。
+在大约两年前，我有一次做 MySQL 分库分表和中间件的经历，那时在中间件里做 sharding，把 16 个节点的 MySQL 扩到 32 节点，差不多要提前一个月做演练，再用一个礼拜来上线。我就在想，能不能有一个数据库可以让我们不再想分库分表这些东西？当时我们也刚刚做完 Codis，觉得分布式是个比较合适的解决方案。另外我一直在关注学术圈关于分布式数据库的最新进展，有看到谷歌在 2013 年发的 Spanner 和 F1 的论文，所以决定干脆就重新开始写一个数据库，从根本上解决 MySQL 扩展性的问题。
+而决定之后发现面对的问题非常复杂：选择什么语言，整个架构怎么做，到底要不要开源……做基础软件有一个很重要的事情：写出来并不难，难的是你怎么保证这个东西写对了。尤其是对于业务方，他们所有的业务正确性是构建在基础软件的正确性上。所以，对于分布式系统来说，什么是写对了，怎么去测试，这都是很重要的问题。关于这些我想了很久。
+一开始总是要起步的。当时就决定冷静一下，先确定一个目标：解决 MySQL 的问题。MySQL 是单机型数据库，它没有办法做全扩展，我们选择 MySQL 兼容，首先选择在协议和语法层面的兼容，因为已有的社区里边很多的海量的测试。第二点是用户的迁移成本，能让用户迁移得很顺畅。第三是因为万事开头难，必须得有一个明确的目标，选定一个目标去做，对开发人员来说心理的压力最小。确定目标以后，我们 3 个人的创始团队从原来的公司出来，拿了一笔比较大的风险投资，开始正式做这件事情。
+兼容 MySQL 最简单的方案，就是直接用 MySQL。为了让这个东西尽快地做起来，我们一开始做了一个最简单的版本，复用 MySQL前端 代码，做一个分布式的存储引擎就可以了，这个事情想想还是蛮简单的，所以非常乐观，觉得这个战略很完美。
+上图是我在 2015 年 4 月份用六个礼拜完成的第一个版本的框架，但是后来没好意思开源出来，虽然能跑，但是在性能上完全无法接受。我就想这个东西为什么这么慢？一步一步去看每一层，就想动手改，但是发现工程量巨大，比如 MySQL 的 SQL 优化器， 事务模型等等，完全没有办法下手。就像这个架构图里看到的，因为在 MySQL Engine 这一层，我们能做的事情太少了，所以就没有办法。</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/trait/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/trait/</guid>
+      <description>trait -  /* It prints: 100.00000000000003 3.1622776601683795*/ fn main() { fn quartic_root(x: f64) -&amp;gt; f64 { x.sqrt().sqrt() } let qr = quartic_root(100f64); print!(&amp;quot;{} {}&amp;quot;, qr * qr * qr * qr, qr); }  /* It prints: 3.1622776601683795 3.1622777*/ fn main() { fn quartic_root_f64(x: f64) -&amp;gt; f64 { x.sqrt().sqrt() } fn quartic_root_f32(x: f32) -&amp;gt; f32 { x.sqrt().sqrt() } print!(&amp;quot;{} {}&amp;quot;, quartic_root_f64(100f64), quartic_root_f32(100f32)); }  // ILLEGAL fn main() { fn quartic_root&amp;lt;Number&amp;gt;(x: Number) -&amp;gt; Number { x.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/types/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/types/</guid>
+      <description>Primitive Types 基本类型
+进制  /* It prints: 16 10 8 2*/ fn main() { let hexadecimal = 0x10; let decimal = 10; let octal = 0o10; let binary = 0b10; print!(&amp;quot;{} {} {} {}&amp;quot;, hexadecimal, decimal, octal, binary); }  /* It prints: 10 16 8 2 */ fn main() { let hexadecimal = 0x10; let octal = 0o10; let binary = 0b10; let mut n = 10; print!</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/vector-all-equal-elements/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/vector-all-equal-elements/</guid>
+      <description>Determining if a Rust Vector has all equal elements Jun 6, 2019
+Earlier today, I tooted out a Rust question: How would you write a function to determine if a Vector of integers are all the same, or not.
+fn main() { let all_eq = vec![2,2,2,2]; let not_eq = vec![1,6,5,1,6]; assert_eq!(is_all_same(all_eq), true); assert_eq!(is_all_same(not_eq), false); } fn is_all_same(vec: Vec&amp;lt;usize&amp;gt;) -&amp;gt; bool { // ??? }  Now, I should note that right off the bat I screwed up a bit in how I laid out the sample code.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/wasi/wasi/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/wasi/wasi/</guid>
+      <description>WASI The WebAssembly System Interface For a quick intro to WASI, including getting started using it, see the intro document.
+For more documentation, see the documents guide.
+Here’s a quick guide to the repositories where things live:
+wasi-sdk - “WASI SDK” packages for C/C++. If you want to try out compiling C/C++, this is a good place to start. “It’s just clang.”
+WASI-enabled Rust - Rust Nightly builds now have built-in WASI support.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/web/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/web/</guid>
+      <description>Rust Web框架列表 由于Rust生态系统还处于早期阶段，因此框架有很多选择。每个人都有自己的优点和缺点，没有明显的赢家。
+Rocket
+Rocket是一个十几岁的框架 - 比其他许多框架更发达，但仍然不太成熟。它的特殊功能是通过宏来注释请求处理函数，这个宏包括路由、参数和所需的数据，例如有效的反序列化形式，以及定义一种依赖注入。此外，文档非常好，开发活跃，并且与Actix一起，这是最常用的框架之一，因此可以从发展的社区知识中受益。火箭需要Rust的nightly以上版本。
+Actix-web
+Actix-web是一个基于Actix构建的框架，Actix是Rust的一个actor系统。它虽然成立时间没有Rocket那么长，但已经获得了另一个社区的最爱。独特的actor方法意味着单独的组件（如数据库访问和后台任务）都被实现为异步actor，它们通过消息传递相互通信。Actix-web可能因出现在TechEmpower Web框架基准测试的排名顶端而闻名。Actix-web正在积极开发中，并且具有相当全面的文档。
+Gotham
+Gotham是一个异步的Web框架，它与Rocket一样时间长，但在2018年由于原始开发人员离开而不太活跃。我喜欢它简单明了的方法，但对于某些常见任务来说它可能被认为有点冗长，并且最近在功能方面落后于更受欢迎的框架。
+Tower-web
+Tower-web是另一个平易近人的框架，旨在提供所有标准功能。它基于Tower：一个网络客户端/服务器组件库，这意味着它最终应该获得“batteries included”状态。它也是由Rust最流行的异步运行时库Tokio的核心贡献者之一开发的，这似乎是一个优点。像火箭一样，Tower-web使用宏来减少样板，但不需要Rust nightly 。由于它是新的，它仍然缺少功能和文档的方式，但正在积极开发。
+Warp
+Warp是一个具有独特可组合性角度的框架，允许将可重复使用的“过滤器”链接在一起，这些过滤器可用于参数提取或包括所需应用程序状态，这样可以构建路由和请求处理程序。它在文档方面也很新颖，但在积极开发中。其开发人员和Tower-web的开发人员彼此都比较了解，并且可能在未来将Warp和Tower-web合并为单个框架。
+Rouille
+Rouille是一个同步微框架，它提供了Web框架的构建块，其余部分留给你。它既小又简单，并没有太多文档，但似乎正在积极开发中。
+SHIO
+Shio是一个异步微框架，与Rouille有许多共同之处。它似乎没有得到很多积极的开发，并且没有很多文档的方式，尽管它确实有一些例子。
+Nickel
+Nickel是一个受Express JavaScript框架启发的轻量级框架。它是第一个出现在Rust中的框架之一，但仍然看到了一些维护，但似乎没有积极开发。它的文档很稀疏。
+Rustful
+Rustful是另一个微框架。它似乎没有看到太多积极的开发，但我把它包括在这里，以防它看起来像你在用的东西。
+Yew （前端）
+受Elm和React启发的前端框架启发，Yew利用Rust的能力编译到WebAssembly。似乎它与JavaScript有良好的互操作性，并且已经足够成熟可使用。它没有很多文档，但确实有很多例子，并且正在积极开发中。
+Diesel（ORM）
+Diesel是Rust的事实上的ORM解决方案。它支持迁移，模式生成，并且具有构建DSL的良好查询。我在过去使用MySQL时遇到了问题，看起来像Postgres是它受欢迎的数据库（足够公平），但是开发是活跃的。</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/whyrust/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/whyrust/</guid>
+      <description>为什么我说Rust是靠谱的编程语言 为什么我说Rust是靠谱的编程语言 作者：Liigo（庄晓立）
+时间：2015年5月16日
+原创链接：http://blog.csdn.net/liigo/article/details/45757123
+版权声明：未经作者许可不得转载；授权转载需注明出处。
+2016年2月22日修补说明：本文最初发表至今已逾半年，这期间Rust语言蓬勃发展，版本从1.0升级到了1.6（1.7也近在咫尺），变化很大。现借《程序员》杂志3月刊发行之际对原文做一些修订和增补，其中增补部分在文中有明确标记。
+序言：本文试图帮您解答“我要不要（投入大量时间和精力）学习Rust语言？”这个问题。作者尽量较少的谈及Rust语言本身，反而尝试从Rust语言周边入手，长时间、大范围、多角度地考察，研判Rust语言是否靠谱，并给出尽可能客观的理由。为写成本文，作者Liigo不惜“卧底”Rust“老巢”长达一年多，收集整理总结了大量信息。如果嫌长，可以只看小标题，粗略浏览一番。
+1. Rust编程语言 Rust(blog)是一门强调安全、并发、高效的系统编程语言。其中四个关键词，系统编程、安全、并发、高效，是Rust语言的核心特征，也是区别于其他编程语言的首要因素。
+ Memory safety without garbage collection
+ Concurrency without data races
+ Abstraction without overhead
+  除此之外，我再补充一些关键词，以便读者更直观地了解Rust：静态类型/编译式语言/静态编译/动态编译、泛型/函数式/面向对象、模式匹配/ADT、DST/Associated Types/闭包(Closures)、Static/Dynamic/Multiple-Dispatch、 没有虚拟机(VM)、没有垃圾收集器(GC)、没有运行时(Runtime)、没有空指针/野指针/内存越界/缓冲区溢出/段错误、没有数据竞争(Data Race)……
+Rust语言具有特性丰富、设计优良、适用范围广等诸多优点。
+我(Liigo)从2013年底开始正式关注Rust项目，……至今有一年半了。其中有赞有批，有争有闹，也有贡献源码。本文所写的是我这些日子以来的所看、所闻、所感。
+判断一门新的编程语言“是否靠谱”，是主观性很大的课题。Rust语言今日才刚刚发布1.0版本，它的未来发展走向如何，谁也说不清楚，说到底都是猜测。但是直觉告诉我，如果人靠谱、团队靠谱、技术能力靠谱、态度靠谱、社区靠谱，这个项目在很大程度上就是靠谱的、值得期待的。
+谨以此文，献给我长久期待的 Rust 1.0！
+2. 开放、友好、高效的开源社区 相当彻底的开源项目，开放、透明、友好，进度热火朝天，动作大刀阔斧。这是我第一次亲身参与并观察到的如此大规模的开源编程语言项目的开发过程。（之前也关注过Go语言项目，但其规模要小得多。）
+ 开放源代码、GitHub/Git在线开发 https://github.com/rust-lang/rust
+ 开放系统设计过程，重要设计项目的提出、讨论、评估、决策均在线进行(RFCs)
+ 内部决策过程也公开透明，每周发布会议记录(meetimg-minutes)
+ 公开接受第三方开发者提交的 Pull Requests，必要时还指导开发
+ 有一个核心团队(the core team)负责项目的发展方向和最终决策
+ 有大量的（超过 1000 人!）第三方开发者给Rust贡献源代码、文档和测试用例
+ 多次将优秀的第三方开发者吸纳进入官方开发团队和核心团队
+ 多次在世界各地（包括北京）主办和协办小型本地开发者见面会
+ IRC,internals,Reddit/r/rust,HN(Hacker News), StackOverflow有许多跟Rust相关的技术讨论，常见核心开发者参与其中
+ Github上用Rust语言开发的项目也风风火火（详见下文）</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/rust/yew/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/rust/yew/</guid>
+      <description>How to use Rust Yew Prepare development environment for Rust yew SteadylearnerJun 30 2019Copy[](https://github.com/steadylearner/code/blob/master/post/Rust/How%20to%20use%20Rust%20Yew.md &amp;ldquo;Click this to visit the GitHub page for How to use Rust Yew.&amp;rdquo;)
+In this post, we will prepare development environment for Rust Yew. Then, we will write minimal code with it and learn how to deploy it in your website also.
+If you just want to see what you will get with this post, please visit Yew Counter in Steadylearner.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/s/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/s/</guid>
+      <description>rust Template
+ChangeableStrings
+clawer
+Closures
+Data Implementation
+e-q
+ffi
+file
+golang-rust-db
+Heterogeneous
+if-s
+Iterators
+July-days
+July
+June-days
+June
+Learning-the-rust-book-1
+Learning-the-rust-book-2
+Learning-the-rust-book-3
+lock
+may-days
+May
+Memory
+newsql
+postgresql-server
+Ranges-Slices
+rust-small-application
+Rustc-cn-1
+Rustc-cn
+rustc
+Rust Learning
+rust primer
+Rust with Julia
+Rust with Julia-Zn
+Rust-clouse-note
+save for myself
+sqlite
+Standard Library
+stringdup
+T
+Tidb
+trait
+types
+web
+whyrust</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/summary/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/summary/</guid>
+      <description>Blog | ordinary | rust |
+| :&amp;mdash;- | &amp;mdash;-: |
+| 1968 | Template|
+| 20190813 | Cpp-vs-Rust |
+| 20190814 | Async |
+| 20190815 | August |
+| txdstyle | Augus-days. |
+| &amp;hellip; | clawer |
+| c-examples | Closures |
+| About pwa | Data Implementation |
+| Review-Template | e-q |
+| at-time | ffi |
+| A old story | golang-rust-db |</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://blog.jaytogo.com/t/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blog.jaytogo.com/t/</guid>
+      <description>Blog | ordinary | rust |
+| :&amp;mdash;- | &amp;mdash;-: |
+| 1968 | Template|
+| 20190813 | 现代化的内存管理 |
+| 20190814 | Async |
+| 20190815 | August |
+| txdstyle | Augus-days. |
+| &amp;hellip; | clawer |
+| &amp;hellip; | Closures |
+| &amp;hellip; | Data Implementation |
+| &amp;hellip; | Data Implementation |
+| &amp;hellip; | e-q |
+| &amp;hellip; | ffi |
+| &amp;hellip; | golang-rust-db |</description>
+    </item>
+    
+  </channel>
+</rss>

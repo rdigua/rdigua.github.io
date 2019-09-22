@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="rust-控制流">Rust 控制流</h1>
+
+<h2 id="if-表达式">if 表达式</h2>
+
+<pre><code>fn main() {
+    let number = 3;
+
+    if number &lt; 5 {
+        println!(&quot;condition was true&quot;);
+    } else {
+        println!(&quot;condition was false&quot;);
+    }
+}
+
+</code></pre>
+
+<h4 id="使用-else-if-处理多重条件">使用 else if 处理多重条件</h4>
+
+<pre><code>fn main() {
+    let number = 6;
+
+    if number % 4 == 0 {
+        println!(&quot;number is divisible by 4&quot;);
+    } else if number % 3 == 0 {
+        println!(&quot;number is divisible by 3&quot;);
+    } else if number % 2 == 0 {
+        println!(&quot;number is divisible by 2&quot;);
+    } else {
+        println!(&quot;number is not divisible by 4, 3, or 2&quot;);
+    }
+}
+
+</code></pre>
+
+<h4 id="在-let-语句中使用-if">在 let 语句中使用 if</h4>
+
+<pre><code>fn main() {
+    let condition = true;
+    let number = if condition {
+        5
+    } else {
+        6
+    };
+
+    println!(&quot;The value of number is: {}&quot;, number);
+}
+
+</code></pre>
+
+<h2 id="使用循环重复执行">使用循环重复执行</h2>
+
+<h4 id="loop">loop</h4>
+
+<pre><code>fn main() {
+    loop {
+        println!(&quot;again!&quot;);
+    }
+}
+
+</code></pre>
+
+<h4 id="while">while</h4>
+
+<pre><code>fn main() {
+    let mut number = 3;
+    while number != 0 {
+        println!(&quot;{}!&quot;, number);
+        number = number - 1;
+    }
+    println!(&quot;LIFTOFF!!!&quot;);
+}
+
+</code></pre>
+
+<h4 id="for">for</h4>
+
+<pre><code>fn main() {
+    let a = [10, 20, 30, 40, 50];
+
+    for element in a.iter() {
+        println!(&quot;the value is: {}&quot;, element);
+    }
+}
+
+</code></pre>
+
+<h4 id="for-反向">for 反向</h4>
+
+<pre><code>fn main() {
+    for number in (1..4).rev() {
+        println!(&quot;{}!&quot;, number);
+    }
+    println!(&quot;LIFTOFF!!!&quot;);
+}
+
+</code></pre>
+
+<h2 id="从循环返回">从循环返回</h2>
+
+<pre><code>fn main() {
+    let mut counter = 0;
+
+    let result = loop {
+        counter += 1;
+
+        if counter == 10 {
+            break counter * 2;
+        }
+    };
+
+    assert_eq!(result, 20);
+}
+
+</code></pre>
+
+<hr />
+
+<p>##　试一试
+Try it:</p>
+
+<h2 id="1">1.</h2>
+
+<pre><code class="language-rust">/* It prints:
+positive*/
+fn main() {
+    let n = 4;
+    if n &gt; 0 { print!(&quot;positive&quot;); }
+}
+</code></pre>
+
+<h2 id="2">2.</h2>
+
+<pre><code class="language-rust">/* It prints:
+non positive*/
+fn main() {
+    let n = 0;
+    if n &gt; 0 {
+        print!(&quot;number is&quot;);
+        print!(&quot; positive&quot;);
+    }
+    else {
+        print!(&quot;non positive&quot;);
+    }
+}
+</code></pre>
+
+<h2 id="3">3.</h2>
+
+<pre><code class="language-rust">/* It prints:
+small*/
+fn main() {
+    let n = 4;
+    if n &gt; 1000 {
+        print!(&quot;big&quot;);
+    }
+    else {
+        if n &gt; 0 {
+            print!(&quot;small&quot;);
+        }
+        else {
+            if n &lt; 0 {
+                print!(&quot;negative&quot;);
+            }
+            else {
+                print!(&quot;neither positive nor negative&quot;);
+            }
+        }
+    }
+}
+</code></pre>
+
+<h2 id="4">4.</h2>
+
+<pre><code class="language-rust">/* It prints:
+small*/
+fn main() {
+    let n = 4;
+    if n &gt; 1000 {
+        print!(&quot;big&quot;);
+    }
+    else if n &gt; 0 {
+        print!(&quot;small&quot;);
+    }
+    else if n &lt; 0 {
+        print!(&quot;negative&quot;);
+    }
+    else {
+        print!(&quot;neither positive nor negative&quot;);
+    }
+}
+</code></pre>
+
+<h2 id="5">5.</h2>
+
+<pre><code class="language-rust">/* It prints:
+small*/
+fn main() {
+    let n = 4;
+    print!(&quot;{}&quot;,
+        if n &gt; 1000 {
+            &quot;big&quot;
+        }
+        else if n &gt; 0 {
+            &quot;small&quot;
+        }
+        else if n &lt; 0 {
+            &quot;negative&quot;
+        }
+        else {
+            &quot;neither positive nor negative&quot;
+        }
+    );
+}
+</code></pre>
+
+<h2 id="6">6.</h2>
+
+<pre><code class="language-c">/* It prints:
+small*/
+#include &lt;stdio.h&gt;
+int main(int argc, char **argv) {
+    int n = 4;
+    printf(&quot;%s&quot;,
+        n &gt; 1000 ?
+            &quot;big&quot; :
+        n &gt; 0 ?
+            &quot;small&quot; :
+        n &lt; 0 ?
+            &quot;negative&quot; :
+            &quot;neither positive nor negative&quot;);
+}
+</code></pre>
+
+<h2 id="7">7.</h2>
+
+<pre><code class="language-rust">// ILLEGAL
+fn main() {
+    let a = if true { &quot;abc&quot; };
+}
+</code></pre>
+
+<h2 id="8">8.</h2>
+
+<pre><code class="language-rust">// ILLEGAL
+fn main() {
+    let a = if true { &quot;abc&quot; } else { 12 };
+}
+</code></pre>
+
+<h2 id="9">9.</h2>
+
+<pre><code class="language-rust">// It does nothing.
+fn main() {
+    let _a = if true { &quot;abc&quot; } else { &quot;xy&quot; };
+    let _b = if true { 3456 } else { 12 };
+    let _c = if true { 56.9 } else { 12. };
+}
+</code></pre>
+
+<h2 id="10">10.</h2>
+
+<pre><code class="language-rust">/* It prints:
+1 4 9 16 25 36 49 64 81 100 */
+fn main() {
+    let mut i = 1;
+    while i &lt;= 10 {
+        print!(&quot;{} &quot;, i * i);
+        i += 1;
+    }
+}
+</code></pre>
+
+<h2 id="11">11.</h2>
+
+<pre><code class="language-rust">/* It prints:
+1 4 16 25 49 64 100 121 169 196 256 289 361 400 */
+fn main() {
+    let mut i = 0;
+    while i &lt; 50 {
+        i += 1;
+        if i % 3 != 0 {
+            if i * i &lt;= 400 {
+                print!(&quot;{} &quot;, i * i);
+            }
+        }
+    }
+}
+</code></pre>
+
+<h2 id="12">12.</h2>
+
+<pre><code class="language-rust">/* It prints:
+1 4 16 25 49 64 100 121 169 196 256 289 361 400 */
+fn main() {
+    let mut i = 0;
+    while i &lt; 50 {
+        i += 1;
+        if i % 3 == 0 { continue; }
+        if i * i &gt; 400 { break; }
+        print!(&quot;{} &quot;, i * i);
+    }
+}
+</code></pre>
+
+<h2 id="13">13.</h2>
+
+<pre><code class="language-rust">/* It prints:
+1 4 9 16 25 36 49 64 81 100 121 144 169 196 */
+fn main() {
+    let mut i = 1;
+    while true {
+        let ii = i * i;
+        if ii &gt;= 200 { break; }
+        print!(&quot;{} &quot;, ii);
+        i += 1;
+    }
+}
+</code></pre>
+
+<h2 id="14">14.</h2>
+
+<pre><code class="language-rust">/* It prints:
+1 4 9 16 25 36 49 64 81 100 121 144 169 196 */
+fn main() {
+    let mut i = 1;
+    loop {
+        let ii = i * i;
+        if ii &gt;= 200 { break; }
+        print!(&quot;{} &quot;, ii);
+        i += 1;
+    }
+}
+</code></pre>
+
+<h2 id="15">15.</h2>
+
+<pre><code class="language-rust">/* It prints:
+1 4 9 16 25 36 49 64 81 100 */
+fn main() {
+    for i in 1..11 {
+        print!(&quot;{} &quot;, i * i);
+    }
+}
+</code></pre>
+
+<h2 id="16">16.</h2>
+
+<pre><code class="language-rust">/* It prints:
+0 1 2 3 :8*/
+fn main() {
+    let index = 8;
+    for index in 0..4 { print!(&quot;{} &quot;, index); }
+    print!(&quot;:{}&quot;, index);
+}
+</code></pre>
+
+<h2 id="17">17.</h2>
+
+<pre><code class="language-rust">/* It prints:
+1 2 3 :1*/
+fn main() {
+    let mut limit = 4;
+    for i in 1..limit {
+        limit -= 1;
+        print!(&quot;{} &quot;, i);
+    }
+    print!(&quot;:{}&quot;, limit);
+}
+</code></pre>
+
+<h2 id="18">18.</h2>
+
+<pre><code class="language-c">/* It prints:
+1 2 :2 */
+#include &lt;stdio.h&gt;
+int main() {
+    int limit = 4;
+    for (int i = 1; i &lt; limit; i++) {
+        limit -= 1;
+        printf(&quot;%d &quot;, i);
+    }
+    printf(&quot;:%d &quot;, limit);
+    return 0;
+}
+</code></pre>
+
+<h2 id="19">19.</h2>
+
+<pre><code class="language-rust">/* It prints:
+1234567*/
+fn main() {
+    print!(&quot;1&quot;);
+    {
+        print!(&quot;2&quot;);
+        print!(&quot;3&quot;);
+        {
+            print!(&quot;4&quot;);
+            {
+                print!(&quot;5&quot;);
+                { { } }
+                print!(&quot;6&quot;);
+            }
+        }
+        print!(&quot;7&quot;);
+    }
+}
+</code></pre>
+
+<h2 id="20">20.</h2>
+
+<pre><code class="language-rust">// ILLEGAL
+fn main() {
+    { let i = 10; }
+    print!(&quot;{} &quot;, i);
+}
+</code></pre>
+
+<h2 id="21">21.</h2>
+
+<pre><code class="language-rust">/* It prints:
+10 14*/
+fn main() {
+    let i = 10;
+    {
+        let j = 4;
+        {
+            print!(&quot;{} &quot;, i);
+        }
+        print!(&quot;{}&quot;, i + j);
+    } // End of the scope of &quot;j&quot;
+} // End of the scope of &quot;i&quot;
+</code></pre>
+
+<h2 id="22">22.</h2>
+
+<pre><code class="language-rust">/* It prints:
+4 10 */
+fn main() {
+    let i = 10;
+    {
+        let i = 4;
+        print!(&quot;{} &quot;, i);
+    } // End of the scope of the second &quot;i&quot;
+    print!(&quot;{} &quot;, i);
+} // End of the scope of the first &quot;i&quot;
+</code></pre>
+
+<h2 id="23">23.</h2>
+
+<pre><code class="language-rust">/* It prints:
+1 0 */
+fn main() {
+    let mut _i = 1;
+    if true { let _i = 2; }
+    print!(&quot;{} &quot;, _i);
+
+    while _i &gt; 0 { _i -= 1; let _i = 5; }
+    print!(&quot;{} &quot;, _i);
+}
+</code></pre>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

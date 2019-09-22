@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<p>编译器参数
+本章将介绍Rust编译器的参数。</p>
+
+<p>Rust编译器程序的名字是rustc，使用它的方法很简单：</p>
+
+<p>$ rustc [OPTIONS] INPUT
+其中，[OPTIONS]表示编译参数，而INPUT则表示输入文件。而编译参数有以下可选：</p>
+
+<p>-h, &ndash;help - 输出帮助信息到标准输出；</p>
+
+<p>&ndash;cfg SPEC - 传入自定义的条件编译参数，使用方法如</p>
+
+<p>fn main() {
+    if cfg!(hello) {
+        println!(&ldquo;world!&rdquo;);
+    }
+}
+如上例所示，若cfg!(hello)成立，则运行程序就会输出&rdquo;world&rdquo;到标准输出。我们把这个文件保存为hello.rs然后编译它</p>
+
+<p>$ rustc &ndash;cfg hello hello.rs
+运行它就会看到屏幕中输出了world!。</p>
+
+<p>-L [KIND=]PATH - 往链接路径中加入一个文件夹，并且可以指定这个路径的类型（Kind），这些类型包括</p>
+
+<p>dependency - 在这个路径下找依赖的文件，比如说mod；
+crate - 只在这个路径下找extern crate中定义的库；
+native - 只在这个路径下找Native库；
+framework - 只在OS X下有用，只在这个路径下找Framework；
+all - 默认选项。
+-l [KIND=]NAME - 链接一个库，这个库可以指定类型（Kind）</p>
+
+<p>static - 静态库；
+dylib - 动态库；
+framework - OS X的Framework。
+如果不传，默认为dylib。</p>
+
+<p>此处举一个例子如何手动链接一个库，我们先创建一个文件叫myhello.rs，在里面写一个函数</p>
+
+<p>// myhello.rs</p>
+
+<p>/// 这个函数仅仅向标签输出打印 Hello World!
+/// 不要忘记要把它标记为 pub 哦。
+pub fn print_hello() {
+    println!(&ldquo;Hello World!&rdquo;);
+}
+然后把这个文件编译成一个静态库，libmyhello.a</p>
+
+<p>$ rustc &ndash;crate-type staticlib myhello.rs
+然后再创建一个main.rs，链接这个库并打印出&rdquo;Hello World!&rdquo;</p>
+
+<p>// main.rs</p>
+
+<p>// 指定链接库 myhello
+extern crate myhello;</p>
+
+<p>fn main() {
+    // 调用库函数
+    myhello::print_hello();
+}
+编译main.rs</p>
+
+<p>$ rustc -L. -lmyhello main.rs
+运行main，就会看到屏幕输出&rdquo;Hello World!&ldquo;啦。</p>
+
+<p>&ndash;crate-type - 指定编译输出类型，它的参数包括</p>
+
+<p>bin - 二进行可执行文件
+lib - 编译为库
+rlib - Rust库
+dylib - 动态链接库
+staticlib - 静态链接库
+&ndash;crate-name - 指定这个Crate的名字，默认是文件名，如main.rs编译成可执行文件时默认是main，但你可以指定它为foo</p>
+
+<p>$ rustc &ndash;crate-name foo main.rs
+则会输出foo可执行文件。</p>
+
+<p>&ndash;emit - 指定编译器的输出。编译器默认是输出一个可执行文件或库文件，但你可以选择输出一些其它的东西用于Debug</p>
+
+<p>asm - 输出汇编
+llvm-bc - LLVM Bitcode；
+llvm-ir - LLVM IR，即LLVM中间码（LLVM Intermediate Representation）；
+obj - Object File（就是*.o文件）；
+link - 这个是要结合其它&ndash;emit参数使用，会执行Linker再输出结果；
+dep-info - 文件依赖关系（Debug用，类似于Makefile一样的依赖）。
+以上参数可以同时使用，使用逗号分割，如</p>
+
+<p>$ rustc &ndash;emit asm,llvm-ir,obj main.rs
+同时，在最后可以加一个=PATH来指定输出到一个特定文件，如</p>
+
+<p>$ rustc &ndash;emit asm=output.S,llvm-ir=output.ir main.rs
+这样会把汇编生成到output.S文件中，把LLVM中间码输出到output.ir中。</p>
+
+<p>&ndash;print - 打印一些信息，参数有</p>
+
+<p>crate-name - 编译目标名；
+file-names - 编译的文件名；
+sysroot - 打印Rust工具链的根目录地址。
+-g - 在目标文件中保存符号，这个参数等同于-C debuginfo=2。</p>
+
+<p>-O - 开启优化，这个参数等同于-C opt-level=2。</p>
+
+<p>-o FILENAME - 指定输出文件名，同样适用于&ndash;emit的输出。</p>
+
+<p>&ndash;out-dir DIR - 指定输出的文件夹，默认是当前文件夹，且会忽略-o配置。</p>
+
+<p>&ndash;explain OPT - 解释某一个编译错误，比如</p>
+
+<p>若你写了一个main.rs，使用了一个未定义变量f</p>
+
+<p>fn main() {
+    f
+}
+编译它时编译器会报错：</p>
+
+<p>main.rs:2:5: 2:6 error: unresolved name <code>f</code> [E0425]
+main.rs:2     f
+              ^
+main.rs:2:5: 2:6 help: run <code>rustc --explain E0425</code> to see a detailed explanation
+error: aborting due to previous error
+虽然错误已经很明显，但是你也可以让编译器解释一下，什么是E0425错误：</p>
+
+<p>$ rustc &ndash;explain E0425
+// 编译器打印的说明
+&ndash;test - 编译成一个单元测试可执行文件</p>
+
+<p>&ndash;target TRIPLE - 指定目标平台，基本格式是cpu-manufacturer-kernel[-os]，例如</p>
+
+<h2 id="64位os-x">64位OS X</h2>
+
+<p>$ rustc &ndash;target x86_64-apple-darwin
+-W help - 打印Linter的所有可配置选项和默认值。</p>
+
+<p>-W OPT, &ndash;warn OPT - 设置某一个Linter选项为Warning。
+-A OPT, &ndash;allow OPT - 设置某一个Linter选项为Allow。
+-D OPT, &ndash;deny OPT - 设置某一个Linter选项为Deny。
+-F OPT, &ndash;forbit OPT - 设置某一个Linter选项为Forbit。</p>
+
+<p>-C FLAG[=VAL], &ndash;codegen FLAG[=VAL] - 目标代码生成的的相关参数，可以用-C help来查看配置，值得关注的几个是</p>
+
+<p>linker=val - 指定链接器；
+linker-args=val - 指定链接器的参数；
+prefer-dynamic - 默认Rust编译是静态链接，选择这个配置将改为动态链接；
+debug-info=level - Debug信息级数，0 = 不生成，1 = 只生成文件行号表，2 = 全部生成；
+opt-level=val - 优化级数，可选0-3；
+debug_assertion - 显式开启cfg(debug_assertion)条件。
+-V, &ndash;version - 打印编译器版本号。</p>
+
+<p>-v, &ndash;verbose - 开启啰嗦模式（打印编译器执行的日志）。</p>
+
+<p>&ndash;extern NAME=PATH - 用来指定外部的Rust库（*.rlib）名字和路径，名字应该与extern crate中指定的一样。</p>
+
+<p>&ndash;sysroot PATH - 指定工具链根目录。</p>
+
+<p>-Z flag - 编译器Debug用的参数，可以用-Z help来查看可用参数。</p>
+
+<p>&ndash;color auto|always|never - 输出时对日志加颜色
+auto - 自动选择加还是不加，如果输出目标是虚拟终端（TTY）的话就加，否则就不加；
+always - 给我加！
+never - 你敢加？</p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

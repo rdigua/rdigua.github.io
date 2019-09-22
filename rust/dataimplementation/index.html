@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="data-implementation">Data Implementation</h1>
+
+<h3 id="对象大小">对象大小</h3>
+
+<ol>
+<li><pre><code class="language-rust">/* It prints:
+4 4 */
+fn main() {
+print!(&quot;{} &quot;, std::mem::size_of::&lt;i32&gt;());
+print!(&quot;{} &quot;, std::mem::size_of_val(&amp;12));
+}
+</code></pre></li>
+</ol>
+
+<h3 id="use">use</h3>
+
+<ol>
+<li><pre><code class="language-rust">/* It prints:
+4 4 */
+fn main() {
+use std::mem;
+print!(&quot;{} &quot;, mem::size_of::&lt;i32&gt;());
+print!(&quot;{} &quot;, mem::size_of_val(&amp;12));
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+4 4 */
+fn main() {
+use std::mem::size_of;
+use std::mem::size_of_val;
+print!(&quot;{} &quot;, size_of::&lt;i32&gt;());
+print!(&quot;{} &quot;, size_of_val(&amp;12));
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+4 4 */
+fn main() {
+use std::mem::*;
+print!(&quot;{} &quot;, size_of::&lt;i32&gt;());
+print!(&quot;{} &quot;, size_of_val(&amp;12));
+}
+</code></pre></li>
+</ol>
+
+<h3 id="基本类型">基本类型</h3>
+
+<ol>
+<li><pre><code class="language-rust">/* It prints:
+1 1 2 2 4 4 8 8 4 8 1 4*/
+fn main() {
+use std::mem::*;
+print!(&quot;{} {} {} {} {} {} {} {} {} {} {} {}&quot;,
+    size_of::&lt;i8&gt;(),
+    size_of::&lt;u8&gt;(),
+    size_of::&lt;i16&gt;(),
+    size_of::&lt;u16&gt;(),
+    size_of::&lt;i32&gt;(),
+    size_of::&lt;u32&gt;(),
+    size_of::&lt;i64&gt;(),
+    size_of::&lt;u64&gt;(),
+    size_of::&lt;f32&gt;(),
+    size_of::&lt;f64&gt;(),
+    size_of::&lt;bool&gt;(),
+    size_of::&lt;char&gt;());
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* In a 32-bit system, it prints:
+4 4 4 4*/
+/* In a 64-bit system, it prints:
+8 8 8 8*/
+fn main() {
+use std::mem::*;
+print!(&quot;{} {} {} {}&quot;,
+    size_of::&lt;isize&gt;(),
+    size_of::&lt;usize&gt;(),
+    size_of::&lt;&amp;i8&gt;(),
+    size_of::&lt;&amp;u32&gt;());
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* In a 32-bit system, it prints:
+[1]
+[2, 0]
+[3, 0, 0, 0]
+[4, 5, 6, 0, 0, 0, 0, 0]
+[65, 0, 0, 0]
+[1]
+[&lt;4 integer numbers&gt;]
+*/
+/* In a 64-bit system, it prints:
+[1]
+[2, 0]
+[3, 0, 0, 0]
+[4, 5, 6, 0, 0, 0, 0, 0]
+[65, 0, 0, 0]
+[1]
+[&lt;8 integer numbers&gt;]
+*/
+fn main() {
+fn as_bytes&lt;T&gt;(o: &amp;T) -&gt; &amp;[u8] {
+    unsafe {
+        std::slice::from_raw_parts(
+            o as *const _ as *const u8,
+            std::mem::size_of::&lt;T&gt;())
+    }
+}
+println!(&quot;{:?}&quot;, as_bytes(&amp;1i8));
+println!(&quot;{:?}&quot;, as_bytes(&amp;2i16));
+println!(&quot;{:?}&quot;, as_bytes(&amp;3i32));
+println!(&quot;{:?}&quot;, as_bytes(&amp;(4i64 + 5 * 256 + 6 * 256 * 256)));
+println!(&quot;{:?}&quot;, as_bytes(&amp;'A'));
+println!(&quot;{:?}&quot;, as_bytes(&amp;true));
+println!(&quot;{:?}&quot;, as_bytes(&amp;&amp;1i8));
+}
+</code></pre></li>
+</ol>
+
+<h3 id="字节位">字节位</h3>
+
+<ol>
+<li><pre><code class="language-rust">/* It prints:
+&lt;an integer number&gt; &lt;an integer number&gt; &lt;an integer number&gt;*/
+fn main() {
+let b1 = true;
+let b2 = true;
+let b3 = false;
+print!(&quot;{} {} {}&quot;,
+    &amp;b1 as *const bool as usize,
+    &amp;b2 as *const bool as usize,
+    &amp;b3 as *const bool as usize);
+}
+</code></pre></li>
+</ol>
+
+<h3 id="复合数据类型">复合数据类型</h3>
+
+<ol>
+<li><pre><code class="language-rust">/* In a 32-bit system, it prints:
+160 16 1600 1 16 12*/
+/* In a 64-bit system, it prints:
+160 16 1600 1 16 24*/
+fn main() {
+enum E1 { E1a, E1b };
+enum E2 { E2a, E2b(f64) };
+use std::mem::*;
+print!(&quot;{} {} {} {} {} {}&quot;,
+    size_of_val(&amp;[0i16; 80]),
+    size_of_val(&amp;(0i16, 0i64)),
+    size_of_val(&amp;[(0i16, 0i64); 100]),
+    size_of_val(&amp;E1::E1a),
+    size_of_val(&amp;E2::E2a),
+    size_of_val(&amp;vec![(0i16, 0i64); 100]));
+}
+</code></pre></li>
+</ol>
+
+<h3 id="vector">Vector</h3>
+
+<ol>
+<li><pre><code class="language-rust">/* It prints:
+0 0
+1 4
+2 4
+3 4
+4 4
+5 8
+*/
+fn main() {
+let mut v = vec![0; 0];
+println!(&quot;{} {}&quot;, v.len(), v.capacity());
+v.push(11);
+println!(&quot;{} {}&quot;, v.len(), v.capacity());
+v.push(22);
+println!(&quot;{} {}&quot;, v.len(), v.capacity());
+v.push(33);
+println!(&quot;{} {}&quot;, v.len(), v.capacity());
+v.push(44);
+println!(&quot;{} {}&quot;, v.len(), v.capacity());
+v.push(55);
+println!(&quot;{} {}&quot;, v.len(), v.capacity());
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+33*/
+fn main() {
+let arr = [11, 22, 33];
+let i: usize = 2;
+print!(&quot;{}&quot;, arr[i]);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It could print:
+0 0 0
+1 1 4
+5 5 8
+9 9 16
+17 17 32
+33 33 64
+65 65 128
+129 129 256
+257 257 512
+513 513 1024
+*/
+fn main() {
+let mut v = vec![0; 0];
+let mut prev_capacity = std::usize::MAX;
+for i in 0..1_000 {
+    let cap = v.capacity();
+    if cap != prev_capacity {
+        println!(&quot;{} {} {}&quot;, i, v.len(), cap);
+        prev_capacity = cap;
+    }
+    v.push(1);
+}
+}
+</code></pre></li>
+</ol>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

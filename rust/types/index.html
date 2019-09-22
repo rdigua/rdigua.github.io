@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="primitive-types">Primitive Types</h1>
+
+<p>基本类型</p>
+
+<h3 id="进制">进制</h3>
+
+<ol>
+<li><pre><code class="language-rust">/* It prints:
+16 10 8 2*/
+fn main() {
+let hexadecimal = 0x10;
+let decimal = 10;
+let octal = 0o10;
+let binary = 0b10;
+print!(&quot;{} {} {} {}&quot;,
+    hexadecimal, decimal, octal, binary);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+10 16 8 2 */
+fn main() {
+let hexadecimal = 0x10;
+let octal = 0o10;
+let binary = 0b10;
+let mut n = 10;
+print!(&quot;{} &quot;, n);
+n = hexadecimal;
+print!(&quot;{} &quot;, n);
+n = octal;
+print!(&quot;{} &quot;, n);
+n = binary;
+print!(&quot;{} &quot;, n);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+10 256*/
+fn main() {
+print!(&quot;{} {}&quot;, 0xA, 0b100000000);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+10 256*/
+fn main() {
+print!(&quot;{} {}&quot;, 10, 256);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+16775075 1234567 134023794 27121*/
+fn main() {
+let hexadecimal = 0x_00FF_F7A3;
+let decimal = 1_234_567;
+let octal = 0o_777_205_162;
+let binary = 0b_0110_1001_1111_0001;
+print!(&quot;{} {} {} {}&quot;,
+    hexadecimal, decimal, octal, binary);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">// It does nothing.
+fn main() {
+let one_thousand = 1e3;
+let one_million = 1e6;
+let thirteen_billions_and_half = 13.5e9;
+let twelve_millionths = 12e-6;
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+5 5 5 5*/
+fn main() {
+let a: i8 = 5;
+let b: i16 = 5;
+let c: i32 = 5;
+let d: i64 = 5;
+print!(&quot;{} {} {} {}&quot;, a, b, c, d);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">// ILLEGAL
+fn main() {
+let a: i8 = 5;
+let b: i16 = 5;
+print!(&quot;{}&quot;, a + b);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+23 23 23*/
+fn main() {
+let a: i16 = 5;
+let b: i16 = 18;
+let c: i64 = 5;
+let d: i64 = 18;
+let e: i32 = 5;
+let f: i32 = 18;
+print!(&quot;{} &quot;, a + b);
+print!(&quot;{} &quot;, c + d);
+print!(&quot;{}&quot;, e + f);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+5 5 5 5*/
+fn main() {
+let a: u8 = 5;
+let b: u16 = 5;
+let c: u32 = 5;
+let d: u64 = 5;
+print!(&quot;{} {} {} {}&quot;, a, b, c, d);
+}
+</code></pre></li>
+</ol>
+
+<h3 id="数组">数组</h3>
+
+<ol>
+<li><pre><code class="language-rust">/* It prints:
+33*/
+fn main() {
+let arr = [11, 22, 33];
+let i: usize = 2;
+print!(&quot;{}&quot;, arr[i]);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">// ILLEGAL
+fn main() {
+let arr = [11, 22, 33];
+let i: usize = 2;
+print!(&quot;{}&quot;, arr[i]);
+let i: isize = 2;
+print!(&quot;{}&quot;, arr[i]);
+let i: u32 = 2;
+print!(&quot;{}&quot;, arr[i]);
+let i: u64 = 2;
+print!(&quot;{}&quot;, arr[i]);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+0*/
+fn main() {
+let a = [0];
+let i = 0;
+print!(&quot;{}&quot;, a[i]);
+}
+</code></pre></li>
+</ol>
+
+<h3 id="toc_3">-</h3>
+
+<ol>
+<li><pre><code class="language-rust">// It does nothing.
+fn main() {
+let i = 0;
+let _j: u16 = i;
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">// ILLEGAL
+fn main() {
+let i = 0;
+let _j: u16 = i;
+let _k: i16 = i;
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">// It does nothing.
+fn main() {
+let i = 0;
+let _j: u16 = i;
+let _k = i;
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+8 -589934592*/
+fn main() {
+let i = 8;
+let j = 8_000_000_000;
+print!(&quot;{} {}&quot;, i, j);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+4.6 3.91*/
+fn main() {
+let a: f64 = 4.6;
+let b: f32 = 3.91;
+print!(&quot;{} {}&quot;, a, b);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">// It does nothing.
+fn main() {
+let a = 4.6;
+let mut _b: f32 = 3.91e5;
+_b = a;
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+19*/
+fn main() {
+let a: i16 = 12;
+let b: u32 = 4;
+let c: f32 = 3.7;
+print!(&quot;{}&quot;, a as i8 + b as i8 + c as i8);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+-12 34464 1410065408*/
+fn main() {
+let a = 500 as i8;
+let b = 100_000 as u16;
+let c = 10_000_000_000 as u32;
+print!(&quot;{} {} {}&quot;, a, b, c);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">// It does nothing.
+fn main() {
+let _a: i16 = -150;
+let _b = -150 as i16;
+let _c = -150 + _b - _b;
+let _d = -150i16;
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">// It does nothing.
+fn main() {
+let _: i8 = 127;
+let _: i16 = 32_767;
+let _: i32 = 2_147_483_647;
+let _: i64 = 9_223_372_036_854_775_807;
+let _: isize = 100; // The maximum value depends on the target architecture
+let _: u8 = 255;
+let _: u16 = 65_535;
+let _: u32 = 4_294_967_295;
+let _: u64 = 18_446_744_073_709_551_615;
+let _: usize = 100; // The maximum value depends on the target architecture
+let _: f32 = 1e38;
+let _: f64 = 1e308;
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+[true][a]*/
+fn main() {
+let a: bool = true; print!(&quot;[{}]&quot;, a);
+let b: char = 'a'; print!(&quot;[{}]&quot;, b);
+}
+</code></pre></li>
+</ol>
+
+<h3 id="字符">字符</h3>
+
+<ol>
+<li><pre><code class="language-rust">/* It prints:
+è さ
+*/
+fn main() {
+let e_grave = 'è';
+let japanese_character = 'さ';
+println!(&quot;{} {}&quot;, e_grave, japanese_character);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">// ILLEGAL
+fn main() {
+let _a = 'a' + 'b';
+let _b = false + true;
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+1 0 65 224 8364*/
+fn main() {
+print!(&quot;{} {} {} {} {}&quot;, true as u8, false as u8,
+    'A' as u32, 'à' as u32, '€' as u32);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+true false A à*/
+fn main() {
+let truthy = 1;
+let falsy = 0;
+print!(&quot;{} {} {} {}&quot;, truthy != 0, falsy != 0,
+    65 as char, 224 as char);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints 256 lines. First:
+0: []
+1: []
+2: []
+3: []
+... then:
+65: [A]
+66: [B]
+67: [C]
+68: [D]
+... and at last:
+253: [ý]
+254: [þ]
+255: [ÿ]
+*/
+fn main() {
+for i in 0..256 {
+    println!(&quot;{}: [{}]&quot;, i, i as u8 as char);
+}
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+() 283 () () () ()*/
+fn main() {
+let a: () = ();
+let b = { 12; 87; 283 };
+let c = { 12; 87; 283; };
+let d = {};
+let e = if false { };
+let f = while false { };
+print!(&quot;{:?} {:?} {:?} {:?} {:?} {:?}&quot;,
+    a, b, c, d, e, f);
+}
+</code></pre></li>
+</ol>
+
+<h3 id="vector">vector</h3>
+
+<ol>
+<li><pre><code class="language-rust">// It does nothing.
+fn main() {
+let _array1: [char; 3] = ['x', 'y', 'z'];
+let _array2: [f32; 200] = [0f32; 200];
+let _vector1: Vec&lt;char&gt; = vec!['x', 'y', 'z'];
+let _vector2: Vec&lt;i32&gt; = vec![0; 5000];
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">// ILLEGAL
+fn main() {
+let n = 20;
+let _ = [0; n];
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">// It does nothing.
+fn main() {
+const N: usize = 20;
+let _ = [0; N];
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">// ILLEGAL
+fn main() {
+let _: bool = 4u32 / 3u32;
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">// ILLEGAL
+fn main() {
+let _: bool = 4 / 3;
+}
+</code></pre></li>
+</ol>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

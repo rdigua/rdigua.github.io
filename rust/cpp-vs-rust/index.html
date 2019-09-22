@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="现代化的内存管理-cpp-vs-rust">现代化的内存管理：Cpp vs Rust</h1>
+
+<h2 id="which-is-safer">Which is safer?</h2>
+
+<p>Posted by Hexi on July 18, 2019</p>
+
+<p>Rust 自诞生起就以它独特、现代化的内存管理机制闻名于世；而其指定的竞争对手 Cpp 自 C++11 以来在内存管理现代化的道路上也下了很大功夫。笔者平时写 Rust 比较多，最近在写 Cpp 便试图给脑中零散的概念做个总结，并使用 Rust 与其作对比，也算是一篇面向 Cpp 用户的 Rust 推销文章吧。</p>
+
+<p>本文主要讨论四点内容，引用（reference）、拷贝（copy）、移动（move）和智能指针（smart pointer）。</p>
+
+<p><a href="https://github.com/Hexilee/modern-memory-management">本文代码地址</a></p>
+
+<hr />
+
+<ul>
+<li><a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E5%BC%95%E7%94%A8">引用</a>
+
+<ul>
+<li><a href="https://hexilee.me/2019/07/18/modern-memory-management/#cpp">Cpp</a>
+
+<ul>
+<li><a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E5%B7%A6%E5%80%BC%E5%BC%95%E7%94%A8">左值引用</a></li>
+<li><a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E4%B8%8D%E5%8F%AF%E5%8F%98%E5%BC%95%E7%94%A8">不可变引用</a></li>
+<li><a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E6%B2%A1%E8%A7%A3%E5%86%B3%E7%9A%84%E9%97%AE%E9%A2%98">没解决的问题</a></li>
+</ul></li>
+<li><a href="https://hexilee.me/2019/07/18/modern-memory-management/#rust">Rust</a>
+
+<ul>
+<li><a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E5%BC%95%E7%94%A8%E7%9A%84%E7%94%9F%E5%91%BD%E6%9C%9F">引用的生命期</a></li>
+<li><a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E5%AF%B9%E5%8F%AF%E5%8F%98%E5%BC%95%E7%94%A8%E7%9A%84%E7%BA%A6%E6%9D%9F">对可变引用的约束</a></li>
+</ul></li>
+</ul></li>
+<li><a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E6%8B%B7%E8%B4%9D%E5%92%8C%E7%A7%BB%E5%8A%A8">拷贝和移动</a>
+
+<ul>
+<li><a href="https://hexilee.me/2019/07/18/modern-memory-management/#cpp-1">Cpp</a>
+
+<ul>
+<li><a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E6%8B%B7%E8%B4%9D">拷贝</a></li>
+<li><a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E7%A7%BB%E5%8A%A8">移动</a></li>
+<li><a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E6%8B%B7%E8%B4%9D%E5%92%8C%E7%A7%BB%E5%8A%A8">为什么需要拷贝和移动</a></li>
+<li><a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E4%B8%8D%E8%B6%B3%E4%B9%8B%E5%A4%84">不足之处</a></li>
+</ul></li>
+<li><a href="https://hexilee.me/2019/07/18/modern-memory-management/#rust-1">Rust</a>
+
+<ul>
+<li><a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E7%A7%BB%E5%8A%A8-1">移动</a></li>
+<li><a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E6%8B%B7%E8%B4%9D-1">拷贝</a>
+
+<ul>
+<li><a href="https://hexilee.me/2019/07/18/modern-memory-management/#clone">Clone</a></li>
+<li><a href="https://hexilee.me/2019/07/18/modern-memory-management/#copy">Copy</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88">智能指针</a>
+
+<ul>
+<li><a href="https://hexilee.me/2019/07/18/modern-memory-management/#cpp-2">Cpp</a>
+
+<ul>
+<li><a href="https://hexilee.me/2019/07/18/modern-memory-management/#unique_ptr">unique_ptr</a></li>
+<li><a href="https://hexilee.me/2019/07/18/modern-memory-management/#shared_ptr">shared_ptr</a>
+
+<ul>
+<li><a href="https://hexilee.me/2019/07/18/modern-memory-management/#weak_ptr">weak_ptr</a></li>
+</ul></li>
+</ul></li>
+<li><a href="https://hexilee.me/2019/07/18/modern-memory-management/#rust-2">Rust</a>
+
+<ul>
+<li><a href="https://hexilee.me/2019/07/18/modern-memory-management/#box">Box</a></li>
+<li><a href="https://hexilee.me/2019/07/18/modern-memory-management/#arcrc">Arc(Rc)</a></li>
+</ul></li>
+<li><a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E5%AF%B9%E6%AF%94">对比</a></li>
+</ul></li>
+<li><a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E6%80%BB%E7%BB%93">总结</a></li>
+</ul>
+
+<h2 id="引用-https-hexilee-me-2019-07-18-modern-memory-management-e5-bc-95-e7-94-a8">引用[](<a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E5%BC%95%E7%94%A8">https://hexilee.me/2019/07/18/modern-memory-management/#%E5%BC%95%E7%94%A8</a>)</h2>
+
+<h3 id="cpp-https-hexilee-me-2019-07-18-modern-memory-management-cpp">Cpp[](<a href="https://hexilee.me/2019/07/18/modern-memory-management/#cpp">https://hexilee.me/2019/07/18/modern-memory-management/#cpp</a>)</h3>
+
+<p>首先讲 Cpp 的引用，我们都知道 Cpp 里引用分为左值引用（Lvalue Reference）和右值引用（Rvalue Reference），在这一部分我们主要讨论左值引用（右值引用放到后面的移动那一部分讨论）。</p>
+
+<h4 id="左值引用-https-hexilee-me-2019-07-18-modern-memory-management-e5-b7-a6-e5-80-bc-e5-bc-95-e7-94-a8">左值引用[](<a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E5%B7%A6%E5%80%BC%E5%BC%95%E7%94%A8">https://hexilee.me/2019/07/18/modern-memory-management/#%E5%B7%A6%E5%80%BC%E5%BC%95%E7%94%A8</a>)</h4>
+
+<p>Cpp 左值引用的本质是变量别名（alias），即对一个已经存在变量的别名（引用同一对象的多个变量），所以可以看到这样的操作：</p>
+
+<pre><code>
+</code></pre>
+
+<p>或者用一个变量接收这个引用</p>
+
+<pre><code>
+</code></pre>
+
+<p>使用 C++14 的  <code>decltype(auto)</code>  写法</p>
+
+<pre><code>
+</code></pre>
+
+<p>他们的打印结果都毫无疑问是</p>
+
+<pre><code>
+</code></pre>
+
+<h4 id="不可变引用-https-hexilee-me-2019-07-18-modern-memory-management-e4-b8-8d-e5-8f-af-e5-8f-98-e5-bc-95-e7-94-a8">不可变引用[](<a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E4%B8%8D%E5%8F%AF%E5%8F%98%E5%BC%95%E7%94%A8">https://hexilee.me/2019/07/18/modern-memory-management/#%E4%B8%8D%E5%8F%AF%E5%8F%98%E5%BC%95%E7%94%A8</a>)</h4>
+
+<p>Cpp 的左值引用又可分为可变引用（<code>T&amp;</code>）和不可变引用（<code>const T&amp;</code>）两种。不可变引用保证了引用指向的对象不可变：</p>
+
+<pre><code>
+</code></pre>
+
+<p>编译会得到两个错误：一个是  <code>no viable overloaded '='</code>  ，因为  <code>ref_a</code>  的类型是  <code>const A&amp;</code>  而  <code>A</code>默认的移动赋值函数的  <code>this</code>  并没有标记为  <code>const</code>；第二个错误也是差不多的原因：<code>A</code>  的方法  <code>auto data() -&gt; int &amp;</code>  的  <code>this</code>  并没有标记为  <code>const</code>.</p>
+
+<p>我们再给  <code>A</code>  加一个  <code>const_data 方法</code>:</p>
+
+<pre><code>
+</code></pre>
+
+<blockquote>
+<p>两个  <code>const</code>  分别标记  <code>this</code>  和返回引用的类型</p>
+</blockquote>
+
+<p>我们现在可以也只能拿到  <code>_data</code>  的不可变引用</p>
+
+<pre><code>
+</code></pre>
+
+<p>这段代码会炸在赋值的地方。</p>
+
+<h4 id="没解决的问题-https-hexilee-me-2019-07-18-modern-memory-management-e6-b2-a1-e8-a7-a3-e5-86-b3-e7-9a-84-e9-97-ae-e9-a2-98">没解决的问题[](<a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E6%B2%A1%E8%A7%A3%E5%86%B3%E7%9A%84%E9%97%AE%E9%A2%98">https://hexilee.me/2019/07/18/modern-memory-management/#%E6%B2%A1%E8%A7%A3%E5%86%B3%E7%9A%84%E9%97%AE%E9%A2%98</a>)</h4>
+
+<p>Cpp 的引用固然在减少拷贝、控制可变性上做得很不错，但依旧存在两个明显的问题</p>
+
+<ul>
+<li>引用可能比对象本身活得更长。</li>
+<li>可能同时持有对同一对象的多个可变引用，不能静态检查到潜在的数据竞争。</li>
+</ul>
+
+<p>第一个问题的例子：</p>
+
+<pre><code>
+</code></pre>
+
+<p>打印出来的结果</p>
+
+<pre><code>
+</code></pre>
+
+<p>第二个问题的例子</p>
+
+<pre><code>
+</code></pre>
+
+<p>结果随机 segmentation fault。</p>
+
+<h3 id="rust-https-hexilee-me-2019-07-18-modern-memory-management-rust">Rust[](<a href="https://hexilee.me/2019/07/18/modern-memory-management/#rust">https://hexilee.me/2019/07/18/modern-memory-management/#rust</a>)</h3>
+
+<h4 id="引用的生命期-https-hexilee-me-2019-07-18-modern-memory-management-e5-bc-95-e7-94-a8-e7-9a-84-e7-94-9f-e5-91-bd-e6-9c-9f">引用的生命期[](<a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E5%BC%95%E7%94%A8%E7%9A%84%E7%94%9F%E5%91%BD%E6%9C%9F">https://hexilee.me/2019/07/18/modern-memory-management/#%E5%BC%95%E7%94%A8%E7%9A%84%E7%94%9F%E5%91%BD%E6%9C%9F</a>)</h4>
+
+<p>下面是 Rust 引用的用例</p>
+
+<pre><code>
+</code></pre>
+
+<blockquote>
+<p>Rust 中变量对象绑定和引用默认都是不可变的，需要用  <code>mut</code>  限定词来使其可变，这与 Cpp 刚好相反。</p>
+</blockquote>
+
+<p>Rust 的引用同样也分可变引用和不可变引用，Cpp 中对可变引用的约束规则 Rust 也全部涵盖了；并且我们可以注意到，不同于 Cpp 中作为变量别名的引用，Rust 中的引用更像是指针，很多场景下都需要显式地取引用（<code>&amp;</code>）和解引用（<code>*</code>）。</p>
+
+<p>看完这个例子后我们继续刚才话题， 第一个问题，Rust 的引用可能比被引用对象本身活得更长吗？答案是不能（在不使用 Unsafe Rust 的情况下）。只要程序过了编译，Rust 能永远保证引用有效。</p>
+
+<p>比如这个程序：</p>
+
+<pre><code>
+</code></pre>
+
+<p>编译失败  <code>missing lifetime specifier</code>，这是因为 Rust 的引用都有自己的生命期（lifetime）。在一般情况下，Rust 编译器能自己推导出生命期，比如当参数和返回值各只有一个生命期时，编译器会认为返回值的生命期与参数一致（返回引用依赖参数引用）：</p>
+
+<pre><code>
+</code></pre>
+
+<p>编译器会认为  <code>get_data</code>  返回的  <code>&amp;i32</code>  依赖参数  <code>a</code>；同时对于  <code>data</code>  方法</p>
+
+<pre><code>
+</code></pre>
+
+<p>返回的  <code>&amp;i32</code>  依赖参数  <code>self</code>，所以编译器认为这个依赖链没问题，编译通过。</p>
+
+<p>但如果依赖链有问题的话，比如</p>
+
+<pre><code>
+</code></pre>
+
+<p><code>get_data</code>  返回的  <code>&amp;i32</code>  和参数  <code>a</code>  并没有关系，引用栈变量，拒绝编译。</p>
+
+<p>当然对于更复杂的情况有其它的推导规则，有时也需要手动标记，有兴趣的读者可参考 Rust 的官方文档。</p>
+
+<h4 id="对可变引用的约束-https-hexilee-me-2019-07-18-modern-memory-management-e5-af-b9-e5-8f-af-e5-8f-98-e5-bc-95-e7-94-a8-e7-9a-84-e7-ba-a6-e6-9d-9f">对可变引用的约束[](<a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E5%AF%B9%E5%8F%AF%E5%8F%98%E5%BC%95%E7%94%A8%E7%9A%84%E7%BA%A6%E6%9D%9F">https://hexilee.me/2019/07/18/modern-memory-management/#%E5%AF%B9%E5%8F%AF%E5%8F%98%E5%BC%95%E7%94%A8%E7%9A%84%E7%BA%A6%E6%9D%9F</a>)</h4>
+
+<p>Rust 的引用声明周期可以解决之前提到的第一个问题，那第二个问题呢？</p>
+
+<p>我们前文说过 “Cpp 中对可变引用的约束规则 Rust 也全部涵盖了”，言外之意就是 Rust 对可变引用还有更多的约束：<strong>一个可变引用不能与其他引用同时存在</strong>。</p>
+
+<p>不能同时存在是什么意思呢？就是生命期不能重叠，比如</p>
+
+<pre><code>
+</code></pre>
+
+<p>编译失败。</p>
+
+<p>由于  <a href="https://github.com/rust-lang/rfcs/blob/master/text/2094-nll.md">NLL</a>  的存在，Rust 引用的生命期从它定义的地方持续到它最后一次被使用的地方而非作用域结尾（注意主语是生命期，存在依赖关系的引用拥有同一个生命期）。</p>
+
+<p>所以这样是 OK 的：</p>
+
+<pre><code>
+</code></pre>
+
+<p>这个编译不过：</p>
+
+<pre><code>
+</code></pre>
+
+<p>那么，这个约束对线程安全有什么帮助呢？<strong>一个可变引用不能与其他引用同时存在</strong>，再加上后面会提到的<strong>对象在被引用时不能移动</strong>，这就意味着在理想情况下是绝对不会出现数据竞争的。</p>
+
+<p>当然这只是在理想情况下，事实上，由于这个约束过强，很多时候必须使用一些基于 Unsafe Rust 的组件（在更强的约束上开洞而非在更弱的约束上修补也算 Rust 的设计哲学吧，首要考虑安全性）。</p>
+
+<p>对 Rust 线程安全有兴趣的读者可以自行参阅官方文档，本文也无法讨论太多了；有一定 Rust 基础的读者还可以看看这篇文章作为拓展阅读<a href="https://zhuanlan.zhihu.com/p/64699643">《如何理解 rust 中的 Sync、Send？》</a>。</p>
+
+<h2 id="拷贝和移动-https-hexilee-me-2019-07-18-modern-memory-management-e6-8b-b7-e8-b4-9d-e5-92-8c-e7-a7-bb-e5-8a-a8">拷贝和移动[](<a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E6%8B%B7%E8%B4%9D%E5%92%8C%E7%A7%BB%E5%8A%A8">https://hexilee.me/2019/07/18/modern-memory-management/#%E6%8B%B7%E8%B4%9D%E5%92%8C%E7%A7%BB%E5%8A%A8</a>)</h2>
+
+<h3 id="cpp-https-hexilee-me-2019-07-18-modern-memory-management-cpp-1">Cpp[](<a href="https://hexilee.me/2019/07/18/modern-memory-management/#cpp-1">https://hexilee.me/2019/07/18/modern-memory-management/#cpp-1</a>)</h3>
+
+<h4 id="拷贝-https-hexilee-me-2019-07-18-modern-memory-management-e6-8b-b7-e8-b4-9d">拷贝[](<a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E6%8B%B7%E8%B4%9D">https://hexilee.me/2019/07/18/modern-memory-management/#%E6%8B%B7%E8%B4%9D</a>)</h4>
+
+<p>Cpp 的拷贝本质上是调用了拷贝构造函数<code>T(const T&amp; other)</code>（构造时）或拷贝赋值运算符<code>T&amp; operator=(const T&amp; other)</code>（赋值时）。</p>
+
+<blockquote>
+<p><code>other</code>  也可以是  <code>T&amp;</code>。</p>
+</blockquote>
+
+<p>一般来说开发者无需自己定义拷贝构造函数或者拷贝赋值运算符，编译器会隐式实现（默认实现是调用所有成员的拷贝构造函数或拷贝赋值运算符），但在一些特殊情况下（比如存在没有拷贝构造函数或拷贝赋值运算符的成员）必须自己实现。具体的隐式实现条件请参考 cppreference，本文不作赘述。</p>
+
+<p>拷贝场景：</p>
+
+<pre><code>
+</code></pre>
+
+<p>打印出</p>
+
+<pre><code>
+</code></pre>
+
+<h4 id="移动-https-hexilee-me-2019-07-18-modern-memory-management-e7-a7-bb-e5-8a-a8">移动[](<a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E7%A7%BB%E5%8A%A8">https://hexilee.me/2019/07/18/modern-memory-management/#%E7%A7%BB%E5%8A%A8</a>)</h4>
+
+<p>Cpp 的移动本质上是调用了移动构造函数<code>T(T&amp;&amp; other)</code>（构造时）或移动赋值运算符<code>T&amp; operator=(T&amp;&amp; other)</code>（赋值时）。</p>
+
+<p>其中  <code>T&amp;&amp;</code>  就是  <code>T</code>  类型的右值引用。</p>
+
+<p>Cpp 左值引用本质上是变量别名（alias），即与同一对象绑定的多个变量；而右值引用（语义上）则表示某对象没有与任何变量绑定，故可能在两种情况下出现：</p>
+
+<ul>
+<li>直接取自右值</li>
+<li>取自左值（使用  <code>std::move</code>、<code>std::forward</code>  等）</li>
+</ul>
+
+<p>这里重点说一下第二种情况，</p>
+
+<p><code>std::move</code>  仅仅是语义上的 move，用于从左值取出右值引用，表示该对象与原来的所有的左值引用解除绑定，move 过后原来所有的左值引用全部失效，不允许再被使用。</p>
+
+<p>正是因为右值引用有着这样的语义，所以移动构造函数和移动赋值运算符可以放心使用右值引用（无变量绑定，移动不影响其它变量）。</p>
+
+<p>而你一旦使用任何变量接收右值引用，这个变量就变成了左值，因为<strong>右值引用不与任何变量绑定</strong>。如果要保证引用在函数之间传递时能“完美转发”（右值引用不会转成左值），可使用  <code>std::forward</code>。</p>
+
+<pre><code>
+</code></pre>
+
+<p>打印出</p>
+
+<pre><code>
+</code></pre>
+
+<h4 id="为什么需要拷贝和移动-https-hexilee-me-2019-07-18-modern-memory-management-e4-b8-ba-e4-bb-80-e4-b9-88-e9-9c-80-e8-a6-81-e6-8b-b7-e8-b4-9d-e5-92-8c-e7-a7-bb-e5-8a-a8">为什么需要拷贝和移动[](<a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E6%8B%B7%E8%B4%9D%E5%92%8C%E7%A7%BB%E5%8A%A8">https://hexilee.me/2019/07/18/modern-memory-management/#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E6%8B%B7%E8%B4%9D%E5%92%8C%E7%A7%BB%E5%8A%A8</a>)</h4>
+
+<p>拷贝和移动本质上都是为了保证变量与其绑定的对象生命期一致，这是它们与引用本质上的目的区别，用额外的内存开销换取内存安全和编码便利。</p>
+
+<p>有时这点额外内存开销是可以忽略不计的，但不是所有时候都这样。减少内存开销的常见做法是堆分配，但堆分配带来的新问题是可能会内存泄漏。</p>
+
+<p>如果使用堆内存分配和拷贝，就需要想一套方案来决定什么时候回收内存。常见的思路是引用计数或者  <a href="https://en.wikipedia.org/wiki/Garbage_collection_(computer_science)">GC</a>。</p>
+
+<p>但我们可以发现，移动是天然符合  <a href="https://zh.wikipedia.org/wiki/RAII">RAII</a>  的：堆内存分配，堆内存生命期与栈对象一致（在栈对象析构函数中释放堆内存）。</p>
+
+<p>比如我们来造一个  <code>Vector</code></p>
+
+<pre><code>
+</code></pre>
+
+<blockquote>
+<p>我们在这里显式删除了拷贝构造函数，导致它只能移动而无法拷贝，你也可以实现它。</p>
+</blockquote>
+
+<p>打印出</p>
+
+<pre><code>
+</code></pre>
+
+<p>从析构顺序来看只有  <code>consume_vector</code>  中的  <code>v</code>  delete 了真正的  <code>header</code>，<code>product_vector</code>  和  <code>main</code>中的  <code>v</code>  再析构之前被 move 从而被“掏空”，<code>header</code>  变成了  <code>nullptr</code>。</p>
+
+<h4 id="不足之处-https-hexilee-me-2019-07-18-modern-memory-management-e4-b8-8d-e8-b6-b3-e4-b9-8b-e5-a4-84">不足之处[](<a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E4%B8%8D%E8%B6%B3%E4%B9%8B%E5%A4%84">https://hexilee.me/2019/07/18/modern-memory-management/#%E4%B8%8D%E8%B6%B3%E4%B9%8B%E5%A4%84</a>)</h4>
+
+<p>虽然 Cpp 的拷贝和移动机制已经很完善了，但依然存在一些缺陷，最主要的问题就是语义上的 move 并没有静态检查。</p>
+
+<ul>
+<li>虽然 move 了，但后面可能还会不小心用到。当然这种情况现代编辑器和编译器一般都会给个 warning。</li>
+
+<li><p>虽然 move 了，但之前的引用还在被使用，这种情况编辑器和编译器很难发觉。</p>
+
+<pre><code>
+</code></pre></li>
+</ul>
+
+<p>没有任何 warning，运行时 segmentation fault。</p>
+
+<h3 id="rust-https-hexilee-me-2019-07-18-modern-memory-management-rust-1">Rust[](<a href="https://hexilee.me/2019/07/18/modern-memory-management/#rust-1">https://hexilee.me/2019/07/18/modern-memory-management/#rust-1</a>)</h3>
+
+<h4 id="移动-https-hexilee-me-2019-07-18-modern-memory-management-e7-a7-bb-e5-8a-a8-1">移动[](<a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E7%A7%BB%E5%8A%A8-1">https://hexilee.me/2019/07/18/modern-memory-management/#%E7%A7%BB%E5%8A%A8-1</a>)</h4>
+
+<p>与 Cpp 不同的是，Rust 所有类型默认都是移动的，除非它实现了  <code>trait Copy</code>，所以我们先来讲移动。</p>
+
+<p>Rust 无法像 Cpp 那样自定义移动操作，目前在实现上移动只是一次 memory copy。但是，变量的所有权（<code>ownership</code>）已经移交出去了，你永远不能再使用这个变量，除非你再给它所有权。</p>
+
+<blockquote>
+<ul>
+<li>移交所有权可以看作对象与当前变量解除绑定后与新的变量绑定。</li>
+<li>所有权的概念同样存在于 Cpp 智能指针中。</li>
+</ul>
+</blockquote>
+
+<pre><code>
+</code></pre>
+
+<p>编译失败：<code>borrow of moved value: 'a'</code>。</p>
+
+<p>如果它正在被引用，就不能被移动</p>
+
+<pre><code>
+</code></pre>
+
+<p>编译失败： <code>cannot move out of 'a' because it is borrowed</code>。</p>
+
+<p>仔细想想可以发现，Rust 的移动跟 Cpp 的移动在语义上是完全一致的。但是，Rust 可以在编译期保证：</p>
+
+<ul>
+<li>不能对已移交所有权的变量取引用（已移交所有权的变量无绑定对象）。</li>
+<li>在其任意引用的生命期内对象不能被移动。</li>
+</ul>
+
+<p>说到这，还剩下的一个问题就是，Rust 怎样在不自定义移动操作的情况下控制资源的回收（堆内存的释放）呢？</p>
+
+<p>如果 Cpp 的移动也只能是 memory copy，那么：</p>
+
+<pre><code>
+</code></pre>
+
+<p>运行</p>
+
+<pre><code>
+</code></pre>
+
+<p><code>get_b</code>  和  <code>main</code>  两个函数执行完后  <code>delete</code>  了同一个指针。</p>
+
+<p>但在 Rust 中</p>
+
+<pre><code>
+</code></pre>
+
+<blockquote>
+<p>或许在这里你会觉得 Rust 很繁琐，这是因为手动 alloc、dealloc 和操作裸指针是不安全的行为，大多数场景下应使用已封装好的组件（如  <code>Box</code>）来替换裸指针。</p>
+</blockquote>
+
+<p>运行，打印结果是</p>
+
+<pre><code>
+</code></pre>
+
+<p>你会发现这个叫作  <code>Drop</code>，看起来像是析构函数的  <code>trait</code>  跟 Cpp 析构函数还是有明显差别的：<code>Drop::drop</code>  只会在拥有对象所有权的变量被 drop 的时候被调用。</p>
+
+<p>函数  <code>boxed</code>  中的  <code>b</code>  返回之后已经把对象的所有权移交给了  <code>main</code>  里的  <code>b</code>，故  <code>boxed</code>  里  <code>b</code>  在函数调用结束被回收时仅仅回收了它在栈上占用的内存，而不会调用  <code>Drop</code>。</p>
+
+<p>所以，一个对象在被移动之后就没有任何被访问的可能性（甚至没有析构函数之类的东西可调用）。Rust 就是以如此简洁的方式完美地实现了移动！</p>
+
+<h4 id="拷贝-https-hexilee-me-2019-07-18-modern-memory-management-e6-8b-b7-e8-b4-9d-1">拷贝[](<a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E6%8B%B7%E8%B4%9D-1">https://hexilee.me/2019/07/18/modern-memory-management/#%E6%8B%B7%E8%B4%9D-1</a>)</h4>
+
+<p>Rust 有两个拷贝相关的  <code>trait</code>，一个是  <code>Clone</code>，一个是  <code>Copy</code>。</p>
+
+<h5 id="clone-https-hexilee-me-2019-07-18-modern-memory-management-clone">Clone[](<a href="https://hexilee.me/2019/07/18/modern-memory-management/#clone">https://hexilee.me/2019/07/18/modern-memory-management/#clone</a>)</h5>
+
+<p><code>Clone</code>  是显式拷贝，跟 Cpp 中的拷贝行为是类似的：</p>
+
+<pre><code>
+</code></pre>
+
+<p>运行，打印出</p>
+
+<pre><code>
+</code></pre>
+
+<p>这样的话  <code>B</code>  还是默认移动，但你需要拷贝时可以显式调用  <code>clone</code>  方法。</p>
+
+<h5 id="copy-https-hexilee-me-2019-07-18-modern-memory-management-copy">Copy[](<a href="https://hexilee.me/2019/07/18/modern-memory-management/#copy">https://hexilee.me/2019/07/18/modern-memory-management/#copy</a>)</h5>
+
+<p><code>Copy</code>  是隐式拷贝，语义上就是 memory copy。Rust 的布尔值（bool）、字符（Char）、数值类型（各种整型和浮点型）、不可变引用以及各种指针都实现了  <code>Copy</code>，但复合类型  <code>T</code>  要实现它需要符合三个条件：</p>
+
+<ul>
+<li><code>T</code>  实现了  <code>Clone</code></li>
+<li><code>T</code>  所有的成员都实现了  <code>Copy</code></li>
+<li><code>T</code>  不能实现  <code>Drop</code></li>
+</ul>
+
+<p><code>T</code>  需要实现  <code>Clone</code>  的原因是很多时候  <code>Clone</code>  的实现依赖  <code>Copy</code>  会比较方便：</p>
+
+<pre><code>
+</code></pre>
+
+<p><code>T</code>  所有成员都必须实现  <code>Copy</code>  是很显然的，当然要所有成员都允许 memory copy。</p>
+
+<p>同时实现  <code>Drop</code>  和  <code>Copy</code>  在语义上没什么毛病，但是在当前实现上有问题所以禁止了，详情见  <a href="https://doc.rust-lang.org/error-index.html#E0184">E0184</a>。</p>
+
+<p>而且  <code>Copy</code>  一般不需要手动实现，当所有成员都实现了  <code>Copy</code>，你可以给  <code>T</code>  自动实现  <code>Clone</code>  和  <code>Copy</code>。</p>
+
+<pre><code>
+</code></pre>
+
+<p>总之，隐式拷贝仅仅能用于纯栈对象的拷贝（momery copy 的同时复制所有权），没有任何可操作性。</p>
+
+<h2 id="智能指针-https-hexilee-me-2019-07-18-modern-memory-management-e6-99-ba-e8-83-bd-e6-8c-87-e9-92-88">智能指针[](<a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88">https://hexilee.me/2019/07/18/modern-memory-management/#%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88</a>)</h2>
+
+<p>智能指针（smart pointer）是 Cpp 造出来的概念，Rust 也沿用了。智能指针就是能自动释放所管理内存的指针。</p>
+
+<p>这一部分主要讨论两种智能指针，一种是独占的，一种是共享的。</p>
+
+<h3 id="cpp-https-hexilee-me-2019-07-18-modern-memory-management-cpp-2">Cpp[](<a href="https://hexilee.me/2019/07/18/modern-memory-management/#cpp-2">https://hexilee.me/2019/07/18/modern-memory-management/#cpp-2</a>)</h3>
+
+<h4 id="unique-ptr-https-hexilee-me-2019-07-18-modern-memory-management-unique-ptr">unique_ptr[](<a href="https://hexilee.me/2019/07/18/modern-memory-management/#unique_ptr">https://hexilee.me/2019/07/18/modern-memory-management/#unique_ptr</a>)</h4>
+
+<p>就如同我们在<a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E6%8B%B7%E8%B4%9D%E5%92%8C%E7%A7%BB%E5%8A%A8">为什么需要拷贝和移动</a>中讨论的，移动行为是天然遵守 RAII 的。Cpp 中的  <code>std::unique_ptr</code>  就是如此设计的，它的结构类似这样：</p>
+
+<pre><code>
+</code></pre>
+
+<p>它是独占式的智能指针，用例：</p>
+
+<pre><code>
+</code></pre>
+
+<p>运行，打印出：</p>
+
+<pre><code>
+</code></pre>
+
+<p><code>std::unique_ptr</code>  具体用法请移步 cppreference</p>
+
+<h4 id="shared-ptr-https-hexilee-me-2019-07-18-modern-memory-management-shared-ptr">shared_ptr[](<a href="https://hexilee.me/2019/07/18/modern-memory-management/#shared_ptr">https://hexilee.me/2019/07/18/modern-memory-management/#shared_ptr</a>)</h4>
+
+<p>如同我们在<a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E6%8B%B7%E8%B4%9D%E5%92%8C%E7%A7%BB%E5%8A%A8">为什么需要拷贝和移动</a>中讨论的，如果使用堆内存分配和拷贝，就需要想一套方案来决定什么时候回收内存。常见的思路是引用计数或者  <a href="https://en.wikipedia.org/wiki/Garbage_collection_(computer_science)">GC</a>。</p>
+
+<p><code>std::shared_ptr</code>  是使用引用计数方案的，共享的智能指针。它的大致结构如下：</p>
+
+<pre><code>
+</code></pre>
+
+<p>用例：</p>
+
+<pre><code>
+</code></pre>
+
+<p>打印出</p>
+
+<pre><code>
+</code></pre>
+
+<h5 id="weak-ptr-https-hexilee-me-2019-07-18-modern-memory-management-weak-ptr">weak_ptr[](<a href="https://hexilee.me/2019/07/18/modern-memory-management/#weak_ptr">https://hexilee.me/2019/07/18/modern-memory-management/#weak_ptr</a>)</h5>
+
+<p><code>std::weak_ptr</code>  代表“弱引用”（<code>std::shared_ptr</code>  代表“强引用”），是引用计数里的概念，用于解决循环引用的问题。它的使用依赖  <code>std::shared_ptr</code>。</p>
+
+<p>循环引用：</p>
+
+<pre><code>
+</code></pre>
+
+<p>运行，没有任何打印结果，说明这两个对象都没有被析构，内存泄漏了。</p>
+
+<p><code>std::weak_ptr</code>  用例：</p>
+
+<pre><code>
+</code></pre>
+
+<p><code>std::weak_ptr</code>  本身的构造并不会使引用计数增加（不会复制所有权），它仅仅在需要使用时（试图）临时获取所有权。</p>
+
+<p>使用  <code>std::weak_ptr</code>  改造我们的程序：</p>
+
+<pre><code>
+</code></pre>
+
+<p>运行，打印出：</p>
+
+<pre><code>
+</code></pre>
+
+<p>两个对象顺利地被析构。</p>
+
+<h3 id="rust-https-hexilee-me-2019-07-18-modern-memory-management-rust-2">Rust[](<a href="https://hexilee.me/2019/07/18/modern-memory-management/#rust-2">https://hexilee.me/2019/07/18/modern-memory-management/#rust-2</a>)</h3>
+
+<h4 id="box-https-hexilee-me-2019-07-18-modern-memory-management-box">Box[](<a href="https://hexilee.me/2019/07/18/modern-memory-management/#box">https://hexilee.me/2019/07/18/modern-memory-management/#box</a>)</h4>
+
+<p>Rust 中的  <code>Box</code>  等同于 Cpp 中的  <code>std::unique_ptr</code>。</p>
+
+<pre><code>
+</code></pre>
+
+<h4 id="arc-rc-https-hexilee-me-2019-07-18-modern-memory-management-arcrc">Arc(Rc)[](<a href="https://hexilee.me/2019/07/18/modern-memory-management/#arcrc">https://hexilee.me/2019/07/18/modern-memory-management/#arcrc</a>)</h4>
+
+<p><code>std::sync::Arc</code>  等同于 Cpp 中的  <code>std::shared_ptr</code>。</p>
+
+<pre><code>
+</code></pre>
+
+<p><code>std::sync::Weak</code>  相当于 Cpp 中的  <code>std::weak_ptr</code>。</p>
+
+<pre><code>
+</code></pre>
+
+<blockquote>
+<p>&amp;’static str 表示字符串字面量类型</p>
+</blockquote>
+
+<p>打印结果：</p>
+
+<pre><code>
+</code></pre>
+
+<p><code>std::rc::Rc</code>  是  <code>Arc</code>  的单线程版本。</p>
+
+<h3 id="对比-https-hexilee-me-2019-07-18-modern-memory-management-e5-af-b9-e6-af-94">对比[](<a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E5%AF%B9%E6%AF%94">https://hexilee.me/2019/07/18/modern-memory-management/#%E5%AF%B9%E6%AF%94</a>)</h3>
+
+<p>Cpp 和 Rust 智能指针的对比就是它们移动和拷贝机制的对比。</p>
+
+<p>Rust 的  <code>Box</code>  相对 Cpp 的<code>std::unique_ptr</code>更优，因为 Rust 可以在编译期保证：</p>
+
+<ul>
+<li>不能对已移交所有权的变量取引用（已移交所有权的变量无绑定对象）。</li>
+<li>在其任意引用的生命期内对象不能被移动。</li>
+</ul>
+
+<p>Rust 的  <code>std::sync::Arc</code>  和  <code>std::shared_ptr</code>  差距不大，但  <code>Arc</code>  必须显式  <code>clone</code>。</p>
+
+<h2 id="总结-https-hexilee-me-2019-07-18-modern-memory-management-e6-80-bb-e7-bb-93">总结[](<a href="https://hexilee.me/2019/07/18/modern-memory-management/#%E6%80%BB%E7%BB%93">https://hexilee.me/2019/07/18/modern-memory-management/#%E6%80%BB%E7%BB%93</a>)</h2>
+
+<p>Cpp 和 Rust 在现代化内存管理的思路上是十分一致的，但 Rust 在静态检查上更胜一筹。学习 Rust 也让笔者对 Cpp 有了更深的理解，有兴趣的读者快打开 Rust 官网进行学习吧！</p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

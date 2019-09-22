@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="分布式-newsql-对比-https-www-cnblogs-com-go-no-1-p-9935195-html"><a href="https://www.cnblogs.com/GO-NO-1/p/9935195.html">分布式 NewSQL 对比</a></h1>
+
+<h3 id="1-tidb">1、TiDB：</h3>
+
+<p>说明：</p>
+
+<p>PingCAP 公司基于 Google <a href="http://research.google.com/archive/spanner.html">Spanner</a> / <a href="http://research.google.com/pubs/pub41344.html">F1</a> 论文实现的开源分布式 NewSQL 数据库。</p>
+
+<p>开源分布式 NewSQL 关系型数据库 TiDB 是新一代开源分布式 NewSQL 数据库，模型受 Google Spanner / F1 论文的启发，实现了自动的水平伸缩，强一致性的分布式事务，基于 Raft 算法的多副本复制等重要 NewSQL 特性。TiDB 结合了 RDBMS 和 NoSQL 的优点，部署简单，在线弹性扩容和异步表结构变更不影响业务， 真正的异地多活及自动故障恢复保障数据安全，同时兼容 <a href="https://mariadb.com/kb/en/library/documentation/" title="MariaDB Documentation">MySQL</a> 协议，使迁移使用成本降到极低</p>
+
+<p>特性：</p>
+
+<p>SQL支持（TiDB 是 MySQL 兼容的） 水平弹性扩展（吞吐可线性扩展） 分布式事务 跨数据中心数据强一致性保证 故障自恢复的高可用 海量数据高并发实时写入与实时查询（HTAP 混合负载） TiDB 的设计目标是 100% 的 OLTP 场景和 80% 的 OLAP 场景，更复杂的 OLAP 分析可以通过 TiSpark 项目来完成。</p>
+
+<hr />
+
+<h3 id="2-cockroachdb">2、CockroachDB：</h3>
+
+<p>说明：</p>
+
+<p>构建于事务处理及强一致性KV存储上的分布式SQL数据库，支持水平扩展、自动容错处理、强一致性事务，并且提供SQL接口用于数据处理，是Google Spanner/F1的开源实现。 CockroachDB适用于应用对数据要求精确、可靠、完全正确的场景，支持自动复制、均匀分布、基于极小配置的数据恢复，可用于分布式的、可复制的联机事务处理（OLTP），多数据中心的部署，私有云的基础构建，它不适用于读少写多的场景，可以用内存数据库来代替，也不适用于复杂的join查询，重量级的数据分析及联机分析处理（OLAP）。</p>
+
+<p>特性：</p>
+
+<p>支持PostgreSQL</p>
+
+<p>对标准SQL支持较完善</p>
+
+<p>较稳定</p>
+
+<hr />
+
+<p>TiDB和Cockroach之间存在一些关键差异。</p>
+
+<p>1.用户界面和生态系统尽管TiDB和CockroachDB都支持SQL，但TiDB与MySQL协议兼容，而Cockroach选择PostgreSQL。您可以使用任何MySQL客户端直接连接到TiDB服务器。</p>
+
+<p>2.体系结构整个TiDB项目在逻辑上分为两部分：无状态SQL层（TiDB）和分布式存储层（TiKV）。由于TiDB建立在TiKV之上，开发人员可以根据自己的业务自由选择使用TiDB或TiKV。如果您只需要分布式键值数据库，则可以单独使用TiKV以获得更高的性能和更低的延迟。</p>
+
+<p>总之，我们的系统是高度分层和模块化的，而CockroachDB是一个P2P系统。我们系统的设计导致我们使用两种编程语言：Go for TiDB和Rust for TiKV以提高存储性能。</p>
+
+<p>并且受益于高度分层的架构，我们构建了另一个项目[1]，以便在TiDB / TiKV之上运行Apache Spark来回答复杂的OLAP查询。它利用了Spark平台和分布式TiKV集群的优势。</p>
+
+<p>3.事务模型尽管CockroachDB和TiDB都支持ACID事务，但TiDB使用了Google的Percolator引入的模型。该模型的关键特性是它需要一个独立的时间戳分配器。与Spanner一样，TiDB中的每个事务都有一个时间戳来隔离不同的事务。</p>
+
+<p>CockroachDB使用的模型类似于Google在其论文中描述的TrueTime API。然而，与Google不同，CockroachDB没有构建原子钟和GPS接收器来保持不同数据中心的时间一致。相反，它使用NTP进行时钟同步，这导致了不确定错误的问题。为了解决这个问题，CockroachDB采用了混合逻辑时钟（HLC）算法。</p>
+
+<p>4.编程语言TiDB使用Go作为SQL层，使用Rust作为存储引擎层。由于Go具有垃圾收集器（GC）和运行时，我们认为调整性能将花费我们几天的时间。因此，我们对TiKV使用Rust，一种静态语言。它的表现要好得多。CockroachDB只使用Go。</p>
+
+<hr />
+
+<h3 id="3-foundationdb">3、FoundationDB：</h3>
+
+<p>2018-4 重新开源，资料较少</p>
+
+<p>根据FoundationDB的官方文档，FoundationDB有一系列的局限性：</p>
+
+<ol>
+<li>单个事务数据量不能超过10MB</li>
+<li>键的长度不能超过10KB, 值的长度不能超过100KB</li>
+<li>系统针对并且只针对SSD优化，使用传统HHD既不保证性能也不保证数据库可用性</li>
+<li>FoundationDB对于需要读比较大的主键值范围的查询性能不好</li>
+<li>该系统没有实现任何的安全和权限管理，任何人都可以去读和写任意一个主键</li>
+<li>系统不支持长时间运行的事务 ，具体来说，一个事务的第一个操作后超过5秒如果事务还没有结束，系统就会报错。</li>
+<li>系统只在＜500个Core的情况下仔细测过，有性能保证</li>
+<li>数据库的数据大小不能超过100TB</li>
+<li>系统对每个分区都做3份拷贝，而不会自动对热点增加更多的拷贝，所以读的性能有上限。</li>
+</ol>
+
+<hr />
+
+<h3 id="4-商用newsql">4、商用NewSQL：</h3>
+
+<p>Spanner、F1：谷歌</p>
+
+<p>OceanBase：阿里</p>
+
+<p>TDSQL：腾讯</p>
+
+<p>UDDB：UCloud</p>
+
+<p>RadonDB：青云中间件</p>
+
+<hr />
+
+<h3 id="5-总结">5、总结：</h3>
+
+<p>对比一番后，TiDB需要SSD及多台服务器，CockRoachDB 更友好，优先尝试。</p>
+
+<hr />
+
+<p>2018-11-30 更新：</p>
+
+<p>找到tidb的二进制文件，可以简单部署单机或集群版：</p>
+
+<p><a href="https://www.pkold.com/a/TiDB_Binary__bu_shu_fang_an_xiang_jie_(_bei_fen_)">https://www.pkold.com/a/TiDB_Binary__bu_shu_fang_an_xiang<em>jie</em>(_bei<em>fen</em>)</a></p>
+
+<p>由于cockroachDB支持的是postgreSQL，如果要承接mysql，需要修改成本，而且不好估算；</p>
+
+<p>tidb则几乎完全兼容mysql，承接mysql成本非常低，故对tidb进行了测试。</p>
+
+<p>在一台服上分别启动mysql和tidb单机版集群，对其进行OLTP压力测试：</p>
+
+<p>debian服务器一台（4核cpu+8G内存）</p>
+
+<p>　　</p>
+
+<p>　QPS　</p>
+
+<p>　TPS　</p>
+
+<p>MySQL</p>
+
+<p>16000</p>
+
+<p>　　800</p>
+
+<p>TiDB</p>
+
+<p>4100</p>
+
+<p>　　200</p>
+
+<p>可见单机情况下mysql的吞吐量比tidb高几倍，在集群情况下tidb表现会好点；</p>
+
+<p>此处应该是没有配置ssd硬盘导致结果没有tidb官网所述好。</p>
+
+<hr />
+
+<p>参考：</p>
+
+<p><a href="https://blog.csdn.net/u011782423/article/details/81030514">https://blog.csdn.net/u011782423/article/details/81030514</a></p>
+
+<p><a href="https://blog.csdn.net/erlib/article/details/78442934">https://blog.csdn.net/erlib/article/details/78442934</a></p>
+
+<p><a href="https://groups.google.com/forum/#!topic/tidb-user/k_nMQWPmK-Q">https://groups.google.com/forum/#!topic/tidb-user/k_nMQWPmK-Q</a></p>
+
+<p><a href="https://github.com/ixiongdi/NewSQLBenchmark">https://github.com/ixiongdi/NewSQLBenchmark</a></p>
+
+<p><a href="https://hn.svelte.technology/item/15499404">https://hn.svelte.technology/item/15499404</a></p>
+
+<p>分类:  <a href="https://www.cnblogs.com/GO-NO-1/category/958585.html">mysql</a></p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

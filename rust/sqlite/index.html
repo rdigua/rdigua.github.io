@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="db">db</h1>
+
+<h2 id="sqlite">Sqlite</h2>
+
+<pre><code class="language-rust">// tombasche/rando_ts.rs //gist
+//rando_ts.rs
+extern crate sqlite;
+
+use std::fs::File;
+use std::io::{BufRead, BufReader};
+
+
+fn db_connection(db_name: &amp;String) -&gt; sqlite::Connection {
+    let connection = sqlite::open(db_name).unwrap();
+    connection.execute(&quot;CREATE TABLE teas (name text, variety text, last_used date)&quot;).unwrap();
+
+    connection
+}
+
+fn main() {
+    let db_name: &amp;String = &amp;&quot;tea.db&quot;.to_string();
+    let connection = db_connection(&amp;db_name);
+
+    let f = File::open(&quot;tea.txt&quot;).expect(&quot;Unable to open file&quot;);
+    let f = BufReader::new(f);
+
+    for line in f.lines() {
+        let line = line.expect(&quot;Unable to read line&quot;);
+        let mut splittable_line = line.split(&quot;,&quot;);
+        let vec = splittable_line.collect::&lt;Vec&lt;&amp;str&gt;&gt;();
+        let statement = format!(&quot;INSERT INTO teas (name, variety) VALUES(\&quot;{}\&quot;,\&quot;{}\&quot;)&quot;, vec[0], vec[1].trim());
+        connection.execute(statement).unwrap();
+    }
+
+    select_tea(&amp;db_name);
+
+}
+
+fn select_tea(db_name: &amp;String) {
+
+    let connection = sqlite::open(db_name).unwrap();
+    let statement = &quot;SELECT name, variety, last_used FROM teas WHERE (last_used != date('now') or last_used != date('now') -1 or last_used IS NULL) ORDER BY RANDOM() LIMIT 1&quot;;
+
+
+    let mut cursor = connection
+        .prepare(statement)
+        .unwrap()
+        .cursor();
+
+    let mut tea = String::new();
+    while let Some(row) = cursor.next().unwrap() {
+        println!(&quot;{}&quot;, format!(&quot;{}: {}&quot;, row[0].as_string().unwrap(), row[1].as_string().unwrap()));
+        tea = row[0].as_string().unwrap().to_string();
+    }
+
+    let update_statement = format!(&quot;UPDATE teas SET last_used = date('now') WHERE name = \&quot;{}\&quot;&quot;, tea);
+    connection.execute(update_statement).unwrap();
+
+}
+</code></pre>
+
+<pre><code class="language-rust">extern mod sqlite;
+
+use sqlite::types::SQLITE_OK;
+
+
+fn open_db(path: ~str) -&gt; sqlite::database::Database {
+    match sqlite::open(path) {
+        Ok(db) =&gt; db,
+        Err(r) =&gt; fail!(r)
+    }
+}
+
+fn test() {
+    let mut db = open_db(~&quot;:memory:&quot;);
+
+    // Create table
+    let result = db.exec(&quot;CREATE TABLE IF NOT EXISTS test (name text)&quot;);
+    println(format!(&quot;Create OK? {:b}&quot;, result.is_ok()));
+
+    // Prepared insert
+    let mut stmt = match db.prepare(&quot;INSERT INTO test (name) VALUES (?)&quot;, &amp;None) {
+        Ok(s) =&gt; s,
+        Err(err) =&gt; fail!(err)
+    };
+
+    assert!(stmt.bind_param(1, &amp;sqlite::types::Text(~&quot;test&quot;)) == SQLITE_OK);
+}
+
+fn main() {
+    test()
+}
+</code></pre>
+
+<pre><code class="language-rust">use std::cmp::Ordering;
+use std::process::{Command,Stdio};
+use std::error::Error;
+use std::io::Write;
+use std::string::String;
+use diesel::types::*;
+use diesel::sqlite::Sqlite;
+use diesel::row::Row;
+use schema::games;
+
+#[derive(Clone,Debug,PartialEq,Eq)]
+pub enum GameURL {
+    Steam,
+    Custom(String),
+}
+
+impl FromSqlRow&lt;Text, Sqlite&gt; for GameURL {
+    const FIELDS_NEEDED: usize = 1;
+    fn build_from_row&lt;T: Row&lt;Sqlite&gt;&gt;(row: &amp;mut T) -&gt; Result&lt;Self, Box&lt;Error+Send+Sync&gt;&gt; {
+        FromSql::&lt;Text, Sqlite&gt;::from_sql(row.take())
+            .map(|s:String|
+                 if s==&quot;&quot; {
+                     GameURL::Steam
+                 } else {
+                     GameURL::Custom(s)
+                 }
+            )
+    }
+}
+
+impl ToSql&lt;Text, Sqlite&gt; for GameURL {
+    fn to_sql&lt;W: Write&gt;(&amp;self, out: &amp;mut ToSqlOutput&lt;W,Sqlite&gt;) -&gt; Result&lt;IsNull, Box&lt;Error+Send+Sync&gt;&gt; {
+        let res: String = match *self {
+            GameURL::Steam =&gt; &quot;&quot;.to_string(),
+            GameURL::Custom(ref x) =&gt; x.clone(),
+        };
+
+        &lt;String as ToSql&lt;Text, Sqlite&gt;&gt;::to_sql(&amp;res, out)
+    }
+}
+
+expression_impls!(Text -&gt; GameURL);
+queryable_impls!(Text -&gt; GameURL);
+ @rdigua
+ 
+</code></pre>
+
+<pre><code class="language-rust">use chrono::NaiveDateTime;
+use diesel::backend::Backend;
+use diesel::serialize::{self, Output, ToSql};
+use diesel::deserialize::{self, FromSql};
+use diesel::sqlite::Sqlite;
+use diesel::sql_types::Integer;
+use std::io::Write;
+
+#[derive(FromSqlRow, SqlType, AsExpression, Clone, Copy, Default, QueryId, Debug)]
+#[sqlite_type = &quot;Integer&quot;]
+pub struct IntTimestamp;
+
+impl ToSql&lt;IntTimestamp, Sqlite&gt; for NaiveDateTime {
+    fn to_sql&lt;W: Write&gt;(&amp;self, out: &amp;mut Output&lt;W, Sqlite&gt;) -&gt; serialize::Result {
+        let x = self.timestamp() as i32;
+        &lt;i32 as ToSql&lt;Integer, Sqlite&gt;&gt;::to_sql(&amp;x, out)
+    }
+}
+
+impl FromSql&lt;IntTimestamp, Sqlite&gt; for NaiveDateTime {
+    fn from_sql(value: Option&lt;&amp;&lt;Sqlite as Backend&gt;::RawValue&gt;) -&gt; deserialize::Result&lt;Self&gt; {
+        use diesel::sql_types::Date;
+        let text_ptr = &lt;*const str as FromSql&lt;Date, Sqlite&gt;&gt;::from_sql(value)?;
+        let text = unsafe { &amp;*text_ptr };
+
+        if let Ok(seconds) = text.parse::&lt;i64&gt;() {
+            let nanos = 0 as u32;
+            if let Some(timestamp) = Self::from_timestamp_opt(seconds, nanos) {
+                return Ok(timestamp);
+            }
+        }
+
+        Err(format!(&quot;Invalid datetime {}&quot;, text).into())
+    }
+}
+</code></pre>
+
+<pre><code class="language-rust">use sqlite::Sqlite;
+use types::{self, FromSql, FromSqlRow, HasSqlType, Numeric, Float};
+use std::error::Error;
+use sqlite::connection::SqliteValue;
+use std::str::FromStr;
+use query_source::Queryable;
+use row::Row;
+
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
+pub enum SqliteNumeric {
+    Positive {
+        number: f64
+    },
+    Negative {
+        number: f64
+    },
+    NaN
+}
+
+impl FromSql&lt;types::Numeric, Sqlite&gt; for SqliteNumeric {
+    fn from_sql(bytes: Option&lt;&amp;SqliteValue&gt;) -&gt; Result&lt;Self, Box&lt;Error&gt;&gt; {
+        let bytes = not_none!(bytes);
+        let number = f64::from_str(bytes.read_text()).unwrap();
+        if number.is_sign_positive() {
+            Ok(SqliteNumeric::Positive {number: number})
+        } else if number.is_sign_negative() {
+            Ok(SqliteNumeric::Negative {number: number})
+        } else {
+            Ok(SqliteNumeric::NaN)
+        }
+    }
+}
+
+impl HasSqlType&lt;Numeric&gt; for Sqlite {
+    fn metadata() -&gt; Self::TypeMetadata {
+        &lt;Sqlite as HasSqlType&lt;Float&gt;&gt;::metadata()
+    }
+}
+
+impl Queryable&lt;Numeric, Sqlite&gt; for SqliteNumeric {
+    type Row = Self;
+
+    fn build(row: Self) -&gt; Self {
+        row
+    }
+}
+
+impl FromSqlRow&lt;Numeric, Sqlite&gt; for SqliteNumeric {
+    fn build_from_row&lt;R:  Row&lt;Sqlite&gt;&gt;(row: &amp;mut R) -&gt; Result&lt;Self, Box&lt;Error&gt;&gt; {
+        FromSql::&lt;Numeric, Sqlite&gt;::from_sql(row.take())
+    }
+}
+</code></pre>
+
+<h2 id="russqlite">russqlite</h2>
+
+<pre><code class="language-rust">extern crate rusqlite;
+
+
+fn main()
+{
+	let mut threads = vec!();
+	for th in 0..300
+	{
+		let name = format!(&quot;{}.db&quot;, th);
+		let t = std::thread::spawn(
+			move ||
+			{
+				for _ in 0..100
+				{
+					let conn = rusqlite::Connection::open_with_flags(
+						&amp;name,
+						rusqlite::OpenFlags::SQLITE_OPEN_NO_MUTEX
+							| rusqlite::OpenFlags::SQLITE_OPEN_READ_WRITE
+							| rusqlite::OpenFlags::SQLITE_OPEN_CREATE
+					).expect(&amp;format!(&quot;open sqlite db ({})&quot;, name));
+					conn.execute_batch(
+						&quot;
+						CREATE TABLE IF NOT EXISTS data (key primary key not null, data not null);
+						&quot;
+					).unwrap();
+				}
+			}
+		);
+		threads.push(t);
+	}
+
+	for th in threads
+	{
+		th.join();
+	}
+}
+</code></pre>
+
+<pre><code class="language-rust">extern crate rusqlite;
+extern crate libsqlite3_sys as sqlite3;
+
+use std::io::{self, Read};
+use std::path::Path;
+use std::mem;
+use std::ptr;
+use std::ffi::{CString, CStr};
+use rusqlite::Connection;
+
+#[derive(Debug)]
+enum SQLite3Error {
+    OpenError,
+    StatementError,
+    ExecuteError,
+}
+
+struct RawConnection {
+    db: *mut sqlite3::sqlite3,
+}
+
+struct Statement {
+    stmt: *mut sqlite3::sqlite3_stmt,
+}
+
+impl Drop for Statement {
+    fn drop(&amp;mut self) {
+        println!(&quot;Called finalize!&quot;);
+        unsafe {
+            //           sqlite3::sqlite3_finalize(self.stmt);
+        }
+    }
+}
+
+fn create_statement(conn: &amp;RawConnection, query: String) -&gt; Result&lt;Statement, SQLite3Error&gt; {
+    let len = query.len();
+    let raw_query = CString::new(query).unwrap().as_ptr();
+    unsafe {
+        let mut stmt: *mut sqlite3::sqlite3_stmt = mem::uninitialized();
+        if stmt.is_null() {
+            println!(&quot;Now it is null!&quot;);
+        }
+        match sqlite3::sqlite3_prepare_v2(conn.db,
+                                          raw_query,
+                                          len as i32,
+                                          &amp;mut stmt,
+                                          ptr::null_mut()) {
+            sqlite3::SQLITE_OK =&gt; Ok(Statement { stmt: stmt }),
+            _ =&gt; Err(SQLite3Error::StatementError),
+        }
+    }
+}
+
+fn open_connection(s: String) -&gt; Result&lt;RawConnection, SQLite3Error&gt; {
+    unsafe {
+        let mut db: *mut sqlite3::sqlite3 = mem::uninitialized();
+        let r = sqlite3::sqlite3_open_v2(CString::new(s).unwrap().as_ptr(),
+                                         &amp;mut db,
+                                         sqlite3::SQLITE_OPEN_CREATE |
+                                         sqlite3::SQLITE_OPEN_READWRITE,
+                                         ptr::null());
+        match r {
+            sqlite3::SQLITE_OK =&gt; Ok(RawConnection { db: db }),
+            _ =&gt; return Err(SQLite3Error::OpenError),
+        }
+    }
+}
+
+
+enum Cursor {
+    OKCursor,
+    DONECursor,
+    RowsCursor {
+        stmt: Statement,
+        num_columns: i32,
+        types: Vec&lt;EntityType&gt;,
+        previous_status: i32,
+    },
+}
+
+fn execute_statement(conn: &amp;RawConnection, stmt: Statement) -&gt; Result&lt;Cursor, SQLite3Error&gt; {
+
+    match unsafe { sqlite3::sqlite3_step(stmt.stmt) } {
+        sqlite3::SQLITE_OK =&gt; Ok(Cursor::OKCursor),
+        sqlite3::SQLITE_DONE =&gt; Ok(Cursor::DONECursor),
+        sqlite3::SQLITE_ROW =&gt; {
+            let n_columns = unsafe { sqlite3::sqlite3_column_count(stmt.stmt) } as i32;
+            let mut types: Vec&lt;EntityType&gt; = Vec::new();
+            for i in 0..n_columns {
+                types.push(match unsafe { sqlite3::sqlite3_column_type(stmt.stmt, i) } {
+                    sqlite3::SQLITE_INTEGER =&gt; EntityType::Integer,
+                    sqlite3::SQLITE_FLOAT =&gt; EntityType::Float,
+                    sqlite3::SQLITE_TEXT =&gt; EntityType::Text,
+                    sqlite3::SQLITE_BLOB =&gt; EntityType::Blob,
+                    sqlite3::SQLITE_NULL =&gt; EntityType::Null,
+                    _ =&gt; EntityType::Null,
+                })
+            }
+            Ok(Cursor::RowsCursor {
+                stmt: stmt,
+                num_columns: n_columns,
+                types: types,
+                previous_status: sqlite3::SQLITE_ROW,
+            })
+        }
+        x =&gt; {
+            println!(&quot;{}&quot;, x);
+            return Err(SQLite3Error::ExecuteError);
+        }
+    }
+
+}
+
+enum EntityType {
+    Integer,
+    Float,
+    Text,
+    Blob,
+    Null,
+}
+
+enum Entity {
+    Integer { int: i32 },
+    Float { float: f64 },
+    Text { text: String },
+    Blob { blob: String },
+    Null,
+    OK,
+    DONE,
+}
+
+type Row = Vec&lt;Entity&gt;;
+
+impl Iterator for Cursor {
+    type Item = Row;
+
+    fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt; {
+        match *self {
+            Cursor::OKCursor =&gt; Some(vec![Entity::OK]),
+            Cursor::DONECursor =&gt; Some(vec![Entity::DONE]),
+
+            Cursor::RowsCursor { stmt: ref stmt,
+                                 num_columns: num_columns,
+                                 types: ref types,
+                                 previous_status: ref mut ps } =&gt; {
+                match *ps {
+                    sqlite3::SQLITE_ROW =&gt; {
+                        let mut result = vec![];
+                        for i in 0..num_columns {
+                            let entity_value = match types[i as usize] {
+                                EntityType::Integer =&gt; {
+                                    let value =
+                                        unsafe { sqlite3::sqlite3_column_int(stmt.stmt, i) };
+                                    Entity::Integer { int: value }
+                                }
+                                EntityType::Float =&gt; {
+                                    let value =
+                                        unsafe { sqlite3::sqlite3_column_double(stmt.stmt, i) };
+                                    Entity::Float { float: value }
+                                }
+                                EntityType::Text =&gt; {
+                                    let value =
+                                unsafe {
+                                    CStr::from_ptr(sqlite3::sqlite3_column_text(stmt.stmt, i) as *const i8).to_string_lossy().into_owned()
+                                };
+                                    Entity::Text { text: value }
+                                }
+                                EntityType::Blob =&gt; {
+                                    let value = 
+                                unsafe { 
+                                    CStr::from_ptr(sqlite3::sqlite3_column_blob(stmt.stmt, i) as *const i8).to_string_lossy().into_owned() };
+                                    Entity::Blob { blob: value }
+                                }
+                                EntityType::Null =&gt; Entity::Null {},
+                            };
+                            result.push(entity_value);
+                        }
+                        unsafe {
+                            *ps = sqlite3::sqlite3_step(stmt.stmt);
+                        };
+                        Some(result)
+                    }
+                    _ =&gt; None,
+                }
+            }
+        }
+    }
+}
+
+fn main() {
+    println!(&quot;Main!&quot;);
+    let mut buff = String::new();
+    println!(&quot;Open a new database: &quot;);
+    io::stdin().read_line(&amp;mut buff);
+    println!(&quot;String read: {}&quot;, buff);
+    let mut conn = &amp;open_connection(buff).unwrap();
+
+    let mut query = String::new();
+    loop {
+        println!(&quot;Insert your query: &quot;);
+        io::stdin().read_line(&amp;mut query);
+
+        let stmt = create_statement(conn, query.clone()).unwrap();
+        match execute_statement(conn, stmt) {
+            Ok(_) =&gt; println!(&quot;Executed!&quot;),
+            Err(_) =&gt; println!(&quot;Error&quot;),
+        }
+    }
+}
+</code></pre>
+
+<h2 id="diesel">diesel</h2>
+
+<pre><code class="language-rust">use diesel;
+use diesel::prelude::*;
+
+// creates a connection to a SQLite database
+pub fn get_sqlite_connection(database_url: String) -&gt; SqliteConnection {
+    SqliteConnection::establish(&amp;database_url)
+        .expect(&amp;format!(&quot;Error connecting to {}&quot;, database_url))
+}
+</code></pre>
+
+<pre><code>#[macro_use]
+extern crate diesel;
+
+pub mod models;
+pub mod schema;
+
+use diesel::prelude::*;
+use diesel::sqlite::SqliteConnection;
+
+use self::models::{Post, NewPost};
+
+pub fn create_post&lt;'a&gt;(conn: &amp;SqliteConnection, title: &amp;'a str, body: &amp;'a str) -&gt; usize {
+    use schema::posts;
+
+    let new_post = NewPost {
+        title: title,
+        body: body,
+    };
+
+    diesel::insert_into(posts::table)
+        .values(&amp;new_post)
+        .execute(conn)
+        .expect(&quot;Cannot insert&quot;)
+}
+
+pub fn establish_connection() -&gt; SqliteConnection {
+    let database_url = &quot;tutu.db&quot;;
+    SqliteConnection::establish(&amp;database_url).expect(&quot;Can't connect DB&quot;)
+}  
+
+no_arg_sql_function!(last_insert_rowid, diesel::sql_types::Bigint);
+
+fn main() {
+    let connection = establish_connection();
+    create_post(&amp;connection, &quot;title&quot;, &quot;body&quot;);
+    let x: i64 = diesel::select(last_insert_rowid).first(&amp;connection).unwrap();
+}
+</code></pre>
+
+<pre><code class="language-rust">use crate::schema::users::dsl::*;
+use crate::modules::User;
+use diesel::prelude::*;
+use diesel::query_dsl::QueryDsl;
+use diesel::ExpressionMethods;
+use diesel::RunQueryDsl
+
+trait UserAccessor &lt;T: Connection&gt; {
+    fn get_db(&amp;self) -&gt; &amp;T;
+    fn filter_active(&amp;self, limit: i64) -&gt; QueryResult&lt;Vec&lt;User&gt;&gt; {
+        use self::schema::users::dsl::*;
+        use diesel::query_dsl::QueryDsl;
+        use diesel::ExpressionMethods;
+        use diesel::RunQueryDsl;
+
+        users.filter(active.eq(true))
+            .limit(limit)
+            .load::&lt;User&gt;(&amp;self.get_db())
+    }
+}
+
+struct UserAccessorPg {
+    conn: PgConnection
+}
+
+impl UserAccessor&lt;PgConnection&gt; for UserAccessorPg {
+
+    fn get_db(&amp;self) -&gt; &amp;PgConnection {
+        &amp;self.conn
+    }
+}
+
+struct UserAccessorSqlite {
+    conn: SqliteConnection
+}
+
+impl UserAccessor&lt;SqliteConnection&gt; for UserAccessorSqlite {
+    
+    fn get_db(&amp;self) -&gt; &amp;SqliteConnection {
+        &amp;self.conn
+    }
+}
+
+fn main() {
+
+    let conn = sqlite_connection();
+    let sqlite = UserAccessorSqlite{ conn };
+    let res = sqlite.filter_active(10);
+    println!(&quot;{:?}&quot;, res);
+}
+</code></pre>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

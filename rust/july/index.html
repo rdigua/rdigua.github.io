@@ -1,0 +1,3617 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="july">July</h1>
+
+<h2 id="rust日报-2019-07-31-https-rust-cc-article-id-26b93f49-9a1a-4843-a412-1c6a7eae69d2"><a href="https://rust.cc/article?id=26b93f49-9a1a-4843-a412-1c6a7eae69d2">【Rust日报】 2019-07-31</a></h2>
+
+<p><a href="https://rust.cc/blog_with_author?author_id=93091acb-066c-4feb-b7a4-364398b1d82e">ZhangHanDong</a>  发表于  2019-07-31 21:57</p>
+
+<p>Tags：rust</p>
+
+<h3 id="so问答-既然两个可变引用不能别名为啥rust编译器没有对其进行优化">「SO问答」既然两个可变引用不能别名为啥Rust编译器没有对其进行优化</h3>
+
+<p>#Rust #stackoverflow</p>
+
+<p>该问题的作者描述，比如C代码中：</p>
+
+<pre><code>void adds(int  *a, int *b) {
+    *a += *b;
+    *a += *b;
+}
+
+</code></pre>
+
+<p>两个指针a和b有可能互为别名（俩指针指向同一数据），所以clang在编译该代码的时候，会在寄存器中存储两次<code>(%rsi),%eax</code>来防止这种情况。当然也可以使用restrict关键字来对参数进行约束，显式地告诉编译器这俩指针不可能互为别名（但在C语言中，restrict关键字仅仅是告诉编译器可以优化，它不会帮助开发者进行检查，也就是说，很可能因为开发者没有遵循此契约而引发未定义行为）。从而生成的优化代码中只存储一次寄存器。</p>
+
+<p>但是作者发现在Rust中虽然有编译器检查，两个可变引用不存在互为别名的情况，但是编译器并没有因此而进行任何优化：</p>
+
+<pre><code>#![crate_type = &quot;staticlib&quot;]
+#[no_mangle]
+fn adds(a: &amp;mut i32, b: &amp;mut i32) {
+    *a += *b;
+    *a += *b;
+}
+
+</code></pre>
+
+<p>所以他比较担忧，是不是在Safe Rust之下也可能存在别名？</p>
+
+<p>该贴的回复给出了答案：</p>
+
+<p>Rust最初启用了LLVM的noalias属性，但这导致了非预期的编译结果（算是LLVM的一个Bug，等issues 54878修复以后就正常了）。现在也可以使用<code>-Zmutable-noalias=yes</code>参数进行编译就能得到预期结果。</p>
+
+<ul>
+<li><a href="https://stackoverflow.com/questions/57259126/why-does-the-rust-compiler-not-optimize-code-assuming-that-two-mutable-reference">Read More</a></li>
+<li><a href="https://github.com/rust-lang/rust/issues/54878">issues/54878</a></li>
+</ul>
+
+<h3 id="学术-使用类型化指针反转进行高效析构">「学术」使用类型化指针反转进行高效析构</h3>
+
+<p>#TypedPointerReversal #paper</p>
+
+<p>HAL INRIA貌似是法国国家信息及自动化研究院。该论文提出了ML风格编程语言的资源管理模型，旨在兼容OCmal理念和运行时模型，提议使用析构函数扩展OCmal，在系统编程所有权和借用模式之上来提升OCmal的安全性、效率。</p>
+
+<p>没错，借用了Rust/C++中的一些概念。感兴趣的可以看看，对资源管理应该会有深入的了解。</p>
+
+<p>该组织已经发布了多篇关于Rust研究的论文了。</p>
+
+<p><a href="https://hal.inria.fr/hal-02177326">Read More</a></p>
+
+<h3 id="python和rust实现神经网络">Python和Rust实现神经网络</h3>
+
+<p>#NeuralNetworks</p>
+
+<p>这篇文章是作者探索Rust是否适合数据科学的工作。他分别用python和rust实现了一个小型的神经网络，然后进行了性能测试，利用火焰图进行分析，最终得出一个结论：</p>
+
+<ul>
+<li>大部分时间都花在做线性代数上，不管Rust还是Python，所以使用Rust永远也不会有10倍的加速。</li>
+<li>Python进行优化以后，性能可以提升两倍，Rust原则上可以进行相同的优化，但目前ndarray还不支持2维数据以上的矩阵乘法。</li>
+<li>作者认为，Rust目前还没有做好胜任数据科学的工作。未来还需要更完善的生态系统。</li>
+</ul>
+
+<p><a href="https://ngoldbaum.github.io/posts/python-vs-rust-nn/">Read More</a></p>
+
+<h3 id="关于rust依赖安全的最新思考">关于Rust依赖安全的最新思考</h3>
+
+<p>#RestSec</p>
+
+<p>很高兴有人在帮我们思考这个问题：当一个crate依赖越来越多的crates时，我们有什么办法可以审计它们？</p>
+
+<p><a href="http://lucumr.pocoo.org/2019/7/29/dependency-scaling/">Read More</a></p>
+
+<h3 id="paperclip-openapi的代码生成工具">paperclip: OpenAPI的代码生成工具</h3>
+
+<p>#openapi #WIP</p>
+
+<p>0.3发布，支持OpenAPI V2接口。</p>
+
+<p><a href="https://github.com/wafflespeanut/paperclip">paperclip</a></p>
+
+<h3 id="rocket-lamb-方便在aws-lambda上面跑rocket的库">rocket-lamb: 方便在aws lambda上面跑rocket的库</h3>
+
+<p>#rocket</p>
+
+<p><a href="https://github.com/GREsau/rocket-lamb">rocket-lamb</a></p>
+
+<h3 id="async-injector-rust的异步反应式依赖注入库">async-injector: Rust的异步反应式依赖注入库</h3>
+
+<p>#async</p>
+
+<p>新库，WIP状态。该库是从作者的另外一个项目OxidizeBot(高性能Twitch机器人)中提取出来的。</p>
+
+<ul>
+<li><a href="https://www.reddit.com/r/rust/comments/cjw4kh/asyncinjector_a_reactive_dependency_injector_for/">Read More</a></li>
+<li><a href="https://github.com/udoprog/async-injector">async-injector</a></li>
+<li><a href="https://github.com/udoprog/OxidizeBot">OxidizeBot</a></li>
+</ul>
+
+<h3 id="讨论-rust如何实现代数效应">「讨论」Rust如何实现代数效应</h3>
+
+<p>#AlgebraicEffects</p>
+
+<p>看样子该贴作者是一个函数式粉丝。评论回复中有人用Rust实现了一个代数效应库effective-rust。</p>
+
+<blockquote>
+<p>代数效应目前是一个学术/实验概念，它允许你通过使用类似于throw catch的机制来改变称为“效果”的某些计算元素（如函数调用，打印语句等）。</p>
+</blockquote>
+
+<ul>
+<li><a href="https://www.reddit.com/r/rust/comments/cjcwmu/is_there_interest_in_algebraic_effects_in_rust/">Reddit 讨论</a></li>
+<li><a href="https://github.com/pandaman64/effective-rust/">effective-rust</a></li>
+<li><a href="https://overreacted.io/algebraic-effects-for-the-rest-of-us/">Algebraic Effects相关文章</a></li>
+<li><a href="https://stackoverflow.com/questions/49626714/what-does-algebraic-effects-mean-in-fp/54360880#54360880">what-does-algebraic-effects-mean-in-fp</a></li>
+</ul>
+
+<h3 id="debian-buster-将会预装rust编译器">Debian Buster 将会预装Rust编译器</h3>
+
+<p>#Debian</p>
+
+<p>2019年7月6日发布的Debian GNU/Linux 10 “Buster” 操作系统将预装Rust编译器。</p>
+
+<p><img src="https://s2.ax1x.com/2019/07/31/eNfHjU.md.jpg" alt="img" /></p>
+
+<hr />
+
+<p>From 日报小组 Chaos</p>
+
+<p>日报订阅地址：</p>
+
+<p>独立日报订阅地址：</p>
+
+<ul>
+<li><a href="https://t.me/rust_daily_news">Telgram Channel</a></li>
+<li><a href="https://www.yuque.com/chaosbot/rustnews">阿里云语雀订阅</a></li>
+<li><a href="https://steemit.com/@blackanger">Steemit</a></li>
+<li><a href="https://github.com/RustStudy/rust_daily_news">GitHub</a></li>
+</ul>
+
+<p>社区学习交流平台订阅：</p>
+
+<ul>
+<li><a href="https://rust.cc/">Rust.cc 论坛: 支持 rss</a></li>
+<li><a href="https://rustforce.net/">Rust Force: 支持 rss</a></li>
+<li><a href="https://rust.cc/article?id=ed7c9379-d681-47cb-9532-0db97d883f62">微信公众号：Rust 语言学习交流</a></li>
+</ul>
+
+<h1 id="rust日报-2019-07-30">【Rust日报】 2019-07-30</h1>
+
+<h3 id="https-www-yuque-com-chaosbot-rustnews-xn4fwe-816d0a18-知乎专栏-cpp工程师的rust迁移之路">[](<a href="https://www.yuque.com/chaosbot/rustnews/xn4fwe#816d0a18)知乎专栏【CPP工程师的Rust迁移之路】">https://www.yuque.com/chaosbot/rustnews/xn4fwe#816d0a18)知乎专栏【CPP工程师的Rust迁移之路】</a></h3>
+
+<p>#rust</p>
+
+<p>知乎网友<a href="https://www.zhihu.com/people/huang-jue-shen">@黄珏珅</a>开设了本专栏，主要针对对 Rust 感兴趣的 C++ 工程师，介绍了完成相同任务 C++ 和 Rust 中的异同，感兴趣可以专注专栏，目前已经有两篇文章：</p>
+
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/75385189">C++工程师的Rust迁移之路（1）- 起步</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/75734426">C++工程师的Rust迁移之路（2）- 类与结构体</a>
+
+<br /></li>
+</ul>
+
+<p><a href="https://zhuanlan.zhihu.com/c_1139487758685900800">Read More</a></p>
+
+<h3 id="https-www-yuque-com-chaosbot-rustnews-xn4fwe-1e3f6b54-rust-blockchain-群">[](<a href="https://www.yuque.com/chaosbot/rustnews/xn4fwe#1e3f6b54)Rust">https://www.yuque.com/chaosbot/rustnews/xn4fwe#1e3f6b54)Rust</a> &amp; Blockchain 群</h3>
+
+<p>#blockchain</p>
+
+<p>秘猿组织的 rust &amp; blockchain 的 telegram 群，下面是群链接</p>
+
+<p><a href="https://t.me/rustinblockchain">Read More</a></p>
+
+<h3 id="https-www-yuque-com-chaosbot-rustnews-xn4fwe-f070b9d9-rust-实现的游戏服务器">[](<a href="https://www.yuque.com/chaosbot/rustnews/xn4fwe#f070b9d9)Rust">https://www.yuque.com/chaosbot/rustnews/xn4fwe#f070b9d9)Rust</a> 实现的游戏服务器</h3>
+
+<p>#rust</p>
+
+<p><a href="https://www.reddit.com/user/ardawan/">@ardawan</a> 用 Rust 实现的游戏服务器，目前还没有开源，评论中期待开源的呼声很高。</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/chodkr/testing_my_first_game_server_written_in_rust_lang/">Read More</a></p>
+
+<h3 id="https-www-yuque-com-chaosbot-rustnews-xn4fwe-07d01269-使用-rust-实现-gameboy-模拟器">[](<a href="https://www.yuque.com/chaosbot/rustnews/xn4fwe#07d01269)使用">https://www.yuque.com/chaosbot/rustnews/xn4fwe#07d01269)使用</a> Rust 实现 Gameboy 模拟器</h3>
+
+<p>#rust</p>
+
+<p><a href="https://www.reddit.com/user/douglascorrea/">@douglascorrea</a> 要在 <a href="https://www.youtube.com/watch?v=8vuzp5hU53E&amp;list=PLye7LM1YVhDHR4TGMklN3tMt_J2jIrn1w">YouTube</a> 和 <a href="https://www.twitch.tv/douglascorrea_">Twitch</a> 直播他实现 Gameboy 模拟器的过程，他认为“公开曝光有助于避免拖延症”，所以他选择了直播。</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/cjespt/twitch_youtube_series_building_a_gameboy_emulator/">Read More</a></p>
+
+<h3 id="https-www-yuque-com-chaosbot-rustnews-xn4fwe-29953785-c-20-和-rust-实现推箱子游戏的比较">[](<a href="https://www.yuque.com/chaosbot/rustnews/xn4fwe#29953785)C++20">https://www.yuque.com/chaosbot/rustnews/xn4fwe#29953785)C++20</a> 和 Rust 实现推箱子游戏的比较</h3>
+
+<p>#rust</p>
+
+<p><a href="https://www.reddit.com/user/SuperV1234/">@SuperV1234</a> 使用 C++20 和 Rust 分别实现了同一个项目，用来比较这两个语言的优势以及相异之处，下面是他的初衷：</p>
+
+<ul>
+<li>让 C++ 的开发者体验一下 Rust</li>
+<li>让 Rust 的开发者体验一下 C++20</li>
+<li>让自己对 Rust 更深入</li>
+<li>确定两种语言的优劣点，并希望有助于改善这两种语言。
+
+<br /></li>
+</ul>
+
+<p>更多讨论和代码仓库请点击链接。</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/cjjnec/feedback_request_for_sokoban_implementation/">Read More</a></p>
+
+<hr />
+
+<p>From 日报小组 格朗</p>
+
+<p>日报订阅地址：</p>
+
+<p>独立日报订阅地址：</p>
+
+<ul>
+<li><a href="https://t.me/rust_daily_news">Telgram Channel</a></li>
+<li><a href="https://www.yuque.com/chaosbot/rustnews">阿里云语雀订阅</a></li>
+<li><a href="https://steemit.com/@blackanger">Steemit</a></li>
+<li><a href="https://github.com/RustStudy/rust_daily_news">GitHub</a>
+
+<br /></li>
+</ul>
+
+<p>社区学习交流平台订阅：</p>
+
+<ul>
+<li><a href="https://rust.cc/">Rust.cc 论坛: 支持 rss</a></li>
+<li><a href="https://rustforce.net/">Rust Force: 支持 rss</a></li>
+<li><a href="https://rust.cc/article?id=ed7c9379-d681-47cb-9532-0db97d883f62">微信公众号：Rust 语言学习交流</a></li>
+</ul>
+
+<h1 id="rust日报-2019-07-29">【Rust日报】 2019-07-29</h1>
+
+<h3 id="https-www-yuque-com-chaosbot-rustnews-xr1l3u-a065e2f1-关于创建-更小的-rust的思考">[](<a href="https://www.yuque.com/chaosbot/rustnews/xr1l3u#a065e2f1)关于创建「更小的」Rust的思考">https://www.yuque.com/chaosbot/rustnews/xr1l3u#a065e2f1)关于创建「更小的」Rust的思考</a></h3>
+
+<p>#rust</p>
+
+<p>官方核心团队成员无船大佬新博文，针对社区中有些人喜欢Rust但还没有真正热爱Rust的人提出的看法「能否创造一个更小化更简单的更易于使用的Rust呢」所做的回应？</p>
+
+<p>发出此类问题的人，最想改变Rust的一个想法就是给Rust增加垃圾回收，但其实这是错误的。因为他们根本不明白Rust语言的本质。Rust的核心是：代数数据类型、RAII、「别名 xor 可变」，换句话说，就是所有权和借用。如果试图摆脱这个核心，就是错过真正的Rust。</p>
+
+<p>如果Rust不以「系统」语言为目标，如何才能设计它才能变得更简单呢？无船大佬给出了以下思考：</p>
+
+<ul>
+<li>放弃变量是在栈上还是堆上分配的任何保证。Rust为开发者做了这种保证，这是Rust复杂性的独特来源。</li>
+<li>使trait对象成为多态的主要形式，不再单态化，泛型只用于创建容器类型，而不去创建函数。</li>
+<li>将Rust的承诺放在并发性上，并使所有可用的原语线程安全。 没有Rc，没有Cell和RefCell。 内部可变性仅允许通过互斥锁类型，并且所有内容都可以跨线程Move。 Send和Sync仅作为对所有权相关类型的一些内置检查存在。</li>
+<li>闭包/数组/Vecs/切片也可以通过不保证任何被分配的位置来简化。</li>
+<li>会使用绿色线程，并且拥有像Go这样的简单CSP/Actor模型。</li>
+<li>还有很多其他地方可以简化，比如元编程、错误处理等。</li>
+<li>会小心地设计编译器，以便它可以嵌入到不同的运行时，有两个主要的编译目标：基于LLVM的和WASM的。<br />
+无船大佬说，（假如要实现的话）他会用Rust实现这种语言及其运行时。<br />
+<a href="https://boats.gitlab.io/blog/post/notes-on-a-smaller-rust/">Read More</a>
+
+<br /></li>
+</ul>
+
+<h3 id="https-www-yuque-com-chaosbot-rustnews-xr1l3u-bd70a3b7-视频-facebook-libra听证会关于为什么选择rust语言的两分钟精华问答">[](<a href="https://www.yuque.com/chaosbot/rustnews/xr1l3u#bd70a3b7)「视频」facebook">https://www.yuque.com/chaosbot/rustnews/xr1l3u#bd70a3b7)「视频」facebook</a> Libra听证会关于为什么选择Rust语言的两分钟精华问答</h3>
+
+<p>#video #libra</p>
+
+<p><a href="https://www.c-span.org/video/?c4808083/rust-language-chosen">Read More</a></p>
+
+<h3 id="https-www-yuque-com-chaosbot-rustnews-xr1l3u-5e6ee71b-到目前为止-rust编译器的速度已经全面提高了30-40">[](<a href="https://www.yuque.com/chaosbot/rustnews/xr1l3u#5e6ee71b)到目前为止，Rust编译器的速度已经全面提高了30-40%">https://www.yuque.com/chaosbot/rustnews/xr1l3u#5e6ee71b)到目前为止，Rust编译器的速度已经全面提高了30-40%</a></h3>
+
+<p>#Rustc</p>
+
+<p>从2019-01-01到2019-07-17，Rust编译器的速度已经全面提高了30-40%，一些项目的速度提高了45%以上</p>
+
+<p><a href="https://perf.rust-lang.org/?start=2019-01-01&amp;end=2019-07-17&amp;absolute=false&amp;stat=wall-time">Read More</a></p>
+
+<h3 id="https-www-yuque-com-chaosbot-rustnews-xr1l3u-def35272-howto-mem-maybeuninit-代替-mem-uninitialized">[](<a href="https://www.yuque.com/chaosbot/rustnews/xr1l3u#def35272)HOWTO:">https://www.yuque.com/chaosbot/rustnews/xr1l3u#def35272)HOWTO:</a> <code>mem::MaybeUninit</code>代替 <code>mem::uninitialized</code></h3>
+
+<p>#std</p>
+
+<p>Rust 1.36稳定了<code>mem::MaybeUninit</code>，本帖教你如何使用它来替代<code>mem::uninitialized</code>。使用<code>uninitialized()</code>函数容易出现UB。一般是在FFi的时候需要使用<code>uninitialized()</code>，因为在C/C++中允许创建未初始化的变量，而Rust不允许。</p>
+
+<p>可以参考该贴作者给自己维护的库升级MaybeUninit的PR来查看如何使用。</p>
+
+<ul>
+<li><a href="https://www.reddit.com/r/rust/comments/cefgec/howto_replace_memuninitialized_with_memmaybeuninit/">Read More</a></li>
+<li><a href="https://github.com/sodiumoxide/sodiumoxide/pull/350">PR</a>
+
+<br /></li>
+</ul>
+
+<h3 id="https-www-yuque-com-chaosbot-rustnews-xr1l3u-5008d4c7-视频-使用-risc-v-和-rust-来构建安全的系统">[](<a href="https://www.yuque.com/chaosbot/rustnews/xr1l3u#5008d4c7)「视频」使用">https://www.yuque.com/chaosbot/rustnews/xr1l3u#5008d4c7)「视频」使用</a> RISC-V 和 Rust 来构建安全的系统</h3>
+
+<p>#RiscV</p>
+
+<ul>
+<li><a href="https://www.youtube.com/watch?v=i0TmZ2vuzbs">Read More</a>
+
+<br /></li>
+</ul>
+
+<h3 id="https-www-yuque-com-chaosbot-rustnews-xr1l3u-2906bb93-rustarok-适合开发多人快节奏moba风格游戏的框架">[](<a href="https://www.yuque.com/chaosbot/rustnews/xr1l3u#2906bb93)rustarok：">https://www.yuque.com/chaosbot/rustnews/xr1l3u#2906bb93)rustarok：</a> 适合开发多人快节奏Moba风格游戏的框架</h3>
+
+<p>#game</p>
+
+<p><a href="https://github.com/bbodi/rustarok">rustarok</a></p>
+
+<h3 id="https-www-yuque-com-chaosbot-rustnews-xr1l3u-ff2b098e-非官方-用于收集rust孤儿规则设计问题的仓库">[](<a href="https://www.yuque.com/chaosbot/rustnews/xr1l3u#ff2b098e)「非官方」用于收集Rust孤儿规则设计问题的仓库">https://www.yuque.com/chaosbot/rustnews/xr1l3u#ff2b098e)「非官方」用于收集Rust孤儿规则设计问题的仓库</a></h3>
+
+<p>#orphan</p>
+
+<p><a href="https://github.com/Ixrec/rust-orphan-rules">rust-orphan-rules</a></p>
+
+<h3 id="https-www-yuque-com-chaosbot-rustnews-xr1l3u-c269d852-pushrod-0-4-1-发布">[](<a href="https://www.yuque.com/chaosbot/rustnews/xr1l3u#c269d852)Pushrod">https://www.yuque.com/chaosbot/rustnews/xr1l3u#c269d852)Pushrod</a> 0.4.1 发布</h3>
+
+<p>#GUI</p>
+
+<p>Pushrod 是一個利用piston_window做GUI库。</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/cisito/announcing_pushrod_041/">Read More</a></p>
+
+<h3 id="https-www-yuque-com-chaosbot-rustnews-xr1l3u-5b970487-讨论-现在rust语言招聘要求三年rust经验是否合理">[](<a href="https://www.yuque.com/chaosbot/rustnews/xr1l3u#5b970487)「讨论」现在Rust语言招聘要求三年Rust经验是否合理？">https://www.yuque.com/chaosbot/rustnews/xr1l3u#5b970487)「讨论」现在Rust语言招聘要求三年Rust经验是否合理？</a></h3>
+
+<p>#reddit</p>
+
+<p>这是来自于Reddit的一个讨论贴，作者十分喜欢Rust，但是看到很多招聘广告要求三年Rust经验，所以他想问，是否有适合Rust新手的工作。然后评论里有一个回复我觉得挺有道理，我贴出来：</p>
+
+<p>There are no language X job advertisements.
+I think there is a misunderstanding here; you see an advertisement asking for C++ experience and conclude that not knowing C++ you are unfit. There&rsquo;s a slim possibility that you are right, and a near overwhelming possibility that you misunderstood the ad.
+Now, before going further, there are possibly some places where &ldquo;X years of experience in Y&rdquo; is a sacrosanct requirement; the company may be looking for an expert in Y for some reasons. And there are cases where HR may even believe it is sacrosanct, if they have no idea what they are doing.
+In the vast, overwhelming, majority of cases though, &ldquo;X years of experience in Y&rdquo; is really a rough guideline:
+X aims at giving a hint of the seniority required; 0-1 is aimed at beginners, 2-4 at juniors, 5-10 at regulars and 10+ at seniors. The varying level of seniority is also a hint at the kind of work (senior may imply mentorship, technological/architecture decisions, &hellip;) and compensation.
+Y aims at giving a hint at the domain, for example C++ could mean: systems programming (kernel, driver, embedded), high-performance computing (numerical, scientific, machine-learning), real-time (embedded, audio/video), low-latency, &hellip; A technical interviewer would understand that anybody with experience in C or Rust in the same domains would be able to adapt relatively quickly.
+The only quasi-certainty in &ldquo;X years of experience in Y&rdquo; is that the job involves working with Y; if you don&rsquo;t like it, or do not want to work with it, better pass your way.
+Learning
+X developers are pointless.
+I&rsquo;ve never seen a job which required me to only ever program with a single language. There&rsquo;s usually a main language, certainly, but:
+My first job was mainly C++, with some SQL, HTML, CSS, JavaScript, and Python/Bash.
+My second job was mainly C++, with a lot of SQL, and some Python/Bash.
+My current job is mainly C++, with some x64 assembly (debugging), Java, and some Python/Bash. The occasional glance at Systems Verilog too.
+Furthermore, the more languages you see, the more your realize just how much in common those languages have. The first time you see a concept, you&rsquo;ll struggle with it, but the fourth or fifth time, it&rsquo;s just like getting back on a bicycle after a couple years, it just comes back instantly.
+My advice, therefore, is NOT to make the mistake of focusing on learning a single language in depth and instead aim for breadth:
+Computer Science is awesome: data-structures and algorithms are not something you code daily, but understanding them and applying complexity analysis is great.
+Languages have a lot of different programming paradigms, in no particular order: C/C++/Rust, Java/C#, JavaScript, Haskell, Python/Ruby, Lisp, Forth, Eiffel, &hellip; Each of these groups bring something novel to the mix.
+Real world != assignments: assignments tend to be small, well-defined, and immediately forgotten. The real-world has large code-bases which grew organically for decades and have high-level functional requirements that are only defined on a coarse-grained level (and even then, there&rsquo;s often leeway). If you want early experience with the real world, either find a part-time job at a programming shop or an existing open-source project &ndash; insisting on existing, as it means already large and laden with technical debt.
+You could read books, like Clean Code, etc&hellip; but honestly, you&rsquo;ll only appreciate their advice after experiencing the mess of the real world first-hand ;)
+Broader Learning
+Also, just in case you are under the misconception that a programming job is about coding; it&rsquo;s a lot more than that.
+Programming also involves:
+Communication: English. If your first language is not English, that&rsquo;s your first priority in University &ndash; take extra courses if needed, start reading/writing in English daily, start watching movies in English. If your first language is English (lucky you), but you&rsquo;re not too good at it, then it&rsquo;s also your first priority. Spelling mistakes are an embarrassment in any professional e-mail, fumbling for words in a conversation is always awkward, and having to repeat because you mumble makes you wonder how many times you were misunderstood.
+Communication: Clarity &amp; Concision. Remember when I mentioned coarse-grained specifications? Guess who it falls onto to clarify them? YOU! It means listening/speaking and reading/writing, of course. It also means communicating with technical peers and non-technical clients. It means rephrasing to ensure you understood. It means summarizing discussions to leave a trace you can come back to.
+Planning. At the very least, planning your work, knowing how to divide a large task in small chunks, understanding business priorities, &hellip;
+In Parting
+Learning a programming language in depth should be the least of your worries.
+Instead you should learn programming in the broad sense: puzzle-solving, navigating large code-bases, communicating clearly and efficiently, and getting comfortable with a variety of programming paradigms and syntax so as to be flexible.
+Oh, and if you&rsquo;re looking to get your feet wet by contributing to open-source, may I suggest the Rust community? It&rsquo;s welcoming, and there are a lot of exciting projects on a broad variety of topics ;)</p>
+
+<h2 id="https-www-yuque-com-chaosbot-rustnews-xr1l3u-5d4c1755-read-more-https-www-reddit-com-r-rust-comments-ciudhi-evolution-of-rust-in-the-marketplace">[](<a href="https://www.yuque.com/chaosbot/rustnews/xr1l3u#5d4c1755)[Read">https://www.yuque.com/chaosbot/rustnews/xr1l3u#5d4c1755)[Read</a> More](<a href="https://www.reddit.com/r/rust/comments/ciudhi/evolution_of_rust_in_the_marketplace/">https://www.reddit.com/r/rust/comments/ciudhi/evolution_of_rust_in_the_marketplace/</a>)</h2>
+
+<p>From 日报小组 Chaos</p>
+
+<p>日报订阅地址：</p>
+
+<p>独立日报订阅地址：</p>
+
+<ul>
+<li><a href="https://t.me/rust_daily_news">Telgram Channel</a></li>
+<li><a href="https://www.yuque.com/chaosbot/rustnews">阿里云语雀订阅</a></li>
+<li><a href="https://steemit.com/@blackanger">Steemit</a></li>
+<li><a href="https://github.com/RustStudy/rust_daily_news">GitHub</a><br />
+社区学习交流平台订阅：</li>
+<li><a href="https://rust.cc/">Rust.cc 论坛: 支持 rss</a></li>
+<li><a href="https://rustforce.net/">Rust Force: 支持 rss</a></li>
+<li><a href="https://rust.cc/article?id=ed7c9379-d681-47cb-9532-0db97d883f62">微信公众号：Rust 语言学习交流</a></li>
+</ul>
+
+<h1 id="rust日报-2019-07-28">【Rust日报】 2019-07-28</h1>
+
+<h3 id="https-www-yuque-com-chaosbot-rustnews-udenu7-ef37dcd4-关于-web-前端开发框架-seed-的一些资料">[](<a href="https://www.yuque.com/chaosbot/rustnews/udenu7#ef37dcd4)关于">https://www.yuque.com/chaosbot/rustnews/udenu7#ef37dcd4)关于</a> Web 前端开发框架 Seed 的一些资料</h3>
+
+<p>Seed(<a href="https://seed-rs.org/">https://seed-rs.org/</a>) 也是一个前端 Web 开发框架。这是用 Seed 写的一个前端网站（<a href="https://seed-rs-realworld.netlify.com/">https://seed-rs-realworld.netlify.com/</a>），这里是一些相关的资源（<a href="https://github.com/MartinKavik/awesome-seed-rs">https://github.com/MartinKavik/awesome-seed-rs</a>）。</p>
+
+<p><a href="https://github.com/David-OConnor/seed">Repo</a></p>
+
+<h3 id="https-www-yuque-com-chaosbot-rustnews-udenu7-19321e96-已经用上-wasm-技术的一些网站">[](<a href="https://www.yuque.com/chaosbot/rustnews/udenu7#19321e96)已经用上">https://www.yuque.com/chaosbot/rustnews/udenu7#19321e96)已经用上</a> wasm 技术的一些网站</h3>
+
+<p>这里列举一些，不完整，会不断增加</p>
+
+<ul>
+<li><a href="https://apps.karthikkaranth.me/spherro/">https://apps.karthikkaranth.me/spherro/</a></li>
+<li><a href="https://lukaslueg.github.io/macro_railroad_wasm_demo/">https://lukaslueg.github.io/macro_railroad_wasm_demo/</a></li>
+<li><a href="https://sandspiel.club/">https://sandspiel.club/</a> 落沙游戏
+
+<br /></li>
+</ul>
+
+<h3 id="https-www-yuque-com-chaosbot-rustnews-udenu7-c93814f0-rust-unsafe-把它们看作公理和定理">[](<a href="https://www.yuque.com/chaosbot/rustnews/udenu7#c93814f0)Rust">https://www.yuque.com/chaosbot/rustnews/udenu7#c93814f0)Rust</a> Unsafe：把它们看作公理和定理</h3>
+
+<p>这篇文章<a href="https://iandouglasscott.com/2019/07/26/rust-safe-and-unsafe-as-theorems-and-axioms/">https://iandouglasscott.com/2019/07/26/rust-safe-and-unsafe-as-theorems-and-axioms/</a> 作者从另一个视角来探讨了 Rust 中的 unsafe 的概念，他建议，可以将 Rust Unsafe 类比看作数学上的公理和定理。基于这个观点，做出了详细的剖析。详情请看原文。</p>
+
+<h3 id="https-www-yuque-com-chaosbot-rustnews-udenu7-9c9550ab-scalc-保证不会溢出的计算库">[](<a href="https://www.yuque.com/chaosbot/rustnews/udenu7#9c9550ab)SCalc">https://www.yuque.com/chaosbot/rustnews/udenu7#9c9550ab)SCalc</a> - 保证不会溢出的计算库</h3>
+
+<p>很简单的思路，如果发现溢出了，结果就置为 1。一定程度上，可保证计算安全，不会由于偶然的原因，导致系统崩溃。</p>
+
+<p>比如：</p>
+
+<p>use scalc::SCell;
+fn main() {
+   let a = SCell::<i32>::new(12) * SCell::<i32>::new(3);
+   assert_eq!(*a.get_data(), 36);
+   // <code>error_tag</code> will be <code>true</code> in the presence of overflow behavior(s)
+   let a = SCell::<i32>::new(std::i32::MAX) + SCell::<i32>::new(1);
+   assert_eq!(a.is_overflowed(), true);
+   assert_eq!(*a.get_data(), 1);
+}</p>
+
+<p><a href="https://github.com/XCH-CEB/xch-project/tree/master/scalc">https://github.com/XCH-CEB/xch-project/tree/master/scalc</a></p>
+
+<h3 id="https-www-yuque-com-chaosbot-rustnews-udenu7-2e97a56a-cargo-cache-帮助你管理你本地的-registry-缓存">[](<a href="https://www.yuque.com/chaosbot/rustnews/udenu7#2e97a56a)cargo-cache">https://www.yuque.com/chaosbot/rustnews/udenu7#2e97a56a)cargo-cache</a> - 帮助你管理你本地的 registry 缓存</h3>
+
+<p>比如会给出这样一个报告。</p>
+
+<p>Total:                              3.81 GB
+  107 installed binaries:         916.89 MB
+  Registry:                       163.43 MB
+    Registry index:               156.47 MB
+    5 crate archives:               6.96 MB
+  Registry: dl.cloudsmith.io        4.18 KB
+    Registry index:                 3.21 KB
+    1 crate archives:                971  B
+  Registry: github.com              1.34 GB
+    Registry index:                98.51 MB
+    5522 crate archives:          812.62 MB
+    743 crate source checkouts:   426.25 MB
+  Registry: home                     478  B
+    Registry index:                  478  B
+  Registry: ship.rs                  478  B
+    Registry index:                  478  B
+  Git db:                           1.40 GB
+    138 bare git repos:             1.37 GB
+    6 git repo checkouts:          23.53 MB</p>
+
+<p>还有相关其它配套功能。使用下面命令安装：</p>
+
+<p>cargo install cargo-cache</p>
+
+<h3 id="https-www-yuque-com-chaosbot-rustnews-udenu7-e9ee267f-bayes-o-matic-帮助你对一些问题做贝叶斯推演的一个webapp程序-用wasm实现">[](<a href="https://www.yuque.com/chaosbot/rustnews/udenu7#e9ee267f)Bayes-O-Matic">https://www.yuque.com/chaosbot/rustnews/udenu7#e9ee267f)Bayes-O-Matic</a> - 帮助你对一些问题做贝叶斯推演的一个Webapp程序（用wasm实现）</h3>
+
+<p>演示地址在这里：<a href="https://vberger.github.io/Bayes-O-Matic/">https://vberger.github.io/Bayes-O-Matic/</a></p>
+
+<p>讲解文章在这里：<a href="https://vberger.github.io/Bayes-O-Matic/help.html">https://vberger.github.io/Bayes-O-Matic/help.html</a></p>
+
+<h3 id="https-www-yuque-com-chaosbot-rustnews-udenu7-ed2b7842-kmean-rs-实现-k-均值聚类的小而快的库">[](<a href="https://www.yuque.com/chaosbot/rustnews/udenu7#ed2b7842)kmean-rs">https://www.yuque.com/chaosbot/rustnews/udenu7#ed2b7842)kmean-rs</a> - 实现 K 均值聚类的小而快的库</h3>
+
+<p>这是一个例子：</p>
+
+<p>use kmeans::*;
+fn main() {
+    let (sample_cnt, sample_dims, k, max_iter) = (20000, 200, 4, 100);
+    // Generate some random data
+    let mut samples = vec![0.0f64;sample_cnt * sample_dims];
+    samples.iter_mut().for_each(|v| *v = rand::random());
+    // Calculate kmeans, using kmean++ as initialization-method
+    let kmean = KMeans::new(samples, sample_cnt, sample_dims);
+    let result = kmean.kmeans(k, max_iter, KMeans::init_kmeanplusplus, &amp;mut rand::thread_rng());
+    println!(&ldquo;Centroids: {:?}&ldquo;, result.centroids);
+    println!(&ldquo;Cluster-Assignments: {:?}&ldquo;, result.assignments);
+    println!(&ldquo;Error: {}&ldquo;, result.distsum);
+}</p>
+
+<p><a href="https://github.com/seijikun/kmean-rs">https://github.com/seijikun/kmean-rs</a></p>
+
+<h3 id="https-www-yuque-com-chaosbot-rustnews-udenu7-b10ef8de-animate-code-with-awoo">[](<a href="https://www.yuque.com/chaosbot/rustnews/udenu7#b10ef8de)Animate">https://www.yuque.com/chaosbot/rustnews/udenu7#b10ef8de)Animate</a> code with awoo!</h3>
+
+<h2 id="https-www-yuque-com-chaosbot-rustnews-udenu7-13ad8d3b-https-phaazon-net-blog-introducing-awoo-https-phaazon-net-blog-introducing-awoo-这篇文章-从风格上-我觉得挺诡异-没看懂-各位看观有兴趣来点评一下">[](<a href="https://www.yuque.com/chaosbot/rustnews/udenu7#13ad8d3b)[https://phaazon.net/blog/introducing-awoo](https://phaazon.net/blog/introducing-awoo">https://www.yuque.com/chaosbot/rustnews/udenu7#13ad8d3b)[https://phaazon.net/blog/introducing-awoo](https://phaazon.net/blog/introducing-awoo</a>) 这篇文章，从风格上，我觉得挺诡异，没看懂，各位看观有兴趣来点评一下？</h2>
+
+<p>From 日报小组 Mike</p>
+
+<p>日报订阅地址：</p>
+
+<p>独立日报订阅地址：</p>
+
+<ul>
+<li><a href="https://t.me/rust_daily_news">Telgram Channel</a></li>
+<li><a href="https://www.yuque.com/chaosbot/rustnews">阿里云语雀订阅</a></li>
+<li><a href="https://steemit.com/@blackanger">Steemit</a></li>
+<li><a href="https://github.com/RustStudy/rust_daily_news">GitHub</a><br />
+社区学习交流平台订阅：</li>
+<li><a href="https://rust.cc/">Rust.cc 论坛: 支持 rss</a></li>
+<li><a href="https://rustforce.net/">Rust Force: 支持 rss</a></li>
+<li><a href="https://rust.cc/article?id=ed7c9379-d681-47cb-9532-0db97d883f62">微信公众号：Rust 语言学习交流</a></li>
+</ul>
+
+<h1 id="rust日报-2019-07-27">【Rust日报】 2019-07-27</h1>
+
+<h3 id="https-www-yuque-com-chaosbot-rustnews-hhwb6u-44ba69ea-关于推动使用-rust-进行游戏开发的讨论">[](<a href="https://www.yuque.com/chaosbot/rustnews/hhwb6u#44ba69ea)关于推动使用">https://www.yuque.com/chaosbot/rustnews/hhwb6u#44ba69ea)关于推动使用</a> Rust 进行游戏开发的讨论</h3>
+
+<p>#rust</p>
+
+<p>如果你想参加关于 Gamedev 的演讲、研讨会或者加入讨论组，可以在这条推特下面和<a href="https://twitter.com/angelmixu">@Miux</a>讨论或者提出建议。</p>
+
+<p><a href="https://twitter.com/angelmixu/status/1154816448096886789">Read More</a></p>
+
+<h3 id="https-www-yuque-com-chaosbot-rustnews-hhwb6u-0ba60809-rust-in-action-新增项目">[](<a href="https://www.yuque.com/chaosbot/rustnews/hhwb6u#0ba60809)Rust">https://www.yuque.com/chaosbot/rustnews/hhwb6u#0ba60809)Rust</a> in Action 新增项目</h3>
+
+<p>#rust</p>
+
+<p>Rust in Action 新增了几个 rust 项目:</p>
+
+<ul>
+<li>a CPU emulator</li>
+<li>an NTP client</li>
+<li>a basic grep</li>
+<li>your own floating point format</li>
+<li>a memory scanner</li>
+<li>UNIX signal handling</li>
+<li>setjmp/longjmp control flow</li>
+<li>binary files inspector<br />
+<a href="http://www.rustinaction.com/">Read More</a>
+
+<br /></li>
+</ul>
+
+<h3 id="https-www-yuque-com-chaosbot-rustnews-hhwb6u-24482f88-sled-将要发布新版本">[](<a href="https://www.yuque.com/chaosbot/rustnews/hhwb6u#24482f88)sled">https://www.yuque.com/chaosbot/rustnews/hhwb6u#24482f88)sled</a> 将要发布新版本</h3>
+
+<p>#rust</p>
+
+<p>sled 将要发布新版本，下面是新版本中的一些特性:</p>
+
+<ul>
+<li>atomic writebatches</li>
+<li>higher write throughput &amp; lower tail latency</li>
+<li>much faster initial startup time for short-lived programs</li>
+<li>CRDT-based multithreaded recovery support</li>
+<li>fewer dependencies</li>
+<li>API closer to #rustlang std<br />
+<a href="https://github.com/graphql-rust/juniper">Read More</a>
+
+<br /></li>
+</ul>
+
+<h3 id="https-www-yuque-com-chaosbot-rustnews-hhwb6u-d9374036-一个使用-rust-实现的-webassembly-项目">[](<a href="https://www.yuque.com/chaosbot/rustnews/hhwb6u#d9374036)一个使用">https://www.yuque.com/chaosbot/rustnews/hhwb6u#d9374036)一个使用</a> Rust 实现的 WebAssembly 项目</h3>
+
+<p>#wasm</p>
+
+<p>这是一个用 Rust 编译到 WebAssembly 的前端项目，它实现的效果像万花镜一样绚丽🦚</p>
+
+<p><a href="https://ran.do/pythia">Online Demo</a></p>
+
+<p><a href="https://twitter.com/josephreisinger/status/1153679861921329158">Read More</a></p>
+
+<h3 id="https-www-yuque-com-chaosbot-rustnews-hhwb6u-c1f97e37-一个关于crate播客的想法">[](<a href="https://www.yuque.com/chaosbot/rustnews/hhwb6u#c1f97e37)一个关于crate播客的想法">https://www.yuque.com/chaosbot/rustnews/hhwb6u#c1f97e37)一个关于crate播客的想法</a></h3>
+
+<p>#crate</p>
+
+<p><a href="https://twitter.com/jntrnr">@jntrnr</a> 有一个关于 crate 播客的想法，每集找一个有趣的 crate，谈谈能用它干什么，点击下面的链接加入讨论。</p>
+
+<p><a href="https://twitter.com/jntrnr/status/1154869171231973376">Read More</a></p>
+
+<h3 id="https-www-yuque-com-chaosbot-rustnews-hhwb6u-b560bedf-用-rust-和-opengl-实现的屏幕拍摄应用">[](<a href="https://www.yuque.com/chaosbot/rustnews/hhwb6u#b560bedf)用">https://www.yuque.com/chaosbot/rustnews/hhwb6u#b560bedf)用</a> Rust 和 OpenGL 实现的屏幕拍摄应用</h3>
+
+<h2 id="https-www-yuque-com-chaosbot-rustnews-hhwb6u-8defec3a-rust">[](<a href="https://www.yuque.com/chaosbot/rustnews/hhwb6u#8defec3a)#rust">https://www.yuque.com/chaosbot/rustnews/hhwb6u#8defec3a)#rust</a></h2>
+
+<h2 id="https-www-yuque-com-chaosbot-rustnews-hhwb6u-lkpuu-nasso4991-https-twitter-com-nasso4991-把他老版本的屏幕拍摄应用使用-rust-重写了-第一个版本是用-c-和-sdl2-实现的-新版本使用了-rust-opengl-和-glium-crate">[](<a href="https://www.yuque.com/chaosbot/rustnews/hhwb6u#LKpuU)[@nasso4991](https://twitter.com/nasso4991)把他老版本的屏幕拍摄应用使用">https://www.yuque.com/chaosbot/rustnews/hhwb6u#LKpuU)[@nasso4991](https://twitter.com/nasso4991)把他老版本的屏幕拍摄应用使用</a> Rust 重写了，第一个版本是用 C 和 SDL2 实现的，新版本使用了 Rust、OpenGL 和 glium crate。</h2>
+
+<h2 id="https-www-yuque-com-chaosbot-rustnews-hhwb6u-cybmp-repo-https-github-com-nasso-screensnap">[](<a href="https://www.yuque.com/chaosbot/rustnews/hhwb6u#CyBMP)[Repo](https://github.com/nasso/screensnap">https://www.yuque.com/chaosbot/rustnews/hhwb6u#CyBMP)[Repo](https://github.com/nasso/screensnap</a>)</h2>
+
+<h2 id="https-www-yuque-com-chaosbot-rustnews-hhwb6u-pnuvm-read-more-https-twitter-com-nasso4991-status-1154122993846689792">[](<a href="https://www.yuque.com/chaosbot/rustnews/hhwb6u#pnUvm)[Read">https://www.yuque.com/chaosbot/rustnews/hhwb6u#pnUvm)[Read</a> More](<a href="https://twitter.com/nasso4991/status/1154122993846689792">https://twitter.com/nasso4991/status/1154122993846689792</a>)</h2>
+
+<p>From 日报小组 格朗</p>
+
+<p>日报订阅地址：</p>
+
+<p>独立日报订阅地址：</p>
+
+<ul>
+<li><a href="https://t.me/rust_daily_news">Telgram Channel</a></li>
+<li><a href="https://www.yuque.com/chaosbot/rustnews">阿里云语雀订阅</a></li>
+<li><a href="https://steemit.com/@blackanger">Steemit</a></li>
+<li><a href="https://github.com/RustStudy/rust_daily_news">GitHub</a><br />
+社区学习交流平台订阅：</li>
+<li><a href="https://rust.cc/">Rust.cc 论坛: 支持 rss</a></li>
+<li><a href="https://rustforce.net/">Rust Force: 支持 rss</a></li>
+<li><a href="https://rust.cc/article?id=ed7c9379-d681-47cb-9532-0db97d883f62">微信公众号：Rust 语言学习交流</a></li>
+</ul>
+
+<h2 id="rust日报-2019-07-26-https-rust-cc-article-id-37e99463-fc10-4044-8abe-fdc48fd89de1"><a href="https://rust.cc/article?id=37e99463-fc10-4044-8abe-fdc48fd89de1">【Rust日报】 2019-07-26</a></h2>
+
+<p><a href="https://rust.cc/blog_with_author?author_id=55ad9d89-6929-4a73-baa5-cf0a99a9abad">damody</a>  发表于  2019-07-26 21:27</p>
+
+<p>Tags：rust</p>
+
+<h3 id="組一台編譯rust最快的個人電腦">組一台編譯rust最快的個人電腦！</h3>
+
+<p>這位網友想組一台 Ryzen 9 3900X + Samsung 970 EVO Plus SSD</p>
+
+<p>有興趣的可以給他建議</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/chqu4c/building_a_computer_for_fastest_possible_rust/">read more</a></p>
+
+<h3 id="blog-post-unsafe-as-a-human-assisted-type-system">Blog Post: Unsafe as a Human-Assisted Type System</h3>
+
+<p><a href="https://matklad.github.io/2019/07/25/unsafe-as-a-type-system.html">read more</a></p>
+
+<h3 id="使用動態規劃解決找錢問題">使用動態規劃解決找錢問題</h3>
+
+<p>給rust初學者參考</p>
+
+<p><a href="https://www.youtube.com/watch?v=TecJkB-8kBI">read more</a></p>
+
+<h3 id="sauron-0-10-0-web-framework-rust-nightly">sauron 0.10.0 web framework (rust nightly)</h3>
+
+<p>更新了效能改善與語法改動。</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/ci0ghn/ann_sauron_0100_web_framework_rust_nightly_with/">read more</a></p>
+
+<h3 id="rust-碎形程式">Rust 碎形程式</h3>
+
+<p>裡面有個短片與源碼，可以看到不斷放大的碎形之美</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/ci19o2/i_made_a_zoom_video_of_the_mandelbrot_set_with/">read more</a></p>
+
+<hr />
+
+<p>From 日报小组 @Damody</p>
+
+<p>日报订阅地址：</p>
+
+<p>独立日报订阅地址：</p>
+
+<ul>
+<li><a href="https://t.me/rust_daily_news">Telgram Channel</a></li>
+<li><a href="https://www.yuque.com/chaosbot/rustnews">阿里云语雀订阅</a></li>
+<li><a href="https://steemit.com/@blackanger">Steemit</a></li>
+<li><a href="https://github.com/RustStudy/rust_daily_news">GitHub</a></li>
+</ul>
+
+<p>社区学习交流平台订阅：</p>
+
+<ul>
+<li><a href="https://rust.cc/">Rust.cc论坛: 支持rss</a></li>
+<li><a href="https://rustforce.net/">Rust Force: 支持rss</a></li>
+<li><a href="https://rust.cc/article?id=ed7c9379-d681-47cb-9532-0db97d883f62">微信公众号：Rust语言学习交流</a></li>
+</ul>
+
+<h2 id="rust日报-2019-07-25-用-rust-cursive-和-pubnub-开发一个聊天客户端-https-rust-cc-article-id-f9df2e54-d24f-44e7-894a-4ab2e9da1cb3"><a href="https://rust.cc/article?id=f9df2e54-d24f-44e7-894a-4ab2e9da1cb3">【Rust日报】 2019-07-25：用 Rust，Cursive 和 PubNub 开发一个聊天客户端</a></h2>
+
+<p><a href="https://rust.cc/blog_with_author?author_id=5c43696d-2337-4a70-8b71-324a701c626f">Mike</a>  发表于  2019-07-25 19:44</p>
+
+<p>Tags：rust</p>
+
+<h3 id="编译器优化及其可能带来的风险">编译器优化及其可能带来的风险</h3>
+
+<p>这是一篇很优秀的文章，讲了 C 编译器的实现中的一些优化情况，以及带来的风险，对于正在进化的 Rust 编译器，可能能提供一些参考。</p>
+
+<p><a href="https://lwn.net/Articles/793253/">Read More</a></p>
+
+<h3 id="rust-编译器一致在致力于加快编译速度的">Rust 编译器一致在致力于加快编译速度的</h3>
+
+<p>都在报怨 Rust 编译器太慢了。其实官方组还是很努力了。不信看看下面的报告：</p>
+
+<p><img src="https://blog.mozilla.org/nnethercote/files/2019/07/rust2019.png" alt="img" /></p>
+
+<p><a href="https://blog.mozilla.org/nnethercote/2019/07/25/the-rust-compiler-is-still-getting-faster/">Read More</a></p>
+
+<h3 id="系列-棒球编程与rust-2">「系列」棒球编程与Rust 2</h3>
+
+<p>昨天出的第一篇文章，今天出的第二篇，接着昨天的写。初学者可以仔细跟着做一下，很好的入门教程。</p>
+
+<p><a href="https://tht.fangraphs.com/baseball-coding-with-rust-part-2/">Read More</a></p>
+
+<h3 id="zoet-一个帮助实现常用-trait-的过程宏库">zoet - 一个帮助实现常用 Trait 的过程宏库</h3>
+
+<p>像下面这个样子：</p>
+
+<pre><code>#[zoet]
+impl Wossname {
+    // The impls are often the same, so share them!
+    #[zoet(Asref, Borrow, Deref)]
+    fn deref(&amp;self) -&gt; &amp;Inner { /* ref-to-ref conversion code */ }
+
+    // No having to remember the associated types on IntoIterator!
+    #[zoet(IntoIterator)]
+    pub fn iter(&amp;self) -&gt; Iter { /* ... */ }
+    #[zoet(IntoIterator)]
+    pub fn iter_mut(&amp;mut self) -&gt; IterMut { /* ... */ }
+    #[zoet(IntoIterator)]
+    fn into_iter(mut self) -&gt; IntoIter { /* ... */ }
+    
+    // ...
+}
+
+</code></pre>
+
+<p>不过，俗话说，写宏一时爽，读宏火葬场。请看官自行斟酌。</p>
+
+<p><a href="https://github.com/mooli/zoet-rs">Repo</a></p>
+
+<h3 id="网页上的-sph-流体模拟器">网页上的 SPH 流体模拟器</h3>
+
+<p>SPH(smoothed-particle hydrodynamics) 光滑颗粒流体动力学 ：D。</p>
+
+<p>作者用 Rust 写了一个模拟这个的库，在网页上运行。效果真棒。</p>
+
+<p><a href="https://apps.karthikkaranth.me/spherro/">Demo online</a><br />
+<a href="https://github.com/medakk/spherro">Repo</a></p>
+
+<h3 id="哪些-unsafe-代码可以被替换为安全代码">哪些 unsafe 代码可以被替换为安全代码</h3>
+
+<p>Rust 安全代码工作组（非官方）搞的一个仓库，供人们讨论可以替换为safe代码的unsafe代码</p>
+
+<p><a href="https://github.com/rust-secure-code/safety-dance">Repo</a></p>
+
+<h3 id="用-rust-cursive-和-pubnub-开发一个聊天客户端">用 Rust，Cursive 和 PubNub 开发一个聊天客户端</h3>
+
+<p>直接看效果。</p>
+
+<p><img src="https://raw.githubusercontent.com/SambaDialloB/RustyChat/master/rustychat.gif" alt="img" /></p>
+
+<p><img src="https://raw.githubusercontent.com/SambaDialloB/RustyChat/master/rustychat.gif" alt="img" /></p>
+
+<p>喜欢。</p>
+
+<p><a href="https://github.com/SambaDialloB/RustyChat">Repo</a></p>
+
+<h3 id="一个-rust-webassembly-及与-js-进行配合的讲座">一个 Rust、WebAssembly 及与 Js 进行配合的讲座</h3>
+
+<p><a href="https://www.infoq.com/presentations/rust-webassembly-javascript/">这里</a></p>
+
+<p>Cloudflare 的工程师讲的，不过是英文的，感兴趣的可以听听。</p>
+
+<h3 id="atomig-一个辅助使用-atomic-类型的库">atomig - 一个辅助使用 Atomic 类型的库</h3>
+
+<p>目的是让使用标准库中的 Atomic 类型更方便。比如下面这样子：</p>
+
+<pre><code>// Requires the 'derive' feature:
+//     atomig = { version = &quot;_&quot;, features = [&quot;derive&quot;] }
+use atomig::{Atom, Atomic, Ordering};
+
+#[derive(Atom)]
+#[repr(u8)]
+enum Animal { Dog, Cat, Fox }
+
+let animal = Atomic::new(Animal::Cat);
+animal.store(Animal::Fox, Ordering::SeqCst);
+
+#[derive(Atom)]
+struct Port(u16);
+
+let port = Atomic::new(Port(80));
+port.store(Port(8080), Ordering::SeqCst);
+
+</code></pre>
+
+<p><a href="https://github.com/LukasKalbertodt/atomig">Repo</a></p>
+
+<h3 id="用-rust-制作游戏服务器">用 Rust 制作游戏服务器</h3>
+
+<p><a href="https://twitter.com/i/status/1154312277845106689">在这里</a></p>
+
+<h3 id="用-rust-实现-mandelbrot-集">用 Rust 实现 Mandelbrot 集</h3>
+
+<p>炫酷的视频效果<a href="https://youtu.be/b4mZau2NhiY">在这里</a></p>
+
+<h3 id="http状态检查器">Http状态检查器</h3>
+
+<p>检查 Http 的返回状态，其实主要是配合 Prometheus 使用的。</p>
+
+<p><a href="https://github.com/rjmasikome/pinger-rs">Repo</a></p>
+
+<h3 id="attribution-辅助写过程宏的过程宏">attribution - 辅助写过程宏的过程宏</h3>
+
+<p>听起来有点绕口，就是帮助你写过程宏的一个库。主要是提供了方便的解析属性的功能。</p>
+
+<p><a href="https://github.com/chuck-flowers/attribution">Repo</a></p>
+
+<h3 id="一个-conway-生命游戏练习">一个 Conway 生命游戏练习</h3>
+
+<p><img src="https://raw.githubusercontent.com/alexislozano/conway/master/conway.gif" alt="img" /></p>
+
+<p><a href="https://github.com/alexislozano/conway">Repo</a></p>
+
+<hr />
+
+<p>From 日报小组 Mike</p>
+
+<p>日报订阅地址：</p>
+
+<p>独立日报订阅地址：</p>
+
+<ul>
+<li><a href="https://t.me/rust_daily_news">Telgram Channel</a></li>
+<li><a href="https://www.yuque.com/chaosbot/rustnews">阿里云语雀订阅</a></li>
+<li><a href="https://steemit.com/@blackanger">Steemit</a></li>
+<li><a href="https://github.com/RustStudy/rust_daily_news">GitHub</a></li>
+</ul>
+
+<p>社区学习交流平台订阅：</p>
+
+<ul>
+<li><a href="https://rust.cc/">Rust.cc 论坛: 支持 rss</a></li>
+<li><a href="https://rustforce.net/">Rust Force: 支持 rss</a></li>
+<li><a href="https://rust.cc/article?id=ed7c9379-d681-47cb-9532-0db97d883f62">微信公众号：Rust 语言学习交流</a></li>
+</ul>
+
+<h1 id="rust日报-2019-07-24">【Rust日报】 2019-07-24</h1>
+
+<h3 id="deb61541-in-rust-we-trust-活动回顾视频已上传b站">[](#deb61541)In Rust We Trust 活动回顾视频已上传B站</h3>
+
+<p>#meetup</p>
+
+<p><a href="https://space.bilibili.com/293274438/channel/detail?cid=81095">Read More</a></p>
+
+<h3 id="05a0c9c9-async-trait-为trait提供async-fn支持">[](#05a0c9c9)async-trait: 为trait提供async fn支持</h3>
+
+<p>#async</p>
+
+<p>async/await将在Rust 1.38中稳定，但是还不会支持trait中的异步方法，所以，dtolnay做了这个库，提供了一个属性宏<code>#[async_trait]</code>来满足这个功能。</p>
+
+<p>#![feature(async_await)]
+use async_trait::async_trait;
+#[async_trait]
+trait Advertisement {
+    async fn run(&amp;self);
+}</p>
+
+<p><a href="https://github.com/dtolnay/async-trait">async-trait</a></p>
+
+<h3 id="488c0912-不同语言中的泛型和元编程模型">[](#488c0912)不同语言中的泛型和元编程模型</h3>
+
+<p>#Metaprogramming #Generics</p>
+
+<p>该文作者比较了Go、Rust、Swift和D等语言中的泛型，以及阐述了这些语言中如何实现泛型。</p>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/114846/1563979347383-07b7cae8-1f45-48f0-be31-921886031888.png" alt="" /></p>
+
+<p><a href="http://thume.ca/2019/07/14/a-tour-of-metaprogramming-models-for-generics/">Read More</a></p>
+
+<h3 id="26709618-位向量与可变长度编码">[](#26709618)位向量与可变长度编码</h3>
+
+<p>#BitVectors</p>
+
+<p>作者在写压缩算法，这篇文章是作者学习使用位向量进行可变长度编码压缩算法学习过程的记录。</p>
+
+<p><a href="https://christianpoveda.github.io/blog/bit-vectors/">Read More</a></p>
+
+<h3 id="7ab92008-siderophile-暴露你crate中的不安全性">[](#7ab92008)Siderophile: 暴露你crate中的不安全性</h3>
+
+<p>#unsafe</p>
+
+<p>(这名字起的好：Sidereophile，噬铁菌，对金属有亲和力)</p>
+
+<p>Siderophile会发现你代码中的unsafe代码，并且会给这些代码进行安全性排序，辅助你进行模糊测试。</p>
+
+<ul>
+<li><a href="https://blog.trailofbits.com/2019/07/01/siderophile-expose-your-crates-unsafety/">Read More</a></li>
+<li><a href="https://github.com/trailofbits/siderophile">siderophile</a>
+
+<br /></li>
+</ul>
+
+<h3 id="55dab002-系列-棒球编程与rust">[](#55dab002)「系列」棒球编程与Rust</h3>
+
+<p>#Rust</p>
+
+<p>到底Rust是否适合小白？本文算是一个答案。</p>
+
+<p>本文作者不是一名程序员，他从去年开始想要创建一个自己的个人棒球数据基础设施，所以想自学一门编程语言，后来选择了Rust。这之前他也了解过R/ Python，来看看他写的两篇文章，看看他如何理解Rust，以及他如何通过类比棒球比赛（代码示例）来理解Rust的所有权。</p>
+
+<p>（我看他这两篇文章写的一点儿都不像是个零基础刚入门的小白）</p>
+
+<p><a href="https://tht.fangraphs.com/baseball-coding-with-rust-intro/">Read More</a></p>
+
+<h3 id="a3362fb6-mozilla在firefox中为所有平台提供了跨语言lto">[](#a3362fb6)Mozilla在Firefox中为所有平台提供了跨语言LTO</h3>
+
+<p>#LTO</p>
+
+<p>为了使Rust能够与用其他语言编写的代码进行互操作，调用必须通过C-ABI。 所以它是内联过程优化的边界。跨语言LTO使此边界对LLVM透明，有效地允许将C/C++代码内联到Rust代码中，反之亦然。</p>
+
+<ul>
+<li><a href="https://www.reddit.com/r/rust/comments/ch7xll/mozilla_just_landed_crosslanguage_lto_in_firefox/">Read More</a></li>
+<li><a href="https://github.com/rust-lang/rust/issues/49879">这篇issues比较详细解释了跨语言LTO</a>
+
+<br /></li>
+</ul>
+
+<h3 id="af176abf-用rust写前端系列文章-如何模块化你的rust前端">[](#af176abf)「用Rust写前端系列文章」如何模块化你的Rust前端</h3>
+
+<p>#yew</p>
+
+<p>该文教你用Yew的函数和组件来模块化代码。</p>
+
+<p><a href="https://www.steadylearner.com/blog/read/How-to-modulize-your-Rust-Frontend">Read More</a></p>
+
+<h3 id="7cb4e4ea-北京区块链创业公司招人">[](#7cb4e4ea)北京区块链创业公司招人</h3>
+
+<p>#Job</p>
+
+<p>Key responsibilities:</p>
+
+<ul>
+<li>Work with product to translate the requirements into high level design.</li>
+<li>Coordinate the engineering to assign/prioritize tasks dynamically.</li>
+<li>Build high quality code by developing both unit and integration testing</li>
+<li>Participate in code reviews to ensure new code conforms to highest standards</li>
+<li>Work with team to troubleshoot code level problems quickly and efficiently<br />
+Requirements:</li>
+<li>Bachelors Degree in Computer Science or related field</li>
+<li>5 years+ software programing experience</li>
+<li>Experience with blockchain technologies, like ethereum, smart contracts, and p2p networking.</li>
+<li>Rust experience in production environment.</li>
+<li>Experience with substrate is a plus<br />
+地址在北京， 薪水40-60万， 联系 zhengpeng.hou [at] gmail</li>
+</ul>
+
+<hr />
+
+<p>From 日报小组 Chaos</p>
+
+<p>日报订阅地址：</p>
+
+<p>独立日报订阅地址：</p>
+
+<ul>
+<li><a href="https://t.me/rust_daily_news">Telgram Channel</a></li>
+<li><a href="https://www.yuque.com/chaosbot/rustnews">阿里云语雀订阅</a></li>
+<li><a href="https://steemit.com/@blackanger">Steemit</a></li>
+<li><a href="https://github.com/RustStudy/rust_daily_news">GitHub</a><br />
+社区学习交流平台订阅：</li>
+<li><a href="https://rust.cc">Rust.cc 论坛: 支持 rss</a></li>
+<li><a href="https://rustforce.net/">Rust Force: 支持 rss</a></li>
+<li><a href="https://rust.cc/article?id=ed7c9379-d681-47cb-9532-0db97d883f62">微信公众号：Rust 语言学习交流</a></li>
+</ul>
+
+<h2 id="rust日报-2019-07-23-https-rust-cc-article-id-c63f1964-9c83-413e-a534-01edf676b7d9"><a href="https://rust.cc/article?id=c63f1964-9c83-413e-a534-01edf676b7d9">【Rust日报】 2019-07-23</a></h2>
+
+<p><a href="https://rust.cc/blog_with_author?author_id=93091acb-066c-4feb-b7a4-364398b1d82e">ZhangHanDong</a>  发表于  2019-07-23 19:30</p>
+
+<p>Tags：rust</p>
+
+<h3 id="建议-学substrate前先系统学习一遍rust语言">建议： 学Substrate前先系统学习一遍Rust语言</h3>
+
+<p>#substrate</p>
+
+<p>最近发现学习Substrate（Polkadot出的区块链框架）的人越来越多。今天有人问我一个问题，刚开始看的我一头雾水（对方截图代码如图1），又像Rust又不像Rust。问了他相关代码上下文之后，发现完整代码是一个宏（图2）。 我有点担忧。想起了10年前Rails流行的时候，很多人把Rails的DSL认为是一种语言，而完全不懂得Ruby了。</p>
+
+<p>对此，我只想说，磨刀不误砍柴工。建议Substrate的爱好者先把Rust系统性地学一遍，再看substrate将会事半功倍。</p>
+
+<p><img src="https://user-images.githubusercontent.com/27893/61705568-92acf500-ad78-11e9-99db-c0bcf7578d4b.png" alt="img1" /><img src="https://user-images.githubusercontent.com/27893/61705576-96d91280-ad78-11e9-9e60-d19fc39953dd.png" alt="img2" /></p>
+
+<h3 id="rust-in-blockchain-meetup视频集">Rust in Blockchain meetup视频集</h3>
+
+<p>#blockchain</p>
+
+<p>由NervOS在San Francisco组织。</p>
+
+<p><a href="https://www.youtube.com/playlist?list=PLRke1-EE4VWGLXPbcpxn8fPmXlvRuZGIw&amp;app=desktop">Youtube</a></p>
+
+<h3 id="微软安全响应中心系列博文-为什么rust适合安全系统编程">「微软安全响应中心系列博文」为什么Rust适合安全系统编程</h3>
+
+<p>#MSRC #Microsoft</p>
+
+<p>本文是MSRC的第二篇文章，介绍了为什么微软认为Rust目前是C和C++的最佳替代品。</p>
+
+<p><a href="https://msrc-blog.microsoft.com/2019/07/22/why-rust-for-safe-systems-programming/">Read More</a></p>
+
+<h3 id="巴基斯坦物联网和人工智能课程使用rust">巴基斯坦物联网和人工智能课程使用Rust</h3>
+
+<p>#AI #IoT</p>
+
+<p>巴基斯坦一个为期15个月的物联网和人工智能项目，专为绝对初学者设计，让巴基斯坦为物联网和人工智能的新时代做好准备。该课程大部分内容是使用Rust。</p>
+
+<p>课程内容涵盖：Rust/ 嵌入式Rust和实时系统/ 微软IoT edge和IoT云/ WebAssembly/ Node.js / Docker/ KubeEdge/ 应用于IoT的区块链等。</p>
+
+<p><a href="https://www.piaic.org/iot">Read More</a></p>
+
+<h3 id="tezos-rust项目获得了tezos基金会的资助">Tezos Rust项目获得了Tezos基金会的资助</h3>
+
+<p>#Tezos</p>
+
+<p>该资金将用于使用Rust开发新的Tezos节点。</p>
+
+<blockquote>
+<p>Tezos是一个和以太坊竞争的区块链项目。</p>
+</blockquote>
+
+<p><a href="https://medium.com/simplestaking/tezos-rust-project-receives-funding-from-tezos-foundation-a10e689373ec">Read More</a></p>
+
+<h3 id="系列-rsoc-为redox实现ptrace-part-5">「系列」RSoC: 为Redox实现ptrace： Part 5</h3>
+
+<p>#Redox</p>
+
+<p><a href="https://www.redox-os.org/news/rsoc-ptrace-5/">Read More</a></p>
+
+<h3 id="radix64-全功能的base64库">radix64: 全功能的base64库</h3>
+
+<p>#base64</p>
+
+<p>它的目标是全功能、易用且采用AVX2加速，所以如果编码/解码大块数据(如何机器支持AVX2)，它会非常快。</p>
+
+<p><a href="https://github.com/ggriffiniii/radix64">radix64</a></p>
+
+<h3 id="quickjs-rs-quickjs-javascript引擎的rust包装">quickjs-rs: Quickjs Javascript引擎的Rust包装</h3>
+
+<p>#quickjs</p>
+
+<p><a href="https://github.com/theduke/quickjs-rs">quickjs-rs</a></p>
+
+<hr />
+
+<p>From 日报小组 Chaos</p>
+
+<p>日报订阅地址：</p>
+
+<p>独立日报订阅地址：</p>
+
+<ul>
+<li><a href="https://t.me/rust_daily_news">Telgram Channel</a></li>
+<li><a href="https://www.yuque.com/chaosbot/rustnews">阿里云语雀订阅</a></li>
+<li><a href="https://steemit.com/@blackanger">Steemit</a></li>
+<li><a href="https://github.com/RustStudy/rust_daily_news">GitHub</a></li>
+</ul>
+
+<p>社区学习交流平台订阅：</p>
+
+<ul>
+<li><a href="https://rust.cc/">Rust.cc 论坛: 支持 rss</a></li>
+<li><a href="https://rustforce.net/">Rust Force: 支持 rss</a></li>
+<li><a href="https://rust.cc/article?id=ed7c9379-d681-47cb-9532-0db97d883f62">微信公众号：Rust 语言学习交流</a></li>
+</ul>
+
+<h2 id="rust日报-2019-07-22-https-rust-cc-article-id-bea2e77d-3214-4fa0-8604-e9e7d6f304b4"><a href="https://rust.cc/article?id=bea2e77d-3214-4fa0-8604-e9e7d6f304b4">【Rust日报】 2019-07-22</a></h2>
+
+<p><a href="https://rust.cc/blog_with_author?author_id=93091acb-066c-4feb-b7a4-364398b1d82e">ZhangHanDong</a>  发表于  2019-07-22 23:27</p>
+
+<p>Tags： rust</p>
+
+<h3 id="cargo-bloat-0-8-发布">cargo-bloat 0.8 发布</h3>
+
+<p>#cargo</p>
+
+<p>cargo-bloat 是一个可以帮助你缩减crate大小的库。新的版本有意思的是，cargo-bloat用cargo-bloat缩减了自己，结果令人满意：大小缩减了5倍，性能提升了10倍。</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/cg3p5m/cargobloat_08_debloated_5x_smaller_10x_faster/">Read More</a></p>
+
+<h3 id="chttp-0-5-发布">chttp 0.5 发布</h3>
+
+<p>#async</p>
+
+<p>chttp是一个http客户端，最近全面升级为async/await，并且改进了API。适合学习async/await</p>
+
+<p><a href="https://github.com/sagebind/chttp/releases/tag/0.5.0">Read More</a></p>
+
+<h3 id="bastion-容错运行时">bastion: 容错运行时</h3>
+
+<p>#supervisor</p>
+
+<p>Rust实现的一个类似于Erlang里的监督树，使用它来启动自动监督的任务。</p>
+
+<p><a href="https://github.com/vertexclique/bastion">bastion</a></p>
+
+<h3 id="cargo-release-0-12-发布">Cargo-release 0.12 发布</h3>
+
+<p>#cargo</p>
+
+<p>新版本提供了Workspace的支持。cargo-release是一个类似于Go语言社区的一个分发工具GoReleaser。</p>
+
+<p><a href="https://github.com/sunng87/cargo-release">Repo</a></p>
+
+<h3 id="heim-用于获取系统信息的跨平台异步库">heim: 用于获取系统信息的跨平台异步库</h3>
+
+<p>#async</p>
+
+<blockquote>
+<p>heim是在Rust crates生态系统中用于获取系统信息(例如，CPU、内存、磁盘或进程统计信息)的最佳工具。它的目标是最终至少具有与psutil、gopsutil或oshi相同的功能。</p>
+</blockquote>
+
+<ul>
+<li><a href="https://github.com/heim-rs/heim/">heim</a></li>
+<li><a href="https://svartalf.info/posts/2019-07-17-announcing-heim-project/">Read More</a></li>
+</ul>
+
+<h3 id="tch-rs-pytorch的rust绑定">tch-rs: PyTorch的Rust绑定</h3>
+
+<p>#ML #PyTorch</p>
+
+<p>同时也有篇文章介绍了如何基于tch-rs和Rust来使用PyTorch。</p>
+
+<ul>
+<li><a href="https://github.com/LaurentMazare/tch-rs">tch-rs</a></li>
+<li><a href="http://vegapit.com/article/how-to-use-torch-in-rust-with-tch-rs">Read More</a></li>
+</ul>
+
+<h3 id="abscissa-面向安全的rust应用框架">Abscissa： 面向安全的Rust应用框架</h3>
+
+<p>#security</p>
+
+<p>用于构建Rust应用程序（CLI工具、网络、Web服务）的微框架，非常注重安全性。可能一些区块链应用在用它。</p>
+
+<ul>
+<li><a href="https://iqlusion.blog/introducing-abscissa-rust-application-framework">Read More</a></li>
+<li><a href="https://github.com/iqlusioninc/abscissa/tree/develop/">abscissa</a></li>
+</ul>
+
+<h3 id="unsafe的魔力">Unsafe的魔力</h3>
+
+<p>#unsafe</p>
+
+<p>最近关于Actix中unsafe的讨论沸沸扬扬，该文作者特地写了一篇针对Unsafe的文章，来引导大家正确认识Unsafe。 最终作者提到几点：</p>
+
+<ul>
+<li>Unsafe并不容易。我们应该承认并尊重Unsafe的复杂性。</li>
+<li>请记住，Unsafe的范围远远超过了unsafe块的界限。</li>
+<li>当你必须使用Unsafe时，请不要放松警惕。你在用FFI的时候无法避免地会使用Unsafe，没有人会因为你在那里使用它而责备你。但这并不能免除你调整外部库的语义用来适应Rust代码的责任。</li>
+<li>如果想用Unsafe来优化代码，那么务必要做到这一点：在使用Unsafe优化之前，先测试代码性能。</li>
+<li>使用注释来记录你对Unsafe代码的不安全假设。</li>
+<li>保守地使用Unsafe，不要随心所欲，这样只会增加自己和别人的负担。</li>
+<li>当看到别人写Unsafe代码的时候，该如何做？ 不要放过UB出现的可能性，但你完全可以拥有一次愉快的交流。</li>
+</ul>
+
+<p><a href="https://inejge.github.io/blog/2019/07/18/The-Temptation-of-Unsafe.html">Read More</a></p>
+
+<h3 id="grue-rs-rpg-角色名字生成器">grue-rs: RPG 角色名字生成器</h3>
+
+<p>#game</p>
+
+<ul>
+<li><a href="https://www.wihlidal.com/blog/general/2019-07-14-name-generation/">Read More</a></li>
+<li><a href="https://github.com/gwihlidal/grue-rs">grue-rs</a></li>
+</ul>
+
+<h3 id="构造函数的危险">构造函数的危险</h3>
+
+<p>#Constructors</p>
+
+<p>这篇文章里作者讨论了构造函数的危险性，以此可以明白Rust为什么放弃构造函数。</p>
+
+<p><a href="https://matklad.github.io/2019/07/16/perils-of-constructors.html">Read More</a></p>
+
+<h3 id="gotham-从零开始实现一个web应用且部署到heroku">Gotham ： 从零开始实现一个Web应用且部署到Heroku</h3>
+
+<p>本文介绍了如何使用Tera模板系统、Webpack、最小的VueJS和CoffeeScript、Gotham创建一个小应用，并部署到Heroku。</p>
+
+<p><a href="https://blog.codeship.com/gotham-from-start-to-heroku/">Read More</a></p>
+
+<hr />
+
+<p>From 日报小组 Chaos</p>
+
+<p>日报订阅地址：</p>
+
+<p>独立日报订阅地址：</p>
+
+<ul>
+<li><a href="https://t.me/rust_daily_news">Telgram Channel</a></li>
+<li><a href="https://www.yuque.com/chaosbot/rustnews">阿里云语雀订阅</a></li>
+<li><a href="https://steemit.com/@blackanger">Steemit</a></li>
+<li><a href="https://github.com/RustStudy/rust_daily_news">GitHub</a></li>
+</ul>
+
+<p>社区学习交流平台订阅：</p>
+
+<ul>
+<li><a href="https://rust.cc/">Rust.cc 论坛: 支持 rss</a></li>
+<li><a href="https://rustforce.net/">Rust Force: 支持 rss</a></li>
+<li><a href="https://rust.cc/article?id=ed7c9379-d681-47cb-9532-0db97d883f62">微信公众号：Rust 语言学习交流</a></li>
+</ul>
+
+<h1 id="rust日报-2019-07-21">【Rust日报】 2019-07-21</h1>
+
+<h3 id="f547b340-treelike-一个用于方便地实现树结构的辅助包">[](#f547b340)treelike - 一个用于方便地实现树结构的辅助包</h3>
+
+<p>它提供了一个 <code>Treelike</code> trait，实现其中的两个方法 <code>content()</code> 和 <code>children()</code> 即可。</p>
+
+<p>作者是在在多个项目中重复写树实现得出的灵感。赞一个！</p>
+
+<p><a href="https://github.com/djugei/treelike">Repo</a></p>
+
+<h3 id="225fac4b-neuralink-在组建一个队伍-寻找有-rust-经验的工程师">[](#225fac4b)Neuralink 在组建一个队伍，寻找有 Rust 经验的工程师</h3>
+
+<blockquote>
+<p>Neuralink is developing ultra-high bandwidth brain-machine interfaces to</p>
+
+<p>connect humans and computers. We are building a team of</p>
+
+<p>multidisciplinary experts passionate about making a world-changing</p>
+
+<p>impact.</p>
+</blockquote>
+
+<p><a href="https://jobs.lever.co/neuralink/efb72bf6-5a55-434e-a0fd-9197f8485b55">Read More</a></p>
+
+<h3 id="7ca0b267-siderophile-暴露你的包中的不安全代码">[](#7ca0b267)siderophile - 暴露你的包中的不安全代码</h3>
+
+<p>可以看作一个代码审查辅助工具。不能完全保证找出所有不安全代码，但可以成为一个有效的生产力工具。会根据不安全代码的使用进行评分，给出一个报告：</p>
+
+<p>Badness Function
+     012 molasses::crypto::hash::HashFunction::hash_serializable
+     005 molasses::crypto::hash::HashContext::feed_serializable
+     003 molasses::utils::derive_node_values
+     003 molasses::application::encrypt_application_message
+     003 molasses::application::decrypt_application_message
+     003 molasses::group_ctx::GroupContext::new_from_parts
+     003 molasses::group_ctx::GroupContext::from_welcome 
+    003 molasses::group_ctx::GroupContext::update_transcript_hash
+     003 molasses::group_ctx::GroupContext::update_tree_hash 
+    003 molasses::group_ctx::GroupContext::update_epoch_secrets
+     003 molasses::group_ctx::GroupContext::apply_update
+     &hellip;</p>
+
+<p><a href="https://blog.trailofbits.com/2019/07/01/siderophile-expose-your-crates-unsafety/">Read More</a></p>
+
+<p><a href="https://github.com/trailofbits/siderophile">Repo</a></p>
+
+<h3 id="1e24495a-slice-group-by-对-slice-进行分组的库">[](#1e24495a)slice-group-by - 对 slice 进行分组的库</h3>
+
+<p>非常 Nice。第一眼就爱上了。</p>
+
+<p>use slice_group_by::GroupBy;</p>
+
+<p>let slice = &amp;[1, 1, 1, 3, 3, 2, 2, 2];</p>
+
+<p>let mut iter = slice.linear_group_by(|a, b| a == b);</p>
+
+<p>assert_eq!(iter.next(), Some(&amp;[1, 1, 1][..]));
+assert_eq!(iter.next(), Some(&amp;[3, 3][..]));
+assert_eq!(iter.next(), Some(&amp;[2, 2, 2][..]));
+assert_eq!(iter.next(), None);</p>
+
+<p>use slice_group_by::StrGroupBy;</p>
+
+<p>let string = &ldquo;aaaabbbbb饰饰cccc&rdquo;;</p>
+
+<p>let mut iter = string.linear_group_by(|a, b| a == b);</p>
+
+<p>assert_eq!(iter.next(), Some(&ldquo;aaaa&rdquo;));
+assert_eq!(iter.next(), Some(&ldquo;bbbbb&rdquo;));
+assert_eq!(iter.next(), Some(&ldquo;饰饰&rdquo;));
+assert_eq!(iter.next(), Some(&ldquo;cccc&rdquo;));
+assert_eq!(iter.next(), None);</p>
+
+<p><a href="https://github.com/Kerollmops/slice-group-by#linear-searched-immutable-groups">Repo</a></p>
+
+<h3 id="f5f3a56e-又一篇-理解生命周期">[](#f5f3a56e)又一篇《理解生命周期》</h3>
+
+<p>初学者可以多看看。</p>
+
+<p><a href="https://rniczh.github.io/blog/lifetimes-intro/">Read More</a></p>
+
+<h3 id="e02f75b0-tgconnector-一个电报连接器">[](#e02f75b0)tgconnector - 一个电报连接器</h3>
+
+<p>可以用来与电报机器人进行交互。</p>
+
+<p><a href="https://github.com/Sreyas-Sreelal/tgconnector">Repo</a></p>
+
+<h3 id="0ba8e04c-redmonk-语言排行榜-rust-比上季度上升两名">[](#0ba8e04c)Redmonk 语言排行榜：Rust 比上季度上升两名</h3>
+
+<p><a href="https://redmonk.com/sogrady/2019/07/18/language-rankings-6-19/">Link</a></p>
+
+<h3 id="3018bd9b-rustc-已经被添加进了-android-工具链">[](#3018bd9b)rustc 已经被添加进了 Android 工具链</h3>
+
+<p><a href="https://android.googlesource.com/toolchain/rustc/">Link</a></p>
+
+<hr />
+
+<p>From 日报小组 Mike</p>
+
+<p>日报订阅地址：</p>
+
+<p>独立日报订阅地址：</p>
+
+<ul>
+<li><a href="https://t.me/rust_daily_news">Telgram Channel</a></li>
+<li><a href="https://www.yuque.com/chaosbot/rustnews">阿里云语雀订阅</a></li>
+<li><a href="https://steemit.com/@blackanger">Steemit</a></li>
+<li><a href="https://github.com/RustStudy/rust_daily_news">GitHub</a>
+
+<br /></li>
+</ul>
+
+<p>社区学习交流平台订阅：</p>
+
+<ul>
+<li><a href="https://rust.cc">Rust.cc 论坛: 支持 rss</a></li>
+<li><a href="https://rustforce.net/">Rust Force: 支持 rss</a></li>
+<li><a href="https://rust.cc/article?id=ed7c9379-d681-47cb-9532-0db97d883f62">微信公众号：Rust 语言学习交流</a></li>
+</ul>
+
+<h1 id="rust日报-2019-07-20">【Rust日报】 2019-07-20</h1>
+
+<h3 id="cbefbeff-台湾友人分享rust官网翻译台湾繁体版本的心得">[](#cbefbeff)台湾友人分享Rust官网翻译台湾繁体版本的心得</h3>
+
+<p>#website</p>
+
+<p>来自刘安齐的分享</p>
+
+<p><a href="https://medium.com/coding-neutrino-blog/localize-the-rust-website-to-traditional-chinese-473413f44d21">Read More</a></p>
+
+<h3 id="2fe4c97d-torch-神经网络框架现已在-rust-中可用">[](#2fe4c97d)Torch 神经网络框架现已在 Rust 中可用</h3>
+
+<p>#rust</p>
+
+<p>下面一篇教程介绍了如何在 Rust 中通过 <a href="https://github.com/LaurentMazare/tch-rs">tch-rs</a> 使用 Torch 神经网络</p>
+
+<p><a href="http://vegapit.com/article/how-to-use-torch-in-rust-with-tch-rs">Read More</a></p>
+
+<h3 id="cbf4cbe1-rust编程语言-新版已经在印刷了">[](#cbf4cbe1)《Rust编程语言》新版已经在印刷了</h3>
+
+<p>#book #rust</p>
+
+<p>这本书是 Rust &ldquo;圣经&rdquo;的纸质版，可以<a href="https://doc.rust-lang.org/book/">在线阅读</a>。推特别特感谢 <a href="https://twitter.com/Carols10cents/">@Carols10cents</a> 为这本书作出的卓越贡献。</p>
+
+<p><a href="https://t.co/XXmEpHeDIM">Read More</a></p>
+
+<h3 id="addc7e8f-mask-一个通过-markdown-配置的任务运行工具">[](#addc7e8f)mask，一个通过 markdown 配置的任务运行工具</h3>
+
+<p>#rust #cli</p>
+
+<p>编写 markdown 文件，通过 mask 运行文档中的任务，目前支持 node、bash、python、php、ruby。例如：你可以配置一个 server 任务和一个 snapshot 任务，让 python 运行 web 服务，让 node 运行 puppeteer 为每一个页面生成一张 png 图片。</p>
+
+<p><a href="https://github.com/jakedeichert/mask">Read More</a></p>
+
+<h3 id="64b93743-webassembly-实现的路径查找-demo">[](#64b93743)WebAssembly 实现的路径查找 Demo</h3>
+
+<p>#wasm</p>
+
+<p>开发者是上面 mask 的作者，他通过编写 rust 编译成 wasm，使用浏览器 canvas2D API 实现了一个寻找路径的 Demo，可以<a href="https://jakedeichert.github.io/wasm-astar/">在线体验</a>。</p>
+
+<p><a href="https://github.com/jakedeichert/wasm-astar">Read More</a></p>
+
+<h3 id="e6b1cfbf-正在想要不要使用-unsafe-吗-可以考虑下-zerocopy">[](#e6b1cfbf)正在想要不要使用 unsafe 吗？可以考虑下 zerocopy</h3>
+
+<h2 id="10a3e9e5-unsafe">[](#10a3e9e5)#unsafe</h2>
+
+<h2 id="5cb3o-zerocopy-https-crates-io-crates-zerocopy-可以为具有的某些属性的类型提供标记-trait-例如-将任意字节序列-正确长度-解释为类型的实例是安全的-它还提供了多个-derive-自动分析的类型并确定它是否符合标准-它提供了零成本抽象-允许开发者在原始和类型字节表示之间进行转换-解锁-零拷贝-解析和序列化-到目前为止-它已被用于网络数据包解析和序列化-图像处理-操作系统程序等">[](#5cb3O)<a href="https://crates.io/crates/zerocopy">zerocopy</a> 可以为具有的某些属性的类型提供标记 trait。例如，将任意字节序列（正确长度）解释为类型的实例是安全的。 它还提供了多个 derive，自动分析的类型并确定它是否符合标准。它提供了零成本抽象，允许开发者在原始和类型字节表示之间进行转换，解锁“零拷贝”解析和序列化。 到目前为止，它已被用于网络数据包解析和序列化，图像处理，操作系统程序等。</h2>
+
+<h2 id="49ibt-它最初是为网络堆栈开发的-作者-去年就此进行了讨论-https-www-youtube-com-watch-v-ufmooxogcma-因此-他们的项目具有零拷贝解析和所有数据包的序列化功能-而整个25k行代码仓库只有一个-unsafe-关键字">[](#49ibt)它最初是为网络堆栈开发的，作者<a href="https://www.youtube.com/watch?v=UfMOOxOGCmA">去年就此进行了讨论</a>，因此，他们的项目具有零拷贝解析和所有数据包的序列化功能，而整个25K行代码仓库只有一个 unsafe 关键字。</h2>
+
+<h2 id="fjdhg-read-more-https-www-reddit-com-r-rust-comments-cfh8la-thinking-of-using-unsafe-try-this-instead">[](#fJDHG)<a href="https://www.reddit.com/r/rust/comments/cfh8la/thinking_of_using_unsafe_try_this_instead/">Read More</a></h2>
+
+<p>From 日报小组 格朗</p>
+
+<p>日报订阅地址：</p>
+
+<p>独立日报订阅地址：</p>
+
+<ul>
+<li><a href="https://t.me/rust_daily_news">Telgram Channel</a></li>
+<li><a href="https://www.yuque.com/chaosbot/rustnews">阿里云语雀订阅</a></li>
+<li><a href="https://steemit.com/@blackanger">Steemit</a></li>
+<li><a href="https://github.com/RustStudy/rust_daily_news">GitHub</a><br />
+社区学习交流平台订阅：</li>
+<li><a href="https://rust.cc">Rust.cc 论坛: 支持 rss</a></li>
+<li><a href="https://rustforce.net/">Rust Force: 支持 rss</a></li>
+<li><a href="https://rust.cc/article?id=ed7c9379-d681-47cb-9532-0db97d883f62">微信公众号：Rust 语言学习交流</a></li>
+</ul>
+
+<h2 id="rust日报-2019-07-19-https-rust-cc-article-id-4386838f-7b32-4e26-8a17-5b4b1238049b"><a href="https://rust.cc/article?id=4386838f-7b32-4e26-8a17-5b4b1238049b">【Rust日报】 2019-07-19</a></h2>
+
+<p><a href="https://rust.cc/blog_with_author?author_id=93091acb-066c-4feb-b7a4-364398b1d82e">ZhangHanDong</a>  发表于  2019-07-19 19:20</p>
+
+<p>Tags：rust</p>
+
+<h3 id="lgm-2019-用-rust-实现-2d-绘图框架">LGM 2019 – 用 rust 实现 2D 绘图框架</h3>
+
+<p>#graphics #rust</p>
+
+<p>libre graphics meeting 是一个图形相关的会议，本次会议 Colin Rofls 和 Raph Levien 一起分享了他们使用 rust 开发绘图框架的过程，如果你正在使用 rust 开发绘图框架，可以点击下面的链接观看视频。</p>
+
+<p><a href="https://www.youtube.com/watch?v=wMoS0QHBoHM">read more</a></p>
+
+<h3 id="开启流水线编译成为默认设置">开启流水线编译成为默认设置</h3>
+
+<p>#rustc</p>
+
+<p>可能下下下一个正式版就有机会用到了</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/cepvks/enable_pipelined_compilation_per_default/">read more</a></p>
+
+<h3 id="abscissa-面向安全的rust应用程序框架">Abscissa：面向安全的Rust应用程序框架</h3>
+
+<p>#cli #rust</p>
+
+<p>Abscissa 是一个小型的程序框架，它提供了 cli 程序的基本功能</p>
+
+<ul>
+<li>cli 指令解析</li>
+<li>TOML 配置</li>
+<li>logging 记录</li>
+<li>错误处理</li>
+<li>组件特性(类似ECS)</li>
+<li>REPL，彩色界面</li>
+</ul>
+
+<p><a href="https://www.reddit.com/r/rust/comments/cethae/introducing_abscissa_a_securityoriented_rust/">read more</a></p>
+
+<h3 id="我们需要更安全的系统编程语言">我们需要更安全的系统编程语言</h3>
+
+<p>#rustlang</p>
+
+<p>微软发现过去他们修正的 bug，平均有70%都是内存安全导致的，当然也包括 data race。</p>
+
+<p>下面一篇文章探讨为什么微软认为 Rust 编程语言目前是业界采用的最佳选择。</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/cexkip/we_need_a_safer_systems_programming_language/">read more</a></p>
+
+<h3 id="编译器速度提升">编译器速度提升</h3>
+
+<p>#rustc</p>
+
+<p>今年到目前为止，编译器速度已经提高了30%～40%，一些项目的提升率达到了45%以上。</p>
+
+<p>本周的 Rust weekly 有一篇关于<a href="https://blog.mozilla.org/nnethercote/2019/07/17/how-to-speed-up-the-rust-compiler-in-2019/">提升编译器速度的文章</a>，可以看看。更多讨论请点击下面的链接。</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/cezxjn/compiler_speed_has_improved_3040_across_the_board/">read more</a></p>
+
+<hr />
+
+<p>From 日报小组 Damody</p>
+
+<p>日报订阅地址：</p>
+
+<p>独立日报订阅地址：</p>
+
+<ul>
+<li><a href="https://t.me/rust_daily_news">Telgram Channel</a></li>
+<li><a href="https://www.yuque.com/chaosbot/rustnews">阿里云语雀订阅</a></li>
+<li><a href="https://steemit.com/@blackanger">Steemit</a></li>
+<li><a href="https://github.com/RustStudy/rust_daily_news">GitHub</a></li>
+</ul>
+
+<p>社区学习交流平台订阅：</p>
+
+<ul>
+<li><a href="https://rust.cc/">Rust.cc论坛: 支持rss</a></li>
+<li><a href="https://rustforce.net/">Rust Force: 支持rss</a></li>
+<li><a href="https://rust.cc/article?id=ed7c9379-d681-47cb-9532-0db97d883f62">微信公众号：Rust语言学习交流</a></li>
+</ul>
+
+<h2 id="rust日报-2019-07-18-美国国会关于libra的听证会-https-rust-cc-article-id-2846a9d9-91d7-4490-b54a-d79943bafc8b"><a href="https://rust.cc/article?id=2846a9d9-91d7-4490-b54a-d79943bafc8b">【Rust日报】 2019-07-18：美国国会关于Libra的听证会</a></h2>
+
+<p><a href="https://rust.cc/blog_with_author?author_id=5c43696d-2337-4a70-8b71-324a701c626f">Mike</a>  发表于  2019-07-18 11:11</p>
+
+<p>Tags：rust</p>
+
+<h3 id="美国国会关于libra的听证会">美国国会关于Libra的听证会</h3>
+
+<p>有议员提到，为什么为选择Rust来开发Libra，它够成熟吗？如何担负起其对安全的要求。内有彩蛋：D</p>
+
+<p><a href="https://www.c-span.org/video/?c4808083/rust-language-chosen">Read More</a></p>
+
+<h3 id="是否真的需要构造器">是否真的需要构造器</h3>
+
+<p><a href="https://matklad.github.io/2019/07/16/perils-of-constructors.html">这篇文章</a>  中，讨论了构造器是什么，Rust选择了没有构造器，这背后的权衡是什么？会有什么问题。并且对比了一下Swift的选择。等等，很细致。值得一看。</p>
+
+<h3 id="heim-获取系统信息的工具项目">heim - 获取系统信息的工具项目</h3>
+
+<p>这个项目用于，跨平台，获取系统基本信息，比如 cpu，内存，磁盘，网络等等。</p>
+
+<p>heim是德语“家”的意思。开发作者专门开了一篇博客，详细讲述他要做什么。老外做事情真是踏实。</p>
+
+<p><a href="https://svartalf.info/posts/2019-07-17-announcing-heim-project/">Read More</a><br />
+<a href="https://github.com/heim-rs/heim/">Repo</a></p>
+
+<h3 id="关于使用-mem-maybeuninit-替换-mem-uninitialized-的一个示例">关于使用 mem::MaybeUninit 替换 mem::uninitialized 的一个示例</h3>
+
+<p>1.36 发布后，Rust带来了一个 mem::MaybeUninit，可以更安全地处理未初始化的数据。而 mem::MaybeUninit 可以替代 mem::uninitialized，为什么？下文给出了说明和一个示例：</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/cefgec/howto_replace_memuninitialized_with_memmaybeuninit/">Read More</a></p>
+
+<h3 id="把-rust-在-commodore-64-位机上跑起来">把 Rust 在 Commodore 64 位机上跑起来</h3>
+
+<p>Commodore 64，也称为C64、CBM 64或在瑞典被称作VIC-64，是由Commodore（康懋达国际）公司于1982年1月推出的8位家用电脑。</p>
+
+<p><img src="https://raw.githubusercontent.com/xTibor/rust-on-c64/master/screenshot.png" alt="img" /></p>
+
+<p><a href="https://github.com/xTibor/rust-on-c64">Repo</a></p>
+
+<h3 id="compactor-win-10-文件系统压缩用户界面">Compactor - Win 10 文件系统压缩用户界面</h3>
+
+<p>这种界面风格：</p>
+
+<p><img src="https://camo.githubusercontent.com/ba237cdc14db5500e57c5a1b975a3413bbe0e4d5/68747470733a2f2f692e696d6775722e636f6d2f41397369385a682e706e67" alt="img" /></p>
+
+<p><a href="https://github.com/Freaky/Compactor">Repo</a></p>
+
+<h3 id="2019-rust如何提高编译器速度">2019，Rust如何提高编译器速度</h3>
+
+<p>Rust 核心组开发人员 Nicholas Nethercote 详细罗列了 2019 年可以做的用于加速 Rust 编译器速度的事情。</p>
+
+<p><a href="https://blog.mozilla.org/nnethercote/2019/07/17/how-to-speed-up-the-rust-compiler-in-2019/">Read More</a></p>
+
+<hr />
+
+<p>From 日报小组 Mike</p>
+
+<p>日报订阅地址：</p>
+
+<p>独立日报订阅地址：</p>
+
+<ul>
+<li><a href="https://t.me/rust_daily_news">Telgram Channel</a></li>
+<li><a href="https://www.yuque.com/chaosbot/rustnews">阿里云语雀订阅</a></li>
+<li><a href="https://steemit.com/@blackanger">Steemit</a></li>
+<li><a href="https://github.com/RustStudy/rust_daily_news">GitHub</a></li>
+</ul>
+
+<p>社区学习交流平台订阅：</p>
+
+<ul>
+<li><a href="https://rust.cc/">Rust.cc 论坛: 支持 rss</a></li>
+<li><a href="https://rustforce.net/">Rust Force: 支持 rss</a></li>
+<li><a href="https://rust.cc/article?id=ed7c9379-d681-47cb-9532-0db97d883f62">微信公众号：Rust 语言学习交流</a></li>
+</ul>
+
+<h2 id="rust日报-2019-07-17-https-rust-cc-article-id-fbdbb67c-bf27-437a-9d86-ba823cb5f043"><a href="https://rust.cc/article?id=fbdbb67c-bf27-437a-9d86-ba823cb5f043">【Rust日报】 2019-07-17</a></h2>
+
+<p><a href="https://rust.cc/blog_with_author?author_id=93091acb-066c-4feb-b7a4-364398b1d82e">ZhangHanDong</a>  发表于  2019-07-17 19:48</p>
+
+<p>Tags：rust</p>
+
+<h3 id="rust的可测试组件设计">Rust的可测试组件设计</h3>
+
+<p>#TestableComponentDesign</p>
+
+<p>本文简单介绍了在Rust中编写一个工程性更强的组件（crate）所必须要遵循的一些原则：</p>
+
+<ul>
+<li>自动化测试覆盖</li>
+<li>需要可配置的依赖</li>
+<li>公共api应该更加易于使用和理解</li>
+<li>契约层应该尽量减少泛型的使用</li>
+<li>其他</li>
+</ul>
+
+<p><a href="http://iextendable.com/2019/07/12/testable-component-design-in-rust/">Read More</a></p>
+
+<h3 id="从futures-0-1迁移到0-3">从futures 0.1迁移到0.3</h3>
+
+<p>#TiKV #futures</p>
+
+<p>nrc 最近为TiKV的客户端从futures的0.1升级到了0.3，本文记录了该过程中他遇到的一些棘手的问题等。想了解0.1和0.3之间的一些区别，可以看看此文。</p>
+
+<ul>
+<li><a href="https://www.ncameron.org/blog/migrating-a-crate-from-futures-0-1-to-0-3/">Read More</a></li>
+<li><a href="https://github.com/tikv/client-rust">client-rust</a></li>
+</ul>
+
+<h3 id="使用yew和rust进行全栈web开发">使用Yew和Rust进行全栈Web开发</h3>
+
+<p>#yew #wasm #web</p>
+
+<p><a href="https://www.steadylearner.com/blog/read/Fullstack-Rust-with-Yew">Read More</a></p>
+
+<h3 id="2019年如何提升rust编译器性能">2019年如何提升Rust编译器性能</h3>
+
+<p>#rustc</p>
+
+<p>该文作者最近给Rust发了很多PR，用于改进Rust编译器的性能，该文是他对这些PR的一些梳理总结，记录了他提升Rustc编译性能的思路。</p>
+
+<p><a href="https://blog.mozilla.org/nnethercote/2019/07/17/how-to-speed-up-the-rust-compiler-in-2019/">Read More</a></p>
+
+<h3 id="系列文章-微软安全响应中心-一种主动性的方式来提升安全">「系列文章」微软安全响应中心：一种主动性的方式来提升安全</h3>
+
+<p>微软安全响应中心一直在研究Rust语言作为系统编程的安全替代方案，并建议整个软件行业认真研究它。并且会写一系列的相关的文章，本文是第一篇：</p>
+
+<blockquote>
+<p>自2004年以来，微软安全响应中心(MSRC)已经对所有报告的微软安全漏洞进行了三重分析。从所有这些分类中，有一个惊人的事实凸显出来: 正如马特·米勒在2019年布鲁哈特伊利诺伊州的演讲中所讨论的那样，大多数修复的漏洞和分配的CVE漏洞都是由开发人员无意中在他们的C和C++代码中插入内存损坏错误造成的。随着微软增加其代码基础并在其代码中使用更多的开源软件，这个问题并没有变得更好，反而变得更糟。微软并不是唯一一个暴露在内存崩坏问题之下的公司。</p>
+</blockquote>
+
+<p>所以需要一种更加内存安全的语言，比如Rust。时代在进步和变革，拿汽车和编程语言类比非常适合。我们不是要等事故发生以后再去处理它，而要在事故发生之前，预判一些可能导致事故的危险行为去避免它。</p>
+
+<p>(微软已经不是以前那个微软了，微软越来越像那个我期待的微软了)</p>
+
+<p><a href="https://msrc-blog.microsoft.com/2019/07/16/a-proactive-approach-to-more-secure-code/">Read More</a></p>
+
+<h3 id="叫板-为什么我们需要一个actix的替代品">叫板？为什么我们需要一个actix的替代品</h3>
+
+<p>#actix</p>
+
+<p>本文作者尝试解释为什么他不认为actix-web能够成为引领Rust社区向前发展的“那个”框架。作者列出了他的理由：</p>
+
+<ul>
+<li>代码中依旧还有25个unsafe方法在使用。比如<code>std::mem::uninitialized</code>。但有人可能会说，这没什么大不了的，修好就可以了。但是本文作者强调：Nikolay（acitx-web作者）的态度是你难以改变的。本文作者列举了Nikolay在强硬关闭其他人移除actix-web中unsafe代码的PR中的回复：<a href="https://github.com/actix/actix-web/pull/968#issuecomment-509894555">actix-web/pull/968</a>。 （这个PR下actix-web作者的几个回复的态度确实不太好，比如他说道：已经失去了和开源社区打交道的动力。）</li>
+<li>actix不是一个你可以轻易贡献的项目。最终，这使得开发者都将依赖Nikolay来获得新的特性。本文作者用一个词来描述actix-web：Flying Solo。</li>
+<li>性能测试作弊？比如硬编码header值、或者放弃检查HTTP方法之类。他呼吁大家仔细研究下TechEmpower的测试代码。</li>
+</ul>
+
+<p>总结：本文作者认为actix-web作者的心态和代码内部的质量，足以让他放弃actix框架。那么还有哪些替代品？</p>
+
+<ul>
+<li>Rocket</li>
+<li>Gotham</li>
+<li>Thruster</li>
+<li>Warp</li>
+<li>Tide</li>
+</ul>
+
+<p>(wow，看完之后我感觉，该文作者描述actix的问题还是挺严重的，真心希望actix-web可以更好)</p>
+
+<ul>
+<li><a href="https://64.github.io/actix/">Read More</a></li>
+<li><a href="https://www.reddit.com/r/rust/comments/ce09id/why_we_need_alternatives_to_actix/">Reddit讨论贴</a></li>
+</ul>
+
+<h3 id="ballista-集成了rust-apache-arrow-和-kubernetes的分布式计算平台">Ballista：集成了Rust、 Apache Arrow 和 Kubernetes的分布式计算平台</h3>
+
+<p>#k8s #Arrow</p>
+
+<p>DataFusion的作者新的项目，目前是PoC（概念验证）阶段。</p>
+
+<ul>
+<li><a href="https://andygrove.io/2019/07/announcing-ballista/">Read More</a></li>
+<li><a href="https://github.com/andygrove/ballista">ballista</a></li>
+</ul>
+
+<h3 id="tokio重构计划-让tokio-的子crate-坍缩-为一个独立的crate">tokio重构计划：让tokio 的子crate “坍缩”为一个独立的crate</h3>
+
+<p>#tokio</p>
+
+<p>主要是解决tokio用户对依赖tokio时候pull的crate数量抱怨的问题。大家可以来此issues下讨论替代的策略。</p>
+
+<p>（合久必分，分久必合）</p>
+
+<p><a href="https://github.com/tokio-rs/tokio/issues/1318">Read More</a></p>
+
+<h3 id="advisory-db-rustsec组织发布的安全告警数据库">advisory-db: RustSec组织发布的安全告警数据库</h3>
+
+<p>#RustSec</p>
+
+<p><a href="https://github.com/RustSec/advisory-db">advisory-db</a></p>
+
+<h3 id="silicon-为你的源码创建漂亮的图片">silicon: 为你的源码创建漂亮的图片</h3>
+
+<p>#Carbon</p>
+
+<p>有一个网站叫Carbon，可以创建漂亮的代码图片，而silicon是该功能的Rust实现。</p>
+
+<p><img src="https://camo.githubusercontent.com/89df72cf474db399c988534d2b8f257c47cb1adf/687474703a2f2f73746f726167652e616c6f7861662e636e2f73696c69636f6e2e706e673f763d31" alt="img" /></p>
+
+<ul>
+<li><a href="https://github.com/Aloxaf/silicon">silicon</a></li>
+<li><a href="https://github.com/dawnlabs/carbon">carbon</a></li>
+</ul>
+
+<hr />
+
+<p>From 日报小组 Chaos</p>
+
+<p>日报订阅地址：</p>
+
+<p>独立日报订阅地址：</p>
+
+<ul>
+<li><a href="https://t.me/rust_daily_news">Telgram Channel</a></li>
+<li><a href="https://www.yuque.com/chaosbot/rustnews">阿里云语雀订阅</a></li>
+<li><a href="https://steemit.com/@blackanger">Steemit</a></li>
+<li><a href="https://github.com/RustStudy/rust_daily_news">GitHub</a></li>
+</ul>
+
+<p>社区学习交流平台订阅：</p>
+
+<ul>
+<li><a href="https://rust.cc/">Rust.cc 论坛: 支持 rss</a></li>
+<li><a href="https://rustforce.net/">Rust Force: 支持 rss</a></li>
+<li><a href="https://rust.cc/article?id=ed7c9379-d681-47cb-9532-0db97d883f62">微信公众号：Rust 语言学习交流</a></li>
+</ul>
+
+<h2 id="rust日报-2019-07-16-https-rust-cc-article-id-8935e36c-8c31-42ea-bdae-7fe98319acb8"><a href="https://rust.cc/article?id=8935e36c-8c31-42ea-bdae-7fe98319acb8">【Rust日报】 2019-07-16</a></h2>
+
+<p><a href="https://rust.cc/blog_with_author?author_id=93091acb-066c-4feb-b7a4-364398b1d82e">ZhangHanDong</a>  发表于  2019-07-16 23:17</p>
+
+<p>Tags： rust</p>
+
+<h3 id="timetill-rs-专注于记录全球rust活动的站点">timetill.rs: 专注于记录全球Rust活动的站点</h3>
+
+<p>#event</p>
+
+<p>该站点专注于记录世界各地Rust各大活动的时间线，开源项目，大家可以提交活动信息。</p>
+
+<p><a href="https://timetill.rs/">timetill.rs</a></p>
+
+<h3 id="chip-8模拟器的rust移植版本">CHIP-8模拟器的Rust移植版本</h3>
+
+<p>#CHIP8</p>
+
+<p>该文作者是游戏开发圈的一员，最近在尝试从Cpp到Rust的迁移过程，这个CHIP-8模拟器就是他的迁移实践。本文记录了他的一些心得感想。</p>
+
+<ul>
+<li><a href="https://ryp.github.io/emu/rust/chip8/2019/07/09/chip8-emulator-rust/">Read More</a></li>
+<li><a href="https://github.com/Ryp/chip8-emu-rs">Code Repo</a></li>
+</ul>
+
+<h3 id="计算机语言benchmarks游戏-rust在n-body项拿下第一">计算机语言Benchmarks游戏：Rust在n-body项拿下第一</h3>
+
+<p>#benchmarks</p>
+
+<p>据文章中所说，是因为新的测试硬件使用了更先进的AVX-512 SIMD指令。</p>
+
+<p><a href="https://frehberg.com/2019/07/the-computer-language-benachmarks-game-rust-ranks-1-for-n-body/">Read More</a></p>
+
+<h3 id="在rust中使用异步网络收集广播udp数据包">在Rust中使用异步网络收集广播UDP数据包</h3>
+
+<p>#async #UDP</p>
+
+<p>本文是async和tokio的一次尝试，作者写了一个通过UDP广播发现本地网络上的设备的应用，并且介绍了他实现过程中的一些心得。</p>
+
+<ul>
+<li><a href="https://medium.com/tresorit-engineering/collecting-broadcast-udp-packets-using-async-networking-in-rust-7fd93a631eac">Read More</a></li>
+<li><a href="https://github.com/tresorit/tresorit-dropbox-discovery">tresorit/tresorit-dropbox-discovery</a></li>
+</ul>
+
+<h3 id="存在于rust中的函数式编程-黑话">存在于Rust中的函数式编程“黑话”</h3>
+
+<p>#functional</p>
+
+<p>本文档使用Fantasy Land规范(JavaScript)和Rust编程语言中定义的术语来提供代码示例，讲解了Rust中存在的函数式语言编程中的“黑话（术语，Jargon）”，很难得的一份学习材料。</p>
+
+<blockquote>
+<p>Fantasy land（梦幻之地 ）不仅包含大量的函数式编程模块，还包含有关如何实现“代数结构”（也称为对象）以与库兼容的正式规范。将此作为标准会很棒。</p>
+</blockquote>
+
+<ul>
+<li><a href="https://functional.works-hub.com/learn/functional-programming-jargon-in-rust-1b555">Read More</a></li>
+<li><a href="https://github.com/JasonShin/functional-programming-jargon.rs">Repo</a></li>
+<li><a href="https://github.com/fantasyland/fantasy-land">fantasy-land</a></li>
+</ul>
+
+<h3 id="使用rust编写的编程类益智游戏-robo-instructus-已上架">使用Rust编写的编程类益智游戏 Robo Instructus 已上架</h3>
+
+<p>#Game</p>
+
+<p>使用100% rust (gfx-rs, winit, opengl)开发了该游戏</p>
+
+<p><a href="https://www.roboinstruct.us/">Site</a>  <a href="https://store.steampowered.com/app/1032170">Steam</a></p>
+
+<h3 id="新手向-rust-vs-c-实现神经网络">「新手向」Rust vs C++ : 实现神经网络</h3>
+
+<p>#ml #cpp #neural</p>
+
+<p>这篇文章其实是一个Rust新手在尝试使用Rust和Cpp编写一个朴树的神经网络来重新学习Rust。作者在2014年第一次学Rust，但是后来就放下了，五年后的今天想尝试使用Rust，这个项目是他复习Rust所做的。</p>
+
+<p>感兴趣的可以看看源码学习学习如何使用Rust实现一个简单的神经网络。</p>
+
+<p><a href="http://nicktasios.nl/posts/rust-vs-c%2B%2B-implementing-a-neural-network.html">Read More</a></p>
+
+<h3 id="osgood-基于rust和v8构建的专门用于http服务器的javascript运行时">Osgood：基于Rust和V8构建的专门用于HTTP服务器的JavaScript运行时</h3>
+
+<p>#JavaScript</p>
+
+<p><a href="https://github.com/IntrinsicLabs/osgood">osgood</a></p>
+
+<h3 id="amethyst-starter-2d-2d游戏开发的新工具">amethyst-starter-2d: 2D游戏开发的新工具</h3>
+
+<p>#game #2D</p>
+
+<p>Amethyst出品</p>
+
+<ul>
+<li><a href="https://amethyst.rs/posts/tools-for-2d-games">Read More</a></li>
+<li><a href="https://github.com/amethyst/amethyst-starter-2d">amethyst-starter-2d</a></li>
+</ul>
+
+<h3 id="rustfest-巴塞罗那大会将在11月份开启">RustFest 巴塞罗那大会将在11月份开启</h3>
+
+<p>#RustFest</p>
+
+<p><a href="https://blog.rustfest.eu/barcelona-announcement">Read More</a></p>
+
+<h3 id="d语言中的所有权和借用">D语言中的所有权和借用</h3>
+
+<p>#D</p>
+
+<p>从D语言的角度来看看所有权和借用？感兴趣的可以看看</p>
+
+<p><a href="https://dlang.org/blog/2019/07/15/ownership-and-borrowing-in-d/">Read More</a></p>
+
+<h3 id="2019年最大的音乐节atlas-weekend使用了rust">2019年最大的音乐节Atlas Weekend使用了Rust</h3>
+
+<p>#event</p>
+
+<p>乌克兰基辅举办的音乐节，其实该音乐节去年就开始使用Rust了，去年的日报也报道过。</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/cdg5b4/rust_in_the_on_of_the_biggest_music_festival/">Read More</a></p>
+
+<h3 id="lain-一个模糊器框架">lain: 一个模糊器框架</h3>
+
+<p>#fuzzer</p>
+
+<p><a href="https://github.com/microsoft/lain">lain</a></p>
+
+<h3 id="用rust编写的redis内存分析器">用Rust编写的Redis内存分析器</h3>
+
+<p>#redis</p>
+
+<p><a href="https://github.com/fetlife/redis-analyzer">redis-analyzer</a></p>
+
+<h3 id="cactusref-一个单线程-周期感知-引用计数智能指针">CactusRef: 一个单线程、周期感知、引用计数智能指针</h3>
+
+<p>#rc</p>
+
+<p>是Rust标准库中Rc的一个替代品</p>
+
+<p><a href="https://hyperbo.la/w/cactus-harvesting/">Read More</a></p>
+
+<h3 id="嵌入式rust-rust嵌入式尝鲜线下活动">「嵌入式Rust」Rust嵌入式尝鲜线下活动</h3>
+
+<p>#embeded</p>
+
+<p>该活动在本月25号于伦敦举行，在伦敦的日报读者朋友可以去看看。</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/cdx8gr/rust_embedded_taster_session/">Read More</a></p>
+
+<h3 id="unlisp-llvm-基于llvm的玩具lisp语言编译器">unlisp-llvm: 基于LLVM的玩具Lisp语言编译器</h3>
+
+<p>#lisp #llvm</p>
+
+<p>基于Rust和inkwell开发。</p>
+
+<blockquote>
+<p>Inkwell旨在通过安全地包装llvm-sys来帮助你编写自己的编程语言。</p>
+</blockquote>
+
+<ul>
+<li><a href="https://github.com/OlegTheCat/unlisp-llvm">unlisp-llvm</a></li>
+<li><a href="https://github.com/TheDan64/inkwell">inkwell</a></li>
+</ul>
+
+<h3 id="学术-用类型指针反转进行高效解构">「学术」用类型指针反转进行高效解构</h3>
+
+<p>#paper</p>
+
+<p>本文说明了一种转换任意数据结构析构函数的技术，使它们在恒定的堆栈和堆空间中运行。听上去不错，可惜的是我还没看明白。。。</p>
+
+<p><a href="http://guillaume.munch.name/files/efficient-drops-mlworkshop.pdf">Read More</a></p>
+
+<h3 id="视频-rust是下一个python-ffi">「视频」Rust是下一个Python FFI</h3>
+
+<p>#Python</p>
+
+<p>将会替代C。</p>
+
+<p><a href="https://www.youtube.com/watch?v=doqno2H4HW8">Read More</a></p>
+
+<h3 id="异步web框架gotham发布0-4版本">异步Web框架Gotham发布0.4版本</h3>
+
+<p>#gotham #async</p>
+
+<p>新版本引入了TLS支持，以及新的中间件设计。</p>
+
+<p><a href="https://gotham.rs/blog/release/2019/07/14/gotham-0.4.html">Read More</a></p>
+
+<h3 id="ralfj-未初始化内存">Ralfj: 未初始化内存</h3>
+
+<p>#memory #unsafe</p>
+
+<p>Ralfj的新博文，探讨了未初始化内存。你真的了解什么是未初始化内存吗？来看看Ralfj怎么说。</p>
+
+<p><a href="https://www.ralfj.de/blog/2019/07/14/uninit.html">Read More</a></p>
+
+<h3 id="shorty-rs-一个基于tower-grpc实现的url短地址服务">shorty-rs: 一个基于tower-grpc实现的url短地址服务</h3>
+
+<p>#gRPC</p>
+
+<p><a href="https://github.com/MovingGauteng/shorty-rs">shorty-rs</a></p>
+
+<h3 id="系列-rust是新的c语言-part-i-构建和组合本地库到c接口">「系列」Rust是新的C语言 Part I： 构建和组合本地库到C接口</h3>
+
+<p>#FFI #C</p>
+
+<p>该系列文章主要包括如何将Rust库更简单更安全地公开为统一的C接口。</p>
+
+<p><a href="http://hotforknowledge.com/2019/07/14/6-rust-the-new-c/">Read More</a></p>
+
+<h3 id="cedarwood-高效可更新的双数组前缀树-double-array-trie">cedarwood: 高效可更新的双数组前缀树（Double-Array Trie）</h3>
+
+<p>#jieba</p>
+
+<p>该库旨在为jieba-rs提速。</p>
+
+<blockquote>
+<p>双数组Trie树（Double-array Trie, DAT）是由三个日本人提出的一种Trie树的高效实现，兼顾了查询效率与空间存储。</p>
+</blockquote>
+
+<ul>
+<li><a href="https://blog.paulme.ng/posts/2019-07-14-cedarwood%3A-efficiently-updatable-double-array-trie-in-rust.html">Read More</a></li>
+<li><a href="https://github.com/MnO2/cedarwood">cedarwood</a></li>
+</ul>
+
+<h3 id="面向数据设计-data-oriented-design-的一些学习资源">面向数据设计（Data-Oriented Design）的一些学习资源</h3>
+
+<p>#DOD</p>
+
+<p><a href="http://www.dataorienteddesign.com/site.php">Read More</a></p>
+
+<h3 id="monome-rs-让rust和monome对话">monome-rs: 让Rust和Monome对话</h3>
+
+<p>#music #monome</p>
+
+<p><img src="http://digforfire.net/wp-content/uploads/2010/04/monome.jpg" alt="img" /></p>
+
+<p>Monome是一种很酷的乐器，算是一种开源硬件，该库可以实现用Rust和Monome对话。</p>
+
+<ul>
+<li><a href="https://github.com/padenot/monome-rs">monome-rs</a></li>
+<li><a href="https://monome.org/">monome</a></li>
+</ul>
+
+<hr />
+
+<p>From 日报小组 Chaos</p>
+
+<p>日报订阅地址：</p>
+
+<p>独立日报订阅地址：</p>
+
+<ul>
+<li><a href="https://t.me/rust_daily_news">Telgram Channel</a></li>
+<li><a href="https://www.yuque.com/chaosbot/rustnews">阿里云语雀订阅</a></li>
+<li><a href="https://steemit.com/@blackanger">Steemit</a></li>
+<li><a href="https://github.com/RustStudy/rust_daily_news">GitHub</a></li>
+</ul>
+
+<p>社区学习交流平台订阅：</p>
+
+<ul>
+<li><a href="https://rust.cc/">Rust.cc 论坛: 支持 rss</a></li>
+<li><a href="https://rustforce.net/">Rust Force: 支持 rss</a></li>
+<li><a href="https://rust.cc/article?id=ed7c9379-d681-47cb-9532-0db97d883f62">微信公众号：Rust 语言学习交流</a></li>
+</ul>
+
+<h2 id="rust日报-2019-07-15-https-rust-cc-article-id-3e6b1de4-a760-4a7f-b87e-9968e8fd98f0"><a href="https://rust.cc/article?id=3e6b1de4-a760-4a7f-b87e-9968e8fd98f0">【Rust日报】 2019-07-15</a></h2>
+
+<p><a href="https://rust.cc/blog_with_author?author_id=17589eca-5f9f-4542-9938-585c74ef6b39">makeco</a>  发表于  2019-07-15 20:59</p>
+
+<p>Tags：rust</p>
+
+<h3 id="rust-trending-用-rust-开发的-twitter-机器人">rust-trending —— 用 Rust 开发的 twitter 机器人</h3>
+
+<p>#rust</p>
+
+<p>用来发布 Rust 项目的推文，可以关注它  <a href="https://twitter.com/RustTrending">@RustTrending</a>。</p>
+
+<p><a href="https://github.com/pbzweihander/rust-trending">Read More</a></p>
+
+<h3 id="juniper-graphql-服务端库的-rust-实现">juniper —— graphQL 服务端库的 Rust 实现</h3>
+
+<p>#graphql</p>
+
+<p>hyper、rocket、iron、warp 这四个 web 框架中可以使用，目前该项目版本没有到 1.0，可能会有一些 API 不稳定。</p>
+
+<p><a href="https://github.com/graphql-rust/juniper">Read More</a></p>
+
+<h3 id="学习rust-写了3万行rust代码后的心得">「学习rust」写了3万行rust代码后的心得</h3>
+
+<p>#article</p>
+
+<p>作者分享了他在写了3万行 rust 代码后的心得，文中包括学习 rust 的十个关键，正在学习 rust 的小伙伴可以去看看，文中推荐了其他文章，可以一起看。</p>
+
+<p><a href="https://medium.com/@jondot/my-key-learnings-after-30-000-loc-in-rust-a553e6403c19">Read More</a></p>
+
+<h3 id="一个尚未发布的-cli-工具">一个尚未发布的 cli 工具</h3>
+
+<p>#rust</p>
+
+<p>编写markdown文档，通过命令运行文档中脚本语言编写的程序，目前支持 node、bash、python、php、ruby。</p>
+
+<p><img src="https://p3.ssl.qhimg.com/t01625567bf1dc28b3a.png" alt="" /></p>
+
+<p><a href="https://twitter.com/jakedeichert/status/1150070977600151552">Read More</a></p>
+
+<hr />
+
+<p>From 日报小组 格朗</p>
+
+<p>日报订阅地址：</p>
+
+<p>独立日报订阅地址：</p>
+
+<ul>
+<li><a href="https://t.me/rust_daily_news">Telgram Channel</a></li>
+<li><a href="https://www.yuque.com/chaosbot/rustnews">阿里云语雀订阅</a></li>
+<li><a href="https://steemit.com/@blackanger">Steemit</a></li>
+<li><a href="https://github.com/RustStudy/rust_daily_news">GitHub</a></li>
+</ul>
+
+<p>社区学习交流平台订阅：</p>
+
+<ul>
+<li><a href="https://rust.cc/">Rust.cc 论坛: 支持 rss</a></li>
+<li><a href="https://rustforce.net/">Rust Force: 支持 rss</a></li>
+<li><a href="https://rust.cc/article?id=ed7c9379-d681-47cb-9532-0db97d883f62">微信公众号：Rust 语言学习交流</a></li>
+</ul>
+
+<h2 id="rust日报-2019-07-14-lemmy-一个用-rust-实现的类-reddit-项目-https-rust-cc-article-id-222cb1ad-1ec6-4543-b967-016c50387d26"><a href="https://rust.cc/article?id=222cb1ad-1ec6-4543-b967-016c50387d26">【Rust日报】 2019-07-14：lemmy - 一个用 rust 实现的类 reddit 项目</a></h2>
+
+<p><a href="https://rust.cc/blog_with_author?author_id=5c43696d-2337-4a70-8b71-324a701c626f">Mike</a>  发表于  2019-07-14 23:14</p>
+
+<p>Tags：rust</p>
+
+<h3 id="cedarwood-提升-jieba-rs-分词效率">cedarwood - 提升 jieba-rs 分词效率</h3>
+
+<p>用双数组字典树实现，尝试并提升了 jieba-rs 的分词效率，点击下面链接阅读详情。</p>
+
+<p><a href="https://blog.paulme.ng/posts/2019-07-14-cedarwood%3A-efficiently-updatable-double-array-trie-in-rust.html">Read More</a><br />
+<a href="https://github.com/MnO2/cedarwood">Repo</a></p>
+
+<h3 id="rustyboy-一个时钟精确的-gameboy-模拟器">RustyBoy - 一个时钟精确的 Gameboy 模拟器</h3>
+
+<p>先来看一下 demo</p>
+
+<p><img src="https://raw.githubusercontent.com/RamiHg/RustyBoy/master/docs/rustyboy.gif" alt="img" /></p>
+
+<p><a href="https://github.com/RamiHg/RustyBoy">Repo</a></p>
+
+<h3 id="lemmy-一个用-rust-实现的类-reddit-项目">lemmy - 一个用 rust 实现的类 reddit 项目</h3>
+
+<p>这套系统 rust.cc 能不能直接拿来用呢？</p>
+
+<p><img src="https://camo.githubusercontent.com/1b38cec240f83aeba39696196bc0d9867c367df4/68747470733a2f2f692e696d6775722e636f6d2f793634427458432e706e67" alt="img" /></p>
+
+<p><a href="https://github.com/dessalines/lemmy">Repo</a></p>
+
+<h3 id="为-redox-os-实现-ptrace">为 Redox OS 实现 ptrace</h3>
+
+<p>Redox OS 还在坚持不懈的开发。这篇文章讲解了为 Redox OS 实现 ptrace 的细节。</p>
+
+<p><img src="https://i.imgur.com/YWwEmxM.png" alt="img" /></p>
+
+<h3 id="silicon-为你的代码生成漂亮的分享图片">silicon - 为你的代码生成漂亮的分享图片</h3>
+
+<p>实际是借鉴的  <a href="https://github.com/dawnlabs/carbon">carbon</a>  库。来看看效果：</p>
+
+<p><img src="https://camo.githubusercontent.com/43dde5e8ed304df6d1519217a98796b0e86d1d1a/687474703a2f2f73746f726167652e616c6f7861662e636e2f73696c69636f6e2e706e673f" alt="img" /></p>
+
+<p><a href="https://github.com/Aloxaf/silicon">Repo</a></p>
+
+<hr />
+
+<p>From 日报小组 Mike</p>
+
+<p>日报订阅地址：</p>
+
+<p>独立日报订阅地址：</p>
+
+<ul>
+<li><a href="https://t.me/rust_daily_news">Telgram Channel</a></li>
+<li><a href="https://www.yuque.com/chaosbot/rustnews">阿里云语雀订阅</a></li>
+<li><a href="https://steemit.com/@blackanger">Steemit</a></li>
+<li><a href="https://github.com/RustStudy/rust_daily_news">GitHub</a></li>
+</ul>
+
+<p>社区学习交流平台订阅：</p>
+
+<ul>
+<li><a href="https://rust.cc/">Rust.cc论坛: 支持rss</a></li>
+<li><a href="https://rustforce.net/">Rust Force: 支持rss</a></li>
+<li><a href="https://rust.cc/article?id=ed7c9379-d681-47cb-9532-0db97d883f62">微信公众号：Rust语言学习交流</a></li>
+</ul>
+
+<h2 id="rust日报-2019-07-13-https-rust-cc-article-id-2fc173f8-808c-47be-a6d8-e5f05e408a9e"><a href="https://rust.cc/article?id=2fc173f8-808c-47be-a6d8-e5f05e408a9e">【Rust日报】 2019-07-13</a></h2>
+
+<p><a href="https://rust.cc/blog_with_author?author_id=55ad9d89-6929-4a73-baa5-cf0a99a9abad">damody</a>  发表于  2019-07-13 22:26</p>
+
+<p>Tags：rust</p>
+
+<h3 id="rust哪邊不安全">Rust哪邊不安全？</h3>
+
+<p>作者提到 unsafe 關鍵字讓很多人誤解了 rust 在 unsafe裡面很不安全，</p>
+
+<p>其實 unsafe 裡面還是有做很多檢查，這篇文也比較了 python 與 rust 的內存安全差異。</p>
+
+<p>文章列舉了 safe 範圍的 rust做了什麼樣的保證， unsafe 的rust做了什麼樣的保證，</p>
+
+<p>與程式員需要做出相對的契約保證。</p>
+
+<p>如果你想讓你的程式更安全、更好維護那這篇文章值得一看。</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/ccdiup/what_is_rusts_unsafe/">read more</a></p>
+
+<h3 id="一節-rust社群語音-1-36特別篇">一節 Rust社群語音 1.36特別篇</h3>
+
+<p>對下面議題有興趣的可以聽聽</p>
+
+<pre><code>4:27 - std::future
+11:29 - std::task
+14:22 - the alloc crate
+18:52 - std::collections::HashMap and hashbrown
+22:50 - std::mem::MaybeUninit and the deprecation of std::mem::uninitialized (mentioned: Error::type_id destabilization and std::pin discussion)
+36:24 - NLL for Rust 2015 (mentioned: MIR)
+44:45 - cargo --offline and cargo fetch
+46:50 - ongoing stdlib constification
+47:25 - read_vectored and write_vectored
+49:05 - Iterator::copied
+49:58 - dbg! enhancements
+51:19 - #[must_use] for is_err and is_ok
+
+</code></pre>
+
+<p><a href="https://www.reddit.com/r/rust/comments/cce7kp/rustacean_station_a_rust_community_podcast_an/">read more</a></p>
+
+<h3 id="cargo-crev-v0-8-出了">cargo-crev v0.8 出了</h3>
+
+<p>值得注意的是，此版本引入了User Guide跟其它文檔</p>
+
+<p>其它改動</p>
+
+<ul>
+<li>verify deps 改成 verify</li>
+<li>關閉草稿編輯器時沒有存檔𤡈的話將移除記錄。</li>
+<li>advisories 系統進行了改造</li>
+</ul>
+
+<p><a href="https://www.reddit.com/r/rust/comments/cceijm/cargocrev_v08_released_distributed_crate_reviewing/">read more</a></p>
+
+<h3 id="從java的角度來思考-rust的web應用程序">從Java的角度來思考 Rust的Web應用程序</h3>
+
+<p>作者提到了 docker 讓虛擬容器變的很普遍，但java的虛擬機開銷很大</p>
+
+<p>作者目前只有看到 actix 好像還不錯，但他對這個框架還不夠了解，</p>
+
+<p>不知道能不能做到過去他在java裡面做的事情，目前他還在研究中</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/ccnold/thoughts_about_rust_for_web_applications_from_a/">read more</a></p>
+
+<hr />
+
+<p>From 日报小组 @Damody</p>
+
+<p>日报订阅地址：</p>
+
+<p>独立日报订阅地址：</p>
+
+<ul>
+<li><a href="https://t.me/rust_daily_news">Telgram Channel</a></li>
+<li><a href="https://www.yuque.com/chaosbot/rustnews">阿里云语雀订阅</a></li>
+<li><a href="https://steemit.com/@blackanger">Steemit</a></li>
+<li><a href="https://github.com/RustStudy/rust_daily_news">GitHub</a></li>
+</ul>
+
+<p>社区学习交流平台订阅：</p>
+
+<ul>
+<li><a href="https://rust.cc/">Rust.cc论坛: 支持rss</a></li>
+<li><a href="https://rustforce.net/">Rust Force: 支持rss</a></li>
+<li><a href="https://rust.cc/article?id=ed7c9379-d681-47cb-9532-0db97d883f62">微信公众号：Rust语言学习交流</a></li>
+</ul>
+
+<h2 id="rust日报-2019-07-12-https-rust-cc-article-id-cdd32292-eef8-4dcf-9a8c-c7a9479c30b6"><a href="https://rust.cc/article?id=cdd32292-eef8-4dcf-9a8c-c7a9479c30b6">【Rust日报】 2019-07-12</a></h2>
+
+<p><a href="https://rust.cc/blog_with_author?author_id=55ad9d89-6929-4a73-baa5-cf0a99a9abad">damody</a>  发表于  2019-07-12 17:09</p>
+
+<p>Tags：rust</p>
+
+<h3 id="aic-無限工作佇列和語言設計">AiC: 無限工作佇列和語言設計</h3>
+
+<p>這篇文章在講Rust的工作量太大，想做的事太多，</p>
+
+<p>這些工作該怎麼管理，有些工作應該被重新考慮，並審查有限的資源該投入在哪些工作上。</p>
+
+<p>RFC的初始設計。 這是由語言團隊完成的。</p>
+
+<p>有些RFC存在五年是因為這個想法很好，但是缺少資源去實作， 且優先級別不夠高。</p>
+
+<p>作者也提到可能會需要設定一些限制，不要讓要做的事無限增加。</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/cbzyf3/aic_unbounded_queues_and_lang_design/">read more</a></p>
+
+<h3 id="rusty-pipes-使用azure-輕鬆-ci-rust項目">rusty-pipes: 使用Azure 輕鬆 CI Rust項目</h3>
+
+<p>作者分享了用 Azure Pipelines app 配上CI 整合進他們的產品中。</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/cc4k9x/rustypipes_easy_continuous_integration_for_rust/">read more</a></p>
+
+<h3 id="書-現代編譯器實作在現代語言">書： 現代編譯器實作在現代語言</h3>
+
+<p>Modern Compiler Implementation in ML</p>
+
+<p>這本書裡面講了一個tiger語言</p>
+
+<p>本文作者實作了第一章的一部份</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/cc4s3p/modern_compiler_implementation_in_a_modern/">read more</a></p>
+
+<h3 id="在-rust-裡面創造一個簡單-lisp">在 Rust 裡面創造一個簡單 LISP</h3>
+
+<p>方法跟上面的現代編譯器實作在現代語言很像</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/cc76k2/creating_a_simple_lisp_in_rust/">read more</a></p>
+
+<h3 id="linkerd2-安全審核">Linkerd2 安全審核</h3>
+
+<p>Linkerd 是一個服務網格，旨在提供平台範圍的可觀察性、可靠性、安全性，而無需更改配置或代碼。</p>
+
+<p>使用 Kubernetes 。  <a href="https://linkerd.io/">官方網站</a></p>
+
+<p>這篇PDF說明了Linkerd花了很多力氣在維護程式碼上面。</p>
+
+<p>包含了 人工程式碼審核和代碼輔助滲透測試。</p>
+
+<p>報告指出，從2019年6月的Cure53項目清楚表明Linkerd產品完全能夠防止重大攻擊和大多數妥協的惡意企圖。</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/cc7mww/linkerd2_security_audit/">read more</a></p>
+
+<hr />
+
+<p>From 日报小组 @Damody</p>
+
+<p>日报订阅地址：</p>
+
+<p>独立日报订阅地址：</p>
+
+<ul>
+<li><a href="https://t.me/rust_daily_news">Telgram Channel</a></li>
+<li><a href="https://www.yuque.com/chaosbot/rustnews">阿里云语雀订阅</a></li>
+<li><a href="https://steemit.com/@blackanger">Steemit</a></li>
+<li><a href="https://github.com/RustStudy/rust_daily_news">GitHub</a></li>
+</ul>
+
+<p>社区学习交流平台订阅：</p>
+
+<ul>
+<li><a href="https://rust.cc/">Rust.cc论坛: 支持rss</a></li>
+<li><a href="https://rustforce.net/">Rust Force: 支持rss</a></li>
+<li><a href="https://rust.cc/article?id=ed7c9379-d681-47cb-9532-0db97d883f62">微信公众号：Rust语言学习交流</a></li>
+</ul>
+
+<h2 id="rust日报-2019-07-11-重磅-rust-的-http-plain-test-在-techempower-上已经霸榜了-hyper-拿下头名-https-rust-cc-article-id-e9d91830-8e81-4ad7-b20f-0082d6d6e2c9"><a href="https://rust.cc/article?id=e9d91830-8e81-4ad7-b20f-0082d6d6e2c9">【Rust日报】 2019-07-11：重磅：Rust 的 http plain test 在 techempower 上已经霸榜了，hyper 拿下头名</a></h2>
+
+<p><a href="https://rust.cc/blog_with_author?author_id=5c43696d-2337-4a70-8b71-324a701c626f">Mike</a>  发表于  2019-07-11 11:43</p>
+
+<p>Tags：rust</p>
+
+<h3 id="golomb-set-比布隆过滤器压缩率更高的库">golomb-set - 比布隆过滤器压缩率更高的库</h3>
+
+<p>Golomb-compressed sets（GCS）是一种空间利用率很高的数据结构，可以用于判断一个元素是否属于这个集合。它与 Bloom Filter 非常类似，区别是它的压缩率更高，同时查询效率更低。同样，GCS 也有将原本不属于集合的元素误判为属于的可能（false positive）。</p>
+
+<p>这个库为 Rust 实现版本。</p>
+
+<p><a href="https://github.com/dac-gmbh/golomb-set">Repo</a></p>
+
+<h3 id="这样写异步递归行不行">这样写异步递归行不行？</h3>
+
+<p>像下面这样写递归现在是不行的。</p>
+
+<pre><code>async fn foo(n: usize) {
+    if n &gt; 0 {
+        foo(n - 1).await;
+    }
+}
+
+</code></pre>
+
+<p><a href="https://www.reddit.com/r/rust/comments/cbdxxm/why_are_recursive_async_fns_forbidden/">这里</a>给出了一些解释。大体上说是异步函数编译成状态机后的一些限制，balabala，可以进帖子查看。</p>
+
+<h3 id="static-alloc">static-alloc</h3>
+
+<p>这个库用于分配一个全局固定存储，特别适合嵌入式设备使用。库刚刚发布，感兴趣可以参与进去。</p>
+
+<p><a href="https://github.com/HeroicKatora/static-alloc">Repo</a></p>
+
+<h3 id="用-rust-点亮树莓派上的-led-阵列">用 Rust 点亮树莓派上的 LED 阵列</h3>
+
+<p>直接上图：</p>
+
+<p><img src="https://blog.tomarrell.com/public/images/rust_and_leds/mario_wide.jpg" alt="img" /></p>
+
+<p>细节可在下文中追寻。</p>
+
+<p><a href="https://blog.tomarrell.com/post/rust_and_leds">Read more</a></p>
+
+<h3 id="关于-rust-能否用在-高频-交易系统中的相关资料汇集和讨论">关于 Rust 能否用在（高频）交易系统中的相关资料汇集和讨论</h3>
+
+<p>在这里  <a href="https://users.rust-lang.org/t/possible-java-to-rust-switch-for-a-securities-trading-platform/16895">Possible Java to Rust switch for a securities trading platform</a></p>
+
+<p>希望有助于致力于把 Rust 用在金融领域的同学。</p>
+
+<h3 id="loopy-bayes-net-的-rust-实现">Loopy Bayes Net 的 Rust 实现</h3>
+
+<p><a href="https://github.com/vberger/loopybayesnet">loopybayesnet</a>  是一个 Loopy Belief Propagation 算法的 Rust 实现。属于神经网络/深度学习领域的算法。关于它与 Bayesian networks 的区别：</p>
+
+<pre><code>Bayesian networks can be used to encode a set of causal or logical probabilistic dependency between events. They take the shape of directed acyclic graphs, each node being associated with a probability table defining the probability of it taking each possible values depending on the values of its parents. For further details, you can check Wikipedia.
+
+The Loopy Belief Propagation is an algorithm that computes an approximation of the marginal probability distribution of each node of the network, conditionned by the value of a chosen set of &quot;observed&quot; variables, for which the values are set beforehand.
+
+</code></pre>
+
+<h3 id="未来全世界-rust-会议的一个汇编网站">未来全世界 Rust 会议的一个汇编网站</h3>
+
+<p>专门用于罗列在哪些地方什么时候将要举办（已经举办）哪些 Rust 会议。很方便了。</p>
+
+<p><a href="https://timetill.rs/">https://timetill.rs/</a></p>
+
+<h3 id="重磅-rust-的-http-plain-test-在-techempower-上已经霸榜了-hyper-拿下头名">重磅：Rust 的 http plain test 在 techempower 上已经霸榜了，hyper 拿下头名</h3>
+
+<p>前 10 结果如下：</p>
+
+<pre><code>1	hyper	7,007,513	
+2	tokio-minihttp	7,006,181	
+3	ulib-plaintext_fit	7,004,608	
+4	actix	7,000,911	
+5	ulib	6,998,172	
+6	libreactor	6,997,422	
+7	actix-raw	6,996,104	
+8	atreugo-prefork	6,995,436	
+9	firenio-http-lite	6,994,344	
+10	aspcore	6,993,704	
+
+</code></pre>
+
+<p>聪明的你认得出哪些是 Rust 的孩子么？</p>
+
+<p>hyper 冲上头名，举社区欢庆！ ：）</p>
+
+<p><a href="https://www.techempower.com/benchmarks/#section=data-r18&amp;hw=ph&amp;test=plaintext">Read more</a></p>
+
+<hr />
+
+<p>From 日报小组 Mike</p>
+
+<p>日报订阅地址：</p>
+
+<p>独立日报订阅地址：</p>
+
+<ul>
+<li><a href="https://t.me/rust_daily_news">Telgram Channel</a></li>
+<li><a href="https://www.yuque.com/chaosbot/rustnews">阿里云语雀订阅</a></li>
+<li><a href="https://steemit.com/@blackanger">Steemit</a></li>
+<li><a href="https://github.com/RustStudy/rust_daily_news">GitHub</a></li>
+</ul>
+
+<p>社区学习交流平台订阅：</p>
+
+<ul>
+<li><a href="https://rust.cc/">Rust.cc论坛: 支持rss</a></li>
+<li><a href="https://rustforce.net/">Rust Force: 支持rss</a></li>
+<li><a href="https://rust.cc/article?id=ed7c9379-d681-47cb-9532-0db97d883f62">微信公众号：Rust语言学习交流</a></li>
+</ul>
+
+<h2 id="rust日报-2019-07-10-https-rust-cc-article-id-429b9713-868e-4079-93c0-af4ec131e5e2"><a href="https://rust.cc/article?id=429b9713-868e-4079-93c0-af4ec131e5e2">【Rust日报】 2019-07-10</a></h2>
+
+<p><a href="https://rust.cc/blog_with_author?author_id=93091acb-066c-4feb-b7a4-364398b1d82e">ZhangHanDong</a>  发表于  2019-07-10 19:19</p>
+
+<p>Tags： rust</p>
+
+<h3 id="hyper现在已经支持std-future">hyper现在已经支持std::future</h3>
+
+<p>#hyper</p>
+
+<p>将在hyper 0.13中稳定发布</p>
+
+<p><a href="https://github.com/hyperium/hyper/pull/1836">Read More</a></p>
+
+<h3 id="对不再打算继续构建的老项目请使用carg-clean">对不再打算继续构建的老项目请使用carg clean</h3>
+
+<p>#cargo</p>
+
+<p>该贴作者写道：在遗忘的target目录下发现了170GB的空间占用。由此他提醒大家使用cargo clean来清理这些垃圾。评论区有人也提供了另外一个工具，比如cargo-sweep。</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/cbc24k/psa_run_cargo_clean_on_old_projects_you_dont/">Read More</a></p>
+
+<h3 id="讨论-如何回复同事这个问题-rust没有提供任何cpp没有的东西">「讨论」如何回复同事这个问题：Rust没有提供任何Cpp没有的东西。</h3>
+
+<p>#cpp</p>
+
+<p>该贴作者谈到：</p>
+
+<blockquote>
+<p>同事是一位（资深）Cpp开发人员，他坚持认为Rust不会带来任何新的东西，至少与C++相比是这样。</p>
+</blockquote>
+
+<p>因为该贴作者没有进一步紧跟现代Cpp（他在Cpp11发布之前就不用Cpp了），所以没有很好的论据来说服他的同事，现在发帖想和大家探讨这个问题。那么评论区是怎么说的呢？</p>
+
+<ul>
+<li>「Rust提供了内存安全保证，Cpp没有」。 对此论点提供反驳的通常都这么说：「格式良好的C++可以用智能指针做同样的事情，等等」，但其实，开发人员并不能保证他们的代码总是格式良好的。也许有人说，Cpp专家可以保证格式良好。但是Rust并不仅仅是关心那些专家，它关心的是每个开发者。这就像说如果每个人都遵守交通法规，事故就不会发生一样。虽然这是真的，但这完全是毫无意义的反驳。</li>
+<li>除此之外，有人总结了Rust提供了Cpp不提供的三件事：强制性RAII； 默认Move； 全局且不妥协的静态分析。但Rust的泛型，目前还不如cpp的模板更加强大。不过Rust还在持续改进，超越Cpp模板编程指日可待。</li>
+</ul>
+
+<p>这篇reddit帖子里包含了大量评论，感兴趣的可以自己去看看。</p>
+
+<p>（总之就是一句话：不要等错过了、遗憾了，才明白生活中其实不必有如此无谓的执着。）</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/cb49lb/coworker_rust_doesnt_offer_anything_c_doesnt/">Read More</a></p>
+
+<h3 id="静态站点生成器zola发布了0-8版本">静态站点生成器Zola发布了0.8版本</h3>
+
+<p>#zola #static_site</p>
+
+<p><a href="https://github.com/getzola/zola/releases/tag/v0.8.0">Read More</a></p>
+
+<h3 id="个人心得-从clojure转到rust的几个原因">「个人心得」从Clojure转到Rust的几个原因</h3>
+
+<p>#clojure</p>
+
+<p>一个9年的Clojure资深开发者写下了他喜欢Rust的原因：其实和大家喜欢Rust的原因一样。</p>
+
+<p>感兴趣的可以去看看。</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/cb5316/my_reasons_to_move_to_rust_from_clojure/">Read More</a></p>
+
+<hr />
+
+<p>From 日报小组 Chaos</p>
+
+<p>日报订阅地址：</p>
+
+<p>独立日报订阅地址：</p>
+
+<ul>
+<li><a href="https://t.me/rust_daily_news">Telgram Channel</a></li>
+<li><a href="https://www.yuque.com/chaosbot/rustnews">阿里云语雀订阅</a></li>
+<li><a href="https://steemit.com/@blackanger">Steemit</a></li>
+<li><a href="https://github.com/RustStudy/rust_daily_news">GitHub</a></li>
+</ul>
+
+<p>社区学习交流平台订阅：</p>
+
+<ul>
+<li><a href="https://rust.cc/">Rust.cc论坛: 支持rss</a></li>
+<li><a href="https://rustforce.net/">Rust Force: 支持rss</a></li>
+<li><a href="https://rust.cc/article?id=ed7c9379-d681-47cb-9532-0db97d883f62">微信公众号：Rust语言学习交流</a></li>
+</ul>
+
+<h2 id="rust日报-2019-07-09-https-rust-cc-article-id-ec27bf76-cc38-40ce-b252-f98becd0d931"><a href="https://rust.cc/article?id=ec27bf76-cc38-40ce-b252-f98becd0d931">【Rust日报】 2019-07-09</a></h2>
+
+<p><a href="https://rust.cc/blog_with_author?author_id=93091acb-066c-4feb-b7a4-364398b1d82e">ZhangHanDong</a>  发表于  2019-07-09 21:15</p>
+
+<p>Tags： rust</p>
+
+<h3 id="系列-使用rust和gtk绘图-part-i">「系列」使用Rust和GTK绘图 Part I</h3>
+
+<p>#GTK</p>
+
+<p>作者对于Rust和GTK都是新手，这是他的学习心得记录。</p>
+
+<p><a href="https://medium.com/journey-to-rust/drawing-in-gtk-in-rust-part-1-4a401eecc4e0">Read More</a></p>
+
+<h3 id="嵌入式rust-嵌入式工作组报告-18">「嵌入式Rust」嵌入式工作组报告 #18</h3>
+
+<p>#embeded</p>
+
+<p>概要：</p>
+
+<ul>
+<li>经过社区投票，交流工具选择了Matrix，新的channel：<a href="https://matrix.to/#/#rust-embedded:matrix.org">https://matrix.to/#/#rust-embedded:matrix.org</a></li>
+<li>官方工作组在英国剑桥和美国波特兰RustConf大会上做宣传</li>
+<li>还在寻找合适的嵌入式Rust项目进行官方展示</li>
+</ul>
+
+<p><a href="https://rust-embedded.github.io/blog/newsletter-18/">Read More</a></p>
+
+<h3 id="cargo-offline功能指南">cargo offline功能指南</h3>
+
+<p>#cargo</p>
+
+<p>使用&ndash;offline意味着Cargo不会更新其索引。 Cargo将使用缓存索引重新解析依赖关系图，并且更喜欢使用已缓存的crates版本。 如果可以只使用缓存的crates，那么就可以在不触及网络的情况下进行构建。</p>
+
+<p>同样，在添加新依赖项或启动新项目时，如果没有&ndash;offline，cargo build将更新索引，但使用&ndash;offline意味着Cargo将使用缓存索引并尝试使用已在本地缓存的crates。</p>
+
+<p><a href="https://www.ncameron.org/blog/cargo-offline/">Read More</a></p>
+
+<h3 id="rust的模块与文件">Rust的模块与文件</h3>
+
+<p>#module</p>
+
+<p>没有搞清楚模块和文件关系的可以看看这篇文章。</p>
+
+<p><a href="https://amos.me/blog/2019/rust-modules-vs-files/">Read More</a></p>
+
+<h3 id="使用gtk和rust的加速桌面应用程序">使用GTK和Rust的加速桌面应用程序</h3>
+
+<p>#GTK</p>
+
+<p><a href="https://nora.codes/tutorial/speedy-desktop-apps-with-gtk-and-rust/">Read More</a></p>
+
+<h3 id="系列-std-alloc-指南">「系列」std::alloc 指南</h3>
+
+<p>#alloc</p>
+
+<p>std::alloc在1.36稳定版中发布，这篇文章较为详细的介绍了std::alloc。总之，可以自定义自己的全局内存分配器。</p>
+
+<p><a href="https://ehsanmkermani.com/2019/07/03/rust-std-study-series-alloc/">Read More</a></p>
+
+<h3 id="rust和yew指南">Rust和Yew指南</h3>
+
+<p>#yew #wasm</p>
+
+<p>这是一篇比较详尽的Yew使用指南，使用Yew和Rust来构建前端页面。</p>
+
+<p><a href="https://www.steadylearner.com/blog/read/How-to-use-Rust-Yew">Read More</a></p>
+
+<h3 id="google的codesearch服务支持rust代码搜索">Google的CodeSearch服务支持Rust代码搜索</h3>
+
+<p>#codesearch</p>
+
+<p>基于Rust的ripgrep和google的re2正则引擎构建。</p>
+
+<p><a href="https://codesearch.aelve.com/rust">Read More</a></p>
+
+<h3 id="rust-webassembly-之-深入浅出wasm-bindgen和wasm2wat">Rust WebAssembly 之 深入浅出wasm-bindgen和wasm2wat</h3>
+
+<p>#wasm</p>
+
+<p><a href="https://www.webassemblyman.com/rust_webassembly_hello_world.html">Read More</a></p>
+
+<h3 id="使用rust构建dev的offline网页">使用Rust构建Dev的offline网页</h3>
+
+<p>#dev #wasm</p>
+
+<p>Dev的offline网页是指dev.to/offline，该网页上提供了几种颜色的画笔。这篇文章教你如何用Rust和WASM实现类似的网站。</p>
+
+<ul>
+<li><a href="https://dev.to/offline">dev.to/offline</a></li>
+<li><a href="https://dev.to/sendilkumarn/create-dev-s-offline-page-with-rust-and-webassembly-21gn">Read More</a></li>
+</ul>
+
+<h3 id="官方-async-await状态报告-2">「官方」async-await状态报告 #2</h3>
+
+<p>#async #await</p>
+
+<p>官方核心组Leader Niko的新文，主要阐述了三件事：</p>
+
+<ul>
+<li>async/await MVP的状态</li>
+<li>目前的工作目标，以及如何将其纳入更大的愿景</li>
+<li>社区里的你，能帮上什么忙。</li>
+</ul>
+
+<p>MVP（最小可行产品）的功能包括：</p>
+
+<ul>
+<li>Future trait（1.36已稳定）</li>
+<li>基本的async-await的语法，正在努力赶在1.38版本稳定发布（仅限于  <code>async fn</code>自由函数 和 impl块中<code>async fn</code>的方法）</li>
+<li>async book（异步之书）的第一版。等async-await语法稳定就开始构建本书。</li>
+</ul>
+
+<p>未来更大的愿景：</p>
+
+<ul>
+<li>需要一组核心的async trait和组合子。基本上是futures-rs的1.0版本中包含。</li>
+<li>更好的stream支持。</li>
+<li>Generator和async Generator支持。</li>
+<li>在trait和trait impl中的<code>async fn</code>支持</li>
+<li>异步闭包</li>
+</ul>
+
+<p>你如果愿意参与贡献，可以去Rust官方仓库搜索async-await相关的issues了解。</p>
+
+<p><a href="http://smallcultfollowing.com/babysteps/blog/2019/07/08/async-await-status-report-2/">Read More</a></p>
+
+<h3 id="debian-10发布-包含ripgrep-fd-find-exa-hexyl-process-viewer几个rust实现的命令行工具">Debian 10发布，包含ripgrep，fd-find，exa，hexyl，process-viewer几个Rust实现的命令行工具</h3>
+
+<p>#Debian</p>
+
+<p><a href="https://qa.debian.org/developer.php?login=pkg-rust-maintainers@lists.alioth.debian.org">Read More</a></p>
+
+<h3 id="veloren-一个类似于我的世界的游戏">veloren: 一个类似于我的世界的游戏</h3>
+
+<p>#game</p>
+
+<p>对本游戏感兴趣的可以关注它们的周报，已经发了23期</p>
+
+<p><img src="https://cdn.discordapp.com/attachments/541307708146581519/597840720916774912/U01qD8m.png" alt="img" /></p>
+
+<p><a href="https://veloren.net/devblog-23/">Read More</a></p>
+
+<h3 id="maybe-uninit-为所有rust版本支持maybeuninit">maybe-uninit: 为所有Rust版本支持MaybeUninit</h3>
+
+<p>Rust最近发布的1.36.0版本带来了一个MaybeUninit Union类型，它允许更安全地处理可能未初始化的数据。 这样的数据结构非常棒，但很多crate的MSRV策略可以追溯到很多，并且可能会犹豫是否放弃std::mem::uninitialized以支持这个非常新的API。对于这些用户，可以使用maybe-uninit crate，它将MaybeUninit的带到所有版本的稳定Rust中，从1.0.0开始。</p>
+
+<p><a href="https://github.com/est31/maybe-uninit">Read More</a></p>
+
+<h3 id="rust-1-36稳定了wasm32-wasi-target">Rust 1.36稳定了wasm32-wasi target</h3>
+
+<p>#wasi</p>
+
+<p>不确定为什么在官方发布公告中没有提到这一点(这是WASM开发的重要一步)，不过在发布说明中可以找到。</p>
+
+<p><a href="https://github.com/rust-lang/rust/blob/master/RELEASES.md#compiler">Read More</a></p>
+
+<h3 id="hashcow-一个带有写时复制kv的rust-hashmap实现">Hashcow： 一个带有写时复制KV的Rust HashMap实现</h3>
+
+<p>#hashmap</p>
+
+<p><a href="https://github.com/purpleprotocol/hashcow">Hashcow</a></p>
+
+<h3 id="wafu-fuse-js的rust移植版">wafu: Fuse.js的Rust移植版</h3>
+
+<p>#fuseJS</p>
+
+<p>模糊字符串搜索库，运行在你的浏览器中</p>
+
+<ul>
+<li><a href="https://projects.heyimalex.com/wafu/">Read More</a></li>
+<li><a href="https://github.com/heyimalex/wafu">wafu</a></li>
+</ul>
+
+<h3 id="derive-destructure-支持对实现drop的结构进行解构">derive_destructure: 支持对实现Drop的结构进行解构</h3>
+
+<p>#macro</p>
+
+<pre><code>let (field_1, field_2, ...) = my_struct.destructure();
+
+</code></pre>
+
+<p>上述代码字段会被Move。该库由unsafe Rust实现，谨慎使用。</p>
+
+<p><a href="https://github.com/Migi/derive_destructure">derive_destructure</a></p>
+
+<hr />
+
+<p>From 日报小组 Chaos</p>
+
+<p>日报订阅地址：</p>
+
+<p>独立日报订阅地址：</p>
+
+<ul>
+<li><a href="https://t.me/rust_daily_news">Telgram Channel</a></li>
+<li><a href="https://www.yuque.com/chaosbot/rustnews">阿里云语雀订阅</a></li>
+<li><a href="https://steemit.com/@blackanger">Steemit</a></li>
+<li><a href="https://github.com/RustStudy/rust_daily_news">GitHub</a></li>
+</ul>
+
+<p>社区学习交流平台订阅：</p>
+
+<ul>
+<li><a href="https://rust.cc/">Rust.cc论坛: 支持rss</a></li>
+<li><a href="https://rustforce.net/">Rust Force: 支持rss</a></li>
+<li><a href="https://rust.cc/article?id=ed7c9379-d681-47cb-9532-0db97d883f62">微信公众号：Rust语言学习交流</a></li>
+</ul>
+
+<h2 id="rust日报-2019-07-08-https-rust-cc-article-id-670bf8d4-505e-4bf9-8377-69c7e30d5aa3"><a href="https://rust.cc/article?id=670bf8d4-505e-4bf9-8377-69c7e30d5aa3">【Rust日报】 2019-07-08</a></h2>
+
+<p><a href="https://rust.cc/blog_with_author?author_id=93091acb-066c-4feb-b7a4-364398b1d82e">ZhangHanDong</a>  发表于  2019-07-08 23:38</p>
+
+<p>Tags： rust</p>
+
+<h3 id="meli-新的终端邮件客户端-pre-alpha版本">meli: 新的终端邮件客户端 pre-alpha版本</h3>
+
+<p>#cli</p>
+
+<p><a href="https://meli.delivery/posts/2019-06-15-pre-alpha.html">Read More</a></p>
+
+<h3 id="使用actix-web-1-0实现auth-web微服务">使用Actix-Web 1.0实现Auth Web微服务</h3>
+
+<p>#actix_web</p>
+
+<p>使用最新版(actix-web 1.0.3)的API</p>
+
+<p><a href="https://gill.net.in/posts/auth-microservice-rust-actix-web1.0-diesel-complete-tutorial/">Read More</a></p>
+
+<h3 id="嵌入式rust-使用apache-mynewt更安全更简单地在stm32-blue-pill上使用rust">「嵌入式Rust」使用Apache Mynewt更安全更简单地在STM32 Blue Pill上使用Rust</h3>
+
+<p>#embeded</p>
+
+<p>这篇文章涵盖了使用声明宏、过程宏来避免在编写嵌入式代码中遇到的坑： 当Embedded Rust编码器调用Mynewt API，驱动程序和其他C函数时，可能会出现字符串相关的问题。为了解决这个问题，作者使用Rust的宏创建了一个新的类型Strn，它表示一个永远不会被修改的以null结尾的字符串。</p>
+
+<blockquote>
+<p>Apache Mynewt是一个开源的ioT操作系统，是C语言实现的，它支持很多传感器。</p>
+</blockquote>
+
+<p><a href="https://medium.com/@ly.lee/safer-simpler-embedded-rust-with-apache-mynewt-on-stm32-blue-pill-d8fcb41969ac">Read More</a></p>
+
+<h3 id="hunter-终端下的文件浏览器">hunter - 终端下的文件浏览器</h3>
+
+<p>#ranger #file_browser #cli</p>
+
+<p>看起来操作性很高，比linux之前的MC好用多了。本工具受 ranger 和 emacs 启发。 （之前日报也推过）</p>
+
+<p><img src="https://raw.githubusercontent.com/rabite0/hunter/master/docs/hunter.png" alt="hunter" /></p>
+
+<p><a href="https://github.com/rabite0/hunter">Hunter</a></p>
+
+<h3 id="bin-io-一个读写二进制文件的框架">bin_io: 一个读写二进制文件的框架</h3>
+
+<p>#nom</p>
+
+<p>类似于nom，但是它提供了读写功能，作者自己称：是nom的小兄弟。</p>
+
+<p><a href="https://github.com/Tazdevil971/bin_io">bin_io</a></p>
+
+<h3 id="rust中模拟高阶类型的方法">Rust中模拟高阶类型的方法</h3>
+
+<p>#Higher-KindedType</p>
+
+<p>该文作者提出了一种方法，通过类型参数向下转换泛型trait来模拟当前Rust中的高阶类型/泛型关联类型，并且提供了使用该方法在Rust中创建Functors，Applicatives和Monads的简单示例。</p>
+
+<p><a href="https://gist.github.com/edmundsmith/855fcf0cb35dd467c29a9350481f0ecf">Read More</a></p>
+
+<h3 id="rust标准库中array-impl用上了const-generics">Rust标准库中array impl用上了const generics</h3>
+
+<p>#Rust #std #const_generics</p>
+
+<p><a href="https://github.com/rust-lang/rust/pull/62435">Read More</a></p>
+
+<h3 id="rust实现遗传算法并用python进行可视化">Rust实现遗传算法并用Python进行可视化</h3>
+
+<p>#algorithm #Genetic</p>
+
+<p><img src="https://github.com/mithi/rusty-genes/raw/rusty-genes/citydna/docs/gif/simA.gif" alt="img" /></p>
+
+<p><a href="https://github.com/mithi/rusty-genes">rusty-genes</a></p>
+
+<hr />
+
+<p>From 日报小组 Chaos</p>
+
+<p>日报订阅地址：</p>
+
+<p>独立日报订阅地址：</p>
+
+<ul>
+<li><a href="https://t.me/rust_daily_news">Telgram Channel</a></li>
+<li><a href="https://www.yuque.com/chaosbot/rustnews">阿里云语雀订阅</a></li>
+<li><a href="https://steemit.com/@blackanger">Steemit</a></li>
+<li><a href="https://github.com/RustStudy/rust_daily_news">GitHub</a></li>
+</ul>
+
+<p>社区学习交流平台订阅：</p>
+
+<ul>
+<li><a href="https://rust.cc/">Rust.cc论坛: 支持rss</a></li>
+<li><a href="https://rustforce.net/">Rust Force: 支持rss</a></li>
+<li><a href="https://rust.cc/article?id=ed7c9379-d681-47cb-9532-0db97d883f62">微信公众号：Rust语言学习交流</a></li>
+</ul>
+
+<h3 id="rust日报-2019-07-07-snoopy-一个可高度配置化的多线程网络包嗅探分析工具-https-rustforce-net-article-id-fc145e18-88ed-418a-88b7-48394a3ec609"><a href="https://rustforce.net/article?id=fc145e18-88ed-418a-88b7-48394a3ec609">【Rust日报】 2019-07-07：snoopy - 一个可高度配置化的多线程网络包嗅探分析工具</a></h3>
+
+<p>2019-07-07 21:00  责任编辑：Mike</p>
+
+<p>标签：rust</p>
+
+<h3 id="神器-flamer">神器 flamer</h3>
+
+<p>flamer 是这样一个魔法东西，它可以方便地计算出你代码块的耗时。</p>
+
+<p>基本方法，就是在你的代码/函数头和尾（自动）插入计时代码，最后汇总出一个耗时（报告）。用到了 nightly 的自定义属性，所以暂时只能以 nightly 版运行。看下例子：</p>
+
+<pre><code>extern crate flame;
+
+use std::fs::File;
+
+pub fn main() {
+    // Manual `start` and `end`
+    flame::start(&quot;read file&quot;);
+    let x = read_a_file();
+    flame::end(&quot;read file&quot;);
+
+    // Time the execution of a closure.  (the result of the closure is returned)
+    let y = flame::span_of(&quot;database query&quot;, || query_database());
+
+    // Time the execution of a block by creating a guard.
+    let z = {
+        let _guard = flame::start_guard(&quot;cpu-heavy calculation&quot;);
+        cpu_heavy_operations_1();
+        // Notes can be used to annotate a particular instant in time.
+        flame::note(&quot;something interesting happened&quot;, None);
+        cpu_heavy_operations_2()
+    };
+
+    // Dump the report to disk
+    flame::dump_html(&amp;mut File::create(&quot;flame-graph.html&quot;).unwrap()).unwrap();
+
+    // Or read and process the data yourself!
+    let spans = flame::spans();
+
+    println!(&quot;{} {} {}&quot;, x, y, z);
+}
+
+------------------------
+
+extern crate flame;
+#[macro_use] extern crate flamer;
+
+#[flame]
+// The item to apply `flame` to goes here.
+
+</code></pre>
+
+<p><a href="https://github.com/llogiq/flamer">Repo</a></p>
+
+<h3 id="snoopy-一个可高度配置化的多线程网络包嗅探分析工具">snoopy - 一个可高度配置化的多线程网络包嗅探分析工具</h3>
+
+<p>Rust 作这类工具太适合不过了。</p>
+
+<pre><code>➜ sudo snoopy capture run                                          
+--------------------
+Sniffing  wlp3s0
+-------------------- 
+
+Source IP              | Source Port  | Dest IP                | Dest Port    | Protocol     | Length       | Timestamp            |
+------------------------------------------------------------------------------------------------------------------------------------
+52.216.185.195         | 443          | 10.20.197.103          | 38522        | Tcp          | 10078        | 1562310108.589373                  
+10.20.197.103          | 38522        | 52.216.185.195         | 443          | Tcp          | 54           | 1562310108.589468                  
+52.216.185.195         | 443          | 10.20.197.103          | 38522        | Tcp          | 10078        | 1562310108.890490                  
+10.20.197.103          | 38522        | 52.216.185.195         | 443          | Tcp          | 54           | 1562310108.890547                  
+52.216.185.195         | 443          | 10.20.197.103          | 38522        | Tcp          | 1486         | 1562310109.197739                  
+10.20.197.103          | 38522        | 52.216.185.195         | 443          | Tcp          | 54           | 1562310109.197795                  
+52.216.185.195         | 443          | 10.20.197.103          | 38522        | Tcp          | 1486         | 1562310109.197841                  
+10.20.197.103          | 38522        | 52.216.185.195         | 443          | Tcp          | 66           | 1562310109.197865                  
+52.216.185.195         | 443          | 10.20.197.103          | 38522        | Tcp          | 2918         | 1562310109.197887                  
+10.20.197.103          | 38522        | 52.216.185.195         | 443          | Tcp          | 74           | 1562310109.197906                  
+52.216.185.195         | 443          | 10.20.197.103          | 38522        | Tcp          | 1486         | 1562310109.197965                  
+10.20.197.103          | 38522        | 52.216.185.195         | 443          | Tcp          | 74           | 1562310109.197984                  
+35.154.102.71          | 443          | 10.20.197.103          | 56572        | Tls          | 160          | 1562310109.262324                  
+10.20.197.103          | 56572        | 35.154.102.71          | 443          | Tcp          | 66           | 1562310109.262383                  
+
+</code></pre>
+
+<p><a href="https://github.com/kanishkarj/snoopy">Repo</a></p>
+
+<h3 id="yarte-号称最快的模板渲染引擎">yarte - 号称最快的模板渲染引擎</h3>
+
+<p>采用 handlebars 语法。作者说它是 Rust 界最快的模板渲染引擎。</p>
+
+<p><a href="https://github.com/botika/yarte">Repo</a></p>
+
+<h3 id="ferrocarril-把-ruby-on-rails-嵌入-rust-服务-容器-中运行的尝试">ferrocarril - 把 Ruby on Rails 嵌入 Rust 服务（容器）中运行的尝试</h3>
+
+<p>这个项目很有意思。想法很新颖。</p>
+
+<p><a href="https://github.com/lopopolo/ferrocarril">Repo</a></p>
+
+<hr />
+
+<p>From 日报小组 Mike</p>
+
+<p>日报订阅地址：</p>
+
+<p>独立日报订阅地址：</p>
+
+<ul>
+<li><a href="https://t.me/rust_daily_news">Telgram Channel</a></li>
+<li><a href="https://www.yuque.com/chaosbot/rustnews">阿里云语雀订阅</a></li>
+<li><a href="https://steemit.com/@blackanger">Steemit</a></li>
+<li><a href="https://github.com/RustStudy/rust_daily_news">GitHub</a></li>
+</ul>
+
+<p>社区学习交流平台订阅：</p>
+
+<ul>
+<li><a href="https://rust.cc/">Rust.cc论坛: 支持rss</a></li>
+<li><a href="https://rustforce.net/">Rust Force: 支持rss</a></li>
+<li><a href="https://rust.cc/article?id=ed7c9379-d681-47cb-9532-0db97d883f62">微信公众号：Rust语言学习交流</a></li>
+</ul>
+
+<h3 id="rust日报-2019-07-06-使用rust與gtk-快速開發桌面應用-https-rustforce-net-article-id-31ce4f30-4c96-42ec-9d8f-48cb2ec2450f"><a href="https://rustforce.net/article?id=31ce4f30-4c96-42ec-9d8f-48cb2ec2450f">【Rust日报】 2019-07-06：使用Rust與GTK 快速開發桌面應用</a></h3>
+
+<p>2019-07-06 21:00  责任编辑：Mike</p>
+
+<p>标签：rust</p>
+
+<h3 id="analysis-of-rust-crate-sizes-on-crates-io">Analysis of Rust Crate Sizes on crates.io</h3>
+
+<p>有人寫了一個程式可以分析crates.io 裡面庫的大小</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/c9fzyp/analysis_of_rust_crate_sizes_on_cratesio/">read more</a></p>
+
+<h3 id="tiny-keccak-1-5-0">tiny-keccak 1.5.0</h3>
+
+<p>Keccak是一種多功能的加密函數。</p>
+
+<p>tiny-keccak是一個有基本加密函數的庫。</p>
+
+<p>這次新增了 big-endian平台支持</p>
+
+<p>與 KangarooTwelve哈希函數的支援</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/c9h6ab/tinykeccak_150/">read more</a></p>
+
+<h3 id="d-macro">d-macro</h3>
+
+<p>用 d! 取代 dbg! 讓你得到更多debug資訊</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/c9hdgu/dmacro_why_dbg_when_you_can_d/">read more</a></p>
+
+<h3 id="hazptr-動態無鎖內存回收">hazptr - 動態無鎖內存回收</h3>
+
+<p>三個月前曾發佈第一版</p>
+
+<p>現在的API跟 crossbeam-epoch 很類似，方便與 crossbeam 的組件合作。</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/c9iltj/announcing_hazptr_dynamic_lockfree_memory/">read more</a></p>
+
+<h3 id="moz-gfx-新聞-46">moz://gfx 新聞 #46</h3>
+
+<p>新增了桌面縮放，WebGL更強大：低功耗高效能</p>
+
+<p>增加了 WebRender 一個基於GPU的2D渲染引擎</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/c9kdfz/mozgfx_newsletter_46_mozilla_gfx_team_blog/">read more</a></p>
+
+<h3 id="使用rust與gtk-快速開發桌面應用">使用Rust與GTK 快速開發桌面應用</h3>
+
+<p>作者寫了一個丟骰子的範例程式作為教學範例</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/c9l2ow/speedy_desktop_apps_with_gtk_and_rust/">read more</a></p>
+
+<hr />
+
+<p>From 日报小组 @Damody</p>
+
+<p>日报订阅地址：</p>
+
+<p>独立日报订阅地址：</p>
+
+<ul>
+<li><a href="https://t.me/rust_daily_news">Telgram Channel</a></li>
+<li><a href="https://www.yuque.com/chaosbot/rustnews">阿里云语雀订阅</a></li>
+<li><a href="https://steemit.com/@blackanger">Steemit</a></li>
+<li><a href="https://github.com/RustStudy/rust_daily_news">GitHub</a></li>
+</ul>
+
+<p>社区学习交流平台订阅：</p>
+
+<ul>
+<li><a href="https://rust.cc/">Rust.cc论坛: 支持rss</a></li>
+<li><a href="https://rustforce.net/">Rust Force: 支持rss</a></li>
+<li><a href="https://rust.cc/article?id=ed7c9379-d681-47cb-9532-0db97d883f62">微信公众号：Rust语言学习交流</a></li>
+</ul>
+
+<h3 id="rust日报-2019-07-05-使用-rust與webassembly-創建離線頁面-https-rustforce-net-article-id-fede4e47-2128-402c-a7ae-932c150aa59e"><a href="https://rustforce.net/article?id=fede4e47-2128-402c-a7ae-932c150aa59e">【Rust日报】 2019-07-05：使用 Rust與WebAssembly 創建離線頁面</a></h3>
+
+<p>2019-07-05 21:00  责任编辑：Mike</p>
+
+<p>标签：rust</p>
+
+<h3 id="給-c-程式員的rust教學影片">給 C++ 程式員的Rust教學影片</h3>
+
+<p><a href="https://youtu.be/k7nAtrwPhR8">read more</a></p>
+
+<h3 id="使用-rust與webassembly-創建離線頁面">使用 Rust與WebAssembly 創建離線頁面</h3>
+
+<p>一個簡單的教學，讓你用 Rust與WebAssembly 創建離線頁面</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/c924s8/create_devs_offline_page_with_rust_and_webassembly/">read more</a></p>
+
+<h3 id="使用javascript-rust-建構區塊鏈聊天系統-webassembly">使用JavaScript Rust 建構區塊鏈聊天系統（WebAssembly）</h3>
+
+<p><a href="https://www.reddit.com/r/rust/comments/c90dtm/build_a_decentralized_chat_using_javascript_rust/">read more</a></p>
+
+<h3 id="pushrod-0-3-5-gui-library">Pushrod 0.3.5: GUI Library</h3>
+
+<p>新增了 基本佈局、水平佈局</p>
+
+<p>修了幾個bug讓速度變快</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/c97e9w/pushrod_035_gui_library_for_rust/">read more</a></p>
+
+<h3 id="rust-問卷調查">Rust 問卷調查</h3>
+
+<p>調查你工作上、業餘時間使用rust的情況。</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/c96jnu/survey_on_upgrading_versions_rust_in_production/">read more</a></p>
+
+<hr />
+
+<p>From 日报小组 @Damody</p>
+
+<p>日报订阅地址：</p>
+
+<p>独立日报订阅地址：</p>
+
+<ul>
+<li><a href="https://t.me/rust_daily_news">Telgram Channel</a></li>
+<li><a href="https://www.yuque.com/chaosbot/rustnews">阿里云语雀订阅</a></li>
+<li><a href="https://steemit.com/@blackanger">Steemit</a></li>
+<li><a href="https://github.com/RustStudy/rust_daily_news">GitHub</a></li>
+</ul>
+
+<p>社区学习交流平台订阅：</p>
+
+<ul>
+<li><a href="https://rust.cc/">Rust.cc论坛: 支持rss</a></li>
+<li><a href="https://rustforce.net/">Rust Force: 支持rss</a></li>
+<li><a href="https://rust.cc/article?id=ed7c9379-d681-47cb-9532-0db97d883f62">微信公众号：Rust语言学习交流</a></li>
+</ul>
+
+<h3 id="rust日报-2019-07-04-rust-的理念已经开始影响-glib-的接口设计了-https-rustforce-net-article-id-a3799861-c869-4c7f-866a-a258ade10ad3"><a href="https://rustforce.net/article?id=a3799861-c869-4c7f-866a-a258ade10ad3">【Rust日报】 2019-07-04：Rust 的理念已经开始影响 glib 的接口设计了</a></h3>
+
+<p>2019-07-04 21:00  责任编辑：Mike</p>
+
+<p>标签：rust</p>
+
+<h3 id="使用-rust-和-js-构建去中心化聊天软件">使用 Rust 和 Js 构建去中心化聊天软件</h3>
+
+<p><a href="https://medium.com/perlin-network/build-a-decentralized-chat-using-javascript-rust-webassembly-c775f8484b52">这篇文章</a>中详细讲解了 Perlin 团队，在他们的 Wavelet 区块链框架的基础上，构建一个去中心化应用（Dapp）的示例。逻辑使用 Rust 合约实现，编译成 Wasm 运行。数据存储，直接存储在区块链上。</p>
+
+<p>这种聊天与我们通常讲的IM有所区别，你见过发一条消息还要钱的吗？：）</p>
+
+<p><a href="https://perlin-network.github.io/decentralized-chat/">Demo</a><br />
+<a href="https://github.com/perlin-network/decentralized-chat">Repo</a></p>
+
+<h3 id="据说-有史以来最好的面向-c-程序员的-rust-视频教程">（据说）有史以来最好的面向 C++ 程序员的 Rust 视频教程</h3>
+
+<p>在 Youtube 上，得自己想办法出去看咯。</p>
+
+<p><a href="https://youtu.be/k7nAtrwPhR8">Read More</a></p>
+
+<h3 id="recloser-使用-rust-实现的一个融断库">recloser - 使用 Rust 实现的一个融断库</h3>
+
+<p>融断是这样一个东西，它属于质量控制中的一环。如果一个组件发生多次失败调用，那这个组件就被融断了。调用这个组件中的东西，直接就返回拒绝服务的结果。（不知道小编理解得对不）。<a href="https://martinfowler.com/bliki/CircuitBreaker.html">这里有讲</a>  ，还是看原文吧。</p>
+
+<p><img src="https://martinfowler.com/bliki/images/circuitBreaker/sketch.png" alt="img" /></p>
+
+<p><a href="https://www.amazon.com/gp/product/0978739213?ie=UTF8&amp;tag=martinfowlerc-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0978739213">Book: Release it!</a><br />
+<a href="https://github.com/lerouxrgd/recloser/">Repo</a></p>
+
+<h3 id="standard-graphics-另一种思路的2d图形渲染引擎">Standard Graphics - 另一种思路的2D图形渲染引擎</h3>
+
+<p>这个库，思路清奇，通过接受  <code>stdin</code>  的输入，来直接产生2D图形输出。比如，可以像下面这样：</p>
+
+<pre><code>// Ruby code
+
+puts 'window 400 400'
+puts 'title Untitled'
+
+loop do
+	puts 'color 255 255 255'
+	puts 'clear'
+	puts 'color 255 0 0'
+	puts 'rect 50 50 100 100'
+	puts 'present'
+	puts 'handle'
+end
+
+</code></pre>
+
+<p>然后运行</p>
+
+<pre><code>ruby draw_rectangle.rb | stdg
+
+</code></pre>
+
+<p>输出</p>
+
+<p><img src="https://camo.githubusercontent.com/cd57eaaa7f39a4f9dbe1a4bed759baef6e991185/68747470733a2f2f692e696d6775722e636f6d2f62506e55596f4a2e706e67" alt="img" /></p>
+
+<p><a href="https://github.com/calebwin/stdg">Repo</a></p>
+
+<h3 id="webrender-背后的生态">WebRender 背后的生态</h3>
+
+<p>这是一个视频，里面提到两个库特别有趣，一个是  <a href="https://github.com/kvark/copyless">copyless</a>，另一个是  <a href="https://github.com/jrmuizel/memcpy-find">memcpy-find</a>。对于性能优化有很大作用。</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/c8o1pc/video_rust_features_and_ecosystem_gems_that_power/">Read More</a></p>
+
+<h3 id="tbot-用-rust-为-telegram-写机器人">tbot - 用 Rust 为 Telegram 写机器人</h3>
+
+<p>比如像下面这样简单几行就可以写一个向 Telegram 发消息的机器人了：</p>
+
+<pre><code>use tbot::prelude::*;
+
+fn main() {
+    let mut bot = tbot::bot!(&quot;BOT_TOKEN&quot;).event_loop();
+
+    bot.text(|context| {
+        let reply = context
+            .send_message(&amp;context.text.value)
+            .into_future()
+            .map_err(|err| {
+                dbg!(err);
+            });
+
+        tbot::spawn(reply);
+    });
+
+    bot.polling().start();
+}
+
+</code></pre>
+
+<p><a href="https://gitlab.com/SnejUgal/tbot">Repo</a></p>
+
+<h3 id="rust-的理念已经开始影响-glib-的接口设计了">Rust 的理念已经开始影响 glib 的接口设计了</h3>
+
+<p>Glib 不用多介绍了吧。Glib 在 Gtk/Gnome 中的地位就跟 glibc 在 Linux 中的地位一样。</p>
+
+<p><a href="https://gitlab.gnome.org/GNOME/glib/issues/1815">这篇文章</a>  讲了，glib 2.x 要设计一个新的分配器 API，借鉴了一些 Rust 的理念。</p>
+
+<hr />
+
+<p>From 日报小组 Mike</p>
+
+<p>日报订阅地址：</p>
+
+<p>独立日报订阅地址：</p>
+
+<ul>
+<li><a href="https://t.me/rust_daily_news">Telgram Channel</a></li>
+<li><a href="https://www.yuque.com/chaosbot/rustnews">阿里云语雀订阅</a></li>
+<li><a href="https://steemit.com/@blackanger">Steemit</a></li>
+<li><a href="https://github.com/RustStudy/rust_daily_news">GitHub</a></li>
+</ul>
+
+<p>社区学习交流平台订阅：</p>
+
+<ul>
+<li><a href="https://rust.cc/">Rust.cc论坛: 支持rss</a></li>
+<li><a href="https://rustforce.net/">Rust Force: 支持rss</a></li>
+<li><a href="https://rust.cc/article?id=ed7c9379-d681-47cb-9532-0db97d883f62">微信公众号：Rust语言学习交流</a></li>
+</ul>
+
+<h3 id="rust日报-2019-07-03-tls-性能-rustls-vs-openssl-https-rustforce-net-article-id-2d17392f-d7c9-4eee-a5a9-7be9d64710b7"><a href="https://rustforce.net/article?id=2d17392f-d7c9-4eee-a5a9-7be9d64710b7">【Rust日报】 2019-07-03：TLS 性能: rustls vs OpenSSL</a></h3>
+
+<p>2019-07-03 21:00  责任编辑：Mike</p>
+
+<p>标签：rust</p>
+
+<h3 id="远程工作-assembl招rust开发">「远程工作」assembl招Rust开发</h3>
+
+<p>#job</p>
+
+<p>assembl公司主要技术栈是Nodejs和Electron，所以也希望应聘者有Nodejs经验。可远程。当然你有Rust的丰富开发经验也是可以的。联系邮件：s@assembl.ch</p>
+
+<ul>
+<li><a href="https://assembl.ch/#!/home">assembl官网</a></li>
+<li><a href="https://www.reddit.com/r/rust/comments/c871n5/remote_jobcontract_rust_nodejs_development/">Read More</a></li>
+</ul>
+
+<h3 id="讨论-跨平台应用的逻辑开发共享库的最佳实践是什么">「讨论」跨平台应用的逻辑开发共享库的最佳实践是什么？</h3>
+
+<p>#CrossPlattform</p>
+
+<p>该贴作者的团队计划开发一个应用程序并将其部署在Android和iOS上，同时也想以将其移植到Windows，MacOS和Linux。目前的想法是，整个应用程序/业务逻辑将作为可交叉编译的库一次性实现，以便可以在多端共享。你是否会推荐Rust呢？如果推荐Rust有什么经验分享？</p>
+
+<p>目前还未有太多讨论，可以关注。</p>
+
+<p><a href="https://www.reddit.com/r/rust/comments/c8c9ce/crossplattform_application_logic_development_as_a/">Reddit 讨论</a></p>
+
+<h3 id="提升rust和webassembly的性能">提升Rust和WebAssembly的性能</h3>
+
+<p>#wasm</p>
+
+<p>该文以使用WebAssembly转换markdown格式为html的示例，介绍了Rust和WASM。</p>
+
+<p><a href="https://dev.to/sendilkumarn/increase-rust-and-webassembly-performance-382h">Read More</a></p>
+
+<h3 id="构建c-abi-like的rust库">构建C(ABI) Like的Rust库</h3>
+
+<p>#C(ABI)</p>
+
+<p>该文介绍了一个小工具cargo-c，帮助开发者改善Makefile和build.rs的开发体验。</p>
+
+<ul>
+<li><a href="https://dev.to/luzero/building-crates-so-they-look-like-c-abi-libraries-1ibn">Read More</a></li>
+<li><a href="https://github.com/lu-zero/cargo-c">cargo-c</a></li>
+</ul>
+
+<h3 id="花一个周末写的光线追踪动画">花一个周末写的光线追踪动画</h3>
+
+<p>#raytracing</p>
+
+<p><img src="https://github.com/nwtgck/ray-tracing-iow-rust/raw/develop/doc_assets/ray-tracing-animation.gif" alt="img" /></p>
+
+<p><a href="https://github.com/nwtgck/ray-tracing-iow-rust">ray-tracing-iow-rust</a></p>
+
+<h3 id="vector-为logs-metrics-和-events提供收集-转换和路由的开源工具集">Vector: 为logs, metrics, 和 events提供收集、转换和路由的开源工具集</h3>
+
+<p>#timberio #log</p>
+
+<p>Timber.io是一家提供日志服务的SaaS厂家。Vector是一种高性能的可观测数据路由器。它使得收集、转换和发送日志、性能指标和事件更加容易。它将数据收集和路由从应用服务中分离出来，使开发者能够控制和拥有数据，还有许多其他好处。它编译成一个静态二进制文件，并被设计为部署在整个基础设施上，既充当轻量级代理，又充当高效的服务，使从A到B的数据获取过程简单而统一。</p>
+
+<ul>
+<li><a href="https://vector.dev/">https://vector.dev/</a></li>
+<li><a href="https://github.com/timberio/vector">vector</a></li>
+</ul>
+
+<h3 id="rust编译器按配置文件引导优化-profile-guided-optimization-pgo-稳定化支持已经被merge到主分支">Rust编译器按配置文件引导优化（Profile-guided optimization，PGO）稳定化支持已经被merge到主分支</h3>
+
+<p>#rustc</p>
+
+<p>PGO优化是一种常见的基于概率的编译器优化技术，主要是通过在收集程序执行的profile信息来估算某些代码执行的频率来进行优化。</p>
+
+<p><a href="https://github.com/rust-lang/rust/pull/61268">Read More</a></p>
+
+<h3 id="tls-性能-rustls-vs-openssl">TLS 性能: rustls vs OpenSSL</h3>
+
+<p>#tls #openssl</p>
+
+<p>rustls是一个现代的Rust实现的TLS库。</p>
+
+<p>结论：</p>
+
+<pre><code>rustls发送数据快15%。
+rustls接收数据快5%。
+建立客户端连接会快20-40%。
+建立服务器连接会快10%。
+恢复客户端连接会快30-70%。
+恢复服务器连接会快10-20%。
+rustls使用的内存不到OpenSSL的一半。
+
+</code></pre>
+
+<ul>
+<li><a href="https://jbp.io/2019/07/01/rustls-vs-openssl-performance.html">Read More</a></li>
+<li><a href="https://github.com/ctz/rustls">rustls</a></li>
+</ul>
+
+<h3 id="rust-analyzer现状-成就和open-collective">rust-analyzer现状：成就和Open Collective</h3>
+
+<p>rust-analyzer是Rust编程语言的实验性编译器前端。 该项目的最终目标是为Rust提供完美的IDE体验，所有IDE功能在编辑代码时都能完美运行。</p>
+
+<p>在2019年2月，rls-2.0工作组在柏林成立之后，rust-analyzer成为了这项工作的一部分。该工作组的目的是尝试构建支持IDE的编译器的可能方法，然后通过这些尝试所获得的知识来确定Rust的总体方向。请注意，rls-2.0用词不当：当前并没有立即替换现有Rust语言服务器（rls）的计划。</p>
+
+<p>这篇文章讨论了rust-analyzer的现状、未来计划，并宣布rust-analyzer Open Collective （可能是某种开放式基金会）。</p>
+
+<blockquote>
+<p>Open Collective是一组具有共同使命的人，完全透明地运作。每个人都可以看到他们如何收钱或花钱。</p>
+</blockquote>
+
+<p>到目前为止完成的成就：</p>
+
+<ul>
+<li>Chalk和rust-analyzer的集成</li>
+<li>尝试集成现有的rls和rust-analyzer</li>
+<li>保证新功能的引入不会影响性能</li>
+<li>尝试解决「宏」相关的问题，让IDE可以更好地支持宏</li>
+</ul>
+
+<p>未来计划：</p>
+
+<ul>
+<li>将目前取得的成就进行组件化，也就是开发出独立的crate，然后集成到rustc中，估计rustc会有大量的重构工作。</li>
+<li>确定rls和rust-analyzer的关系，因为它们具有不同的体系结构，这个问题也需要花费大量时间。</li>
+</ul>
+
+<p>Open Collective：</p>
+
+<p>Open Collective专注于为正在进行的项目而不是为个人筹集资金。有闲钱的可以支持下。</p>
+
+<ul>
+<li><a href="https://opencollective.com/rust-analyzer/">opencollective.com/rust-analyzer</a></li>
+<li><a href="https://ferrous-systems.com/blog/rust-analyzer-status-opencollective/">Read More</a></li>
+</ul>
+
+<h3 id="mimalloc-rust-mimalloc的另一个rust绑定">mimalloc_rust: mimalloc的另一个Rust绑定</h3>
+
+<p>#mimalloc</p>
+
+<p>mimalloc是最近流行的一个C实现的性能良好的小型通用分配器。</p>
+
+<p><a href="https://github.com/purpleprotocol/mimalloc_rust">mimalloc_rust</a></p>
+
+<h3 id="indy-sdk-indy-sdk实现">indy-sdk: indy SDK实现</h3>
+
+<p>#indy #hyperledger</p>
+
+<p>Hyperledger Indy（超级账本）官方发布的Rust SDK。</p>
+
+<blockquote>
+<p>Hyperledger Indy是特别为去中心化的身份而建立的一种分布式账本。它提供了基于区块链或者其它分布式账本互操作来创建和使用独立数字身份的工具、代码库和可以重用的组件。</p>
+</blockquote>
+
+<p><a href="https://github.com/hyperledger/indy-sdk">indy-sdk</a></p>
+
+<h3 id="paperclip-openapi的代码生成工具-1">paperclip: OpenAPI的代码生成工具</h3>
+
+<p>#openapi #WIP</p>
+
+<p>0.2发布，支持OpenAPI V2接口。目前还是WIP状态。</p>
+
+<p><a href="https://github.com/wafflespeanut/paperclip">paperclip</a></p>
+
+<hr />
+
+<p>From 日报小组 Chaos</p>
+
+<p>日报订阅地址：</p>
+
+<p>独立日报订阅地址：</p>
+
+<ul>
+<li><a href="https://t.me/rust_daily_news">Telgram Channel</a></li>
+<li><a href="https://www.yuque.com/chaosbot/rustnews">阿里云语雀订阅</a></li>
+<li><a href="https://steemit.com/@blackanger">Steemit</a></li>
+<li><a href="https://github.com/RustStudy/rust_daily_news">GitHub</a></li>
+</ul>
+
+<p>社区学习交流平台订阅：</p>
+
+<ul>
+<li><a href="https://rust.cc/">Rust.cc论坛: 支持rss</a></li>
+<li><a href="https://rustforce.net/">Rust Force: 支持rss</a></li>
+<li><a href="https://rust.cc/article?id=ed7c9379-d681-47cb-9532-0db97d883f62">微信公众号：Rust语言学习交流</a></li>
+</ul>
+
+<p><a href="https://rustforce.net/login">编辑登录</a>  友情链接：  <a href="https://rust.cc/">Rus</a></p>
+
+<h2 id="rust日报-2019-07-02-https-rust-cc-article-id-af647cb9-3af1-4ba5-9a46-325894f4062a"><a href="https://rust.cc/article?id=af647cb9-3af1-4ba5-9a46-325894f4062a">【Rust日报】 2019-07-02</a></h2>
+
+<p><a href="https://rust.cc/blog_with_author?author_id=93091acb-066c-4feb-b7a4-364398b1d82e">ZhangHanDong</a>  发表于  2019-07-02 15:32</p>
+
+<p>Tags： rust</p>
+
+<h3 id="serenity-discord-api的rust客户端">serenity: Discord API的Rust客户端</h3>
+
+<p>#Discord</p>
+
+<p><a href="https://github.com/serenity-rs/serenity">serenity</a></p>
+
+<h3 id="librespot-开源的spotify客户端">librespot: 开源的Spotify客户端</h3>
+
+<p>#Spotify</p>
+
+<p><a href="https://github.com/librespot-org/librespot">librespot</a></p>
+
+<h3 id="redox编程之夏博客系列-为redox-os实现ptrace-part-2">「Redox编程之夏博客系列」：为Redox OS实现ptrace Part 2</h3>
+
+<p>#RSoC</p>
+
+<p>目前是本系列第三篇。</p>
+
+<blockquote>
+<p>ptrace (process trace)系统调用通常与调试相关,它是本地调试器监视类unix系统上调试的主要机制，同时也是实现strace系统调用跟踪的常用方法。</p>
+</blockquote>
+
+<p><a href="https://www.redox-os.org/news/rsoc-ptrace-2/">Read More</a></p>
+
+<h3 id="在python和rust之间共享引用">在Python和Rust之间共享引用</h3>
+
+<p>#python</p>
+
+<p>Mercurial开发人员写的一篇博客。在重写Mercurial的一些核心部分期间，他们必须为Python提供一个类似于类的接口来运行Rust代码（他们使用rust-cpython）。 通常，该类实现了<code>__iter__</code>，这需要Python来保存对Rust迭代器的引用。 每当遇到这个问题时，他们只是将整个结构复制到Python的数据类型，这是一种糟糕的方式。</p>
+
+<p>最近他们重构了代码，直接在Rust和Python之间实现了共享引用来解决上述问题。本文通过一个简单的HashSet为示例，阐述了他们的共享引用的方法，并且还解决了Python GC可能会将共享引用收集而引发内存泄漏等问题。</p>
+
+<ul>
+<li><a href="https://raphaelgomes.dev/blog/articles/2019-07-01-sharing-references-between-python-and-rust.html">Read More</a></li>
+<li><a href="https://heptapod.octobus.net/gracinet/rust-cpython-shared-ref/tree/topic/default/lock_explicit_count">相关代码</a></li>
+</ul>
+
+<h3 id="学术-介绍oars-用于处理正交数组的库">「学术」介绍oars：用于处理正交数组的库</h3>
+
+<p>#OrthogonalArray</p>
+
+<p>正交数组：一个具有特殊的数学特性的二维数组，例如，数组中的任意两列都包含了所有可能的、由数组的任意值组成的对值。</p>
+
+<p><a href="https://afnan.io/post/introducing-oars/">Read More</a></p>
+
+<h3 id="用python-go和rust编写同一程序之后的心得">用Python，Go和Rust编写同一程序之后的心得</h3>
+
+<p>#python #go</p>
+
+<p>该文作者先后用Python、Go和Rust实现了同一个程序，在使用过这三种语言之后，他写了这篇文章，比较客观公正地比较了这三门语言。感兴趣的可以看看，结论还算客观。</p>
+
+<p><a href="http://www.nicolas-hahn.com/python/go/rust/programming/2019/07/01/program-in-python-go-rust/">Read More</a></p>
+
+<h3 id="rvirt-用rust编写的risc-v管理程序">RVirt: 用Rust编写的RISC-V管理程序</h3>
+
+<p>#riscv</p>
+
+<p>由MIT并行和分布式操作系统小组出品</p>
+
+<p><a href="https://github.com/mit-pdos/RVirt">RVirt</a></p>
+
+<h3 id="使用rust和zig编写小的光线追踪程序">使用Rust和Zig编写小的光线追踪程序</h3>
+
+<p>#zig</p>
+
+<p>作者出于比较Zig和Rust哪个更适合编写小型的图形应用的目的，分别使用这两种语言实现了一个小的光线追踪程序。所以，作者的结论是：</p>
+
+<p>Rust和Zig他都非常喜欢，以后做大项目就用Rust，做点自己的小项目用Zig。</p>
+
+<p><a href="https://nelari.us/post/raytracer_with_rust_and_zig/">Read More</a></p>
+
+<h3 id="leaf-注重效率的高级函数式编程语言">leaf：注重效率的高级函数式编程语言</h3>
+
+<p>#lang #wip</p>
+
+<p>又一门由Rust编写的新语言，不过该语言状态是WIP，感兴趣可以关注。</p>
+
+<p><a href="https://github.com/AlmightyFloppyFish/leaf">leaf</a></p>
+
+<hr />
+
+<p>From 日报小组 Chaos</p>
+
+<p>日报订阅地址：</p>
+
+<p>独立日报订阅地址：</p>
+
+<ul>
+<li><a href="https://t.me/rust_daily_news">Telgram Channel</a></li>
+<li><a href="https://www.yuque.com/chaosbot/rustnews">阿里云语雀订阅</a></li>
+<li><a href="https://steemit.com/@blackanger">Steemit</a></li>
+<li><a href="https://github.com/RustStudy/rust_daily_news">GitHub</a></li>
+</ul>
+
+<p>社区学习交流平台订阅：</p>
+
+<ul>
+<li><a href="https://rust.cc/">Rust.cc论坛: 支持rss</a></li>
+<li><a href="https://rustforce.net/">Rust Force: 支持rss</a></li>
+<li><a href="https://rust.cc/article?id=ed7c9379-d681-47cb-9532-0db97d883f62">微信公众号：Rust语言学习交流</a></li>
+</ul>
+
+<h3 id="评论区">评论区</h3>
+
+<p><a href="https://rust.cc/p/comment/new?article_id=af647cb9-3af1-4ba5-9a46-325894f4062a">写评论</a></p>
+
+<p>还没有评论</p>
+
+<p><a href="https://rust.cc/article?id=af647cb9-3af1-4ba5-9a46-325894f4062a&amp;current_page=1">1</a></p>
+
+<h3 id="rust日报-2019-07-01-优化jieba-rs-比cppjieba快33-https-rustforce-net-article-id-7e9cbd54-86ea-400c-b249-721102feef6f"><a href="https://rustforce.net/article?id=7e9cbd54-86ea-400c-b249-721102feef6f">【Rust日报】 2019-07-01：优化jieba-rs，比cppjieba快33%</a></h3>
+
+<p>2019-07-01 21:00  责任编辑：Mike</p>
+
+<p>标签：rust</p>
+
+<h3 id="rust在区块链中的应用-topic-申请表">Rust在区块链中的应用 Topic 申请表</h3>
+
+<p>#topic</p>
+
+<p>如果你在San Francisco, Berlin 或 杭州，想要分享Rust在区块链中的应用，可以填一下这个申请表</p>
+
+<p><a href="https://docs.google.com/forms/d/e/1FAIpQLSdqDDPv6WylWCel8j5oorm3U5M1wtQJ7gYLsw_Ng6IcDcDSBg/viewform">Read More</a></p>
+
+<h3 id="理解闭包">理解闭包</h3>
+
+<p>#closure</p>
+
+<p>本文是一篇介绍闭包的文章，在学习中的朋友可以看看</p>
+
+<p><a href="https://medium.com/swlh/understanding-closures-in-rust-21f286ed1759">Read More</a></p>
+
+<h3 id="winit-0-20-alpha-1-发布-请求测试-审查和贡献">Winit 0.20 alpha 1 发布，请求测试、审查和贡献</h3>
+
+<p>#GUI</p>
+
+<p>Winit是纯Rust Window创建库。Servo和Alacritty都使用了该库。 支持Glutin（或者包括gfx-rs，Glium和Amethyst在内的相关项目）等图形编程。新的版本中引入了新的事件循环。现在因为团队人手缺乏，所以想请求社区的朋友帮助测试、审查和贡献代码。</p>
+
+<ul>
+<li><a href="https://users.rust-lang.org/t/winit-0-20-the-state-of-windowing-in-rust-and-a-request-for-help/29485">Read More</a></li>
+<li><a href="https://github.com/rust-windowing/winit">winit</a></li>
+</ul>
+
+<h3 id="rust标准库研究系列-内部可变性">「Rust标准库研究系列」内部可变性</h3>
+
+<p>#study</p>
+
+<p>该系列文章记录了作者对Rust标准库的一些学习心得。</p>
+
+<p><a href="https://ehsanmkermani.com/2019/06/18/rust-std-study-series-interior-mutability/">Read More</a></p>
+
+<h3 id="rust中的生命周期">Rust中的生命周期</h3>
+
+<p>#study</p>
+
+<p>该文通过示例记录了作者学习Rust生命周期的一些心得</p>
+
+<p><a href="https://medium.com/@richardanaya/a-journey-through-rust-lifetimes-5a08782c7091">Read More</a></p>
+
+<h3 id="sozu-http-反向代理实现">sozu：HTTP 反向代理实现</h3>
+
+<p>#ReverseProxy</p>
+
+<p>sozu是一个Rust实现的反向代理库，该文作者写了一篇关于sozu的文章。</p>
+
+<ul>
+<li><a href="https://github.com/sozu-proxy/sozu">sozu</a></li>
+<li><a href="https://medium.com/swlh/writing-a-proxy-in-rust-and-why-it-is-the-language-of-the-future-265d8bf7c6d2">Read More</a></li>
+</ul>
+
+<h3 id="std-time与runtime库">std::time与Runtime库</h3>
+
+<p>#runtime</p>
+
+<p>Runtime库的成员正在考虑为其增加时间支持，本文讨论了<code>std:time</code>模块，以及可以为无缝集成runtime工作流而进行的一些更改讨论。</p>
+
+<p><a href="https://blog.yoshuawuyts.com/std-time/">Read More</a></p>
+
+<h3 id="termimad-可以在显示富-markdown-文本的库">termimad： 可以在显示富（Markdown）文本的库</h3>
+
+<p>#cli #markdown</p>
+
+<p><img src="https://github.com/Canop/termimad/blob/master/doc/text.png" alt="img" /></p>
+
+<p><a href="https://github.com/Canop/termimad">termimad</a></p>
+
+<h3 id="系列文章-使用rust实现光线跟踪-part3">「系列文章」使用Rust实现光线跟踪 Part3</h3>
+
+<p>#RayTracer</p>
+
+<p><a href="https://canmom.github.io/programming/graphics/raytracer/rust-raytracer-part-3">Read More</a></p>
+
+<h3 id="小书-使用rust从零开始制作任天堂gameboy模拟器">「小书」使用Rust从零开始制作任天堂GameBoy模拟器</h3>
+
+<p>#GameBoy</p>
+
+<p>任天堂的Game Boy是曾经最受欢迎的计算机之一，该小书作者说：如果想学习计算机是如何工作的，没有比模拟实现一个计算机更好的学习方法了。</p>
+
+<p><a href="https://blog.ryanlevick.com/DMG-01/public/book/">Read More</a></p>
+
+<h3 id="async-log-使用异步元数据扩展标准日志包">async-log：使用异步元数据扩展标准日志包</h3>
+
+<p>#async #log</p>
+
+<p>这是一个通用的包，它使用异步元数据扩展标准日志包。 这是向Rust引入完整的异步track功能的第一步。</p>
+
+<p><a href="https://blog.yoshuawuyts.com/async-log/">Read More</a></p>
+
+<h3 id="rust-vs-haskell-正则性能比拼">Rust vs Haskell 正则性能比拼</h3>
+
+<p>#haskell #regex</p>
+
+<p><a href="https://github.com/bennydictor/haskell-vs-rust-regex-benchmark/">haskell-vs-rust-regex-benchmark</a></p>
+
+<h3 id="优化jieba-rs-比cppjieba快33">优化jieba-rs，比cppjieba快33%</h3>
+
+<p>#jieba</p>
+
+<p><a href="https://blog.paulme.ng/posts/2019-06-30-optimizing-jieba-rs-to-be-33percents-faster-than-cppjieba.html">Read More</a></p>
+
+<h3 id="使用nix-shell为termux编译rust应用程序">使用nix-shell为Termux编译Rust应用程序</h3>
+
+<p>#termux #nixShell #android</p>
+
+<p>NixOS平台上为安卓手机交叉编译Termux（安卓手机上的终端）</p>
+
+<p><a href="https://blog.geemili.xyz/blog/rust-app-on-termux-with-nix/">Read More</a></p>
+
+<h3 id="diffr-一个diff高亮工具">diffr: 一个diff高亮工具</h3>
+
+<p>#git #cli</p>
+
+<p><a href="https://github.com/mookid/diffr">diffr</a></p>
+
+<hr />
+
+<p>From 日报小组 Chaos</p>
+
+<p>日报订阅地址：</p>
+
+<p>独立日报订阅地址：</p>
+
+<ul>
+<li><a href="https://t.me/rust_daily_news">Telgram Channel</a></li>
+<li><a href="https://www.yuque.com/chaosbot/rustnews">阿里云语雀订阅</a></li>
+<li><a href="https://steemit.com/@blackanger">Steemit</a></li>
+<li><a href="https://github.com/RustStudy/rust_daily_news">GitHub</a></li>
+</ul>
+
+<p>社区学习交流平台订阅：</p>
+
+<ul>
+<li><a href="https://rust.cc/">Rust.cc论坛: 支持rss</a></li>
+<li><a href="https://rustforce.net/">Rust Force: 支持rss</a></li>
+<li><a href="https://rust.cc/article?id=ed7c9379-d681-47cb-9532-0db97d883f62">微信公众号：Rust语言学习交流</a></li>
+</ul>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

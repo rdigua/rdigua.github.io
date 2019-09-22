@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="learning-the-rust-book">Learning the rust book</h1>
+
+<p>Network Programming with Rust</p>
+
+<h2 id="who-this-book-is-for">Who this book is for</h2>
+
+<p>This book&rsquo;s target audience is a software engineer who is interested in writing networking software using Rust.</p>
+
+<h2 id="what-this-book-covers">What this book covers</h2>
+
+<p>What this book covers</p>
+
+<h2 id="chapter-1">Chapter 1,</h2>
+
+<p>Introduction to Client/Server Networking, starts the book with a gentle introduction to computer networking from the ground up. This includes IP addressing, TCP/UDP, and DNS. This forms the basis of our discussions in later chapters.</p>
+
+<h2 id="chapter-2">Chapter 2,</h2>
+
+<h2 id="introduction-to-rust-and-its-ecosystem-contains-an-introduction-to-rust-this-is-an-overall-introduction-that-should-be-good-enough-to-get-the-reader-started-we-do-assume-some-familiarity-with-programming">Introduction to Rust and its Ecosystem, contains an introduction to Rust. This is an overall introduction that should be good enough to get the reader started. We do assume some familiarity with programming.</h2>
+
+<p>Getting started with Rust</p>
+
+<p>The Rust toolchain installer is available at: <a href="https://www.rustup.rs/">https://www.rustup.rs/</a>. The following commands will install all three versions of the toolchain on a system. For the examples in this book, we will use a Linux machine running Ubuntu 16.04. While most of Rust should not depend on the OS, there can be minor differences.</p>
+
+<p>We will point out any strict dependencies on the OS:</p>
+
+<p>$ curl <a href="https://sh.rustup.rs">https://sh.rustup.rs</a> -sSf | sh</p>
+
+<h1 id="source-home-cargo-env">source $HOME/.cargo/env</h1>
+
+<ul>
+<li>rustup install nightly beta
+We will need to put Cargo&rsquo;s bin directory to our PATH by editing .bashrc. Run the following to do that:</li>
+</ul>
+
+<p>$ echo &ldquo;export PATH=$HOME/.cargo/bin:$PATH&rdquo; &gt;&gt; ~/.bashrc
+A Rust installation comes with a lot of documentation built in; they can be accessed by running the following command. This should open up the documentation in a browser window:</p>
+
+<ul>
+<li><p>rustup doc
+The next step is to set up a Rust project and run it, all using Cargo:</p></li>
+
+<li><p>cargo new &ndash;bin hello-rust
+This tells Cargo to set up a new project called hello-rust in the current directory. Cargo will create a directory of that name and set up the basic structure. Since the type of this project is set to be a binary, Cargo will generate a file called main.rs which will have an empty main function, the entry point for the application. The other (default) option here is that of a library, in this case, a file named lib.rs will be generated. The file named Cargo.toml has a bunch of metadata for the current project and is used by Cargo. All source code is located in the src directory:</p></li>
+</ul>
+
+<p>$ cargo run</p>
+
+<p><strong>Introduction to the borrow checker</strong></p>
+
+<pre><code class="language-rust">// chapter2/ownership-heap-fixed.rs
+
+fn main() {
+    let s = String::from(&quot;Test&quot;);
+    heap_example(s);
+}
+
+fn heap_example(input: String) {
+    let mystr = input;
+    let _otherstr = mystr.clone(); // if ... let _otherstr = mystr; note: move occurs because `mystr` has type `std::string::String`, which does not implement the `Copy` trait
+    println!(&quot;{}&quot;, mystr);
+}
+</code></pre>
+
+<p>$ rustc ownership-heap-fixed.rs &amp;&amp; ./ownership-heap-fixed
+Test</p>
+
+<pre><code class="language-rust">// chapter2/lifetime.rs
+
+fn main() {
+    let v1 = vec![1, 2, 3, 4, 5];
+    let v2 = vec![1, 2];
+
+    println!(&quot;{:?}&quot;, longer_vector(&amp;v1, &amp;v2));
+}
+
+fn longer_vector(x: &amp;[i32], y: &amp;[i32]) -&gt; &amp;[i32] {       //errors help: this function's return type contains a borrowed value, but the signature does not say whether it is borrowed from `x` or `y`
+
+    if x.len() &gt; y.len() { x } else { y }
+}
+
+
+fn longer_vector&lt;'a&gt;(x: &amp;'a[i32], y: &amp;'a[i32]) -&gt; &amp;'a[i32] {  //right
+    if x.len() &gt; y.len() { x } else { y }
+}
+
+</code></pre>
+
+<p><strong>p96 reviewer</strong></p>
+
+<hr />
+
+<p>It become some difficuld&hellip;
+  <strong>Generics and the trait system</strong></p>
+
+<pre><code class="language-rust">// chapter2/generic-function.rs
+
+struct Tuple&lt;T&gt; {
+    first: T,
+    second: T,
+}
+
+fn main() {
+    let tuple_u32: Tuple&lt;u32&gt; = Tuple {first: 4u32, second: 2u32 };
+    let tuple_u64: Tuple&lt;u64&gt; = Tuple {first: 5u64, second: 6u64 };
+    println!(&quot;{}&quot;, sum(tuple_u32));
+    println!(&quot;{}&quot;, sum(tuple_u64));
+
+    let tuple: Tuple&lt;String&gt; = Tuple {first: &quot;One&quot;.to_owned(), second: &quot;Two&quot;.to_owned() };
+    println!(&quot;{}&quot;, sum(tuple));
+}
+
+fn sum&lt;T&gt;(tuple: Tuple&lt;T&gt;) -&gt; T
+{
+    tuple.first + tuple.second
+}  
+</code></pre>
+
+<p>This fails to compile, and the compiler throws the following error:</p>
+
+<p>$ rustc generic-function.rs
+error[E0369]: binary operation <code>+</code> cannot be applied to type <code>T</code>
+  &ndash;&gt; generic-function-error.rs:18:5
+   |
+18 | tuple.first + tuple.second
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: <code>T</code> might need a bound for <code>std::ops::Add</code></p>
+
+<p>error: aborting due to previous error</p>
+
+<p>// We constrain the possible types of T to those which implement the Add trait
+fn sum<T: Add<Output = T>&gt;(tuple: Tuple<T>) -&gt; T
+{
+    tuple.first + tuple.second
+}</p>
+
+<p><strong>It is to be reviewer</strong>
+P97-106</p>
+
+<ul>
+<li>Higher-order functions</li>
+</ul>
+
+<h2 id="chapter-3">Chapter 3,</h2>
+
+<p>TCP and UDP Using Rust, dives into using Rust for networking. We start with basic socket programming using the standard library. We then look at some crates from the ecosystem that can be used for network programming.</p>
+
+<h2 id="chapter-4">Chapter 4,</h2>
+
+<p>Data Serialization, Deserialization, and Parsing, explains that an important aspect of networked computing is handling data. This chapter is an introduction to serializing and deserializing data using Serde. We also look at parsing using nom and other frameworks.</p>
+
+<h2 id="chapter-5">Chapter 5,</h2>
+
+<p>Application Layer Protocols, moves up a layer to look at protocols that operate above TCP/IP. We look at a few crates to work with, such as RPC, SMTP, FTP, and TFTP.</p>
+
+<h2 id="chapter-6">Chapter 6,</h2>
+
+<p>Talking HTTP in the Internet, explains that arguably the most common application of the internet is HTTP. We look at crates such as Hyper and Rocket which are used for writing HTTP servers and clients.</p>
+
+<h2 id="chapter-7">Chapter 7,</h2>
+
+<p>Asynchronous Network Programming Using Tokio, looks at the Tokio stack for asynchronous programming using futures, streams, and event loops.</p>
+
+<h2 id="chapter-8-security">Chapter 8, Security,</h2>
+
+<p>delves into securing the services we have described so far. This is using certificates and secret keys.</p>
+
+<h2 id="chapter-9-appendix">Chapter 9, Appendix,</h2>
+
+<p>discusses a number of crates have appeared that propose alternate ways of doing things already covered in this book. This includes the async/await syntax, parsing using Pest, and so on. We will discuss some of these in the appendix.</p>
+
+<h2 id="code">code</h2>
+
+<p>The code bundle for the book is also hosted on GitHub at <a href="https://github.com/PacktPublishing/Network-Programming-with-Rust">https://github.com/PacktPublishing/Network-Programming-with-Rust</a>. We also have other code bundles from our rich catalog of books and videos available at <a href="https://github.com/PacktPublishing/">https://github.com/PacktPublishing/</a>. Check them out!</p>
+
+<h2 id="words">words:</h2>
+
+<p>related
+the sake of simplicity
+revolutionized
+prominent
+protocols
+Eventually
+silos
+proximity
+hierarchy
+imperative
+brutally
+engagements
+architectural
+Heap memory</p>
+
+<p><a href="https://commons.wikimedia.org/wiki/File:Arpanet_logical_map,_march_1977.png">1977</a>
+In networking, a Request For Comment (RFC) is a document that describes how a proposed system should work. These are the first steps towards standardizing a protocol or a system. The term internet was first used in RFC 675, which proposed a standard for TCP.</p>
+
+<p>Physical layer: It defines how data is transmitted in the physical medium in terms of its electrical and physical characteristics. This can either be by wire, fiber optic, or a wireless medium.
+Data link layer: It defines how data is transmitted between two nodes connected by a physical medium. This layer deals with prioritization between multiple parties trying to access the wire simultaneously. Another important function of this layer is to include some redundancy in the transmitted bits to minimize errors during transmission. This is referred to as coding.
+Network layer: It defines how packets (made up of multiple units of data) are transmitted between networks. Thus, this layer needs to define how to identify hosts and networks uniquely.
+Transport layer: It defines mechanisms to reliably deliver variable length messages to hosts (in the same or different networks). This layer defines a stream of packets that the receiver can then listen to.
+Session layer: It defines how applications running on hosts should communicate. This layer needs to differentiate between applications running on the same host and deliver packets to them.
+Presentation layer: It defines common formats for data representation so that different applications can interlink seamlessly. In some cases, this layer also takes care of security.
+Application layer: It defines how user-centric applications should send and receive data. An example is the web browser (a user-centric application) using HTTP (an application layer protocol) to talk to a web server.</p>
+
+<p><a href="https://commons.wikimedia.org/wiki/File:Osi-model-jb.svg">model</a></p>
+
+<p>Typically, each computer in a network will have a local DNS server configured in the file /etc/resolv.conf. In most cases, this points to the ISP&rsquo;s DNS server. This might also point to the home Wi-Fi router&rsquo;s DNS server. In that case, the DNS will transparently proxy requests to the ISP&rsquo;s DNS server. The OS will then query that server, asking the IP of the given name www.google.com.</p>
+
+<p>TCP header format</p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

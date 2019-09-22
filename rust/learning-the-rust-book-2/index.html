@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="learning-the-rust-book">Learning the rust book</h1>
+
+<p>Hands-On Data Structures and Algorithms with Rust</p>
+
+<p>Preface
+Who this book is for
+What this book covers
+To get the most out of this book
+Download the color images
+Download the example code files
+Conventions used
+Get in touch
+Reviews</p>
+
+<h2 id="1-hello-rust">1. Hello Rust!</h2>
+
+<p>Rust in 2018
+The 2018 edition
+The Rust language
+Objects and behavior
+Going wrong
+Macros
+Unsafe
+Borrowing and ownership
+Exceptional lifetimes
+Multiple owners
+Concurrency and mutability
+Immutable variables
+Shadowing
+Interior mutability
+Moving data
+Sharing data
+Send and Sync
+Deeper into Rust
+Requests for Comments (RFCs)
+Summary
+Questions
+Further reading</p>
+
+<h2 id="2-cargo-and-crates">2. Cargo and Crates</h2>
+
+<p>Cargo
+Project configuration
+The manifest &#x2013; Cargo.toml
+Package
+Profiles
+Dependencies
+Dependencies &#x2013; Cargo.lock
+Commands
+The compile and run commands
+Testing
+Third-party subcommands
+Crates
+Rust libraries and binaries
+Static and dynamic libraries
+Linking and interoperability
+FFI
+Wasm
+The main repository &#x2013; crates.io
+Publishing
+Summary
+Questions
+Further reading</p>
+
+<h2 id="3-storing-efficiently">3. Storing Efficiently</h2>
+
+<p>Heaps and stacks
+Sized and unsized
+Generics
+Accessing the box
+Copying and cloning
+Immutable storage
+States and reasoning
+Concurrency and performance
+Summary
+Questions
+Further reading</p>
+
+<h2 id="4-lists-lists-and-more-lists">4. Lists, Lists, and More Lists</h2>
+
+<p>Linked lists
+A transaction log
+Adding entries
+Log replay
+After use
+Wrap up
+Upsides
+Downsides
+Doubly linked list
+A better transaction log
+Examining the log
+Reverse
+Wrap up
+Upsides
+Downsides
+Skip lists
+The best transaction log
+The list
+Adding data
+Leveling up
+Jumping around
+Thoughts and discussion
+Upsides
+Downsides
+Dynamic arrays
+Favorite transactions
+Internal arrays
+Quick access
+Wrap up
+Upsides
+Downsides
+Summary
+Questions
+Further reading</p>
+
+<h2 id="5-robust-trees">5.Robust Trees</h2>
+
+<p>Binary search tree
+IoT device management
+More devices
+Finding the right one
+Finding all devices
+Wrap up
+Upsides
+Downsides
+Red-black tree
+Better IoT device management
+Even more devices
+Balancing the tree
+Finding the right one, now
+Wrap up
+Upsides
+Downsides
+Heaps
+A huge inbox
+Getting messages in
+Taking messages out
+Wrap up
+Upsides
+Downsides
+Trie
+More realistic IoT device management
+Adding paths
+Walking
+Wrap up
+Upsides
+Downsides
+B-Tree
+An IoT database
+Adding stuff
+Searching for stuff
+Walking the tree
+Wrap up
+Upsides
+Downsides
+Graphs
+The literal Internet of Things
+Neighborhood search
+The shortest path
+Wrap up
+Upsides
+Downsides
+Summary
+Questions</p>
+
+<h2 id="6-exploring-maps-and-sets">6. Exploring Maps and Sets</h2>
+
+<p>Hashing
+Create your own
+Message digestion
+Wrap up
+Maps
+A location cache
+The hash function
+Adding locations
+Fetching locations
+Wrap up
+Upsides
+Downsides
+Sets
+Storing network addresses
+Networked operations
+Union
+Intersection
+Difference
+Wrap up
+Upsides
+Downsides
+Summary
+Questions
+Further reading</p>
+
+<h2 id="7-collections-in-rust">7. Collections in Rust</h2>
+
+<p>Sequences
+Vec&lt;T&gt; and VecDeque&lt;T&gt;
+Architecture
+Insert
+Look up
+Remove
+LinkedList&lt;T&gt;
+Architecture
+Insert
+Look up
+Remove
+Wrap up
+Maps and sets
+HashMap and HashSet
+Architecture
+Insert
+Lookup
+Remove
+BTreeMap and BTreeSet
+Architecture
+Insert
+Look up
+Remove
+Wrap up
+Summary
+Questions
+Further reading</p>
+
+<h2 id="8-algorithm-evaluation">8. Algorithm Evaluation</h2>
+
+<p>The Big O notation
+Other people&rsquo;s code
+The Big OAsymptotic runtime complexity
+Making your own
+Loops
+Recursion
+Complexity classes
+O(1)
+O(log(n))
+O(n)
+O(n log(n))
+O(n&#xB2;)
+O(2n)
+Comparison
+In the wild
+Data structures
+Everyday things
+Exotic things
+Summary
+Questions
+Further reading</p>
+
+<h2 id="9-ordering-things">9. Ordering Things</h2>
+
+<p>From chaos to order
+Bubble sort
+Shell sort
+Heap sort
+Merge sort
+Quicksort
+Summary
+Questions
+Further reading</p>
+
+<h2 id="10-finding-stuff">10. Finding Stuff</h2>
+
+<p>Finding the best
+Linear searches
+Jump search
+Binary searching
+Wrap up
+Summary
+Questions
+Further reading</p>
+
+<h2 id="11-random-and-combinatorial">11. Random and Combinatorial</h2>
+
+<p>Pseudo-random numbers
+Pseudo-random numbers
+LCG
+Wichmann-Hill
+The rand crate
+Back to front
+Packing bags or the 0-1 knapsack problem
+N queens
+Advanced problem solving
+Dynamic programming
+The knapsack problem improved
+Metaheuristic approaches
+Example metaheuristic &#x2013; genetic algorithms
+Summary
+Questions
+Further reading</p>
+
+<h2 id="12-algorithms-of-the-standard-library">12. Algorithms of the Standard Library</h2>
+
+<p>Slicing and iteration
+Iterator
+Slices
+Search
+Linear search
+Binary search
+Sorting
+Stable sorting
+Unstable sorting
+Summary
+Questions
+Further reading</p>
+
+<h2 id="assessments">Assessments</h2>
+
+<p>Chapter 1
+Chapter 2
+Chapter 3
+Chapter 4
+Chapter 5
+Chapter 6
+Chapter 7
+Chapter 8
+Chapter 9
+Chapter 10
+Chapter 11
+Chapter 12</p>
+
+<h2 id="other-books-you-may-enjoy">Other Books You May Enjoy</h2>
+
+<p>Leave a review - let other readers know what you think</p>
+
+<h2 id="example">example:</h2>
+
+<pre><code class="language-cpp">class Door {
+    private bool is_open = false;
+
+    public void Open() {
+        this.is_open = true;
+    }
+}
+</code></pre>
+
+<pre><code class="language-rust">struct Door {
+    is_open: bool
+}
+
+impl Door {
+    fn new(is_open: bool) -&gt; Door {
+        Door { is_open: is_open }
+    }
+}
+
+trait Openable {
+    fn open(&amp;mut self);
+}
+
+impl Openable for Door {
+    fn open(&amp;mut self) {
+        self.is_open = true;
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+	#[test]
+    fn open_door() {
+        let mut door = Door::new(false);
+        door.open();
+        assert!(door.is_open);
+    }
+}
+</code></pre>
+
+<hr />
+
+<p><strong>p194</strong></p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

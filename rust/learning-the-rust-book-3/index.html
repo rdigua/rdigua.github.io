@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="learning-the-rust-book">Learning the rust book</h1>
+
+<p>Beginning Rust From Novice to Professional</p>
+
+<p><a href="https://doi.org/10.1007/978-1-4842-3468-6_21">ebook</a></p>
+
+<p>Why deterministic and implicit destruction of objects is a big plus of Rust</p>
+
+<hr />
+
+<p>Preface
+Who this book is for
+What this book covers
+To get the most out of this book
+Download the color images
+Download the example code files
+Conventions used
+Get in touch
+Reviews</p>
+
+<h2 id="1-printing-on-the-terminal">1. Printing on the Terminal</h2>
+
+<p>In this chapter, you will learn:
+- How to write and run your first program in the Rust Language<br />
+- How to output texts and numbers on the terminal<br />
+- How to write a small script that makes more readable the output of the compiler  // What is its mean?
+- How to write comments in your code</p>
+
+<pre><code class="language-bash">clear
+rustc $* --color always 2&gt;&amp;1 | more
+</code></pre>
+
+<p>This script first clears the screen, then runs the rustc compiler with all the
+arguments you give to it. If the compilation is successful, or if it generates less than a
+screenful of error messages, it behaves like a normal run of rustc.</p>
+
+<h2 id="2-doing-arithmetic">2. Doing Arithmetic</h2>
+
+<p>In this chapter, you will learn:
+- How to compute an arithmetic operation between integer numbers or between floating-point numbers
+- How to write a program containing several statements
+- How to print strings in several lines</p>
+
+<pre><code class="language-rust">fn main() {
+println!(&quot;{}&quot;, &quot;This \
+is \
+just one line&quot;);
+}
+</code></pre>
+
+<p>This will print:
+This is just one line</p>
+
+<pre><code class="language-rust">fn main() {
+println!(&quot;{}&quot;, &quot;These
+are
+three lines&quot;);
+}
+or this:
+fn main() {
+println!(&quot;{}&quot;, &quot;These\n\
+are\n\
+three lines&quot;);
+}
+</code></pre>
+
+<p>Both will print:
+These
+are
+three lines</p>
+
+<h2 id="3-naming-objects">3. Naming Objects</h2>
+
+<p>In this chapter, you will learn:
+- The concepts of “value”, “object”, and “variable”
+- The concept of “mutability” of variables
+- The difference between initialization and re-assignment
+- How to avoid warnings for unused variables
+- The concept of “Boolean expression”
+- Which type checks are performed by the compiler for assignments
+- How some operators can perform both an arithmetic operation and an assignment
+- How to invoke functions defined in the Rust standard library</p>
+
+<pre><code class="language-rust">let _ = 12;
+print!(&quot;{}&quot;, _)
+</code></pre>
+
+<pre><code class="language-rust">let truth = 5 &gt; 2;
+let falsity = -12.3 &gt;= 10.;
+print!(&quot;{} {} {}&quot;, truth, falsity, -50 &lt; 6);
+//This will print true false true.
+</code></pre>
+
+<p>• ==: is equal to
+• !=: is different from
+• &lt;: is less than
+• &lt;=: is less than or equal to
+• &gt;: is greater than
+• &gt;=: is greater than or equal to</p>
+
+<pre><code class="language-rust">print!(&quot;{} {} {}&quot;, &quot;abc&quot; &lt; &quot;abcd&quot;, &quot;ab&quot; &lt; &quot;ac&quot;, &quot;A&quot; &lt; &quot;a&quot;);
+//This will print true true true.
+</code></pre>
+
+<pre><code class="language-rust">let truth = true;
+let falsity = false;
+println!(&quot;{} {}&quot;, ! truth, ! falsity);
+println!(&quot;{} {} {} {}&quot;, falsity &amp;&amp; falsity, falsity &amp;&amp; truth,
+truth &amp;&amp; falsity, truth &amp;&amp; truth);
+println!(&quot;{} {} {} {}&quot;, falsity || falsity, falsity || truth,
+truth || falsity, truth || truth);
+</code></pre>
+
+<p>//This will print:
+false true
+false false false true
+false true true true</p>
+
+<pre><code class="language-rust">print!(&quot;{} {}&quot;, true || true &amp;&amp; ! true,
+(true || true) &amp;&amp; ! true);
+</code></pre>
+
+<p>This will print: &ldquo;true false&rdquo;.</p>
+
+<h2 id="4-controlling-execution-flow">4. Controlling Execution Flow</h2>
+
+<p>In this chapter, you will learn:
+• How to use if statements to execute different statements based on a Boolean condition
+• How to use if expressions to generate different values based on a Boolean condition
+• How to use while statements to repeat some statements as long as a Boolean condition holds
+• How to use for statements to repeat some statements for a definite number of times
+• What is the scope of validity of variables</p>
+
+<h2 id="5-using-data-sequences">5.Using Data Sequences</h2>
+
+<p>In this chapter, you will learn:
+• How to define sequences of objects of the same type, having fixed-length (arrays) or variable-length (vectors)<br />
+• How to specify the initial contents of arrays or vectors, by listing the items, or by specifying one item and its repeat count<br />
+• How to read or write the value of single items of arrays or vectors<br />
+• How to add items to a vector or to remove items from a vector<br />
+• How to create arrays with several dimensions<br />
+• How to create empty arrays or vectors<br />
+• How to print or copy whole arrays or vectors</p>
+
+<h3 id="multidimensional-arrays">Multidimensional Arrays</h3>
+
+<pre><code class="language-rust">let mut x = [[[[23; 4]; 6]; 8]; 15];
+x[14][7][5][3] = 56;
+print!(&quot;{}, {}&quot;, x[0][0][0][0], x[14][7][5][3]);
+//This will print: &quot;23, 56.&quot;
+</code></pre>
+
+<pre><code class="language-rust">let x = [[[[0; 4]; 6]; 8]; 15];
+print!(&quot;{}, {}, {}, {}.&quot;,
+x.len(), x[0].len(), x[0][0].len(), x[0][0][0].len());
+//This will print: &quot;15, 8, 6, 4.&quot;
+</code></pre>
+
+<h3 id="vectors">Vectors</h3>
+
+<p>To create sequences of objects whose size is defined at runtime, the Rust standard library provides the Vec type, shorthand for vector.</p>
+
+<pre><code class="language-rust">let x = vec![&quot;This&quot;, &quot;is&quot;];
+print!(&quot;{} {}. Length: {}.&quot;, x[0], x[1], x.len());
+//This will print: &quot;This is. Length: 2.&quot;
+</code></pre>
+
+<h2 id="6-using-primitive-types">6. Using Primitive Types</h2>
+
+<p>In this chapter, you will learn:
+• How to write numeric literals in hexadecimal, octal, or binary notation<br />
+• How to use the underscore character to make numeric literals easier to read<br />
+• How to use the exponential notation to write huge or tiny numbers in a compact form<br />
+• Which are the ten primitive integer numeric types, and the two primitive floating-point numeric types; which are their ranges; and when it is better to use each of them<br />
+• How to specify numeric literals of concrete types or of unconstrained types
+• How to convert a numeric value to another numeric type<br />
+• The other primitive types: Booleans, characters, and empty tuples<br />
+• How type inference works<br />
+• How to express the types of arrays and vectors<br />
+• How to assign a name to a compile-time constant<br />
+• How to use the compiler to discover the type of an expression</p>
+
+<pre><code class="language-rust">let a: i16 = 12;
+let b: u32 = 4;
+let c: f32 = 3.7;
+print!(&quot;{}&quot;, a as i8 + b as i8 + c as i8);
+//This will print: &quot;19&quot;.  
+</code></pre>
+
+<pre><code class="language-rust">let a = 500 as i8;  //..............**..**..??......**..**..??......**..**..??......**..**..??......**..**..??......**..**..??...
+let b = 100_000 as u16;
+let c = 10_000_000_000 as u32;
+print!(&quot;{} {} {}&quot;, a, b, c);
+//Perhaps surprisingly, it will print: &quot;-12 34464 1410065408&quot;.
+</code></pre>
+
+<p>let _: i8 = 127;
+let _: i16 = 32_767;
+let _: i32 = 2_147_483_647;
+let _: i64 = 9_223_372_036_854_775_807;
+let _: isize = 100; // The maximum value depends on the target architecture
+let _: u8 = 255;
+let _: u16 = 65_535;
+let _: u32 = 4_294_967_295;
+let _: u64 = 18_446_744_073_709_551_615;
+let _: usize = 100; // The maximum value depends on the target architecture
+let _: f32 = 1e38;
+let _: f64 = 1e308;</p>
+
+<pre><code class="language-rust">let a: () = ();
+let b = { 12; 87; 283 };
+let c = { 12; 87; 283; };
+let d = {};
+let e = if false { };
+let f = while false { };
+print!(&quot;{:?} {:?} {:?} {:?} {:?} {:?}&quot;,
+a, b, c, d, e, f);
+//This code will print: &quot;() 283 () () () ()&quot;.
+</code></pre>
+
+<h2 id="7-enumerating-cases">7. Enumerating Cases</h2>
+
+<p>In this chapter, you will learn:<br />
+• How enums help in defining variables that can take on values only from a finite set of cases
+• How enums can be used to implement discriminated union types
+• How to use the match pattern-matching construct to handle enums
+• How to use the match construct to handle other data types, like integer numbers, strings, and single characters
+• How to use Boolean guards to generalize the pattern-matching of the match construct</p>
+
+<pre><code class="language-rust">enum CardinalPoint { North, South, West, East };
+let direction = CardinalPoint::South;
+match direction {
+CardinalPoint::North =&gt; print!(&quot;NORTH&quot;),
+CardinalPoint::South =&gt; print!(&quot;SOUTH&quot;),
+_ =&gt; {},
+}
+</code></pre>
+
+<p><strong>error:</strong></p>
+
+<pre><code class="language-rust">enum CardinalPoint { North, South, West, East };
+let direction = CardinalPoint::South;
+match direction {
+CardinalPoint::North =&gt; print!(&quot;NORTH&quot;),
+_ =&gt; {},
+CardinalPoint::South =&gt; print!(&quot;SOUTH&quot;),
+}
+</code></pre>
+
+<pre><code class="language-rust">enum Result {
+Success(f64),
+Failure(u16, char),
+Uncertainty,
+}
+let outcome = Result::Success(23.67);
+match outcome {
+Result::Success(_) =&gt; print!(&quot;OK&quot;),
+Result::Failure(error_code, module) =&gt;
+print!(&quot;Error n. {} in module {}&quot;,
+error_code, module),
+Result::Uncertainty =&gt; {},
+}
+//This will print: &quot;OK&quot;.
+</code></pre>
+
+<pre><code class="language-rust">enum CardinalPoint { North, South, West, East };
+let direction = CardinalPoint::South;
+print!(&quot;{}&quot;, match direction {
+CardinalPoint::North =&gt; 'N',
+CardinalPoint::South =&gt; 'S',
+_ =&gt; '*',
+});
+//This will print: &quot;S.&quot;
+</code></pre>
+
+<pre><code class="language-rust">for n in -2..5 {
+println!(&quot;{} is {}.&quot;, n, match n {
+0 =&gt; &quot;zero&quot;,
+1 =&gt; &quot;one&quot;,
+_ if n &lt; 0 =&gt; &quot;negative&quot;,
+_ =&gt; &quot;plural&quot;,
+});
+}
+</code></pre>
+
+<p>This program will print:
+-2 is negative.
+-1 is negative.
+0 is zero.
+1 is one.
+2 is plural.
+3 is plural.
+4 is plural.</p>
+
+<p><strong>MarkP95</strong>
+P95</p>
+
+<h2 id="8-using-heterogeneous-data-structures">8. Using Heterogeneous Data Structures</h2>
+
+<p>In this chapter you will learn how to define and use other composite types:
+• Tuples
+• Structs
+• Tuple-Structs
+They are useful to group objects of different types.
+At the end of the chapter, you&rsquo;ll see some code style conventions.</p>
+
+<pre><code class="language-rust">const MAXIMUM_POWER: u16 = 600;
+enum VehicleKind {
+    Motorcycle,
+    Car,
+    Truck,
+}
+struct VehicleData {
+    kind: VehicleKind,
+    registration_year: u16,
+    registration_month: u8,
+    power: u16,
+}
+let vehicle = VehicleData {
+    kind: VehicleKind::Car,
+    registration_year: 2003,
+    registration_month: 11,
+    power: 120,
+};
+if vehicle.power &gt; MAXIMUM_POWER {
+      println!(&quot;Too powerful&quot;);
+}
+</code></pre>
+
+<h2 id="9-defining-functions">9 Defining Functions</h2>
+
+<p>In this chapter you will learn:
+• How to define your own procedures (better known as “functions”)
+and how to invoke them
+• When and how you can have several functions with the same name
+• How to pass arguments to a function, by-value or by-reference
+• How to return simple and composite values from a function
+• How to exit prematurely from a function
+• How references to objects can be manipulated</p>
+
+<pre><code class="language-rust">fn f1() { print!(&quot;1&quot;); }
+fn main() {
+    f1();
+    fn f2() { print!(&quot;2&quot;); }
+    f2(); f1(); f2();
+}
+// This will print: &quot;1212&quot;.  
+</code></pre>
+
+<hr />
+
+<pre><code class="language-rust">fn f() { print!(&quot;1&quot;); } //it is not used.
+fn main() {
+    f(); // Prints 2
+    {
+        f(); // Prints 3
+        fn f() { print!(&quot;3&quot;); }
+    }
+    f(); // Prints 2
+    fn f() { print!(&quot;2&quot;); }
+}
+//This will print 232.
+</code></pre>
+
+<hr />
+
+<pre><code class="language-rust">fn double(x: f64) -&gt; f64 { x * 2. }
+print!(&quot;{}&quot;, double(17.3));
+//This will print &quot;34.6&quot;.
+</code></pre>
+
+<h2 id="10-defining-generic-functions-and-structs">10. Defining Generic Functions and Structs</h2>
+
+<pre><code class="language-rust">// Library code
+fn f&lt;T&gt;(ch: char, num1: T, num2: T) -&gt; T {
+if ch == 'a' { num1 }
+else { num2 }
+}
+// Application code
+let a: i16 = f::&lt;i16&gt;('a', 37, 41);
+let b: f64 = f::&lt;f64&gt;('b', 37.2, 41.1);
+print!(&quot;{} {}&quot;, a, b);
+//This will print 37 41.1.
+
+// Library code
+fn f&lt;T&gt;(ch: char, num1: T, num2: T) -&gt; T {
+if ch == 'a' { num1 }
+else { num2 }
+}
+// Application code
+let a: i16 = f('a', 37, 41);
+let b: f64 = f('b', 37.2, 41.1);
+print!(&quot;{} {}&quot;, a, b);
+
+</code></pre>
+
+<h2 id="11-allocating-memory">11. Allocating Memory</h2>
+
+<p>In this chapter, you will learn:
+• The various kinds of memory allocation, their performance characteristics, and their limitations
+• How to specify in Rust which memory allocation to use for an object
+• The difference between a reference and a Box</p>
+
+<p><a href="https://www.dyike.com/2018/09/24/rust-box-tree/">https://www.dyike.com/2018/09/24/rust-box-tree/</a></p>
+
+<p><a href="https://kaisery.github.io/trpl-zh-cn/ch15-01-box.html">https://kaisery.github.io/trpl-zh-cn/ch15-01-box.html</a></p>
+
+<pre><code class="language-rust">#[derive(Default)]
+struct Tree {
+  root: i64,
+  left: Option&lt;Box&lt;Tree&gt;&gt;,
+  right: Option&lt;Box&lt;Tree&gt;&gt;,
+}
+impl Tree {
+  fn new(root: i64) -&gt; Tree {
+    Tree {
+      root: root,
+      ..Default::default()
+    }
+  }
+  fn left(mut self, leaf: Tree) -&gt; Self {
+    self.left = Some(Box::new(leaf));
+    self
+  }
+  fn right(mut self, leaf: Tree) -&gt; Self {
+    self.right = Some(Box::new(leaf));
+    self
+  }
+}
+
+//...
+Tree::new(12)
+  .left(
+    Tree::new(10)
+      .right(Tree::new(14))
+  )
+  .right(
+    Tree::new(16)
+      .left(Tree::new(15))
+      .right(Tree::new(22))
+  );
+</code></pre>
+
+<h2 id="12-data-implementation">12. Data Implementation</h2>
+
+<p>In this chapter, you will learn:
+• How to know how many bytes of stack are taken by objects of various types
+• How to shorten the path to access functions declared in external modules
+• How bits are stored in primitive type objects
+• How to know where an object is stored in memory
+• Why padding can increase the size taken by some objects
+• How vectors are implemented</p>
+
+<pre><code class="language-rust">use std::mem::*;
+print!(&quot;{} {} {} {} {} {} {} {} {} {} {} {}&quot;,
+size_of::&lt;i8&gt;(),
+size_of::&lt;u8&gt;(),
+size_of::&lt;i16&gt;(),
+size_of::&lt;u16&gt;(),
+size_of::&lt;i32&gt;(),
+size_of::&lt;u32&gt;(),
+size_of::&lt;i64&gt;(),
+size_of::&lt;u64&gt;(),
+size_of::&lt;f32&gt;(),
+size_of::&lt;f64&gt;(),
+size_of::&lt;bool&gt;(),
+size_of::&lt;char&gt;());
+In any computer, this will print 1 1 2 2 4 4 8 8 4 8 1 4.
+</code></pre>
+
+<pre><code class="language-rust">let mut v = vec![0; 0];
+println!(&quot;{} {}&quot;, v.len(), v.capacity());
+v.push(11);
+println!(&quot;{} {}&quot;, v.len(), v.capacity());
+v.push(22);
+println!(&quot;{} {}&quot;, v.len(), v.capacity());
+v.push(33);
+println!(&quot;{} {}&quot;, v.len(), v.capacity());
+v.push(44);
+println!(&quot;{} {}&quot;, v.len(), v.capacity());
+v.push(55);
+println!(&quot;{} {}&quot;, v.len(), v.capacity());
+</code></pre>
+
+<p>This will print:
+0 0
+1 4
+2 4
+3 4
+4 4
+5 8</p>
+
+<pre><code class="language-rust">let mut v = vec![0; 0];
+let mut prev_capacity = std::usize::MAX;
+for i in 0..1_000 {
+let cap = v.capacity();
+if cap != prev_capacity {
+println!(&quot;{} {} {}&quot;, i, v.len(), cap);
+prev_capacity = cap;
+}
+v.push(1);
+}
+
+</code></pre>
+
+<p>This (probably) will print:
+0 0 0
+1 1 4
+5 5 8
+9 9 16
+17 17 32
+33 33 64
+65 65 128
+129 129 256
+257 257 512
+513 513 1024</p>
+
+<h2 id="13-defining-closures">13. Defining Closures</h2>
+
+<p>In this chapter, you will learn:
+• Why there is a need for anonymous inline functions, with type inference for the arguments and the return value type, without having to write braces, and which can access the variables that are alive at the function definition point
+• How such lightweight functions, named “closures”, can be declared and invoked</p>
+
+<pre><code class="language-rust">let factor = 2;
+let multiply = |a| a * factor;
+print!(&quot;{}&quot;, multiply(13));
+let multiply_ref: &amp;(Fn(i32) -&gt; i32) = &amp;multiply;
+print!(
+&quot; {} {} {} {} {}&quot;,
+(*multiply_ref)(13),
+multiply_ref(13),
+(|a| a * factor)(13),
+(|a: i32| a * factor)(13),
+|a| -&gt; i32 { a * factor }(13));
+// This will print: &quot;26 26 26 26 26 26&quot;.
+</code></pre>
+
+<pre><code class="language-rust">print!(
+&quot;{}&quot;,
+(|v: &amp;Vec&lt;i32&gt;| {
+let mut sum = 0;
+for i in 0..v.len() {
+sum += v[i];
+}
+sum
+})(&amp;vec![11, 22, 34]));
+//This will print &quot;67&quot; which is the sum of the numbers contained in the vector.
+</code></pre>
+
+<h2 id="14-using-changeable-strings">14. Using Changeable Strings</h2>
+
+<p>In this chapter, you will learn:
+• How static strings are implemented
+• How dynamic strings are implemented
+• How you can add characters to or remove characters from a dynamic string
+• How to convert a static string to a dynamic string, and conversely
+• How to concatenate strings</p>
+
+<pre><code class="language-rust">fn main(){
+let mut a = &quot;Hel&quot;;
+print!(&quot;{}&quot;, a);
+a = &quot;lo&quot;;
+print!(&quot;{}\n&quot;, a);
+//This will print &quot;Hello&quot;. 
+use std::mem::*;
+let a: &amp;str = &quot;&quot;;
+let b: &amp;str = &quot;0123456789&quot;;
+let c: &amp;str = &quot;abcdè&quot;;
+print!(&quot;{} {} {}&quot;,
+size_of_val(a),
+size_of_val(b),
+size_of_val(c));
+//This program will print 0 10 6.
+// use std::mem::*;
+let a: &amp;str = &quot;&quot;;
+let b: &amp;str = &quot;0123456789&quot;;
+let c: &amp;str = &quot;abcdè&quot;;
+print!(&quot;{} {} {}; &quot;,
+size_of_val(&amp;a),
+size_of_val(&amp;b),
+size_of_val(&amp;c));
+print!(&quot;{} {} {}\n&quot;,
+size_of_val(&amp;&amp;a),
+size_of_val(&amp;&amp;b),
+size_of_val(&amp;&amp;c));
+//This program in a 64-bit system will print &quot;16 16 16; 8 8 8&quot;, while in a 32-bit system it will print &quot;8 8 8; 4 4 4&quot;.
+let mut a: String = &quot;He&quot;.to_string();
+a.push('l');
+a.push('l');
+a.push('o');
+print!(&quot;{}\n&quot;, a);
+//This will print &quot;Hello&quot;.
+let mut a: String = &quot;Xy&quot;.to_string(); // &quot;Xy&quot;
+a.remove(0); // &quot;y&quot;
+a.insert(0, 'H'); // &quot;Hy&quot;
+a.pop(); // &quot;H&quot;
+a.push('i'); // &quot;Hi&quot;
+print!(&quot;{}\n&quot;, a);
+//This prints &quot;Hi&quot;.
+let mut s1 = &quot;&quot;.to_string();
+s1.push('e');
+let mut s2 = &quot;&quot;.to_string();
+s2.push('è');
+let mut s3 = &quot;&quot;.to_string();
+s3.push('€');
+print!(&quot;{} {}; &quot;, s1.capacity(), s1.len());
+print!(&quot;{} {}; &quot;, s2.capacity(), s2.len());
+print!(&quot;{} {}\n&quot;, s3.capacity(), s3.len());
+//This may print: &quot;4 1; 2 2; 3 3&quot;.
+let mut s = &quot;&quot;.to_string();
+for _ in 0..10 {
+println!(&quot;{:?} {} {}&quot;,
+s.as_ptr(), s.capacity(), s.len());
+s.push('a');
+}
+println!(&quot;{:?} {} {}: {}\n&quot;,
+s.as_ptr(), s.capacity(), s.len(), s);
+
+}
+</code></pre>
+
+<p>This, in a 64-bit system, may print:</p>
+
+<p>0x1 0 0
+0x7fbf95e20020 4 1
+0x7fbf95e20020 4 2
+0x7fbf95e20020 4 3
+0x7fbf95e20020 4 4
+0x7fbf95e20020 8 5
+0x7fbf95e20020 8 6
+0x7fbf95e20020 8 7
+0x7fbf95e20020 8 8
+0x7fbf95e2a000 16 9
+0x7fbf95e2a000 16 10: aaaaaaaaaa</p>
+
+<h2 id="15-ranges-and-slices">15. Ranges and Slices</h2>
+
+<p>In this chapter, you will learn:
+• How to use closed ranges, and open-ended ranges
+• How to process portions of arrays or vectors using slices</p>
+
+<pre><code class="language-rust">/* It prints:
+3..8, 3, 8, 5
+3, 4, 5, 6, 7, */
+fn main() {
+    let range: std::ops::Range&lt;usize&gt; = 3..8;
+    println!(&quot;{:?}, {}, {}, {}&quot;,
+        range, range.start, range.end, range.len());
+    for i in range { print!(&quot;{}, &quot;, i); }
+}
+
+
+/* It prints:
+[33, 44, 66] [33, 44, 66] [44] 44*/
+fn main() {
+    let arr = [55, 22, 33, 44, 66, 7, 8];
+    let v = vec![55, 22, 33, 44, 66, 7, 8];
+    let sr1 = &amp;arr[2..5];
+    let sr2 = &amp;v[2..5];
+    print!(&quot;{:?} {:?} {:?} {:?}&quot;, sr1, sr2, &amp;sr1[1..2], &amp;sr1[1]);
+}
+
+/* It prints:
+[11, 22] [33, 44]*/
+fn main() {
+    let arr = [11, 22, 33, 44];
+    let n = 2;
+    let sr1 = &amp;arr[..n];
+    let sr2 = &amp;arr[n..];
+    print!(&quot;{:?} {:?}&quot;, sr1, sr2);
+}
+
+/* It prints:
+3.. ..12 4 4
+*/
+fn main() {
+    let r1: std::ops::RangeFrom&lt;i32&gt; = 3..;
+    let r2: std::ops::RangeTo&lt;i32&gt; = ..12;
+    println!(&quot;{:?} {:?} {} {}&quot;, r1, r2,
+        std::mem::size_of_val(&amp;r1),
+        std::mem::size_of_val(&amp;r2));
+}
+
+/* It prints:
+3 4 5 6 */
+fn main() {
+    for i in 3.. {
+        if i * i &gt; 40 { break; }
+        print!(&quot;{} &quot;, i);
+    }
+}
+
+</code></pre>
+
+<p>** continue &hellip; mark p183**</p>
+
+<h2 id="16-using-iterators">16. Using Iterators</h2>
+
+<p>In this chapter, you will learn:
+• How characters are stored in Rust strings, and why they do not allow
+direct access
+• How to read string characters or string bytes using iterators
+• How to read items from slices, arrays, and vectors using iterators
+• How to modify items from slices, arrays, and vectors using mutating
+iterators
+• How to use some iterator adapters: filter, map, and enumerate
+• How to use some iterator consumers: any, all, count, sum, min, max,
+and collect
+• The concept of lazy processing in iterator chains</p>
+
+<pre><code class="language-rust">/* It prints:
+0: 97
+1: 98
+2: 99
+3: 48
+4: 49
+5: 50
+6: 195
+7: 168
+8: 226
+9: 130
+10: 172
+*/
+fn main() {
+    let s = &quot;abc012è€&quot;;
+    for i in 0..s.len() {
+        println!(&quot;{}: {}&quot;, i, s.as_bytes()[i]);
+    }
+}
+
+/* It prints:
+226 130 172 195 168 101 */
+fn main() {
+    for byte in &quot;€èe&quot;.bytes() {
+        print!(&quot;{} &quot;, byte);
+    }
+}
+
+/* It prints:
+226 130 172 195 168 101 */
+fn main() {
+    let string: &amp;str = &quot;€èe&quot;;
+    let string_it: std::str::Bytes = string.bytes();
+    for byte in string_it {
+        print!(&quot;{} &quot;, byte);
+    }
+}
+
+/* It prints:
+11 22 33 44 55 66 a b c */
+fn main() {
+    for item_ref in (&amp;[11u8, 22, 33]).iter() {
+        // *item_ref += 1;
+        print!(&quot;{} &quot;, *item_ref);
+    }
+    for item_ref in [44, 55, 66].iter() {
+        // *item_ref += 1;
+        print!(&quot;{} &quot;, *item_ref);
+    }
+    for item_ref in vec!['a', 'b', 'c'].iter() {
+        // *item_ref = if *item_ref == 'b' { 'B' } else { '-' };
+        print!(&quot;{} &quot;, *item_ref);
+    }
+}
+
+/* It prints:
+11 22 33 44 55 66 a b c */
+fn main() {
+    let slice: &amp;[u8] = &amp;[11u8, 22, 33];
+    let slice_it: std::slice::Iter&lt;u8&gt; = slice.iter();
+    for item_ref in slice_it {
+        // *item_ref += 1;
+        print!(&quot;{} &quot;, *item_ref);
+    }
+    let arr: [i32; 3] = [44, 55, 66];
+    let arr_it: std::slice::Iter&lt;i32&gt; = arr.iter();
+    for item_ref in arr_it {
+        // *item_ref += 1;
+        print!(&quot;{} &quot;, *item_ref);
+    }
+    let vec: Vec&lt;char&gt; = vec!['a', 'b', 'c'];
+    let vec_it: std::slice::Iter&lt;char&gt; = vec.iter();
+    for item_ref in vec_it {
+        // *item_ref = if *item_ref == 'b' { 'B' } else { '-' };
+        print!(&quot;{} &quot;, *item_ref);
+    }
+}
+
+/* It prints:
+[3] [4] [5] (7) (8) */
+fn main() {
+    let slice1 = &amp;[3, 4, 5];
+    let slice2 = &amp;[7, 8];
+    let mut iterator = slice1.iter();
+    for item_ref in iterator {
+        print!(&quot;[{}] &quot;, *item_ref);
+    }
+    iterator = slice2.iter();
+    for item_ref in iterator {
+        print!(&quot;({}) &quot;, *item_ref);
+    }
+}
+
+
+
+</code></pre>
+
+<h2 id="assessments">Assessments</h2>
+
+<h2 id="continue">Continue</h2>
+
+<h2 id="words">words</h2>
+
+<p>cascade<br />
+destruction<br />
+deallocated<br />
+Arithmetic<br />
+braces</p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="ranges-and-slices">Ranges and Slices</h1>
+
+<h3 id="the-ranges">The Ranges</h3>
+
+<ol>
+<li><pre><code class="language-rust">/* It prints:
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+*/
+fn main() {
+for i in 0..12 { println!(&quot;{}&quot;, i); }
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+*/
+fn main() {
+let dozen = 0..12;
+for i in dozen { println!(&quot;{}&quot;, i); }
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+3..8, 3, 8, 5
+3, 4, 5, 6, 7, */
+fn main() {
+let range: std::ops::Range&lt;usize&gt; = 3..8;
+println!(&quot;{:?}, {}, {}, {}&quot;,
+    range, range.start, range.end, range.len());
+for i in range { print!(&quot;{}, &quot;, i); }
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+2 2 2 8 8 16*/
+fn main() {
+let r1 = 3u8..12u8;
+let r2 = 3u8..12;
+let r3 = 3..12u8;
+let r4 = 3..12;
+let r5 = -3..12;
+let r6 = 3..12 as i64;
+print!(
+    &quot;{} {} {} {} {} {} \n&quot;,
+    std::mem::size_of_val(&amp;r1),
+    std::mem::size_of_val(&amp;r2),
+    std::mem::size_of_val(&amp;r3),
+    std::mem::size_of_val(&amp;r4),
+    std::mem::size_of_val(&amp;r5),
+    std::mem::size_of_val(&amp;r6));
+print!(
+    &quot;{:?} {:?} {:?} {:?} {:?} \n&quot;,  r1, r2, r3 ,r4, r5);
+
+//print!(
+//       &quot;{} {} {} {} {} {} \n&quot;,  &amp;r1, &amp;r2, &amp;r3 , &amp;r4,  &amp;r5, &amp;r6 );
+
+
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">// ILLEGAL
+fn main() {
+let r1 = 3u8..12i8;
+let r2: std::ops::Range&lt;u32&gt; = -3..12;
+let r3: std::ops::Range&lt;i32&gt; = 3i16..12;
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">// It does nothing.
+fn main() {
+let _r1 = 3u8..1200;
+let _r2 = 3..5_000_000_000;
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">// It does nothing.
+fn main() {
+let _r1 = false .. true;
+let _r2 = &quot;hello&quot; .. &quot;world&quot;;
+let _r3 = 4.2 .. 7.9;
+}
+</code></pre></li>
+</ol>
+
+<h3 id="passing-a-sequence-to-a-function">Passing a Sequence to a Function</h3>
+
+<p>参数传递<br />
+ 8.</p>
+
+<pre><code class="language-rust">/* It prints:
+12*/
+fn main() {
+    fn min(arr: [i32; 8]) -&gt; i32 {
+        let mut minimum = arr[0];
+        for i in 1..arr.len() {
+            if arr[i] &lt; minimum { minimum = arr[i]; }
+        }
+        minimum
+    }
+    print!(&quot;{}&quot;, min([23, 17, 12, 16, 15, 28, 17, 30]));
+}
+</code></pre>
+
+<ol>
+<li><pre><code class="language-rust">/* It prints:
+12*/
+fn main() {
+fn min(arr: &amp;[i32; 8]) -&gt; i32 {
+    let mut minimum = arr[0];
+    for i in 1..arr.len() {
+        if arr[i] &lt; minimum { minimum = arr[i]; }
+    }
+    minimum
+}
+print!(&quot;{}&quot;, min(&amp;[23, 17, 12, 16, 15, 28, 17, 30]));
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+5 5 5 5*/
+fn main() {
+let a: u8 = 5;
+let b: u16 = 5;
+let c: u32 = 5;
+let d: u64 = 5;
+print!(&quot;{} {} {} {}&quot;, a, b, c, d);
+}
+</code></pre></li>
+</ol>
+
+<h3 id="the-slices">The Slices</h3>
+
+<ol>
+<li><pre><code class="language-rust">/* It prints:
+12*/
+fn main() {
+fn min(arr: &amp;[i32]) -&gt; i32 {
+    // Let's assume 'arr' is not empty.
+    let mut minimum = arr[0];
+    for i in 1..arr.len() {
+        if arr[i] &lt; minimum { minimum = arr[i]; }
+    }
+    minimum
+}
+print!(&quot;{}&quot;, min(&amp;[23, 17, 12, 16, 15, 28, 17, 30]));
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+17 22*/
+fn main() {
+fn min(arr: &amp;[i32]) -&gt; i32 {
+    // Let's assume 'arr' is not empty.
+    let mut minimum = arr[0];
+    for i in 1..arr.len() {
+        if arr[i] &lt; minimum { minimum = arr[i]; }
+    }
+    minimum
+}
+print!(&quot;{} &quot;, min(&amp;[23, 17]));
+print!(&quot;{}&quot;, min(&amp;vec![55, 22, 33, 44]));
+}
+</code></pre></li>
+</ol>
+
+<h3 id="slicing">Slicing</h3>
+
+<ol>
+<li><pre><code class="language-rust">/* It prints:
+12*/
+fn main() {
+fn min(arr: &amp;[i32]) -&gt; i32 {
+    // Let's assume 'arr' is not empty.
+    let mut minimum = arr[0];
+    for i in 1..arr.len() {
+        if arr[i] &lt; minimum { minimum = arr[i]; }
+    }
+    minimum
+}
+let arr = [23, 17, 12, 16, 15, 2];
+let range = 2..5;
+let slice_ref = &amp;arr[range];
+print!(&quot;{}&quot;, min(slice_ref));
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+12 */
+fn main() {
+fn min(arr: &amp;[i32]) -&gt; i32 {
+    // Let's assume 'arr' is not empty.
+    let mut minimum = arr[0];
+    for i in 1..arr.len() {
+        if arr[i] &lt; minimum { minimum = arr[i]; }
+    }
+    minimum
+}
+print!(&quot;{} &quot;, min(&amp;[23, 17, 12, 16, 15, 2][2..5]));
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+[33, 44, 66] [33, 44, 66] [44] 44*/
+fn main() {
+let arr = [55, 22, 33, 44, 66, 7, 8];
+let v = vec![55, 22, 33, 44, 66, 7, 8];
+let sr1 = &amp;arr[2..5];
+let sr2 = &amp;v[2..5];
+print!(&quot;{:?} {:?} {:?} {:?}&quot;, sr1, sr2, &amp;sr1[1..2], &amp;sr1[1]);
+}
+</code></pre></li>
+</ol>
+
+<h3 id="out-of-range-slicing">Out-of-Range Slicing</h3>
+
+<ol>
+<li><pre><code class="language-rust">// It does nothing.
+fn main() {
+let arr = [55, 22, 33, 44, 66];
+let _r1 = 4..4; let _a1 = &amp;arr[_r1];
+let _r2 = 4..3; //let _a2 = &amp;arr[_r2];
+let _r3 = -3i32..2; //let _a3 = &amp;arr[_r3];
+let _r4 = 3..8; //let _a4 = &amp;arr[_r4];
+}
+</code></pre></li>
+</ol>
+
+<h3 id="mutable-slicing">Mutable Slicing</h3>
+
+<ol>
+<li><pre><code class="language-rust">/* It prints:
+[22, 33] [22, 0] [11, 22, 0, 44]*/
+fn main() {
+let mut arr = [11, 22, 33, 44];
+{
+    let sl_ref = &amp;mut arr[1..3];
+    print!(&quot;{:?}&quot;, sl_ref);
+    sl_ref[1] = 0;
+    print!(&quot; {:?}&quot;, sl_ref);
+}
+print!(&quot; {:?}&quot;, arr);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+[22, 33] [11] [11, 22, 33, 44]*/
+fn main() {
+let arr = [11, 22, 33, 44];
+{
+    let mut sl_ref = &amp;arr[1..3];
+    print!(&quot;{:?}&quot;, sl_ref);
+    sl_ref = &amp;arr[0..1];
+    print!(&quot; {:?}&quot;, sl_ref);
+}
+print!(&quot; {:?}&quot;, arr);
+}
+</code></pre></li>
+</ol>
+
+<h3 id="open-ended-ranges-and-slicing">Open-Ended Ranges and Slicing</h3>
+
+<ol>
+<li><pre><code class="language-rust">/* It prints:
+[11, 22] [33, 44]*/
+fn main() {
+let arr = [11, 22, 33, 44];
+let n = 2;
+let sr1 = &amp;arr[0..n];
+let sr2 = &amp;arr[n..arr.len()];
+print!(&quot;{:?} {:?}&quot;, sr1, sr2);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+[11, 22] [33, 44]*/
+fn main() {
+let arr = [11, 22, 33, 44];
+let n = 2;
+let sr1 = &amp;arr[..n];
+let sr2 = &amp;arr[n..];
+print!(&quot;{:?} {:?}&quot;, sr1, sr2);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+3.. ..12 4 4
+*/
+fn main() {
+let r1: std::ops::RangeFrom&lt;i32&gt; = 3..;
+let r2: std::ops::RangeTo&lt;i32&gt; = ..12;
+println!(&quot;{:?} {:?} {} {}&quot;, r1, r2,
+    std::mem::size_of_val(&amp;r1),
+    std::mem::size_of_val(&amp;r2));
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+3 4 5 6 */
+fn main() {
+for i in 3.. {
+    if i * i &gt; 40 { break; }
+    print!(&quot;{} &quot;, i);
+}
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+0 [11, 22, 33, 44] [11, 22, 33, 44]*/
+fn main() {
+let range: std::ops::RangeFull = ..;
+let a1 = [11, 22, 33, 44];
+let a2 = &amp;a1[range];
+print!(&quot;{} {:?} {:?}&quot;, std::mem::size_of_val(&amp;range), a1, a2);
+}
+</code></pre></li>
+</ol>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

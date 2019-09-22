@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="rust语言中文入门教程-rust调用ffi函数">Rust语言中文入门教程-rust调用ffi函数</h1>
+
+<p>中文入门教程-rust调用ffi函数。</p>
+
+<h1 id="调用ffi函数">调用ffi函数</h1>
+
+<blockquote>
+<p>下文提到的ffi皆指cffi。</p>
+</blockquote>
+
+<p><strong>Rust</strong>作为一门<strong>系统</strong>级语言，自带对ffi调用的支持。</p>
+
+<h2 id="getting-start">Getting Start</h2>
+
+<h3 id="引入libc库">引入libc库</h3>
+
+<p>由于cffi的数据类型与rust不完全相同，我们需要引入libc库来表达对应ffi函数中的类型。</p>
+
+<p>在Cargo.toml中添加以下行:</p>
+
+<p>[dependencies]
+libc = &ldquo;0.2.9&rdquo;</p>
+
+<p>在你的rs文件中引入库:</p>
+
+<p>extern crate libc</p>
+
+<p>在以前libc库是和rust一起发布的，后来libc被移入了crates.io通过cargo安装。</p>
+
+<h3 id="声明你的ffi函数">声明你的ffi函数</h3>
+
+<p>就像c语言需要#include声明了对应函数的头文件一样，rust中调用ffi也需要对对应函数进行声明。</p>
+
+<p>use libc::c_int;
+use libc::c_void;
+use libc::size_t;</p>
+
+<p>#[link(name = &ldquo;yourlib&rdquo;)]
+extern {
+    fn your_func(arg1: c_int, arg2: *mut c_void) -&gt; size_t; // 声明ffi函数
+    fn your_func2(arg1: c_int, arg2: *mut c_void) -&gt; size_t;
+    static ffi_global: c_int; // 声明ffi全局变量
+}</p>
+
+<p>声明一个ffi库需要一个标记有#[link(name = &ldquo;yourlib&rdquo;)]的extern块。name为对应的库(so/dll/dylib/a)的名字。 如：如果你需要snappy库(libsnappy.so/libsnappy.dll/libsnappy.dylib/libsnappy.a), 则对应的name为snappy。 在一个extern块中你可以声明任意多的函数和变量。</p>
+
+<h3 id="调用ffi函数-1">调用ffi函数</h3>
+
+<p>声明完成后就可以进行调用了。 由于此函数来自外部的c库，所以rust并不能保证该函数的安全性。因此，调用任何一个ffi函数需要一个unsafe块。</p>
+
+<p>let result: size_t = unsafe {
+    your_func(1 as c_int, Box::into_raw(Box::new(3)) as *mut c_void)
+};</p>
+
+<h3 id="封装unsafe-暴露安全接口">封装unsafe，暴露安全接口</h3>
+
+<p>作为一个库作者，对外暴露不安全接口是一种非常不合格的做法。在做c库的rust binding时，我们做的最多的将是将不安全的c接口封装成一个安全接口。 通常做法是：在一个叫ffi.rs之类的文件中写上所有的extern块用以声明ffi函数。在一个叫wrapper.rs之类的文件中进行包装：</p>
+
+<p>// ffi.rs
+#[link(name = &ldquo;yourlib&rdquo;)]
+extern {
+    fn your_func(arg1: c_int, arg2: *mut c_void) -&gt; size_t;
+}</p>
+
+<p>// wrapper.rs
+fn your_func_wrapper(arg1: i32, arg2: &amp;mut i32) -&gt; isize {
+    unsafe { your_func(1 as c_int, Box::into_raw(Box::new(3)) as *mut c_void) } as isize
+}</p>
+
+<p>对外暴露(pub use) your_func_wrapper函数即可。</p>
+
+<h2 id="数据结构对应">数据结构对应</h2>
+
+<p>libc为我们提供了很多原始数据类型，比如c_int, c_float等，但是对于自定义类型，如结构体，则需要我们自行定义。</p>
+
+<h3 id="结构体">结构体</h3>
+
+<p>rust中结构体默认的内存表示和c并不兼容。如果要将结构体传给ffi函数，请为rust的结构体打上标记：</p>
+
+<p>#[repr&copy;]
+struct RustObject {
+    a: c_int,
+    // other members
+}</p>
+
+<p>此外，如果使用#[repr(C, packed)]将不为此结构体填充空位用以对齐。</p>
+
+<h3 id="union">Union</h3>
+
+<p>比较遗憾的是，rust到目前为止(2016-03-31)还没有一个很好的应对c的union的方法。只能通过一些hack来实现。(<a href="https://github.com/rust-lang/rfcs/pull/1444">对应rfc</a>)</p>
+
+<h3 id="enum">Enum</h3>
+
+<p>和struct一样，添加#[repr&copy;]标记即可。</p>
+
+<h3 id="回调函数">回调函数</h3>
+
+<p>和c库打交道时，我们经常会遇到一个函数接受另一个回调函数的情况。将一个rust函数转变成c可执行的回调函数非常简单：在函数前面加上extern &ldquo;C&rdquo;:</p>
+
+<p>extern &ldquo;C&rdquo; fn callback(a: c_int) { // 这个函数是传给c调用的
+    println!(&ldquo;hello {}!&rdquo;, a);
+}</p>
+
+<p>#[link(name = &ldquo;yourlib&rdquo;)]
+extern {
+   fn run_callback(data: i32, cb: extern fn(i32));
+}</p>
+
+<p>fn main() {
+    unsafe {
+        run_callback(1 as i32, callback); // 打印 1
+    }
+}</p>
+
+<p>对应c库代码:</p>
+
+<p>typedef void (*rust_callback)(int32_t);</p>
+
+<p>void run_callback(int32_t data, rust_callback callback) {
+    callback(data); // 调用传过来的回调函数
+}</p>
+
+<h3 id="字符串">字符串</h3>
+
+<p>rust为了应对不同的情况，有很多种字符串类型。其中CStr和CString是专用于ffi交互的。</p>
+
+<h4 id="cstr">CStr</h4>
+
+<p>对于产生于c的字符串(如在c程序中使用malloc产生)，rust使用CStr来表示，和str类型对应，表明我们并不拥有这个字符串。</p>
+
+<p>use std::ffi::CStr;
+use libc::c_char;
+#[link(name = &ldquo;yourlib&rdquo;)]
+extern {
+    fn char_func() -&gt; *mut c_char;
+}</p>
+
+<p>fn get_string() -&gt; String {
+    unsafe {
+        let raw_string: *mut c_char = char_func();
+        let cstr = CStr::from_ptr(my_string());
+        cstr.to_string_lossy().into_owned()
+    }
+}</p>
+
+<p>在这里get_string使用CStr::from_ptr从c的char*获取一个字符串，并且转化成了一个String.</p>
+
+<p>注意to_string_lossy()的使用：因为在rust中一切字符都是采用utf8表示的而c不是， 因此如果要将c的字符串转换到rust字符串的话，需要检查是否都为有效utf-8字节。to_string_lossy将返回一个Cow类型， 即如果c字符串都为有效utf-8字节，则将其0开销地转换成一个&amp;str类型，若不是，rust会将其拷贝一份并且将非法字节用U+FFFD填充。</p>
+
+<h4 id="cstring">CString</h4>
+
+<p>和CStr表示从c中来，rust不拥有归属权的字符串相反，CString表示由rust分配，用以传给c程序的字符串。</p>
+
+<p>use std::ffi::CString;
+use std::os::raw::c_char;</p>
+
+<p>extern {
+    fn my_printer(s: *const c_char);
+}</p>
+
+<p>let c_to_print = CString::new(&ldquo;Hello, world!&rdquo;).unwrap();
+unsafe {
+    my_printer(c_to_print.as_ptr()); // 使用 as_ptr 将CString转化成char指针传给c函数
+}</p>
+
+<p>注意c字符串中并不能包含\0字节(因为\0用来表示c字符串的结束符),因此CString::new将返回一个Result， 如果输入有\0的话则为Error(NulError)。</p>
+
+<h3 id="不透明结构体">不透明结构体</h3>
+
+<p>C库存在一种常见的情况：库作者并不想让使用者知道一个数据类型的具体内容，因此常常提供了一套工具函数，并使用void*或不透明结构体传入传出进行操作。 比较典型的是ncurse库中的WINDOW类型。</p>
+
+<p>当参数是void*时，在rust中可以和c一样，使用对应类型*mut libc::c_void进行操作。如果参数为不透明结构体，rust中可以使用空白enum进行代替:</p>
+
+<p>enum OpaqueStruct {}</p>
+
+<p>extern &ldquo;C&rdquo; {
+    pub fn foo(arg: *mut OpaqueStruct);
+}</p>
+
+<p>C代码：</p>
+
+<p>struct OpaqueStruct;
+void foo(struct OpaqueStruct *arg);</p>
+
+<h3 id="空指针">空指针</h3>
+
+<p>另一种很常见的情况是需要一个空指针。请使用0 as *const _ 或者 std::ptr::null()来生产一个空指针。</p>
+
+<h2 id="内存安全">内存安全</h2>
+
+<p>由于ffi跨越了rust边界，rust编译器此时无法保障代码的安全性，所以在涉及ffi操作时要格外注意。</p>
+
+<h3 id="析构问题">析构问题</h3>
+
+<p>在涉及ffi调用时最常见的就是析构问题：这个对象由谁来析构？是否会泄露或use after free？ 有些情况下c库会把一类类型malloc了以后传出来，然后不再关系它的析构。因此在做ffi操作时请为这些类型实现析构(Drop Trait).</p>
+
+<h3 id="可空指针优化">可空指针优化</h3>
+
+<p>当rust的一个enum为一种特殊结构：它有两种实例，一种为空，另一种只有一个数据域的时候，rustc会开启空指针优化将其优化成一个指针。 比如Option<extern "C" fn(c_int) -> c_int&gt;会被优化成一个可空的函数指针。</p>
+
+<h3 id="ownership处理">ownership处理</h3>
+
+<p>在rust中，由于编译器会自动插入析构代码到块的结束位置，在使用owned类型时要格外的注意。</p>
+
+<p>extern {
+    pub fn foo(arg: extern fn() -&gt; *const c_char);
+}</p>
+
+<p>extern &ldquo;C&rdquo; fn danger() -&gt; *const c_char {
+    let cstring = CString::new(&ldquo;I&rsquo;m a danger string&rdquo;).unwrap();
+    cstring.as_ptr()
+}  // 由于CString是owned类型，在这里cstring被rust free掉了。USE AFTER FREE! too young!</p>
+
+<p>fn main() {
+  unsafe {
+        foo(danger); // boom !!
+    }
+}</p>
+
+<p>由于as_ptr接受一个&amp;self作为参数(fn as_ptr(&amp;self) -&gt; *const c_char)，as_ptr以后ownership仍然归rust所有。因此rust会在函数退出时进行析构。 正确的做法是使用into_raw()来代替as_ptr()。由于into_raw的签名为fn into_raw(self) -&gt; *mut c_char，接受的是self,产生了ownership转移， 因此danger函数就不会将cstring析构了。</p>
+
+<h3 id="panic">panic</h3>
+
+<p>由于在ffi中panic是未定义行为，切忌在cffi时panic包括直接调用panic!,unimplemented!,以及强行unwrap等情况。 当你写cffi时，记住：你写下的每个单词都可能是发射核弹的密码！</p>
+
+<h2 id="静态库-动态库">静态库/动态库</h2>
+
+<p>前面提到了声明一个外部库的方式&ndash;#[link]标记，此标记默认为动态库。但如果是静态库，可以使用#[link(name = &ldquo;foo&rdquo;, kind = &ldquo;static&rdquo;)]来标记。 此外，对于osx的一种特殊库&ndash;framework, 还可以这样标记#[link(name = &ldquo;CoreFoundation&rdquo;, kind = &ldquo;framework&rdquo;)].</p>
+
+<h2 id="调用约定">调用约定</h2>
+
+<p>前面看到，声明一个被c调用的函数时，采用extern &ldquo;C&rdquo; fn的语法。此处的&rdquo;C&rdquo;即为c调用约定的意思。此外，rust还支持：</p>
+
+<ul>
+<li>stdcall</li>
+<li>aapcs</li>
+<li>cdecl</li>
+<li>fastcall</li>
+<li>vectorcall //这种call约定暂时需要开启abi_vectorcall feature gate.</li>
+<li>Rust</li>
+<li>rust-intrinsic</li>
+<li>system</li>
+<li>C</li>
+<li>win64</li>
+</ul>
+
+<h2 id="bindgen">bindgen</h2>
+
+<p>是不是觉得把一个个函数和全局变量在extern块中去声明，对应的数据结构去手动创建特别麻烦？没关系，rust-bindgen来帮你搞定。 rust-bindgen是一个能从对应c头文件自动生成函数声明和数据结构的工具。创建一个绑定只需要./bindgen [options] input.h即可。  <a href="https://github.com/crabtw/rust-bindgen">项目地址</a></p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

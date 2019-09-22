@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="dlang-rust-以及-golang-数据库操作方式对比">Dlang、Rust 以及 Golang 数据库操作方式对比</h1>
+
+<p>时间 2019-02-20 20:36:38 <a href="https://www.tuicool.com/sites/AnyqueI">Go语言中文网</a></p>
+
+<p><em>原文</em> <a href="https://studygolang.com/articles/18362?utm_source=tuicool&amp;utm_medium=referral">https://studygolang.com/articles/18362</a></p>
+
+<p>主题  <a href="https://www.tuicool.com/topics/11000064">数据库</a> <a href="https://www.tuicool.com/topics/11020185">Rust</a> <a href="https://www.tuicool.com/topics/11080084">Go语言</a></p>
+
+<p>我们使用 Dlang / Rust / Golang 在服务端开发的时候对数据库操作是家常便饭，而对于所谓的系统级编译型语言来说操作数据库可能没那么方便，不像 PHP 和 JAVA 那样，对于比较新的三个编译型语言我们来看看效果，刚好这三个语言的语法差异比较大。</p>
+
+<h2 id="一-数据插入-insert">一、数据插入 - INSERT</h2>
+
+<h3 id="1-1-dlang-插入数据">1.1 : Dlang 插入数据</h3>
+
+<p>import std.stdio;</p>
+
+<p>import hunt.database;</p>
+
+<p>void main() {
+    auto db = new Database(&ldquo;mysql://root:123456@localhost:3306/test?charset=utf8mb4&rdquo;);</p>
+
+<pre><code>int result = db.execute(`INSERT INTO user(username) VALUES(&quot;test&quot;)`);
+
+// 打印插入的ID
+writeln(result);
+
+db.close();
+</code></pre>
+
+<p>}</p>
+
+<h3 id="1-2-rust-插入数据">1.2 : Rust 插入数据</h3>
+
+<p>extern crate postgres;</p>
+
+<p>use postgres::{Connection, SslMode};</p>
+
+<p>fn main() {
+    let conn = Connection::connect(&ldquo;postgres://postgres@localhost&rdquo;, SslMode::None).unwrap();</p>
+
+<pre><code>conn.execute(&quot;INSERT INTO user (username) VALUES (\&quot;test\&quot;)&quot;, &amp;[]).unwrap();
+</code></pre>
+
+<p>}</p>
+
+<h3 id="1-3-golang-插入数据">1.3 : Golang 插入数据</h3>
+
+<p>import (
+    &ldquo;database/sql&rdquo;
+    &ldquo;fmt&rdquo;
+    _ &ldquo;github.com/lib/pq&rdquo;
+    &ldquo;time&rdquo;
+    &ldquo;log&rdquo;
+)</p>
+
+<p>func main() {
+    db, err := sql.Open(&ldquo;postgres&rdquo;, &ldquo;user=portgres password=123456 dbname=test sslmode=disable&rdquo;)</p>
+
+<pre><code>if err != nil {
+    log.Fatal(err)
+    return nil
+}
+
+stmt := db.Prepare(&quot;INSERT INTO user (username) VALUES (\&quot;test\&quot;)&quot;)
+
+stmt.Exec()
+
+stmt.Close()
+</code></pre>
+
+<p>}</p>
+
+<h2 id="二-数据查询-select">二、数据查询 - SELECT</h2>
+
+<h3 id="2-1-dlang-查询数据">2.1 : Dlang 查询数据</h3>
+
+<p>import std.stdio;</p>
+
+<p>import hunt.database;</p>
+
+<p>void main() {
+    auto db = new Database(&ldquo;mysql://root:123456@localhost:3306/test?charset=utf8mb4&rdquo;);</p>
+
+<pre><code>foreach(row; db.query(&quot;SELECT * FROM user LIMIT 10&quot;))
+{
+    writeln(row[&quot;username&quot;]);
+}
+
+db.close();
+</code></pre>
+
+<p>}</p>
+
+<h3 id="2-2-rust-查询数据">2.2 : Rust 查询数据</h3>
+
+<p>extern crate postgres;</p>
+
+<p>use postgres::{Connection, SslMode};</p>
+
+<p>fn main() {
+    let conn = Connection::connect(&ldquo;postgres://postgres@localhost&rdquo;, SslMode::None).unwrap();</p>
+
+<pre><code>for row in &amp;conn.query(&quot;SELECT * FROM user&quot;, &amp;[]).unwrap();
+    println!(&quot;Found person {}&quot;, row.get(0));
+}
+</code></pre>
+
+<p>}</p>
+
+<h3 id="2-3-golang-查询数据">2.3 : Golang 查询数据</h3>
+
+<p>import (
+    &ldquo;database/sql&rdquo;
+    &ldquo;fmt&rdquo;
+    _ &ldquo;github.com/lib/pq&rdquo;
+    &ldquo;time&rdquo;
+    &ldquo;log&rdquo;
+)</p>
+
+<p>type User struct {
+    UserName    string
+}</p>
+
+<p>func main() {
+    db, err := sql.Open(&ldquo;postgres&rdquo;, &ldquo;user=portgres password=123456 dbname=test sslmode=disable&rdquo;)</p>
+
+<pre><code>if err != nil {
+    log.Fatal(err)
+    return nil
+}
+
+user := User{}
+
+stmt := db.Query(&quot;SELECT * FROM user&quot;)
+
+for rows.Next() {
+    rows.Scan(&amp;user.UserName)
+    fmt.Println(user.UserName)
+}
+
+stmt.Close()
+</code></pre>
+
+<p>}</p>
+
+<h2 id="三-总结">三、总结</h2>
+
+<p>对于操作数据库来说静态类型语言的确不是很容易操作，类似C++这么多年还没有相对容易使用的数据库操作的 library，但无论 Dlang / Rust 和 Golang 都能比较全面的操作数据库。</p>
+
+<p>这三个语言的语法还有比较大的差异，Dlang 语法可读性比较好（感觉和PHP是不是有点像？），Rust 相对来说操作符会多一些，而 golang 在执行 SELECT 之后需要创建对象绑定，不支持字段作为 key 的操作形式？（可能是我功课没做好）</p>
+
+<p>在包引入方面 Dlang 最简单，Rust 相对来说颗粒度控制的更细，而 Golang 相对繁琐一些，需要几个包同时引入才可以操作数据库。</p>
+
+<p>总而言之系统级语言在服务端的应用日益增多，更多有意思的对比还需要大家一起来挖掘，不要沉浸在单一的脚本语言如 PHP、虚拟机语言 JAVA 和 C#，多多学习，现在语言的学习成本已经非常低，我们应该在不同的应用场景使用更适合的开发语言。</p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

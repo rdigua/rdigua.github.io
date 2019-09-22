@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="option-and-result">Option and Result</h1>
+
+<p>[](<a href="https://github.com/learning-rust/site/edit/master/source/docs/e3.option_and_result.md">https://github.com/learning-rust/site/edit/master/source/docs/e3.option_and_result.md</a> &ldquo;Improve this doc&rdquo;)</p>
+
+<h2 id="https-learning-rust-github-io-docs-e3-option-and-result-html-why-option-and-result-why-option-and-result-why-option-and-result">[](<a href="https://learning-rust.github.io/docs/e3.option_and_result.html#Why-Option-and-Result">https://learning-rust.github.io/docs/e3.option_and_result.html#Why-Option-and-Result</a> &ldquo;Why Option and Result?&rdquo;)Why Option and Result?</h2>
+
+<p>Many languages use  <strong><code>null</code>\  <code>nil</code>\  <code>undefined</code>  types</strong>  to represent empty outputs, and  <strong><code>Exceptions</code></strong>  to handle errors. Rust skips using both, especially to prevent issues like  <strong>null pointer exceptions, sensitive data leakages through exceptions</strong>  and etc. Instead, Rust provides two special  <strong>generic enums</strong>;<code>Option</code>and  <code>Result</code>  to deal with above cases.</p>
+
+<blockquote>
+<p>💭 In the previous sections, we have discussed about the basics of  <a href="https://learning-rust.github.io/docs/b3.enums.html">enums</a>,  <a href="https://learning-rust.github.io/docs/b4.generics.html">generics</a>  and  <a href="https://learning-rust.github.io/docs/b4.generics.html#Generalizing-enums"><code>Result</code>&amp;  <code>Option</code>  types</a>.</p>
+</blockquote>
+
+<p>As you know,</p>
+
+<ul>
+<li>An  <strong>optional value</strong>  can have either  <strong>Some</strong>  value or no value/  <strong>None</strong>.</li>
+
+<li><p>A  <strong>result</strong>  can represent either success/  <strong>Ok</strong>  or failure/  <strong>Err</strong></p>
+
+<pre><code>// An output can have either Some value or no value/ None.
+enum Option&lt;T&gt; { // T is a generic and it can contain any type of value.
+Some(T),
+None,
+}
+
+// A result can represent either success/ Ok or failure/ Err.
+enum Result&lt;T, E&gt; { // T and E are generics. T can contain any type of value, E can be any error.
+Ok(T),
+Err(E),
+}
+
+</code></pre></li>
+</ul>
+
+<p>💭 Also as we discussed in  <a href="https://learning-rust.github.io/docs/d7.std_primitives_and_preludes.html#Preludes">preludes</a>, not only  <code>Option</code>  and  <code>Result</code>, and also their variants are in preludes. So, we can use them directly without using namespaces in the code.</p>
+
+<h2 id="https-learning-rust-github-io-docs-e3-option-and-result-html-basic-usages-of-option-basic-usages-of-option-basic-usages-of-option">[](<a href="https://learning-rust.github.io/docs/e3.option_and_result.html#Basic-usages-of-Option">https://learning-rust.github.io/docs/e3.option_and_result.html#Basic-usages-of-Option</a> &ldquo;Basic usages of Option&rdquo;)Basic usages of Option</h2>
+
+<p>When writing a function or data type,</p>
+
+<ul>
+<li>if an  <strong>argument</strong>  of the function is optional,</li>
+<li>If the function is non-void and if the output it  <strong>returns</strong>  can be empty,</li>
+<li>If the value, of a  <strong>property of the data type</strong>  can be empty,<br />
+We have to use their data type as an  <code>Option</code>  type</li>
+</ul>
+
+<p>For example, if the function outputs a  <code>&amp;str</code>  value and the output can be empty, the return type of the function should set as  <code>Option&lt;&amp;str&gt;</code>.</p>
+
+<pre><code>fn get_an_optional_value() -&gt; Option&lt;&amp;str&gt; {
+
+    //if the optional value is not empty
+    return Some(&quot;Some value&quot;);
+
+    //else
+    None
+}
+
+</code></pre>
+
+<p>Same way, if the value of a property of a data type can be empty or optional like the  <code>middle_name</code>  of  <code>Name</code>  data type in the following example, we should set its data type as an  <code>Option</code>  type.</p>
+
+<pre><code>struct Name {
+  first_name: String,
+  middle_name: Option&lt;String&gt;, // middle_name can be empty
+  last_name: String,
+}
+
+</code></pre>
+
+<p>💭 As you know, we can use pattern matching to catch the relevant return type (<code>Some</code>/  <code>None</code>) via  <code>match</code>. There is a function to get the current user’s home directory in  <strong><code>std::env</code></strong>  as  <strong><a href="https://doc.rust-lang.org/std/env/fn.home_dir.html"><code>home_dir()</code></a></strong>. Because of all users doesn’t have a home directory in the systems like Linux, home directory of the user can be optional. So it returns an  <code>Option</code>  type;  <a href="https://doc.rust-lang.org/std/path/struct.PathBuf.html"><code>Option&lt;PathBuf&gt;</code></a>.</p>
+
+<pre><code>use std::env;
+
+fn main() {
+    let home_path = env::home_dir();
+    match home_path {
+        Some(p) =&gt; println!(&quot;{:?}&quot;, p), // This prints &quot;/root&quot;, if you run this in Rust playground
+        None =&gt; println!(&quot;Can not find the home directory!&quot;),
+    }
+}
+
+</code></pre>
+
+<p>⭐ However, when using optional arguments with functions, we have to pass  <code>None</code>  values for empty arguments while calling the function.</p>
+
+<pre><code>fn get_full_name(fname: &amp;str, lname: &amp;str, mname: Option&lt;&amp;str&gt;) -&gt; String { // middle name can be empty
+  match mname {
+    Some(n) =&gt; format!(&quot;{} {} {}&quot;, fname, n, lname),
+    None =&gt; format!(&quot;{} {}&quot;, fname, lname),
+  }
+}
+
+fn main() {
+  println!(&quot;{}&quot;, get_full_name(&quot;Galileo&quot;, &quot;Galilei&quot;, None));
+  println!(&quot;{}&quot;, get_full_name(&quot;Leonardo&quot;, &quot;Vinci&quot;, Some(&quot;Da&quot;)));
+}
+
+// 💡 Better create a struct as Person with fname, lname, mname fields and create a impl function as full_name()
+
+</code></pre>
+
+<p>🔎 Other than that,  <code>Option</code>  types are used with  <strong>nullable pointers</strong>  in Rust. Because of there is  <strong>no null pointers in Rust</strong>, the pointer types should point to a valid location. So if a pointer can be nullable, we have use  <code>Option&lt;Box&lt;T&gt;&gt;</code>  .</p>
+
+<h2 id="https-learning-rust-github-io-docs-e3-option-and-result-html-basic-usages-of-result-basic-usages-of-result-basic-usages-of-result">[](<a href="https://learning-rust.github.io/docs/e3.option_and_result.html#Basic-usages-of-Result">https://learning-rust.github.io/docs/e3.option_and_result.html#Basic-usages-of-Result</a> &ldquo;Basic usages of Result&rdquo;)Basic usages of Result</h2>
+
+<p>If a function can produce an error, we have to use a  <code>Result</code>  type by  <strong>combining the data type of the valid output and the data type of the error</strong>. For example, if the data type of the valid output is  <code>u64</code>and error type is  <code>String</code>, return type should be  <code>Result&lt;u64, String&gt;</code>.</p>
+
+<pre><code>fn function_with_error() -&gt; Result&lt;u64, String&gt; {
+
+    //if error happens
+    return Err(&quot;The error message&quot;.to_string());
+
+    // else, return valid output
+    Ok(255)
+}
+
+</code></pre>
+
+<p>💭 As you know, we can use the pattern matching to catch the relevant return types (<code>Ok</code>/<code>Err</code>) via  <code>match</code>. There is a function to fetch the value of any environment variable in  <strong><code>std::env</code></strong>  as  <strong><a href="https://doc.rust-lang.org/std/env/fn.var.html"><code>var()</code></a></strong>  . Its input is the environment variable name. This can produce an error, if we passes a wrong environment variable or the program can not extract the value of the environment variable while running. So, its return type is a  <code>Result</code>  type;  <a href="https://doc.rust-lang.org/std/env/enum.VarError.html"><code>Result&lt;String, VarError&gt;</code></a>.</p>
+
+<pre><code>use std::env;
+
+fn main() {
+    let key = &quot;HOME&quot;;
+    match env::var(key) {
+        Ok(v) =&gt; println!(&quot;{}&quot;, v), // This prints &quot;/root&quot;, if you run this in Rust playground
+        Err(e) =&gt; println!(&quot;{}&quot;, e), // This prints &quot;environment variable not found&quot;, if you give a nonexistent environment variable
+    }
+}
+
+</code></pre>
+
+<h2 id="https-learning-rust-github-io-docs-e3-option-and-result-html-is-some-is-none-is-ok-is-err-is-some-is-none-is-ok-is-err-is-some-is-none-is-ok-is-err">[](<a href="https://learning-rust.github.io/docs/e3.option_and_result.html#is-some-is-none-is-ok-is-err">https://learning-rust.github.io/docs/e3.option_and_result.html#is-some-is-none-is-ok-is-err</a> &ldquo;is_some(), is_none(), is_ok(), is_err()&ldquo;)is_some(), is_none(), is_ok(), is_err()</h2>
+
+<p>Other than  <code>match</code>  expressions, Rust provides  <code>is_some()</code>  ,  <code>is_none()</code>  and  <code>is_ok()</code>  ,  <code>is_err()</code>functions to identify the return type.</p>
+
+<pre><code>fn main() {
+    let x: Option&lt;&amp;str&gt; = Some(&quot;Hello, world!&quot;);
+    assert_eq!(x.is_some(), true);
+    assert_eq!(x.is_none(), false);
+
+    let y: Result&lt;i8, &amp;str&gt; = Ok(10);
+    assert_eq!(y.is_ok(), true);
+    assert_eq!(y.is_err(), false);
+}
+
+</code></pre>
+
+<h2 id="https-learning-rust-github-io-docs-e3-option-and-result-html-ok-err-for-result-types-ok-err-for-result-types-ok-err-for-result-types">[](<a href="https://learning-rust.github.io/docs/e3.option_and_result.html#ok-err-for-Result-types">https://learning-rust.github.io/docs/e3.option_and_result.html#ok-err-for-Result-types</a> &ldquo;ok(), err() for Result types&rdquo;)ok(), err() for Result types</h2>
+
+<p>In addition to that Rust provides  <code>ok()</code>  and  <code>err()</code>  for  <code>Result</code>  types. They convert the  <code>Ok&lt;T&gt;</code>  and  <code>Err&lt;E&gt;</code>  values of a  <strong><code>Result</code>  type to  <code>Option</code>  types</strong>.</p>
+
+<pre><code>fn main() {
+    let o: Result&lt;i8, &amp;str&gt; = Ok(8);
+    let e: Result&lt;i8, &amp;str&gt; = Err(&quot;message&quot;);
+
+    assert_eq!(o.ok(), Some(8)); // Ok(v) ok = Some(v)
+    assert_eq!(e.ok(), None);    // Err(v) ok = None
+
+    assert_eq!(o.err(), None);            // Ok(v) err = None
+    assert_eq!(e.err(), Some(&quot;message&quot;)); // Err(v) err = Some(v)
+}
+</code></pre>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

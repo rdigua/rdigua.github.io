@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="rust错误处理">Rust错误处理</h1>
+
+<p>From: <a href="https://zhuanlan.zhihu.com/p/52373731">Rust错误处理</a>
+<a href="https://www.zhihu.com/people/krriy"><img src="https://pic3.zhimg.com/v2-1e2b6d207207f132b4acfec15d5ceadf_xs.jpg" alt="krircc" /></a></p>
+
+<p><a href="https://www.zhihu.com/people/krriy">krircc</a></p>
+
+<p>天真-浪漫</p>
+
+<p>11 人赞同了该文章</p>
+
+<h2 id="rust错误处理-1">Rust错误处理</h2>
+
+<blockquote>
+<p>本文同步于<a href="https://link.zhihu.com/?target=https%3A//rustlang-cn.org/read/rust/2018/rust-error-handle.html">Rust中文社区专栏文章：Rust错误处理</a>  ,本文时间：2018-12-14, 译者：<a href="https://link.zhihu.com/?target=https%3A//krircc.github.io/">krircc</a>，简介：天青色，<a href="https://link.zhihu.com/?target=https%3A//medium.com/learning-rust/rust-error-handling-72a8e036dd3">原文出处</a></p>
+</blockquote>
+
+<p><strong><a href="https://link.zhihu.com/?target=https%3A//github.com/rustlang-cn/Important/issues/1">欢迎加入</a></strong>Rust中文社区,共建Rust语言中文网络！欢迎向Rust中文社区专栏投稿,<strong><a href="https://link.zhihu.com/?target=https%3A//github.com/rustlang-cn/rustlang-cn">投稿地址</a></strong>  ,好文在以下地方直接展示, 欢迎访问<strong><a href="https://link.zhihu.com/?target=https%3A//github.com/rustlang-cn/forum/issues">Rust中文论坛</a></strong>，QQ群：<strong>570065685</strong></p>
+
+<ol>
+<li><p><strong><a href="https://link.zhihu.com/?target=https%3A//rustlang-cn.org/">Rust中文社区首页</a></strong></p></li>
+
+<li><p>Rust中文社区<a href="https://link.zhihu.com/?target=https%3A//rustlang-cn.org/read/rust/">专栏文章</a></p></li>
+</ol>
+
+<h2 id="智能编译器">智能编译器</h2>
+
+<p>Rust编译器最重要的工作是防止Rust程序中的错误。如果代码没有正确遵循内存管理规则或生命周期注释，它会在编译时分析代码并发出警告。例如，</p>
+
+<pre><code class="language-rust">#[allow(unused_variables)] //💡 A lint attribute used to suppress the warning; unused variable: `b`
+fn main() {
+    let a = vec![1, 2, 3];
+    let b = a;
+
+    println!(&quot;{:?}&quot;, a);
+}
+
+
+// ------ Compile time error ------
+error[E0382]: use of moved value: `a`
+ --&gt; src/main.rs:6:22
+  |
+3 |     let b = a;
+  |         - value moved here
+4 |
+5 |     println!(&quot;{:?}&quot;, a);
+  |                      ^ value used here after move
+  |
+  = note: move occurs because `a` has type `std::vec::Vec&lt;i32&gt;`, which does not implement the `Copy` trait
+
+error: aborting due to previous error
+For more information about this error, try `rustc --explain E0382`.
+
+// ⭐ instead using #[allow(unused_variables)], consider using &quot;let _b = a;&quot; in line 4. 
+// Also you can use &quot;let _ =&quot; to completely ignore return values
+
+</code></pre>
+
+<p>Rust编译器不仅检查与生命周期或内存管理相关的问题，还检查常见的编码错误，如下面的代码。</p>
+
+<pre><code class="language-rust">struct Color {
+    r: u8,
+    g: u8,
+    b: u8,
+}
+
+fn main() {
+    let yellow = Color {
+        r: 255,
+        g: 255,
+        d: 0,
+    };
+
+    println!(&quot;Yellow = rgb({},{},{})&quot;, yellow.r, yellow.g, yellow.b);
+}
+
+
+// ------------ Compile time error ------------
+error[E0560]: struct `Color` has no field named `d`
+  --&gt; src/main.rs:11:9
+   |
+11 |         d: 0,
+   |         ^ field does not exist - did you mean `b`?
+
+error: aborting due to previous error
+For more information about this error, try `rustc --explain E0560`.
+
+</code></pre>
+
+<p>以上错误消息非常具有描述性，我们可以很容易地看出错误在哪里。但是，虽然我们无法通过错误消息识别问题，但<code>rustc --explain</code>  命令通过显示表达相同问题的简单代码示例以及我们必须使用的解决方案来帮助我们<strong>识别错误类型以及如何解决它</strong>。例如，在控制台中显示以下输出。<code>rustc --explain E0571</code></p>
+
+<pre><code class="language-rust">// A `break` statement with an argument appeared in a non-`loop` loop.
+
+// Example of erroneous code:
+
+let result = while true {
+    if satisfied(i) {
+        break 2*i; // error: `break` with value from a `while` loop
+    }
+    i += 1;
+};
+
+// The `break` statement can take an argument (which will be the value of the loop expression if the `break` statement is executed) in `loop` loops, but not `for`, `while`, or `while let` loops.
+
+Make sure `break value;` statements only occur in `loop` loops:
+let result = loop { // ok!
+    if satisfied(i) {
+        break 2*i;
+    }
+    i += 1;
+};
+
+</code></pre>
+
+<p>💡您也可以通过<code>Rust Compiler Error Index</code>阅读相同的解释 。例如，要检查<code>E0571</code>错误的解释，您可以使用<code>https://doc.rust-lang.org/error-index.html#E0571</code></p>
+
+<h2 id="panicking">Panicking</h2>
+
+<h2 id="panic">panic!()</h2>
+
+<p>▸ 在某些情况下，当发生错误时，我们无法做任何事情来处理它，如果错误是某种情况，那就不应该发生。换句话说，如果这是一个不可恢复的错误。</p>
+
+<p>▸ 当我们不使用功能丰富的调试器或正确的日志时，有时我们需要通过打印特定的消息或变量绑定的值从特定的代码行退出程序来调试代码以了解当前的程序的流程。</p>
+
+<p>对于上述情况，我们可以使用<code>panic!</code>宏。让我们看几个例子。</p>
+
+<blockquote>
+<p>⭐  <code>panic!()</code>  运行基于线程。一个线程可能会被恐慌，而其他线程正在运行。</p>
+</blockquote>
+
+<p>01.从特定行退出。</p>
+
+<pre><code class="language-rust">fn main() {
+    // some code
+
+    // if we need to debug in here
+    panic!();
+}
+
+// -------------- Compile time error --------------
+thread 'main' panicked at 'explicit panic', src/main.rs:5:5
+
+</code></pre>
+
+<p>02.退出并显示自定义错误消息。</p>
+
+<pre><code class="language-rust">#[allow(unused_mut)] // 💡 A lint attribute used to suppress the warning; username variable does not need to be mutable
+fn main() {
+    let mut username = String::new();
+
+    // some code to get the name
+
+    if username.is_empty() {
+        panic!(&quot;Username is empty!&quot;);
+    }
+
+    println!(&quot;{}&quot;, username);
+}
+
+// -------------- Compile time error --------------
+thread 'main' panicked at 'Username is empty!', src/main.rs:8:9
+
+</code></pre>
+
+<p>03.退出附带代码元素的值。</p>
+
+<pre><code class="language-rust">#[derive(Debug)] // 💡 A lint attribute which use to implement `std::fmt::Debug` to Color
+struct Color {
+    r: u8,
+    g: u8,
+    b: u8,
+}
+
+#[allow(unreachable_code)] // 💡 A lint attribute used to suppress the warning; unreachable statement
+fn main() {
+    let some_color: Color;
+
+    // some code to get the color. ex
+    some_color = Color {r: 255, g: 255, b: 0};
+
+    // if we need to debug in here
+    panic!(&quot;{:?}&quot;, some_color);
+
+    println!(
+        &quot;The color = rgb({},{},{})&quot;,
+        some_color.r, some_color.g, some_color.b
+    );
+}
+
+// -------------- Compile time error --------------
+thread 'main' panicked at 'Color { r: 255, g: 255, b: 0 }', src/main.rs:16:5
+
+</code></pre>
+
+<p>正如您在上面的示例中所看到的，<code>panic!()</code>支持<code>println!()</code>类型样式参数 。默认情况下，它会输出错误消息，文件路径以及发生错误的行号和列号。</p>
+
+<h2 id="unimplemented">unimplemented!()</h2>
+
+<p>如果您的代码具有未完成的代码段，则有一个标准化宏<code>unimplemented!()</code>来标记这些路径。如果程序通过这些路径运行，程序将<code>panicked</code>并返回&rdquo;not yet implemented&rdquo;的错误消息。</p>
+
+<pre><code class="language-rust">// error messages with panic!()
+thread 'main' panicked at 'explicit panic', src/main.rs:6:5
+thread 'main' panicked at 'Username is empty!', src/main.rs:9:9
+thread 'main' panicked at 'Color { r: 255, g: 255, b: 0 }', src/main.rs:17:5
+
+// error messages with unimplemented!()
+thread 'main' panicked at 'not yet implemented', src/main.rs:6:5
+thread 'main' panicked at 'not yet implemented: Username is empty!', src/main.rs:9:9
+thread 'main' panicked at 'not yet implemented: Color { r: 255, g: 255, b: 0 }', src/main.rs:17:5
+
+</code></pre>
+
+<h2 id="unreachable">unreachable!()</h2>
+
+<p>这是标记程序不应输入的路径的标准宏。如果程序进入这些路径，程序将<code>panicked</code>并返回&rdquo;&lsquo;internal error: entered unreachable code&rsquo;&ldquo;错误消息。</p>
+
+<pre><code class="language-rust">fn main() {
+    let level = 22;
+    let stage = match level {
+        1...5 =&gt; &quot;beginner&quot;,
+        6...10 =&gt; &quot;intermediate&quot;,
+        11...20 =&gt; &quot;expert&quot;,
+        _ =&gt; unreachable!(),
+    };
+
+    println!(&quot;{}&quot;, stage);
+}
+
+
+// -------------- Compile time error --------------
+thread 'main' panicked at 'internal error: entered unreachable code', src/main.rs:7:20
+
+</code></pre>
+
+<p>我们也可以为此设置自定义错误消息。</p>
+
+<pre><code class="language-rust">// --- with a custom message ---
+_ =&gt; unreachable!(&quot;Custom message&quot;),
+// -------------- Compile time error --------------
+thread 'main' panicked at 'internal error: entered unreachable code: Custom message', src/main.rs:7:20
+
+
+// --- with debug data ---
+_ =&gt; unreachable!(&quot;level is {}&quot;, level),
+// -------------- Compile time error --------------
+thread 'main' panicked at 'internal error: entered unreachable code: level is 22', src/main.rs:7:14
+
+</code></pre>
+
+<h2 id="assert-assert-eq-assert-ne">assert!(), assert_eq!(), assert_ne!()</h2>
+
+<p>这些是标准宏，通常与测试断言一起使用。</p>
+
+<ul>
+<li><p>assert!()确保布尔表达式为true。如果表达式为false，则会发生<code>panics</code>。</p>
+
+<pre><code class="language-rust">fn main() {
+let f = false;
+
+assert!(f)
+}
+
+
+// -------------- Compile time error --------------
+thread 'main' panicked at 'assertion failed: f', src/main.rs:4:5
+
+</code></pre></li>
+
+<li><p>assert_eq!()确保两个表达式相等。如果表达式不相等则会发生<code>panics</code>。</p>
+
+<pre><code class="language-rust">fn main() {
+let a = 10;
+let b = 20;
+
+assert_eq!(a, b);
+}
+
+
+// -------------- Compile time error --------------
+thread 'main' panicked at 'assertion failed: `(left == right)`
+left: `10`,
+right: `20`', src/main.rs:5:5
+
+</code></pre></li>
+
+<li><p>assert_ne!()确保两个表达式不相等。如果表达式相等，它会发生<code>panics</code>。</p>
+
+<pre><code class="language-rust">fn main() {
+let a = 10;
+let b = 10;
+
+assert_ne!(a, b);
+}
+
+
+// -------------- Compile time error --------------
+thread 'main' panicked at 'assertion failed: `(left != right)`
+left: `10`,
+right: `10`', src/main.rs:5:5
+
+</code></pre></li>
+</ul>
+
+<blockquote>
+<p>⭐使用表达式assert_ne!()和assert_eq!()应返回相同的数据类型。</p>
+</blockquote>
+
+<p>我们也可以为这些宏设置自定义错误消息。举些例子，</p>
+
+<ol>
+<li><p>带有自定义消息 assert_eq!()</p>
+
+<pre><code class="language-rust">fn main() {
+let a = 10;
+let b = 20;
+
+assert_eq!(a, b, &quot;a and b should be equal&quot;);
+}
+
+
+// -------------- Compile time error --------------
+thread 'main' panicked at 'assertion failed: `(left == right)`
+left: `10`,
+right: `20`: a and b should be equal', src/main.rs:5:5
+
+</code></pre></li>
+
+<li><p>assert_eq!()带有调试数据</p>
+
+<pre><code class="language-rust">fn main() {
+let a = 10;
+let b = 20;
+
+let c = 40;
+
+assert_eq!(a+b, c, &quot;a = {} ; b = {}&quot;, a, b);
+}
+
+// -------------- Compile time error --------------
+thread 'main' panicked at 'assertion failed: `(left == right)`
+left: `30`,
+right: `40`: a = 10 ; b = 20', src/main.rs:7:5
+
+</code></pre></li>
+</ol>
+
+<h2 id="debug-assert-debug-assert-eq-debug-assert-ne">debug_assert!(), debug_assert_eq!(), debug_assert_ne!()</h2>
+
+<p>🔎这些与上面的<code>assert</code>宏类似。但默认情况下，这些语句仅在非优化构建中启用。<code>debug_assert</code>除非我们传递<code>-C debug-assertions</code>给编译器，否则在发布版本中将省略所有这些宏。</p>
+
+<h2 id="option-and-result">Option and Result</h2>
+
+<p>许多语言使用<code>null\ nil\ undefined</code>  类型来表示空输出和Exceptions处理错误。Rust会同时使用两者，特别是为了防止诸如空指针异常，异常等敏感数据泄漏等问题。相反，Rust提供了两个特殊的通用枚举 ;  <code>Option</code>和<code>Result</code>处理上述案件。</p>
+
+<p>如您所知:</p>
+
+<p>▸  <code>Option</code>可以包含某个值<code>Some</code>或没有值/<code>None</code>。</p>
+
+<p>▸  <code>Result</code>可以表示成功/<code>Ok</code>  或失败/<code>Err</code>。</p>
+
+<pre><code class="language-rust">// An output can have either Some value or no value/ None.
+enum Option&lt;T&gt; { // T is a generic and it can contain any type of value.
+    Some(T),
+    None,
+}
+
+// A result can represent either success/ Ok or failure/ Err.
+enum Result&lt;T, E&gt; { // T and E are generics. T can contain any type of value, E can be any error.
+    Ok(T),
+    Err(E),
+}
+
+</code></pre>
+
+<h2 id="option-的基本用法"><code>Option</code>的基本用法</h2>
+
+<p>编写函数或数据类型时:<br />
+- 如果函数的参数是可选的， - 如果函数为非空，并且返回的输出可以为空， - 如果数据类型的属性的值可以是空，我们不得不使用他们的数据类型为Option类型</p>
+
+<p>例如，如果函数输出一个<code>&amp;str</code>值并且输出可以为空，则函数的返回类型应设置为<code>Option&lt;&amp;str&gt;</code></p>
+
+<pre><code class="language-rust">fn get_an_optional_value() -&gt; Option&lt;&amp;str&gt; {
+
+    //if the optional value is not empty
+    return Some(&quot;Some value&quot;);
+
+    //else
+    None
+}
+
+</code></pre>
+
+<p>同样，如果数据类型的属性值可以为空或者像下面示例中<code>middle_name</code>的<code>Name</code>数据类型那样可选，我们应该将其数据类型设置为<code>Option</code>类型。</p>
+
+<pre><code class="language-rust">struct Name {
+  first_name: String,
+  middle_name: Option&lt;String&gt;, // middle_name can be empty
+  last_name: String,
+}
+
+</code></pre>
+
+<p>💭如您所知，我们可以使用模式匹配<code>match</code>来捕获相关的返回类型<code>（Some/ None）</code>  。有一个函数来获取当前用户的主目录在<code>std::env</code>为<code>home_dir()</code>  。由于所有用户在Linux等系统中都没有主目录，因此用户的主目录可以是可选的。所以它返回一个<code>Option</code>类型;<code>Option&lt;PathBuf&amp;</code>amp;gt;.</p>
+
+<pre><code class="language-rust">use std::env;
+
+fn main() {
+    let home_path = env::home_dir();
+    match home_path {
+        Some(p) =&gt; println!(&quot;{:?}&quot;, p), // This prints &quot;/root&quot;, if you run this in Rust playground
+        None =&gt; println!(&quot;Can not find the home directory!&quot;),
+    }
+}
+
+</code></pre>
+
+<p>⭐但是，当在函数中使用可选参数时，我们必须None在调用函数时传递空参数的值。</p>
+
+<pre><code class="language-rust">fn get_full_name(fname: &amp;str, lname: &amp;str, mname: Option&lt;&amp;str&gt;) -&gt; String { // middle name can be empty
+  match mname {
+    Some(n) =&gt; format!(&quot;{} {} {}&quot;, fname, n, lname),
+    None =&gt; format!(&quot;{} {}&quot;, fname, lname),
+  }
+}
+
+fn main() {
+  println!(&quot;{}&quot;, get_full_name(&quot;Galileo&quot;, &quot;Galilei&quot;, None));
+  println!(&quot;{}&quot;, get_full_name(&quot;Leonardo&quot;, &quot;Vinci&quot;, Some(&quot;Da&quot;)));
+}
+
+// 💡 Better create a struct as Person with fname, lname, mname fields and create a impl function as full_name()
+
+</code></pre>
+
+<blockquote>
+<p>🔎除此之外，<code>Option</code>类型与Rust中的可空指针一起使用。由于Rust中没有空指针，因此指针类型应指向有效位置。因此，如果指针可以为空，我们就可以使用了<code>Option&lt;Box&lt;T&gt;&amp;</code>amp;gt; 。</p>
+</blockquote>
+
+<h2 id="result-的基本用法"><code>Result</code>的基本用法</h2>
+
+<p>如果函数可以产生错误，我们必须<code>Result</code>通过组合有效输出的数据类型和错误的数据类型来使用类型。例如，如果有效输出的数据类型为<code>u64</code>且错误类型为<code>String</code>  ，则返回类型应为<code>Result&lt;u64, String&gt;</code>  。</p>
+
+<pre><code class="language-rust">fn function_with_error() -&gt; Result&lt;u64, String&gt; {
+
+    //if error happens
+    return Err(&quot;The error message&quot;.to_string());
+
+    // else, return valid output
+    Ok(255)
+}
+
+</code></pre>
+
+<p>💭如您所知，我们可以使用模式匹配<code>match</code>来捕获相关的返回类型<code>（Ok/ Err）</code>。有一个函数可以获取<code>std::env</code>  任何环境变量中的值是<code>var()</code>  。它的输入是环境变量名称。如果我们传递了错误的环境变量，或者程序在运行时无法提取环境变量的值，则会产生错误。所以它的返回类型是一种<code>Result</code>类型;  <code>Result&lt;String, VarError&amp;</code>amp;gt;.</p>
+
+<pre><code class="language-rust">use std::env;
+
+fn main() {
+    let key = &quot;HOME&quot;;
+    match env::var(key) {
+        Ok(v) =&gt; println!(&quot;{}&quot;, v), // This prints &quot;/root&quot;, if you run this in Rust playground
+        Err(e) =&gt; println!(&quot;{}&quot;, e), // This prints &quot;environment variable not found&quot;, if you give a nonexistent environment variable
+    }
+}
+
+</code></pre>
+
+<h2 id="is-some-is-none-is-ok-is-err">is_some(), is_none(), is_ok(), is_err()</h2>
+
+<p>除了<code>match</code>表情，rust还提供<code>is_some()</code>  ，<code>is_none()</code>并且<code>is_ok()</code>  ，<code>is_err()</code>功能，以确定返回类型。</p>
+
+<pre><code class="language-rust">fn main() {
+    let x: Option&lt;&amp;str&gt; = Some(&quot;Hello, world!&quot;);
+    assert_eq!(x.is_some(), true);
+    assert_eq!(x.is_none(), false);
+
+    let y: Result&lt;i8, &amp;str&gt; = Ok(10);
+    assert_eq!(y.is_ok(), true);
+    assert_eq!(y.is_err(), false);
+}
+
+</code></pre>
+
+<h2 id="ok-err-for-result-types">ok(), err() for Result types</h2>
+
+<p>rust另外提供<code>ok()</code>和<code>err()</code>为<code>Result</code>类型。它们将<code>Result</code>类型的<code>Ok&lt;T&gt;</code>值和<code>Err&lt;E&gt;</code>值转换为Option类型。</p>
+
+<pre><code class="language-rust">fn main() {
+    let o: Result&lt;i8, &amp;str&gt; = Ok(8);
+    let e: Result&lt;i8, &amp;str&gt; = Err(&quot;message&quot;);
+
+    assert_eq!(o.ok(), Some(8)); // Ok(v) ok = Some(v)
+    assert_eq!(e.ok(), None);    // Err(v) ok = None
+
+    assert_eq!(o.err(), None);            // Ok(v) err = None
+    assert_eq!(e.err(), Some(&quot;message&quot;)); // Err(v) err = Some(v)
+}
+
+</code></pre>
+
+<h2 id="unwrap-and-expect">Unwrap and Expect</h2>
+
+<h2 id="unwrap">unwrap()</h2>
+
+<p>▸如果<code>Option</code>类型具有<code>Some</code>值或<code>Result</code>类型具有<code>Ok</code>值，则其中的值将传递到下一步。</p>
+
+<p>▸如果<code>Option</code>类型具有<code>None</code>值或<code>Result</code>类型具有<code>Err</code>值，则编程<code>panics</code>  ; 如果Err，<code>panics</code>携带错误消息。</p>
+
+<p>该功能与以下代码类似，使用<code>match</code>而不是使用<code>unwrap()</code>  。</p>
+
+<p>示例使用<code>Option</code>和<code>match</code></p>
+
+<pre><code class="language-rust">fn main() {
+    let x;
+    match get_an_optional_value() {
+        Some(v) =&gt; x = v, // if Some(&quot;abc&quot;), set x to &quot;abc&quot;
+        None =&gt; panic!(), // if None, panic without any message
+    }
+
+    println!(&quot;{}&quot;, x); // &quot;abc&quot; ; if you change line 14 `false` to `true`
+}
+
+fn get_an_optional_value() -&gt; Option&lt;&amp;'static str&gt; {
+
+    //if the optional value is not empty
+    if false {
+        return Some(&quot;abc&quot;);
+    }
+
+    //else
+    None
+}
+
+
+// --------------- Compile time error ---------------
+thread 'main' panicked at 'explicit panic', src/main.rs:5:17
+
+</code></pre>
+
+<p>示例使用<code>Result</code>和<code>match</code></p>
+
+<pre><code class="language-rust">fn main() {
+    let x;
+    match function_with_error() {
+        Ok(v) =&gt; x = v, // if Ok(255), set x to 255
+        Err(e) =&gt; panic!(e), // if Err(&quot;some message&quot;), panic with error message &quot;some message&quot;
+    }
+
+    println!(&quot;{}&quot;, x); // 255 ; if you change line 13 `true` to `false`
+}
+
+fn function_with_error() -&gt; Result&lt;u64, String&gt; {
+    //if error happens
+    if true {
+        return Err(&quot;some message&quot;.to_string());
+    }
+
+    // else, return valid output
+    Ok(255)
+}
+
+
+// ---------- Compile time error ----------
+thread 'main' panicked at 'some message', src/main.rs:5:19
+
+</code></pre>
+
+<p>上述main函数中的相同代码可以使用<code>unwrap()</code>两行来编写。</p>
+
+<pre><code class="language-rust">// 01. unwrap error message for None
+fn main() {
+    let x = get_an_optional_value().unwrap();
+
+    println!(&quot;{}&quot;, x);
+}
+
+// --------------- Compile time error ---------------
+thread 'main' panicked at 'called `Option::unwrap()` on a `None` value', libcore/option.rs:345:21
+
+
+// 02. unwrap error message for Err
+fn main() {
+    let x = function_with_error().unwrap();
+
+    println!(&quot;{}&quot;, x);
+}
+
+// --------------- Compile time error ---------------
+thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: &quot;some message&quot;', libcore/result.rs:945:5
+
+</code></pre>
+
+<p>⭐但是正如您所看到的，当使用<code>unwrap()</code>错误消息时，没有显示发生恐慌的确切行号。</p>
+
+<h2 id="expect">expect()</h2>
+
+<p>类似<code>unwrap()</code>但可以为恐慌设置自定义消息。</p>
+
+<pre><code class="language-rust">// 01. expect error message for None
+fn main() {
+    let n: Option&lt;i8&gt; = None;
+
+    n.expect(&quot;empty value returned&quot;);
+}
+
+// --------------- Compile time error ---------------
+thread 'main' panicked at 'empty value returned', libcore/option.rs:989:5
+
+
+// 02. expect error message for Err
+fn main() {
+    let e: Result&lt;i8, &amp;str&gt; = Err(&quot;some message&quot;);
+
+    e.expect(&quot;expect error message&quot;);
+}
+
+// --------------- Compile time error ---------------
+thread 'main' panicked at 'expect error message: &quot;some message&quot;', libcore/result.rs:945:5
+
+</code></pre>
+
+<h2 id="unwrap-err-and-expect-err-for-result-types">unwrap_err() and expect_err() for Result types</h2>
+
+<p><code>unwrap()</code>和<code>expect()</code>相反的情况;  <code>Ok</code>时恐慌而不是<code>Err</code>时。两者都在<code>Ok</code>错误消息中打印内部值。</p>
+
+<p>💡通常用于测试。</p>
+
+<pre><code class="language-rust">// 01. unwrap_err error message for Ok
+fn main() {
+    let o: Result&lt;i8, &amp;str&gt; = Ok(8);
+
+    o.unwrap_err();
+}
+
+// ---------- Compile time error ----------
+thread 'main' panicked at 'called `Result::unwrap_err()` on an `Ok` value: 8', libcore/result.rs:945:5
+
+
+// 02. expect_err error message for Ok
+fn main() {
+    let o: Result&lt;i8, &amp;str&gt; = Ok(8);
+
+    o.expect_err(&quot;Should not get Ok value&quot;);
+}
+
+// ---------- Compile time error ----------
+thread 'main' panicked at 'Should not get Ok value: 8', libcore/result.rs:945:5
+
+</code></pre>
+
+<h2 id="unwrap-or-unwrap-or-default-and-unwrap-or-else">unwrap_or(), unwrap_or_default() and unwrap_or_else()</h2>
+
+<blockquote>
+<p>💡这些有点类似于<code>unwrap()</code>，如果<code>Option</code>类型有<code>Some</code>值或<code>Result</code>类型有<code>Ok</code>值，则它们内部的值传递到下一步。但是当有<code>None</code>或者  <code>Err</code>，功能有点不同。</p>
+</blockquote>
+
+<ul>
+<li><p><code>unwrap_or()</code>  ：使用<code>None</code>或<code>Err</code>，您传递给的<code>unwrap_or()</code>值将传递到下一步。但是，您传递的值的数据类型应与相关<code>Some</code>或<code>Ok</code>的数据类型匹配。</p>
+
+<pre><code class="language-rust">fn main() {
+let v1 = 8;
+let v2 = 16;
+
+let s_v1 = Some(8);
+let n = None;
+
+assert_eq!(s_v1.unwrap_or(v2), v1); // Some(v1) unwrap_or v2 = v1
+assert_eq!(n.unwrap_or(v2), v2);    // None unwrap_or v2 = v2
+
+let o_v1: Result&lt;i8, &amp;str&gt; = Ok(8);
+let e: Result&lt;i8, &amp;str&gt; = Err(&quot;error&quot;);
+
+assert_eq!(o_v1.unwrap_or(v2), v1); // Ok(v1) unwrap_or v2 = v1
+assert_eq!(e.unwrap_or(v2), v2);    // Err unwrap_or v2 = v2
+}
+
+</code></pre></li>
+
+<li><p><code>unwrap_or_default(</code>) ：使用<code>None</code>或<code>Err</code>，相关的数据类型的默认值<code>Some</code>或者<code>Ok</code>，传递到下一步。</p>
+
+<pre><code class="language-rust">fn main() {
+let v = 8;
+let v_default = 0;
+
+let s_v: Option&lt;i8&gt; = Some(8);
+let n: Option&lt;i8&gt; = None;
+
+assert_eq!(s_v.unwrap_or_default(), v);       // Some(v) unwrap_or_default = v
+assert_eq!(n.unwrap_or_default(), v_default); // None unwrap_or_default = default value of v
+
+let o_v: Result&lt;i8, &amp;str&gt; = Ok(8);
+let e: Result&lt;i8, &amp;str&gt; = Err(&quot;error&quot;);
+
+assert_eq!(o_v.unwrap_or_default(), v);       // Ok(v) unwrap_or_default = v
+assert_eq!(e.unwrap_or_default(), v_default); // Err unwrap_or_default = default value of v
+}
+
+</code></pre></li>
+
+<li><p><code>unwrap_or_else()</code>  ：类似于<code>unwrap_or()</code>。唯一的区别是，您必须传递一个闭包，它返回一个具有<code>Some</code>或<code>Ok</code>相关数据类型的值，而不是传递一个值。</p>
+
+<pre><code class="language-rust">fn main() {
+let v1 = 8;
+let v2 = 16;
+
+let s_v1 = Some(8);
+let n = None;
+let fn_v2_for_option = || 16;
+
+assert_eq!(s_v1.unwrap_or_else(fn_v2_for_option), v1); // Some(v1) unwrap_or_else fn_v2 = v1
+assert_eq!(n.unwrap_or_else(fn_v2_for_option), v2);    // None unwrap_or_else fn_v2 = v2
+
+let o_v1: Result&lt;i8, &amp;str&gt; = Ok(8);
+let e: Result&lt;i8, &amp;str&gt; = Err(&quot;error&quot;);
+let fn_v2_for_result = |_| 16;
+
+assert_eq!(o_v1.unwrap_or_else(fn_v2_for_result), v1); // Ok(v1) unwrap_or_else fn_v2 = v1
+assert_eq!(e.unwrap_or_else(fn_v2_for_result), v2);    // Err unwrap_or_else fn_v2 = v2
+}
+
+</code></pre></li>
+</ul>
+
+<h2 id="error-and-none-propagation">Error and None Propagation</h2>
+
+<p>我们应该使用恐慌<code>panic!()</code>，<code>unwrap()</code>，<code>expect()</code>只有当我们没有一个更好处理办法的情况。此外如果一个函数包含表达式既能产生<code>None</code>也能产生<code>Err</code>，</p>
+
+<p>▸我们可以在同一函数中处理</p>
+
+<p>▸我们可以立即返回<code>None</code>  和<code>Err</code>给调用者。因此调用者可以决定如何处理它们。</p>
+
+<p>💡 None类型无需始终由函数的调用者处理。但Rusts处理<code>Err</code>类型的约定是，立即将它们返回给调用者，以便给调用者更多的控制权来决定如何处理它们。</p>
+
+<h2 id="操作符"><code>？</code>操作符</h2>
+
+<p>▸如果<code>Option</code>类型具有<code>Some</code>值或<code>Result</code>类型具有<code>Ok</code>值，则其中的值将传递到下一步。 ▸如果<code>Option</code>类型具有<code>None</code>值或<code>Result</code>类型具有<code>Err</code>值，则立即将它们返回给函数的调用者。</p>
+
+<p>示例<code>Option</code>类型，</p>
+
+<pre><code class="language-rust">fn main() {
+    if complex_function().is_none() {
+        println!(&quot;X not exists!&quot;);
+    }
+}
+
+fn complex_function() -&gt; Option&lt;&amp;'static str&gt; {
+    let x = get_an_optional_value()?; // if None, returns immidiately; if Some(&quot;abc&quot;), set x to &quot;abc&quot;
+
+    // some other code, ex
+    println!(&quot;{}&quot;, x); // &quot;abc&quot; ; if you change line 19 `false` to `true` 
+
+    Some(&quot;&quot;)
+}
+
+fn get_an_optional_value() -&gt; Option&lt;&amp;'static str&gt; {
+
+    //if the optional value is not empty
+    if false {
+        return Some(&quot;abc&quot;);
+    }
+
+    //else
+    None
+}
+
+</code></pre>
+
+<p>示例<code>Result</code>类型，</p>
+
+<pre><code class="language-rust">fn main() {
+    // `main` function is the caller of `complex_function` function
+    // So we handle errors of complex_function(), inside main()
+    if complex_function().is_err() {
+        println!(&quot;Can not calculate X!&quot;);
+    }
+}
+
+fn complex_function() -&gt; Result&lt;u64, String&gt; {
+    let x = function_with_error()?; // if Err, returns immidiately; if Ok(255), set x to 255
+
+    // some other code, ex
+    println!(&quot;{}&quot;, x); // 255 ; if you change line 20 `true` to `false`
+
+    Ok(0)
+}
+
+fn function_with_error() -&gt; Result&lt;u64, String&gt; {
+    //if error happens
+    if true {
+        return Err(&quot;some message&quot;.to_string());
+    }
+
+    // else, return valid output
+    Ok(255)
+}
+
+</code></pre>
+
+<h2 id="从main-传播错误">从main（）传播错误</h2>
+
+<p>在Rust版本1.26之前，我们无法从main()函数传播<code>Result</code>和<code>Option</code>。但是现在，我们可以从main()函数中传播<code>Result</code>类型，并打印出<code>Err</code>的<code>Debug</code>表示形式。</p>
+
+<pre><code class="language-rust">use std::fs::File;
+
+fn main() -&gt; std::io::Result&lt;()&gt; {
+    let _ = File::open(&quot;not-existing-file.txt&quot;)?;
+
+    Ok(()) // Because of the default return value of Rust functions is an empty tuple/ ()
+}
+
+// Because of the program can not find not-existing-file.txt , it produces,
+//    Err(Os { code: 2, kind: NotFound, message: &quot;No such file or directory&quot; })
+// While propagating error, the program prints,
+//    Error: Os { code: 2, kind: NotFound, message: &quot;No such file or directory&quot; }
+
+</code></pre>
+
+<h2 id="combinators">Combinators</h2>
+
+<p>让我们看看组合器是什么，</p>
+
+<ul>
+<li><p>“组合者”的一个含义是更加非正式的意义，指的是组合模式，一种以组合事物的思想为中心组织图书馆的风格。通常存在一些类型T，一些用于构造类型T的“原始”值的函数，以及一些可以以各种方式组合类型T的值以构建类型T的更复杂值的 “ 组合器 ” 。另一个定义是“ 没有自由变量的函数 ”（<a href="https://link.zhihu.com/?target=http%3A//wiki.haskell.org">http://wiki.haskell.org</a>）</p></li>
+
+<li><p>组合子是一个函数，其从程序片段构建程序片段 ; 从某种意义上说，使用组合器的程序员自动构建了大部分所需的程序，而不是手工编写每个细节。</p></li>
+</ul>
+
+<p>Rust生态系统中“组合子”的确切定义有点不清楚。</p>
+
+<p>▸  <code>or()</code>，<code>and()</code>，<code>or_else()</code>，<code>and_then()</code>  - 组合类型为T的两个值并返回相同类型T。</p>
+
+<p>▸  <code>filter()</code>对于Option类型 - 使用闭包作为条件函数来过滤类型T. - 返回相同的类型T.</p>
+
+<p>▸  <code>map()</code>，<code>map_err()</code>  - 通过使用闭包转换类型T。 - 可以更改T内部值的数据类型。例如:<code>Some&lt;&amp;str&gt;</code>可转化为<code>Some&lt;usize&gt;</code>或者<code>Err&lt;&amp;str&gt;</code>可转化为<code>Err&lt;isize&gt;</code>等</p>
+
+<p>▸  <code>map_or()</code>，<code>map_or_else()</code>  - 通过应用闭包转换类型T并返回类型T内的值。 - 对<code>None</code>  和<code>Err</code>，应用默认值或其他闭包。</p>
+
+<p>▸  <code>ok_or()</code>，<code>ok_or_else()</code>对于Option类型 - 将Option类型转换为Result类型。</p>
+
+<p>▸  <code>as_ref()</code>，<code>as_mut()</code>  - 将类型T转换为引用或可变引用。</p>
+
+<h2 id="or-and-and">or() and and()</h2>
+
+<p>组合两个表达式返回<code>Option/ Result</code></p>
+
+<p>▸<code>or() ：如果任何一个得到</code>Some<code>或</code>Ok`，该值立即返回。</p>
+
+<p>▸ and() ：如果两者都得到<code>Some</code>或<code>Ok</code>，则返回第二个表达式中的值。如果任何一个获得None或Err该值立即返回。</p>
+
+<pre><code class="language-rust">fn main() {
+  let s1 = Some(&quot;some1&quot;);
+  let s2 = Some(&quot;some2&quot;);
+  let n: Option&lt;&amp;str&gt; = None;
+
+  let o1: Result&lt;&amp;str, &amp;str&gt; = Ok(&quot;ok1&quot;);
+  let o2: Result&lt;&amp;str, &amp;str&gt; = Ok(&quot;ok2&quot;);
+  let e1: Result&lt;&amp;str, &amp;str&gt; = Err(&quot;error1&quot;);
+  let e2: Result&lt;&amp;str, &amp;str&gt; = Err(&quot;error2&quot;);
+
+  assert_eq!(s1.or(s2), s1); // Some1 or Some2 = Some1
+  assert_eq!(s1.or(n), s1);  // Some or None = Some
+  assert_eq!(n.or(s1), s1);  // None or Some = Some
+  assert_eq!(n.or(n), n);    // None1 or None2 = None2
+
+  assert_eq!(o1.or(o2), o1); // Ok1 or Ok2 = Ok1
+  assert_eq!(o1.or(e1), o1); // Ok or Err = Ok
+  assert_eq!(e1.or(o1), o1); // Err or Ok = Ok
+  assert_eq!(e1.or(e2), e2); // Err1 or Err2 = Err2
+
+  assert_eq!(s1.and(s2), s2); // Some1 and Some2 = Some2
+  assert_eq!(s1.and(n), n);   // Some and None = None
+  assert_eq!(n.and(s1), n);   // None and Some = None
+  assert_eq!(n.and(n), n);    // None1 and None2 = None1
+
+  assert_eq!(o1.and(o2), o2); // Ok1 and Ok2 = Ok2
+  assert_eq!(o1.and(e1), e1); // Ok and Err = Err
+  assert_eq!(e1.and(o1), e1); // Err and Ok = Err
+  assert_eq!(e1.and(e2), e1); // Err1 and Err2 = Err1
+}
+
+</code></pre>
+
+<blockquote>
+<p>🔎nightly支持Option类型的<code>xor()</code>，它返回<code>Some</code>当只有一个表达式返回<code>Some</code>，而不是两个。</p>
+</blockquote>
+
+<h2 id="or-else">or_else()</h2>
+
+<p>类似于or()。唯一的区别是，第二个表达式应该是一个返回相同类型T 的闭包。</p>
+
+<pre><code class="language-rust">fn main() {
+    // or_else with Option
+    let s1 = Some(&quot;some1&quot;);
+    let s2 = Some(&quot;some2&quot;);
+    let fn_some = || Some(&quot;some2&quot;); // similar to: let fn_some = || -&gt; Option&lt;&amp;str&gt; { Some(&quot;some2&quot;) };
+
+    let n: Option&lt;&amp;str&gt; = None;
+    let fn_none = || None;
+
+    assert_eq!(s1.or_else(fn_some), s1);  // Some1 or_else Some2 = Some1
+    assert_eq!(s1.or_else(fn_none), s1);  // Some or_else None = Some
+    assert_eq!(n.or_else(fn_some), s2);   // None or_else Some = Some
+    assert_eq!(n.or_else(fn_none), None); // None1 or_else None2 = None2
+
+    // or_else with Result
+    let o1: Result&lt;&amp;str, &amp;str&gt; = Ok(&quot;ok1&quot;);
+    let o2: Result&lt;&amp;str, &amp;str&gt; = Ok(&quot;ok2&quot;);
+    let fn_ok = |_| Ok(&quot;ok2&quot;); // similar to: let fn_ok = |_| -&gt; Result&lt;&amp;str, &amp;str&gt; { Ok(&quot;ok2&quot;) };
+
+    let e1: Result&lt;&amp;str, &amp;str&gt; = Err(&quot;error1&quot;);
+    let e2: Result&lt;&amp;str, &amp;str&gt; = Err(&quot;error2&quot;);
+    let fn_err = |_| Err(&quot;error2&quot;);
+
+    assert_eq!(o1.or_else(fn_ok), o1);  // Ok1 or_else Ok2 = Ok1
+    assert_eq!(o1.or_else(fn_err), o1); // Ok or_else Err = Ok
+    assert_eq!(e1.or_else(fn_ok), o2);  // Err or_else Ok = Ok
+    assert_eq!(e1.or_else(fn_err), e2); // Err1 or_else Err2 = Err2
+}
+
+</code></pre>
+
+<h2 id="and-then">and_then()</h2>
+
+<p>类似于and()。唯一的区别是，第二个表达式应该是一个返回相同类型T 的闭包。</p>
+
+<pre><code class="language-rust">fn main() {
+    // and_then with Option
+    let s1 = Some(&quot;some1&quot;);
+    let s2 = Some(&quot;some2&quot;);
+    let fn_some = |_| Some(&quot;some2&quot;); // similar to: let fn_some = |_| -&gt; Option&lt;&amp;str&gt; { Some(&quot;some2&quot;) };
+
+    let n: Option&lt;&amp;str&gt; = None;
+    let fn_none = |_| None;
+
+    assert_eq!(s1.and_then(fn_some), s2); // Some1 and_then Some2 = Some2
+    assert_eq!(s1.and_then(fn_none), n);  // Some and_then None = None
+    assert_eq!(n.and_then(fn_some), n);   // None and_then Some = None
+    assert_eq!(n.and_then(fn_none), n);   // None1 and_then None2 = None1
+
+    // and_then with Result
+    let o1: Result&lt;&amp;str, &amp;str&gt; = Ok(&quot;ok1&quot;);
+    let o2: Result&lt;&amp;str, &amp;str&gt; = Ok(&quot;ok2&quot;);
+    let fn_ok = |_| Ok(&quot;ok2&quot;); // similar to: let fn_ok = |_| -&gt; Result&lt;&amp;str, &amp;str&gt; { Ok(&quot;ok2&quot;) };
+
+    let e1: Result&lt;&amp;str, &amp;str&gt; = Err(&quot;error1&quot;);
+    let e2: Result&lt;&amp;str, &amp;str&gt; = Err(&quot;error2&quot;);
+    let fn_err = |_| Err(&quot;error2&quot;);
+
+    assert_eq!(o1.and_then(fn_ok), o2);  // Ok1 and_then Ok2 = Ok2
+    assert_eq!(o1.and_then(fn_err), e2); // Ok and_then Err = Err
+    assert_eq!(e1.and_then(fn_ok), e1);  // Err and_then Ok = Err
+    assert_eq!(e1.and_then(fn_err), e1); // Err1 and_then Err2 = Err1
+}
+
+</code></pre>
+
+<h2 id="filter">filter()</h2>
+
+<blockquote>
+<p>💡通常在编程语言中，filter函数与数组或迭代器一起使用，通过函数/闭包过滤自己的元素来创建新的数组/迭代器。Rust还提供了一个<code>filter()</code>迭代器适配器，用于在迭代器的每个元素上应用闭包，将其转换为另一个迭代器。然而，在这里，我们正在谈论<code>filter()</code>函数与<code>Option</code>类型。</p>
+</blockquote>
+
+<p>仅当我们传递一个<code>Some</code>值并且给定的闭包为它返回<code>true</code>时,返回相同的<code>Some</code>类型。如果<code>None</code>传递类型或闭包返回<code>false</code>,返回<code>None</code>。闭包使用<code>Some</code>里面的值作为参数。Rust仍然支持<code>filter()</code>只支持<code>Option</code>的类型。</p>
+
+<pre><code class="language-rust">fn main() {
+    let s1 = Some(3);
+    let s2 = Some(6);
+    let n = None;
+
+    let fn_is_even = |x: &amp;i8| x % 2 == 0;
+
+    assert_eq!(s1.filter(fn_is_even), n);  // Some(3) -&gt; 3 is not even -&gt; None
+    assert_eq!(s2.filter(fn_is_even), s2); // Some(6) -&gt; 6 is even -&gt; Some(6)
+    assert_eq!(n.filter(fn_is_even), n);   // None -&gt; no value -&gt; None
+}
+
+</code></pre>
+
+<h2 id="map-and-map-err">map() and map_err()</h2>
+
+<blockquote>
+<p>💡通常在编程语言中，map()函数与数组或迭代器一起使用，以在数组或迭代器的每个元素上应用闭包。Rust还提供了一个<code>map()</code>迭代器适配器，用于在迭代器的每个元素上应用闭包，将其转换为另一个迭代器。但是在这里我们讨论的是<code>map()</code>函数与<code>Option</code>和<code>Result</code>类型。</p>
+</blockquote>
+
+<ul>
+<li><code>map()</code>  ：通过应用闭包来转换类型T. 可以根据闭包的返回类型更改<code>Some</code>或<code>Ok</code>块数据类型。转换<code>Option&lt;T&gt;</code>为<code>Option&lt;U&gt;</code>  ，转换<code>Result&lt;T, E&gt;</code>为<code>Result&lt;U, E&gt;</code></li>
+</ul>
+
+<p>⭐  <code>map()</code>，仅仅  <code>Some</code>和<code>Ok</code>值改变。对<code>Err</code>内部值没有影响（<code>None</code>根本不包含任何值）。</p>
+
+<pre><code class="language-rust">fn main() {
+    let s1 = Some(&quot;abcde&quot;);
+    let s2 = Some(5);
+
+    let n1: Option&lt;&amp;str&gt; = None;
+    let n2: Option&lt;usize&gt; = None;
+
+    let o1: Result&lt;&amp;str, &amp;str&gt; = Ok(&quot;abcde&quot;);
+    let o2: Result&lt;usize, &amp;str&gt; = Ok(5);
+
+    let e1: Result&lt;&amp;str, &amp;str&gt; = Err(&quot;abcde&quot;);
+    let e2: Result&lt;usize, &amp;str&gt; = Err(&quot;abcde&quot;);
+
+    let fn_character_count = |s: &amp;str| s.chars().count();
+
+    assert_eq!(s1.map(fn_character_count), s2); // Some1 map = Some2
+    assert_eq!(n1.map(fn_character_count), n2); // None1 map = None2
+
+    assert_eq!(o1.map(fn_character_count), o2); // Ok1 map = Ok2
+    assert_eq!(e1.map(fn_character_count), e2); // Err1 map = Err2
+}
+
+</code></pre>
+
+<ul>
+<li><code>map_err()</code>对于<code>Result</code>类型：Err块的数据类型可以根据闭包的返回类型进行更改。转换<code>Result&lt;T, E&gt;</code>为<code>Result&lt;T, F&gt;</code>。</li>
+</ul>
+
+<p>⭐<code>map_err()</code>，只有<code>Err</code>值会发生变化。对<code>Ok</code>内部的值没有影响。</p>
+
+<pre><code class="language-rust">fn main() {
+    let o1: Result&lt;&amp;str, &amp;str&gt; = Ok(&quot;abcde&quot;);
+    let o2: Result&lt;&amp;str, isize&gt; = Ok(&quot;abcde&quot;);
+
+    let e1: Result&lt;&amp;str, &amp;str&gt; = Err(&quot;404&quot;);
+    let e2: Result&lt;&amp;str, isize&gt; = Err(404);
+
+    let fn_character_count = |s: &amp;str| -&gt; isize { s.parse().unwrap() }; // convert str to isize
+
+    assert_eq!(o1.map_err(fn_character_count), o2); // Ok1 map = Ok2
+    assert_eq!(e1.map_err(fn_character_count), e2); // Err1 map = Err2
+}
+
+</code></pre>
+
+<h2 id="map-or-and-map-or-else">map_or() and map_or_else()</h2>
+
+<p>这些功能也与<code>unwrap_or()</code>和<code>unwrap_or_else()</code>相似。但是<code>map_or()</code>和<code>map_or_else()</code>在<code>Some</code>，<code>Ok</code>值上应用闭包和返回类型T内的值。</p>
+
+<ul>
+<li><p><code>map_or()</code>  ：仅支持<code>Option</code>类型（不支持<code>Result</code>）。将闭包应用于<code>Some</code>内部值并根据闭包返回输出。为None类型返回给定的默认值。</p>
+
+<pre><code class="language-rust">fn main() {
+const V_DEFAULT: i8 = 1;
+
+let s = Some(10);
+let n: Option&lt;i8&gt; = None;
+let fn_closure = |v: i8| v + 2;
+
+assert_eq!(s.map_or(V_DEFAULT, fn_closure), 12);
+assert_eq!(n.map_or(V_DEFAULT, fn_closure), V_DEFAULT);
+}
+
+</code></pre></li>
+
+<li><p><code>map_or_else()</code>  ：支持两种<code>Option</code>和<code>Result</code>类型（Result仅限nightly）。类似<code>map_or()</code>但应该提供另一个闭包而不是第一个参数的默认值。</p></li>
+</ul>
+
+<p>⭐  <code>None</code>类型不包含任何值。所以不需要将任何东西传递给闭包作为输入Option类型。但是<code>Err</code>类型在其中包含一些值。因此，默认闭包应该能够将其作为输入读取，同时将其与<code>Result</code>类型一起使用。</p>
+
+<pre><code class="language-rust">#![feature(result_map_or_else)] // enable unstable library feature 'result_map_or_else' on nightly
+fn main() {
+    let s = Some(10);
+    let n: Option&lt;i8&gt; = None;
+
+    let fn_closure = |v: i8| v + 2;
+    let fn_default = || 1; // None doesn't contain any value. So no need to pass anything to closure as input.
+
+    assert_eq!(s.map_or_else(fn_default, fn_closure), 12);
+    assert_eq!(n.map_or_else(fn_default, fn_closure), 1);
+
+    let o = Ok(10);
+    let e = Err(5);
+    let fn_default_for_result = |v: i8| v + 1; // Err contain some value inside it. So default closure should able to read it as input
+
+    assert_eq!(o.map_or_else(fn_default_for_result, fn_closure), 12);
+    assert_eq!(e.map_or_else(fn_default_for_result, fn_closure), 6);
+}
+
+</code></pre>
+
+<h2 id="ok-or-and-ok-or-else">ok_or() and ok_or_else()</h2>
+
+<p>如前所述<code>ok_or(</code>)，<code>ok_or_else()</code>将<code>Option</code>类型转换为<code>Result</code>类型。<code>Some</code>对<code>Ok</code>和<code>None</code>对<code>Err</code>  。</p>
+
+<ul>
+<li><p><code>ok_or()</code>  ：默认<code>Err</code>消息应作为参数传递.</p>
+
+<pre><code class="language-rust">fn main() {
+const ERR_DEFAULT: &amp;str = &quot;error message&quot;;
+
+let s = Some(&quot;abcde&quot;);
+let n: Option&lt;&amp;str&gt; = None;
+
+let o: Result&lt;&amp;str, &amp;str&gt; = Ok(&quot;abcde&quot;);
+let e: Result&lt;&amp;str, &amp;str&gt; = Err(ERR_DEFAULT);
+
+assert_eq!(s.ok_or(ERR_DEFAULT), o); // Some(T) -&gt; Ok(T)
+assert_eq!(n.ok_or(ERR_DEFAULT), e); // None -&gt; Err(default)
+}
+
+</code></pre></li>
+
+<li><p><code>ok_or_else()</code>：类似于<code>ok_or()</code>。应该将闭包作为参数传递。</p>
+
+<pre><code class="language-rust">fn main() {
+let s = Some(&quot;abcde&quot;);
+let n: Option&lt;&amp;str&gt; = None;
+let fn_err_message = || &quot;error message&quot;;
+
+let o: Result&lt;&amp;str, &amp;str&gt; = Ok(&quot;abcde&quot;);
+let e: Result&lt;&amp;str, &amp;str&gt; = Err(&quot;error message&quot;);
+
+assert_eq!(s.ok_or_else(fn_err_message), o); // Some(T) -&gt; Ok(T)
+assert_eq!(n.ok_or_else(fn_err_message), e); // None -&gt; Err(default)
+}
+
+</code></pre></li>
+</ul>
+
+<h2 id="as-ref-and-as-mut">as_ref() and as_mut()</h2>
+
+<p>🔎如前所述，这些函数用于借用类型T作为引用或作为可变引用。</p>
+
+<ul>
+<li><code>as_ref()</code>  ：转换<code>Option&lt;T&gt;</code>到<code>Option&lt;&amp;T&gt;</code>和<code>Result&lt;T, E&gt;</code>到<code>Result&lt;&amp;T, &amp;E&gt;</code></li>
+<li><code>as_mut()</code>  ：转换<code>Option&lt;T&gt;</code>到<code>Option&lt;&amp;mut T&gt;</code>和<code>Result&lt;T, E&gt;</code>到<code>Result&lt;&amp;mut T, &amp;mut E&gt;</code></li>
+</ul>
+
+<h2 id="自定义错误类型">自定义错误类型</h2>
+
+<p>Rust允许我们创建自己的Err类型。我们称之为“ 自定义错误类型”。</p>
+
+<h2 id="error-trait">Error trait</h2>
+
+<p>如您所知，traits定义了类型必须提供的功能。但是我们不需要总是为常用功能定义新的特性，因为Rust 标准库提供了一些可以在我们自己的类型上实现的可重用特性。创建自定义错误类型时，<a href="https://link.zhihu.com/?target=https%3A//doc.rust-lang.org/std/error/trait.Error.html">std::error::Error</a>  trait可帮助我们将任何类型转换为<code>Err</code>类型。</p>
+
+<pre><code class="language-rust">use std::fmt::{Debug, Display};
+
+pub trait Error: Debug + Display {
+    fn source(&amp;self) -&gt; Option&lt;&amp;(Error + 'static)&gt; { ... }
+}
+
+</code></pre>
+
+<p>一个特质可以从另一个特质继承。<code>trait Error: Debug + Display</code>意味着<code>Error</code>特质继承<code>fmt::Debug</code>和<code>fmt::Display</code>特质。</p>
+
+<pre><code class="language-rust">// traits inside Rust standard library core fmt module/ std::fmt
+pub trait Display {
+    fn fmt(&amp;self, f: &amp;mut Formatter) -&gt; Result&lt;(), Error&gt;;
+}
+
+pub trait Debug {
+    fn fmt(&amp;self, f: &amp;mut Formatter) -&gt; Result&lt;(), Error&gt;;
+}
+
+</code></pre>
+
+<p>▸ Display - 最终用户应如何将此错误视为面向消息/面向用户的输出。 - 通常通过<code>println!(&quot;{}&quot;)</code>或打印<code>eprintln!(&quot;{}&quot;)</code></p>
+
+<p>▸ Debug - 如何显示Errwhile调试/面向程序员的输出。 - 通常打印<code>println!(&quot;{:?}&quot;)</code>或<code>eprintln!(&quot;{:?}&quot;)</code>  - - 漂亮打印，可以使用<code>println!(&quot;{:#?}&quot;)</code>或<code>eprintln!(&quot;{:#?}&quot;)</code>。</p>
+
+<p>▸ source() - 此错误的较低级别来源（如果有）。 - 可选的。</p>
+
+<p>首先，让我们看看如何<code>std::error::Error</code>在最简单的自定义错误类型上实现特征。</p>
+
+<pre><code class="language-rust">use std::fmt;
+
+// Custom error type; can be any type which defined in the current crate
+// 💡 In here, we use a simple &quot;unit struct&quot; to simplify the example
+struct AppError;
+
+// Implement std::fmt::Display for AppError
+impl fmt::Display for AppError {
+    fn fmt(&amp;self, f: &amp;mut fmt::Formatter) -&gt; fmt::Result {
+        write!(f, &quot;An Error Occurred, Please Try Again!&quot;) // user-facing output
+    }
+}
+
+// Implement std::fmt::Debug for AppError
+impl fmt::Debug for AppError {
+    fn fmt(&amp;self, f: &amp;mut fmt::Formatter) -&gt; fmt::Result {
+        write!(f, &quot;{{ file: {}, line: {} }}&quot;, file!(), line!()) // programmer-facing output
+    }
+}
+
+// A sample function to produce an AppError Err
+fn produce_error() -&gt; Result&lt;(), AppError&gt; {
+    Err(AppError)
+}
+
+fn main() {
+    match produce_error() {
+        Err(e) =&gt; eprintln!(&quot;{}&quot;, e), // An Error Occurred, Please Try Again!
+        _ =&gt; println!(&quot;No error&quot;),
+    }
+
+    eprintln!(&quot;{:?}&quot;, produce_error()); // Err({ file: src/main.rs, line: 17 })
+}
+
+</code></pre>
+
+<p>希望你理解要点。现在，让我们看一些带有错误代码和错误消息的自定义错误类型。</p>
+
+<pre><code class="language-rust">use std::fmt;
+
+struct AppError {
+    code: usize,
+    message: String,
+}
+
+// Different error messages according to AppError.code
+impl fmt::Display for AppError {
+    fn fmt(&amp;self, f: &amp;mut fmt::Formatter) -&gt; fmt::Result {
+        let err_msg = match self.code {
+            404 =&gt; &quot;Sorry, Can not find the Page!&quot;,
+            _ =&gt; &quot;Sorry, something is wrong! Please Try Again!&quot;,
+        };
+
+        write!(f, &quot;{}&quot;, err_msg)
+    }
+}
+
+// A unique format for dubugging output
+impl fmt::Debug for AppError {
+    fn fmt(&amp;self, f: &amp;mut fmt::Formatter) -&gt; fmt::Result {
+        write!(
+            f,
+            &quot;AppError {{ code: {}, message: {} }}&quot;,
+            self.code, self.message
+        )
+    }
+}
+
+fn produce_error() -&gt; Result&lt;(), AppError&gt; {
+    Err(AppError {
+        code: 404,
+        message: String::from(&quot;Page not found&quot;),
+    })
+}
+
+fn main() {
+    match produce_error() {
+        Err(e) =&gt; eprintln!(&quot;{}&quot;, e), // Sorry, Can not find the Page!
+        _ =&gt; println!(&quot;No error&quot;),
+    }
+
+    eprintln!(&quot;{:?}&quot;, produce_error()); // Err(AppError { code: 404, message: Page not found })
+
+    eprintln!(&quot;{:#?}&quot;, produce_error());
+    // Err(
+    //     AppError { code: 404, message: Page not found }
+    // )
+}
+
+</code></pre>
+
+<p>⭐️Rust标准库不仅提供了可重用的特性，而且还有助于通过<code>#[derive]</code>属性神奇地生成少数特征的实现。Rust支持<code>derive</code>  <code>std::fmt::Debug</code>，为调试消息提供默认格式。因此，我们可以在struct前声明使用<code>#[derive(Debug)]</code>跳过实现<code>std::fmt::Debug</code>  自定义错误类型。</p>
+
+<pre><code class="language-rust">use std::fmt;
+
+#[derive(Debug)] // derive std::fmt::Debug on AppError
+struct AppError {
+    code: usize,
+    message: String,
+}
+
+impl fmt::Display for AppError {
+    fn fmt(&amp;self, f: &amp;mut fmt::Formatter) -&gt; fmt::Result {
+        let err_msg = match self.code {
+            404 =&gt; &quot;Sorry, Can not find the Page!&quot;,
+            _ =&gt; &quot;Sorry, something is wrong! Please Try Again!&quot;,
+        };
+
+        write!(f, &quot;{}&quot;, err_msg)
+    }
+}
+
+fn produce_error() -&gt; Result&lt;(), AppError&gt; {
+    Err(AppError {
+        code: 404,
+        message: String::from(&quot;Page not found&quot;),
+    })
+}
+
+fn main() {
+    match produce_error() {
+        Err(e) =&gt; eprintln!(&quot;{}&quot;, e), // Sorry, Can not find the Page!
+        _ =&gt; println!(&quot;No error&quot;),
+    }
+
+    eprintln!(&quot;{:?}&quot;, produce_error()); // Err(AppError { code: 404, message: Page not found })
+
+    eprintln!(&quot;{:#?}&quot;, produce_error());
+    // Err(
+    //     AppError {
+    //         code: 404,
+    //         message: &quot;Page not found&quot;
+    //     }
+    // )
+}
+
+</code></pre>
+
+<h2 id="from-trait">From trait</h2>
+
+<p>在编写真实的程序时，我们大多数时候必须同时处理不同的模块，不同的std和第三方的板条箱。但是每个包都使用自己的错误类型，如果我们使用自己的错误类型，我们应该将这些错误转换为错误类型。我们可以使用<code>std::convert::From</code>标准化特征进行这些转换。</p>
+
+<pre><code class="language-rust">// traits inside Rust standard library core convert module/ std::convert
+pub trait From&lt;T&gt;: Sized {
+  fn from(_: T) -&gt; Self;
+}
+
+</code></pre>
+
+<blockquote>
+<p>💡如您所知，<code>String::from()</code>函数用于创建<code>String</code>  from  <code>&amp;str</code>数据类型。实际上这也是<code>std::convert::From</code>特质的实现。</p>
+</blockquote>
+
+<p>让我们看看如何在自定义错误类型上实现<code>std::convert::From</code>特征。</p>
+
+<pre><code class="language-rust">use std::fs::File;
+use std::io;
+
+#[derive(Debug)]
+struct AppError {
+    kind: String,    // type of the error
+    message: String, // error message
+}
+
+// Implement std::convert::From for AppError; from io::Error
+impl From&lt;io::Error&gt; for AppError {
+    fn from(error: io::Error) -&gt; Self {
+        AppError {
+            kind: String::from(&quot;io&quot;),
+            message: error.to_string(),
+        }
+    }
+}
+
+fn main() -&gt; Result&lt;(), AppError&gt; {
+    let _file = File::open(&quot;nonexistent_file.txt&quot;)?; // This generates an io::Error. But because of return type is Result&lt;(), AppError&gt;, it converts to AppError
+
+    Ok(())
+}
+
+
+// --------------- Run time error ---------------
+Error: AppError { kind: &quot;io&quot;, message: &quot;No such file or directory (os error 2)&quot; }
+
+</code></pre>
+
+<p>在上面的例子中，<code>File::open(“nonexistent.txt”)?</code>产生<code>std::io::Error</code>。但由于返回类型是<code>Result&lt;(), AppError&gt;</code>，它转换为<code>AppError</code>。因为我们正在从<code>main()</code>函数传播错误，所以它会打印出<code>Err</code>的Debug表示形式。</p>
+
+<p>在上面的例子中，我们只处理一种std错误类型<code>std::io::Error</code>。让我们看一些处理多种std错误类型的例子。</p>
+
+<pre><code class="language-rust">use std::fs::File;
+use std::io::{self, Read};
+use std::num;
+
+#[derive(Debug)]
+struct AppError {
+    kind: String,
+    message: String,
+}
+
+// Implement std::convert::From for AppError; from io::Error
+impl From&lt;io::Error&gt; for AppError {
+    fn from(error: io::Error) -&gt; Self {
+        AppError {
+            kind: String::from(&quot;io&quot;),
+            message: error.to_string(),
+        }
+    }
+}
+
+// Implement std::convert::From for AppError; from num::ParseIntError
+impl From&lt;num::ParseIntError&gt; for AppError {
+    fn from(error: num::ParseIntError) -&gt; Self {
+        AppError {
+            kind: String::from(&quot;parse&quot;),
+            message: error.to_string(),
+        }
+    }
+}
+
+fn main() -&gt; Result&lt;(), AppError&gt; {
+    let mut file = File::open(&quot;hello_world.txt&quot;)?; // generates an io::Error, if can not open the file and converts to an AppError
+
+    let mut content = String::new();
+    file.read_to_string(&amp;mut content)?; // generates an io::Error, if can not read file content and converts to an AppError
+
+    let _number: usize;
+    _number = content.parse()?; // generates num::ParseIntError, if can not convert file content to usize and converts to an AppError
+
+    Ok(())
+}
+
+
+// --------------- Few possible run time errors ---------------
+
+// 01. If hello_world.txt is a nonexistent file
+Error: AppError { kind: &quot;io&quot;, message: &quot;No such file or directory (os error 2)&quot; }
+
+// 02. If user doesn't have relevant permission to access hello_world.txt
+Error: AppError { kind: &quot;io&quot;, message: &quot;Permission denied (os error 13)&quot; }
+
+// 03. If hello_world.txt contains non-numeric content. ex Hello, world!
+Error: AppError { kind: &quot;parse&quot;, message: &quot;invalid digit found in string&quot; }
+
+</code></pre>
+
+<blockquote>
+<p>🔎 搜索有关实现的内容<a href="https://link.zhihu.com/?target=https%3A//doc.rust-lang.org/std/io/enum.ErrorKind.html">std::io::ErrorKind</a>，以了解如何进一步组织错误类型。</p>
+</blockquote>
+
+<p>发布于 2018-12-14</p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

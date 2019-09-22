@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="closures">Closures</h1>
+
+<h3 id="rust普通方法排序数组">rust普通方法排序数组：</h3>
+
+<pre><code class="language-rust">/* It prints:
+[0, 1, 4, 7, 8, 10, 12, 45]*/
+fn main() {
+    let mut arr = [4, 8, 1, 10, 0, 45, 12, 7];
+    arr.sort();
+    print!(&quot;{:?}&quot;, arr);
+}
+
+/* It prints:
+[45, 12, 10, 8, 7, 4, 1, 0]*/
+fn main() {
+    let mut arr = [4, 8, 1, 10, 0, 45, 12, 7];
+    use std::cmp::Ordering;
+    fn desc(a: &amp;i32, b: &amp;i32) -&gt; Ordering {
+        if a &lt; b { Ordering::Greater }
+        else if a &gt; b { Ordering::Less }
+        else { Ordering::Equal }
+    }
+    arr.sort_by(desc);
+    print!(&quot;{:?}&quot;, arr);
+}
+</code></pre>
+
+<hr />
+
+<h3 id="题外">题外</h3>
+
+<pre><code class="language-rust">// ILLEGAL
+fn main() {
+    let two = 2.;
+    fn print_double(x: f64) {
+        print!(&quot;{}&quot;, x * two);
+    }
+    print_double(17.2);
+}
+
+/* It prints:
+34.4*/
+fn main() {
+    const TWO: f64 = 2.;
+    fn print_double(x: f64) {
+        print!(&quot;{}&quot;, x * TWO);
+    }
+    print_double(17.2);
+}
+
+/* It prints:
+34.4*/
+fn main() {
+    static TWO: f64 = 2.;
+    fn print_double(x: f64) {
+        print!(&quot;{}&quot;, x * TWO);
+    }
+    print_double(17.2);
+}
+</code></pre>
+
+<pre><code class="language-rust">/* It prints:
+[45, 12, 10, 8, 7, 4, 1, 0]*/
+fn main() {
+    let mut arr = [4, 8, 1, 10, 0, 45, 12, 7];
+    use std::cmp::Ordering;
+    let desc = |a: &amp;i32, b: &amp;i32| -&gt; Ordering {
+        if a &lt; b { Ordering::Greater }
+        else if a &gt; b { Ordering::Less }
+        else { Ordering::Equal }
+    };
+    arr.sort_by(desc);
+    print!(&quot;{:?}&quot;, arr);
+}
+
+/* It prints:
+[45, 12, 10, 8, 7, 4, 1, 0]*/
+fn main() {
+    let mut arr = [4, 8, 1, 10, 0, 45, 12, 7];
+    use std::cmp::Ordering;
+    arr.sort_by(|a, b|
+        if a &lt; b { Ordering::Greater }
+        else if a &gt; b { Ordering::Less }
+        else { Ordering::Equal });
+    print!(&quot;{:?}&quot;, arr);
+}
+</code></pre>
+
+<hr />
+
+<h3 id="closure实现">closure实现：</h3>
+
+<pre><code class="language-rust">/* It prints:
+[0, 1, 4, 7, 8, 10, 12, 45]*/
+fn main() {
+    let mut arr = [4, 8, 1, 10, 0, 45, 12, 7];
+    arr.sort_by(|a, b| a.cmp(b));
+    print!(&quot;{:?}&quot;, arr);
+}
+</code></pre>
+
+<pre><code class="language-rust">/* It prints:
+[45, 12, 10, 8, 7, 4, 1, 0]*/
+fn main() {
+    let mut arr = [4, 8, 1, 10, 0, 45, 12, 7];
+    arr.sort_by(|a, b| (&amp;-*a).cmp(&amp;-*b));
+    print!(&quot;{:?}&quot;, arr);
+}
+</code></pre>
+
+<pre><code class="language-rust">/* It prints:
+[45, 12, 10, 8, 7, 4, 1, 0]*/
+fn main() {
+    let mut arr = [4, 8, 1, 10, 0, 45, 12, 7];
+    arr.sort_by(|a, b| b.cmp(a));
+    print!(&quot;{:?}&quot;, arr);
+}
+</code></pre>
+
+<hr />
+
+<p>###　另外的小栗子：</p>
+
+<pre><code class="language-rust">/* It prints:
+26 26 26 26 26 26*/
+fn main() {
+    let factor = 2;
+    let multiply = |a| a * factor;
+    print!(&quot;{}&quot;, multiply(13));
+    let multiply_ref: &amp;(Fn(i32) -&gt; i32) = &amp;multiply;
+    print!(
+        &quot; {} {} {} {} {}&quot;,
+        (*multiply_ref)(13),
+        multiply_ref(13),
+        (|a| a * factor)(13),
+        (|a: i32| a * factor)(13),
+        |a| -&gt; i32 { a * factor }(13));
+}
+</code></pre>
+
+<pre><code class="language-rust">/* It prints:
+67*/
+fn main() {
+    print!(
+        &quot;{}&quot;,
+        (|v: &amp;Vec&lt;i32&gt;| {
+            let mut sum = 0;
+            for i in 0..v.len() {
+                sum += v[i];
+            }
+            sum
+        })(&amp;vec![11, 22, 34]));
+}
+</code></pre>
+
+<p>参看:</p>
+
+<p>[理解 Rust 中的 Closure]<a href="https://www.zhihu.com/topic/19674381/hot">https://www.zhihu.com/topic/19674381/hot</a></p>
+
+<p>[rust-lang-Closures]<a href="https://doc.rust-lang.org/book/ch13-01-closures.html">https://doc.rust-lang.org/book/ch13-01-closures.html</a></p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

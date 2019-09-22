@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="how-does-tokio-schedule-tasks">How does Tokio schedule tasks?</h1>
+
+<p><a href="https://www.reddit.com/r/rust/comments/co5uop/how_does_tokio_schedule_tasks/">https://www.reddit.com/r/rust/comments/co5uop/how_does_tokio_schedule_tasks/</a></p>
+
+<p>Hello everyone,</p>
+
+<p>I am currently working on a Certificate Transparency log scraper using HTTP2.</p>
+
+<p>Now the problem that I run into is that if I create too many tasks (20+ network IO tasks) the first ones will await at some point during task but will never get called again to finish because other (newly) spawned tasks seem to be prioritized. When looking at tokio&rsquo;s docs I was not able to figure out what kind of scheduling algorithm Tokio uses and if the user can somehow change this.</p>
+
+<p>I hope someone would be able to give me some pointers! The code is listed in the Tokio issue mentioned below.</p>
+
+<p>Thanks in advance!</p>
+
+<p>References:</p>
+
+<ul>
+<li><p><a href="https://www.reddit.com/r/rust/comments/ck9mht/http2_request_using_the_await_syntax/">Reddit: Getting HTTP2 to work with h2 and the new async-await syntax</a></p></li>
+
+<li><p><a href="https://github.com/tokio-rs/tokio/issues/1388">Tokio issue that contains example code of the problem</a></p></li>
+</ul>
+
+<hr />
+
+<p>​</p>
+
+<p>In a well written application, what you are describing should not be possible as the Tokio scheduler is mostly fair.</p>
+
+<p>It sounds like you may have tasks that are hogging scheduler time. Tokio uses &ldquo;cooperative&rdquo; scheduling, so if you have a task that never yields back to the scheduler (returns Poll::Pending or awaits) then that scheduler thread cannot process other tasks.</p>
+
+<p>If your app is 100% CPU saturated (there is always new work to do), then it is possible that this would lead to unfair scheduling like you are seeing as idle threads prioritize getting newly spawned tasks over stealing tasks from other workers.</p>
+
+<p>Another option is that you have some bug that leads to lost wake up notifications. Again, it is hard to say.</p>
+
+<hr />
+
+<p>​</p>
+
+<p>First of all! Thanks for your attempt to help me :)</p>
+
+<p>I confirmed that my tasks yield back to the scheduler (You can see the output and code on the GitHub issue I mentioned in the description).</p>
+
+<p>It seems like I am suffering from the second problem (100% saturated CPU): The pseudocode looks something like this:</p>
+
+<pre><code class="language-rust">for 1 till 0..20
+
+tokio::spawn
+
+{
+
+loop
+
+{
+
+// Send request.await()
+
+// Retrieve response.await()
+
+}
+
+}
+</code></pre>
+
+<p>So there is a fixed amount of tasks but the older tasks (let&rsquo;s say task 1..4), successfully send the request, but are not being scheduled anymore) while the other tasks keep looping and sending new requests successfully. If I scale down the amount of tasks, this problem does not occur.</p>
+
+<p>Do you have any tips on how I should gain optimal performance (100% CPU) without this problem?</p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

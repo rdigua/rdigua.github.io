@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="rust-闭包-move-与自由变量的穿越">Rust : 闭包、move 与自由变量的穿越</h1>
+
+<p>2017年01月02日 21:22:04  <a href="https://me.csdn.net/wowotuo">songroom</a>  阅读数 1641</p>
+
+<p>版权声明：本文为博主原创文章，未经博主允许不得转载。  <a href="https://blog.csdn.net/wowotuo/article/details/53982307">https://blog.csdn.net/wowotuo/article/details/53982307</a></p>
+
+<blockquote>
+<p>核心：闭包是什么，闭包是能控制环境变量的特殊函数。正因为此，环境变量被闭包捕获了，原作用域下的环境变量的所有权就没了，完全由闭包控制。当然，个别情况不一样，下面会讲到。但实质就是这样。<br />
+这个是理解闭包的关键。也是理解move的关键。</p>
+</blockquote>
+
+<p>闭包对进入其中的自由变量而言，有点象黑洞。自由变量进去了，很难再逃脱了。除非，有特别的力量。move，你该上场了，开始你的表演…</p>
+
+<pre><code>let f = | j:i32 |  i =i+j ;    // j为输入参数，i为环境变量  等价于 =&gt;Fn(j:i32)-&gt;()
+let g = || a+b   ; // a,b为环境变量，无输入参数  ,等价于 =&gt;Fn() -&gt;T 
+
+</code></pre>
+
+<p>一、copy trait 下move</p>
+
+<p>我们知道，象i32,i64,等实现了copy trait。在赋值等行为是会自动copy一份。</p>
+
+<p>move在闭包中的作用是，可以强制获取环境变量的所有权：</p>
+
+<p>情景1 ：有move, 作用域相同</p>
+
+<pre><code>    let mut num1 = 5;
+    let mut f1 = move |x: i32| num1 = x + num1;
+    let data1 = f1(2_i32);
+    println!(&quot;num1:{:?} data1:{:?}&quot;, num1, data1);
+
+</code></pre>
+
+<p>结论：有move下，自由变量可以穿越闭包函数。</p>
+
+<p>情景2：无move,作用域相同</p>
+
+<pre><code>    let mut num2 = 5;
+    let mut f2 = |x: i32| num2 = x + num2;
+    let data2 = f2(2_i32);
+    //println!(&quot;num2:{:?} data2:{:?}&quot;, num2, data2);=&gt;error!, num2已经被借走了
+
+</code></pre>
+
+<p>结论：无move下，自由变量是无法穿越闭包函数。</p>
+
+<p>情景3：无move，作用域不同</p>
+
+<pre><code>let mut num = 5;
+{ 
+   let mut add_num = |x: i32| num += x;
+   add_num(5);
+}
+assert_eq!(10, num);
+
+</code></pre>
+
+<p>情景4：有move，作用域不同</p>
+
+<p>如果我们换成一个 move 闭包，就会出现不同：</p>
+
+<pre><code>let mut num = 5;
+{ 
+   let mut add_num = move |x: i32| num += x;
+   add_num(5);
+}
+assert_eq!(5, num);
+
+</code></pre>
+
+<p>我们只得到 5。而不是从 num 得到可变的 borrow 我们对副本拥有所有权。</p>
+
+<p>总结一下：</p>
+
+<p>在实现了copy trait的自由变量，在move的帮助下，可以实现对闭包的穿越。</p>
+
+<p>二、no copy trait下的move</p>
+
+<p>对于没有实现copy trait的String类型的环境变量，情况会如何？</p>
+
+<p>1、有move, 作用域相同</p>
+
+<pre><code>    let mut str2 = &quot;julia book&quot;.to_string();
+    let str2_0 = &quot;i love it&quot;;
+    let mut f4 = move |x: &amp;str| str2 = str2 + x + str2_0;
+    let _str2 = f4(&quot; 2013&quot;);
+    println!(&quot;str2_0:{:?}&quot;, str2_0);//无影响
+    //println!(&quot;str2:{:?}&quot;, str2); //=&gt; error: str2也已经被借用了
+
+</code></pre>
+
+<p>2、无move,作用域相同</p>
+
+<pre><code>    let mut str2 = &quot;julia book&quot;.to_string();
+    let str2_0 = &quot;i love it&quot;;
+    let mut f4 = |x: &amp;str| str2 = str2 + x + str2_0;
+    let _str2 = f4(&quot; 2013&quot;);
+    println!(&quot;str2_0:{:?}&quot;, str2_0); //不变化
+    //println!(&quot;str2:{:?}&quot;, str2); //=&gt; error: str2也已经被借用了
+
+</code></pre>
+
+<p>以上1、2两种情况，有、无move情况相同，对不可变自由变理无影响，但对可变变量有影响；</p>
+
+<p>3、有move，作用域不相同</p>
+
+<pre><code>    let mut mybook = &quot;rust&quot;.to_string();
+    let comment: &amp;str = &quot;ok?&quot;;
+    {
+        let f = move |x: &amp;str| {
+            mybook = mybook + x + comment;
+            println!(&quot;move=&gt; mybook:{:?}&quot;, mybook);
+        };
+        f(&quot;primer is a good book!&quot;);
+    };
+    println!(&quot;comment:{:?}&quot;, comment);//=&gt; comment仍可用
+    //println!(&quot;mybook:{:?}&quot;, mybook); //=&gt; 报错，mybook已经被f move走了，不存在
+
+
+</code></pre>
+
+<p>4、 无move，作用域不相同</p>
+
+<pre><code>    let mut mybook = &quot;rust&quot;.to_string();
+    let comment: &amp;str = &quot;ok?&quot;;
+    {
+        let f = |x: &amp;str| {
+            mybook = mybook + x + comment;
+            println!(&quot;无move=&gt; mybook:{:?}&quot;, mybook);
+        };
+        f(&quot;primer is a good book!&quot;);
+    };
+    println!(&quot;comment:{:?}&quot;, comment); //comment仍可用
+    //println!(&quot;mybook:{:?}&quot;, mybook); //=&gt; 报错，mybook已经被f move走了，不存在
+
+</code></pre>
+
+<p>以上3、4两种情况，也是一样，move无力回天。</p>
+
+<p>总结一下，在没有实现copy trait的情况下，不管有无move：<br />
+（1）可变的自由变量进入闭包后，都无法穿越过闭包；//如 mybook<br />
+（2）不可变的自由变量是没有问题的。//如：comment</p>
+
+<p>三、为什么要有move</p>
+
+<p>想一想，如果没有move,会如何？</p>
+
+<pre><code>use std::thread;
+
+fn main() {
+    let x = 1;
+    thread::spawn(move || {
+        println!(&quot;x is {}&quot;, x);
+    });
+}
+
+</code></pre>
+
+<p>因此，你在thread::spawn中，经常会碰到move.<br />
+如果没有move,子线程则无法捕捉x变量。</p>
+
+<p>四、其它情况</p>
+
+<pre><code>fn main() {
+    let x = &quot;hello&quot;;
+    thread::spawn(move || {
+        let y = String::from(&quot;hi,&quot;) + x;
+        println!(&quot;y is {}&quot;, y);
+    });
+    println!(&quot;....x:{:?}&quot;, x);
+    thread::sleep_ms(500000);
+}
+
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>....x:&quot;hello&quot;
+y is hi,hello
+
+</code></pre>
+
+<p>五、具体的细节</p>
+
+<p>关于地址：<br />
+1、有move</p>
+
+<pre><code>fn main() {
+    let sy_time0 = SystemTime::now();
+    let mut s: String = &quot;rust&quot;.into();
+    let mut n: i32 = 10;
+    println!(&quot;before =&gt; s:  {}  address:  {:p}&quot;, s, s.as_ptr());
+    println!(&quot;before =&gt; n:  {}  address:  {:p}&quot;, n, &amp;n);
+    println!(&quot;move=&gt;&quot;);
+    let mut c = move || {
+        s += &quot;love&quot;;
+        n += 5;
+        println!(&quot;move =&gt; s:  {}, address:  {:p}&quot;, s, s.as_ptr());
+        println!(&quot;move =&gt; n:  {}, address:  {:p}&quot;, n, &amp;n);
+    };
+    c();
+    c();
+    c();
+    println!(&quot;after closure =&gt; check var status: &quot;);
+    println!(&quot;after closure =&gt; n: {} address: {:p}&quot;, n,  &amp;n); //  因为有 copy
+    //println!(&quot;after closure =&gt; s: {} &quot;, s); // 已经没有所有权了
+    thread::sleep_ms(500000);
+}
+
+</code></pre>
+
+<p><img src="https://img-blog.csdnimg.cn/20190105215811681.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dvd290dW8=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" /><br />
+在有move的情况下，n因为实现了copy，原值还在。但s却是所有权没了。</p>
+
+<p>2、无move</p>
+
+<pre><code>fn main() {
+    let sy_time0 = SystemTime::now();
+    let mut s: String = &quot;rust&quot;.into();
+    let mut n: i32 = 10;
+    println!(&quot;before =&gt; s:  {}  address:   {:p}&quot;, s, s.as_ptr());
+    println!(&quot;before =&gt; n:  {}  address:  {:p}&quot;, n, &amp;n);
+    println!(&quot;no move=&gt;&quot;);
+    let mut c = || {
+        s += &quot;love&quot;;
+        n += 5;
+        println!(&quot;move =&gt; s:  {}, address:   {:p}&quot;, s, s.as_ptr());
+        println!(&quot;move =&gt; n:  {}, adress:    {:p}&quot;, n, &amp;n);
+    };
+    c();
+    c();
+    c();
+    println!(&quot;after closure =&gt; check var status: &quot;);
+    //println!(&quot;after closure =&gt; n:  {} &quot;, n); // 已经没有所有权了
+    //println!(&quot;after closure =&gt; s:  {} &quot;, s); // 已经没有所有权了
+    thread::sleep_ms(500000);
+}
+
+
+</code></pre>
+
+<p><img src="https://img-blog.csdnimg.cn/20190105215729810.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dvd290dW8=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" /><br />
+在没有move的情况下，n和s所有权都没了。</p>
+
+<p>3、有move和无move下比较<br />
+比较：<br />
+move =&gt; 有实现copy trait的变量，是副本进了closure; 真身并没有影响；没有实现copy trait 所有权无。<br />
+无move =&gt;;所有权全部没了。</p>
+
+<p>理解的角度：<br />
+另个，从另外一个角度也可以看到，当闭包不断运行时，即c(), 函数中控制了相关的环境变量了。<br />
+只是copy trait 让副本的进去的，才能逃出闭包的魔掌。因为是副本，所以地址自然就不一样了。</p>
+
+<p>特明，本文中有一部分参考了相关部分内容：<a href="http://wiki.jikexueyuan.com/project/rust/closures.html">http://wiki.jikexueyuan.com/project/rust/closures.html</a></p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

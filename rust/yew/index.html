@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="how-to-use-rust-yew">How to use Rust Yew</h1>
+
+<h2 id="prepare-development-environment-for-rust-yew">Prepare development environment for Rust yew</h2>
+
+<p><a href="https://www.youtube.com/channel/UCt_jsJOe91EVjd58kHpgTfw" title="Link to Steadylearner YouTube Channel"><img src="https://avatars0.githubusercontent.com/u/32325099?s=460&amp;v=4" alt="Steadylearner Image" title="Steadylearner Image" /></a><a href="https://www.linkedin.com/in/steady-learner-3151b7164/" title="Link to Steadylearner LinkedIn">Steadylearner</a>Jun 30 2019Copy[](<a href="https://github.com/steadylearner/code/blob/master/post/Rust/How%20to%20use%20Rust%20Yew.md">https://github.com/steadylearner/code/blob/master/post/Rust/How%20to%20use%20Rust%20Yew.md</a> &ldquo;Click this to visit the GitHub page for How to use Rust Yew.&rdquo;)</p>
+
+<p><img src="https://www.steadylearner.com/static/images/post/web/how-to-use-rust-yew.png" alt="https://www.steadylearner.com/static/images/post/web/how-to-use-rust-yew.png" title="https://www.steadylearner.com/static/images/post/web/how-to-use-rust-yew.png" /></p>
+
+<p>In this post, we will prepare development environment for Rust  <strong>Yew</strong>. Then, we will write minimal code with it and learn how to deploy it in  <a href="https://www.steadylearner.com/" title="Click it will open a new tab at https://www.steadylearner.com">your website</a>  also.</p>
+
+<p>If you just want to see what you will get with this post, please visit  <a href="https://www.steadylearner.com/yew_counter" title="Click it will open a new tab at https://www.steadylearner.com/yew_counter">Yew Counter</a>  in  <a href="https://www.steadylearner.com/" title="Click it will open a new tab at https://www.steadylearner.com">Steadylearner</a>.</p>
+
+<p>If you want to save your time and have experience in Rust, just clone the  <a href="https://github.com/steadylearner/Webassembly" title="Click it will open a new tab at https://github.com/steadylearner/Webassembly">Steadylearner Web</a>repository with</p>
+
+<pre><code>$git clone https://github.com/steadylearner/Webassembly.git
+</code></pre>
+
+<p>then inside Yew folder</p>
+
+<pre><code>$yarn
+$rustup default nightly
+$cargo install cargo-web
+</code></pre>
+
+<p>and  <strong>$yarn watch:rs</strong>  for development and  <strong>$yarn prod</strong>  for production files in  <strong>release</strong>.</p>
+
+<p>Then, make a route to serve  <strong>index.html</strong>  and modify paths to link them if you find a problem with it.</p>
+
+<h2 id="prerequisite">[Prerequisite]</h2>
+
+<ol>
+<li><a href="https://www.steadylearner.com/blog/read/How-to-install-Rust" title="Click it will open a new tab at https://www.steadylearner.com/blog/read/How-to-install-Rust">How to install Rust</a></li>
+<li><a href="https://dev.to/deciduously/lets-build-a-rust-frontend-with-yew---part-2-1ech" title="Click it will open a new tab at https://dev.to/deciduously/lets-build-a-rust-frontend-with-yew---part-2-1ech">Build a rust frontend with yew</a></li>
+<li><a href="https://github.com/koute/cargo-web" title="Click it will open a new tab at https://github.com/koute/cargo-web">Cargo Web</a></li>
+<li><a href="https://github.com/DenisKolodin/yew" title="Click it will open a new tab at https://github.com/DenisKolodin/yew">Yew</a></li>
+<li><a href="https://github.com/rollup/rollup" title="Click it will open a new tab at https://github.com/rollup/rollup">rollupjs</a></li>
+</ol>
+
+<hr />
+
+<p>I want you to install Rust first if you haven&rsquo;t yet. The blog post  <a href="https://www.steadylearner.com/blog/read/How-to-install-Rust" title="Click it will open a new tab at https://www.steadylearner.com/blog/read/How-to-install-Rust">How to install Rust</a>  will help you to learn how to do that or visit  <a href="https://www.rust-lang.org/" title="Click it will open a new tab at https://www.rust-lang.org/">Rust Website</a>  for more information.</p>
+
+<p>This post is based on the information from another blog post for  <strong>Yew</strong>  <a href="https://dev.to/deciduously/lets-build-a-rust-frontend-with-yew---part-2-1ech" title="Click it will open a new tab at https://dev.to/deciduously/lets-build-a-rust-frontend-with-yew---part-2-1ech">Build a rust frontend with Yew</a>. You can read until second part of it. You will find that this post will have many common parts with it.</p>
+
+<p>With this post, you will have everything ready to develop Rust  <strong>Yew</strong>  Web application. Before you invest more time for it, read the documentations from  <a href="https://github.com/DenisKolodin/yew" title="Click it will open a new tab at https://github.com/DenisKolodin/yew">Yew</a>(especially  <strong>src</strong>  and  <strong>examples</strong>folders). If you see the source code of it, you can see that many of them are from  <a href="https://github.com/koute/cargo-web" title="Click it will open a new tab at https://github.com/koute/cargo-web">Cargo Web</a>. So it will be helpful for you to read its documentation also.</p>
+
+<p>In case of  <a href="https://github.com/rollup/rollup" title="Click it will open a new tab at https://github.com/rollup/rollup">rollupjs</a>, it will be sufficient for you to know that</p>
+
+<p><strong>&lsquo;To use it with a configuration file, pass the &ndash;config or -c flags.&rsquo;</strong>(<a href="https://rollupjs.org/guide/en#configuration-files" title="Click it will open a new tab at https://rollupjs.org/guide/en#configuration-files">https://rollupjs.org/guide/en#configuration-files</a>)</p>
+
+<p>If you want to use your own favicon after you read this post or  <a href="https://dev.to/deciduously/lets-build-a-rust-frontend-with-yew---part-2-1ech" title="Click it will open a new tab at https://dev.to/deciduously/lets-build-a-rust-frontend-with-yew---part-2-1ech">Build a rust frontend with Yew</a>, please clear cache of your webrowser first and use your file with name favicon.ico instead in  <strong>static</strong>  folder.</p>
+
+<p>(<strong>$grep &ldquo;favicon.ico&rdquo; .</strong>  and delete files relevant to it will not help you.)</p>
+
+<h2 id="table-of-contents">Table of Contents</h2>
+
+<ol>
+<li>Install Cargo Web to use Yew</li>
+<li>How to prepare minimal files for it</li>
+<li>Rust Yew example from its official website</li>
+<li>Improve it</li>
+<li>How to upload it in your website</li>
+<li><strong>Conclusion</strong></li>
+</ol>
+
+<hr />
+
+<p>You can skip some parts if you already read  <a href="https://dev.to/deciduously/lets-build-a-rust-frontend-with-yew---part-2-1ech" title="Click it will open a new tab at https://dev.to/deciduously/lets-build-a-rust-frontend-with-yew---part-2-1ech">Build a rust frontend with Yew</a>.</p>
+
+<h2 id="1-install-cargo-web-to-use-yew">1. Install Cargo Web to use Yew</h2>
+
+<p>Before this post, I doubted that my machine with Linux Ubuntu 18.04 would work with  <strong>Yew</strong>  or not. When you read the documentation from the  <a href="https://github.com/koute/cargo-web" title="Click it will open a new tab at https://github.com/koute/cargo-web">Cargo Web</a>, you can see that there are many options and it was difficult to decide what to use.</p>
+
+<p>So I found a blog post such as  <a href="https://dev.to/deciduously/lets-build-a-rust-frontend-with-yew---part-2-1ech" title="Click it will open a new tab at https://dev.to/deciduously/lets-build-a-rust-frontend-with-yew---part-2-1ech">Build a rust frontend with Yew</a>. I hope you already read it and may skip this part. Otherwise, read on and execute commands below.</p>
+
+<p>(I will suppose that you already have Rust installed in your machine with  <a href="https://www.steadylearner.com/blog/read/How-to-install-Rust" title="Click it will open a new tab at https://www.steadylearner.com/blog/read/How-to-install-Rust">How to install Rust</a>  or other guides.)</p>
+
+<pre><code>$rustup default nightly // 1.
+$cargo install cargo-web // 2.
+</code></pre>
+
+<ol>
+<li><p>You will need nightly features of Rust to use  <strong>Yew</strong>. You can use override to make nightly directory specific instead of glboal.</p></li>
+
+<li><p>It will take long. You may use this time to read  <a href="https://dev.to/deciduously/lets-build-a-rust-frontend-with-yew---part-2-1ech" title="Click it will open a new tab at https://dev.to/deciduously/lets-build-a-rust-frontend-with-yew---part-2-1ech">Build a rust frontend with Yew</a>  post and its relevant information.</p></li>
+</ol>
+
+<p>When you see that  <a href="https://github.com/koute/cargo-web" title="Click it will open a new tab at https://github.com/koute/cargo-web">Cargo Web</a>  installation is completed. You have everything ready to write  <strong>Rust yew</strong>. Its main role is to help you use JavaScript, HTML etc in Rust  <strong>Yew</strong>.</p>
+
+<p>You may follow the instructions from the first part of  <a href="https://dev.to/deciduously/lets-build-a-rust-frontend-with-yew---part-2-1ech" title="Click it will open a new tab at https://dev.to/deciduously/lets-build-a-rust-frontend-with-yew---part-2-1ech">Build a rust frontend with Yew</a>  at this point.</p>
+
+<p>It will be to execute command below to make  <a href="https://github.com/koute/cargo-web" title="Click it will open a new tab at https://github.com/koute/cargo-web">Cargo Web</a>  work well.</p>
+
+<pre><code>$echo 'default-target = &quot;wasm32-unknown-unknown&quot;' &gt; Web.toml
+</code></pre>
+
+<p>Then, build some files and install NPM packages to make the entire Rust Yew project work. It is just matter of  <strong>copy and paste</strong>.</p>
+
+<p>If you want to save time, you can clone  <a href="https://github.com/steadylearner/Webassembly" title="Click it will open a new tab at https://github.com/steadylearner/Webassembly">Steadylearner Web</a>  repository and use  <strong>Yew</strong>  folder.</p>
+
+<p>Then, open the console in it and type  <strong>$yarn watch:rs</strong>  or  <strong>$yarn prod</strong>  and you will see the latest  <strong>Yew</strong>  example from  <a href="https://www.steadylearner.com/" title="Click it will open a new tab at https://www.steadylearner.com">Steadylearner</a>  in your browser.</p>
+
+<h2 id="2-how-to-prepare-minimal-files-for-it">2. How to prepare minimal files for it</h2>
+
+<p>If you read  <a href="https://dev.to/deciduously/lets-build-a-rust-frontend-with-yew---part-2-1ech" title="Click it will open a new tab at https://dev.to/deciduously/lets-build-a-rust-frontend-with-yew---part-2-1ech">the blog post</a>  or cloned  <a href="https://github.com/steadylearner/Webassembly" title="Click it will open a new tab at https://github.com/steadylearner/Webassembly">Steadylearner Web</a>, you should have everything to start development with Rust Yew already.</p>
+
+<p>Having the minimal folder structure to start with will always be helpful.</p>
+
+<p>It will be similar to</p>
+
+<pre><code>├── Cargo.toml
+├── package.json
+├── rollup.config.js
+├── src
+│   ├── components
+│   ├── lib.rs
+│   └── main.rs
+├── static
+│   ├── favicon.ico
+│   ├── index.css
+│   ├── index.html
+├── Web.toml
+</code></pre>
+
+<p>We don&rsquo;t need to edit  <strong>Web.toml</strong>  and you may modify folder or file names for  <strong>Cargo.toml</strong>,  <strong>rollup.config.js</strong>  when you want to customize them.</p>
+
+<p>So what left are  <strong>package.json</strong>, and  <strong>src</strong>  and  <strong>static</strong>  folders. I already gave you a information about  <strong>favicon.ico</strong>  you can use your image instead of it.</p>
+
+<p>You don&rsquo;t have to care for  <strong>components</strong>  and  <strong>lib.rs</strong>  file also. You may delete all files in  <strong>components</strong>  and empty  <strong>lib.rs</strong>  file but don&rsquo;t delete it because it is included in  <strong>Cargo.toml</strong>.</p>
+
+<p>In those processes, we removed some options and what we need to care for are only</p>
+
+<pre><code>├── package.json
+├── src
+│   └── main.rs
+├── static
+│   ├── index.css
+│   ├── index.html
+</code></pre>
+
+<p>We have payloads for this project. We will start from  <strong>package.json</strong>.</p>
+
+<p>If you see the scripts and the devDependencies parts of  <strong>package.json</strong>  from the  <a href="https://dev.to/deciduously/lets-build-a-rust-frontend-with-yew---part-2-1ech" title="Click it will open a new tab at https://dev.to/deciduously/lets-build-a-rust-frontend-with-yew---part-2-1ech">the blog post</a></p>
+
+<pre><code>{
+  &quot;scripts&quot;: {
+    &quot;build:js&quot;: &quot;rollup -c&quot;,
+    &quot;build:rs&quot;: &quot;cargo web deploy --release&quot;,
+    &quot;build:scss&quot;: &quot;node-sass --include-path scss scss/hunt.scss css/hunt.css&quot;,
+    &quot;build:css&quot;: &quot;postcss --use autoprefixer -o static/hunt.css css/hunt.css&quot;,
+    &quot;build:style&quot;: &quot;run-s build:scss build:css&quot;,
+    &quot;build:copy&quot;: &quot;cp target/deploy/hunt.css release/ &amp;&amp; cp target/deploy/hunt.wasm release/ &amp;&amp; cp target/deploy/index.html release/ &amp;&amp; cp target/deploy/favicon.ico release/&quot;,
+    &quot;build&quot;: &quot;run-s clean:deploy build:rs build:js build:style build:copy&quot;,
+    &quot;clean:deploy&quot;: &quot;rm -rf /release&quot;,
+    &quot;prod&quot;: &quot;run-s build serve&quot;,
+    &quot;serve&quot;: &quot;serve -p 8080 release&quot;,
+    &quot;watch:rs&quot;: &quot;cargo web start --release&quot;,
+    &quot;test&quot;: &quot;echo \&quot;Error: no tests!\&quot; &amp;&amp; exit 1&quot;
+  },
+  &quot;devDependencies&quot;: {
+    &quot;@babel/core&quot;: &quot;^7.4.5&quot;,
+    &quot;@babel/preset-env&quot;: &quot;^7.4.5&quot;,
+    &quot;autoprefixer&quot;: &quot;^9.6.0&quot;,
+    &quot;node-sass&quot;: &quot;^4.12.0&quot;,
+    &quot;nodemon&quot;: &quot;^1.19.1&quot;,
+    &quot;npm-run-all&quot;: &quot;^4.1.5&quot;,
+    &quot;postcss&quot;: &quot;^7.0.17&quot;,
+    &quot;postcss-cli&quot;: &quot;^6.1.2&quot;,
+    &quot;rollup&quot;: &quot;^1.15.6&quot;,
+    &quot;rollup-plugin-babel&quot;: &quot;^4.3.2&quot;,
+    &quot;rollup-plugin-postcss&quot;: &quot;^2.0.3&quot;,
+    &quot;rollup-plugin-uglify&quot;: &quot;^6.0.2&quot;,
+    &quot;rollup-plugin-wasm&quot;: &quot;^3.0.0&quot;,
+    &quot;serve&quot;: &quot;^11.0.2&quot;
+  }
+}
+</code></pre>
+
+<p>It is not easy to find what they do. If you spent time for that, you may find that you can remove many of them if you don&rsquo;t use sass etc to write CSS.</p>
+
+<p>Therefore, if you remove parts for them it will be</p>
+
+<pre><code>{
+    &quot;scripts&quot;: {
+        &quot;build:js&quot;: &quot;rollup -c&quot;,
+        &quot;build:rs&quot;: &quot;cargo web deploy --release&quot;,
+        &quot;build:copy&quot;: &quot;cp target/deploy/index.css release/ &amp;&amp; cp target/deploy/index.wasm release/ &amp;&amp; cp target/deploy/index.html release/ &amp;&amp; cp target/deploy/favicon.ico release/&quot;,
+        &quot;build&quot;: &quot;run-s clean:deploy build:rs build:js build:copy&quot;,
+        &quot;clean:deploy&quot;: &quot;rm -rf /release&quot;,
+        &quot;prod&quot;: &quot;run-s build serve&quot;,
+        &quot;serve&quot;: &quot;serve -p 8080 release&quot;,
+        &quot;watch:rs&quot;: &quot;cargo web start --release&quot;,
+        &quot;test&quot;: &quot;echo \&quot;Error: no tests!\&quot; &amp;&amp; exit 1&quot;
+    },
+    &quot;devDependencies&quot;: {
+        &quot;@babel/core&quot;: &quot;^7.1.6&quot;,
+        &quot;@babel/preset-env&quot;: &quot;^7.1.6&quot;,
+        &quot;autoprefixer&quot;: &quot;^9.3.1&quot;,
+        &quot;nodemon&quot;: &quot;^1.18.6&quot;,
+        &quot;npm-run-all&quot;: &quot;^4.1.3&quot;,
+        &quot;rollup&quot;: &quot;^0.67.3&quot;,
+        &quot;rollup-plugin-babel&quot;: &quot;^4.0.3&quot;,
+        &quot;rollup-plugin-uglify&quot;: &quot;^6.0.0&quot;,
+        &quot;rollup-plugin-wasm&quot;: &quot;^3.0.0&quot;,
+        &quot;serve&quot;: &quot;^11.0.2&quot;
+    }
+}
+</code></pre>
+
+<p>and what you need are</p>
+
+<ol>
+<li><p><strong>$yarn watch:rs</strong>  when you develope</p></li>
+
+<li><p><strong>$yarn prod</strong>  before you prepare production files.</p></li>
+</ol>
+
+<p>and you don&rsquo;t need some folders for scss etc to work and project becomes simpler.</p>
+
+<p>We have index.html, index.css and main.rs at this point. If you have experience with frontend, you won&rsquo;t need many explantion for how  <strong>index.html, index.css</strong>  work. You can just refer the files in  <a href="https://github.com/steadylearner/Webassembly" title="Click it will open a new tab at https://github.com/steadylearner/Webassembly">Steadylearner Web</a>  repository or write index.html file similar to this.</p>
+
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+
+&lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+
+  &lt;!-- https://github.com/steadylearner/code/blob/master/src/metatag/index.js --&gt;
+
+  &lt;title&gt;Web by Steadylearner&lt;/title&gt;
+  &lt;meta name=&quot;description&quot; content=&quot;Yew example made by https://www.steadylearner.com&quot; /&gt;
+  &lt;meta name=&quot;thumbnail&quot; content=&quot;https://avatars0.githubusercontent.com/u/32325099?s=460&amp;v=4&quot; /&gt;
+
+  &lt;!-- / --&gt;
+
+  &lt;!-- Custom CSS --&gt;
+
+  &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;steadylearner.css&quot; /&gt;
+
+  &lt;!-- / --&gt;
+
+  &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;index.css&quot; /&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+  &lt;script src=&quot;custom.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;index.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;
+</code></pre>
+
+<p>We have only  <strong>main.rs</strong>  to care for and we will write code for it in the next part.</p>
+
+<h2 id="3-rust-yew-example-from-its-official-website">3. Rust Yew example from its official website</h2>
+
+<p><a href="https://github.com/DenisKolodin/yew" title="Click it will open a new tab at https://github.com/DenisKolodin/yew">Yew</a>  has many examples. But the purpose of this post is to help you have minimal setup and start the development with it.</p>
+
+<p>So we will take minimal example from from its author.</p>
+
+<p>It will be similar to the code snippet below and copy it your  <strong>main.rs</strong>  file.</p>
+
+<pre><code>#[macro_use]
+extern crate yew;
+use yew::prelude::*;
+
+// M in MVC
+
+struct Model {
+    value: i64,
+}
+
+// C in MVC
+enum Msg {
+    DoIt,
+}
+
+impl Component for Model {
+    type Message = Msg;
+    type Properties = ();
+
+    fn create(_: Self::Properties, _: ComponentLink&lt;Self&gt;) -&gt; Self {
+        Self {
+            value: 0,
+        }
+    }
+
+    fn update(&amp;mut self, msg: Self::Message) -&gt; ShouldRender {
+        match msg {
+            Msg::DoIt =&gt; self.value = self.value + 1
+        }
+        true
+    }
+}
+
+// V in MVC
+impl Renderable&lt;Model&gt; for Model {
+    fn view(&amp;self) -&gt; Html&lt;Self&gt; {
+        html! {
+            &lt;div&gt;
+               &lt;button onclick=|_| Msg::DoIt,&gt;{ &quot;+1&quot; }&lt;/button&gt;
+                &lt;p&gt;{ self.value }&lt;/p&gt;
+            &lt;/div&gt;
+        }
+    }
+}
+
+fn main() {
+    yew::initialize();
+    App::&lt;Model&gt;::new().mount_to_body();
+    yew::run_loop();
+}
+</code></pre>
+
+<p>If you are familar with other frontend framework such as  <a href="https://www.steadylearner.com/blog/search/React" title="Click it will open a new tab at https://www.steadylearner.com/blog/search/React">React</a>  or read the documentation I gave you above.</p>
+
+<p>You should know that</p>
+
+<pre><code>fn create(_: Self::Properties, _: ComponentLink&lt;Self&gt;) -&gt; Self {
+    Self {
+        value: 0,
+    }
+}
+
+fn update(&amp;mut self, msg: Self::Message) -&gt; ShouldRender {
+    match msg {
+        Msg::DoIt =&gt; self.value = self.value + 1
+    }
+    true
+}
+</code></pre>
+
+<p>is payload to control the app and</p>
+
+<pre><code>html! {
+    &lt;div&gt;
+        &lt;button onclick=|_| Msg::DoIt,&gt;{ &quot;+1&quot; }&lt;/button&gt;
+        &lt;p&gt;{ self.value }&lt;/p&gt;
+    &lt;/div&gt;
+}
+</code></pre>
+
+<p>is to render the view of it.</p>
+
+<p>The entire main.rs file is the minimal example to show how to control state with  <a href="https://github.com/DenisKolodin/yew" title="Click it will open a new tab at https://github.com/DenisKolodin/yew">Yew</a>.</p>
+
+<p>We do not need to edit  <strong>fn create</strong>  part that much because we just need them only when we start it.</p>
+
+<p>If you use  <strong>$yarn watch:rs or yarn prod</strong>  in your folder it will show you counter app in your  <a href="http://localhost:8080/" title="Click it will open a new tab at http://localhost:8080/">localhost</a>.</p>
+
+<p>If you made it, you have minimal development environment ready to start to use  <strong>Yew</strong>.</p>
+
+<p>You may refer to  <a href="https://github.com/DenisKolodin/yew" title="Click it will open a new tab at https://github.com/DenisKolodin/yew">Yew</a>  documentation and its examples or follow the next part.</p>
+
+<h2 id="4-improve-it">4. Improve it</h2>
+
+<p>You are already ready to write codes for Rust with the previous parts. You may have found that what you need to do is just</p>
+
+<ol>
+<li><p>Modify your html to be used inside Rust html! macro</p></li>
+
+<li><p>Write JavaScript equivalent mehtods to update state in Rust  <strong>Yew</strong>  way.</p></li>
+</ol>
+
+<p>But you haven&rsquo;t seen how to use CSS and what if you want to use various methods instead of just update it?</p>
+
+<p>Then, you can refer to the example below.</p>
+
+<pre><code>#[macro_use]
+extern crate yew;
+use yew::prelude::*;
+
+struct Model {
+    value: i64,
+}
+
+// 1.
+enum Msg {
+    Plus,
+    Minus,
+    Zero,
+}
+
+impl Component for Model {
+    type Message = Msg;
+    type Properties = ();
+    fn create(_: Self::Properties, _: ComponentLink&lt;Self&gt;) -&gt; Self {
+        Self {
+            value: 0,
+        }
+    }
+
+    // 2.
+    fn update(&amp;mut self, msg: Self::Message) -&gt; ShouldRender {
+        match msg {
+            Msg::Plus =&gt; self.value = self.value + 1,
+            Msg::Minus =&gt; self.value = self.value - 1,
+            Msg::Zero =&gt; self.value = 0,
+        }
+        true
+    }
+}
+
+impl Renderable&lt;Model&gt; for Model {
+    fn view(&amp;self) -&gt; Html&lt;Self&gt; {
+        // 3.
+        html! {
+            &lt;section class=(&quot;flex&quot;, &quot;center&quot;, &quot;height-vh&quot;), &gt;
+               &lt;section&gt;
+                    &lt;button
+                        class=(&quot;hover-blue&quot;, &quot;cursor-pointer&quot;),
+                        onclick=|_| Msg::Plus,
+                        title=&quot;Click this to plus one&quot;,
+                    &gt;
+                        { &quot;+1&quot; }
+                    &lt;/button&gt;
+                    &lt;button
+                        class=(&quot;hover-red&quot;, &quot;cursor-pointer&quot;),
+                        onclick=|_| Msg::Minus,
+                        title=&quot;Click this to minus one&quot;,
+                    &gt;
+                        { &quot;-1&quot; }
+                    &lt;/button&gt;
+                   &lt;p
+                        class=(&quot;flex&quot;, &quot;center&quot;, &quot;cursor-pointer&quot;),
+                        onclick=|_| Msg::Zero,
+                        title=&quot;Click this back to zero&quot;,
+                    &gt;
+                        { self.value }
+                    &lt;/p&gt;
+               &lt;/section&gt;
+            &lt;/section&gt;
+        }
+    }
+}
+
+fn main() {
+    yew::initialize();
+    App::&lt;Model&gt;::new().mount_to_body();
+    yew::run_loop();
+}
+</code></pre>
+
+<p>You can see that</p>
+
+<ol>
+<li><p>We write more options for  <strong>enum Msg</strong></p></li>
+
+<li><p>Modify update parts to make work with it</p></li>
+
+<li><p>Include some class names, title and event handlers for html! macro to work</p></li>
+</ol>
+
+<p>For  <strong>html!</strong>  is macro, we don&rsquo;t need to invest time to find what they do, just follow the rules.</p>
+
+<p>It is important to notice that you should write  <strong>,</strong>  when ever you write prop(atrribute) for your html tags.</p>
+
+<p>You can live edit your app with  <strong>$yarn watch:rs</strong>. Whenever you modify the html example, you will see message similar to this</p>
+
+<pre><code>==== Triggering `cargo build` ====
+   Compiling index v0.1.0 (/steadylearner/Yew)
+</code></pre>
+
+<p>and it take a little bit long because  <strong>Rust</strong>  will statically verify your web application and wouldn&rsquo;t compile if there is a problem in your code.</p>
+
+<p>I hope you made it. You could include  <strong>steadylearner.css</strong>  in  <a href="https://github.com/steadylearner/Webassembly" title="Click it will open a new tab at https://github.com/steadylearner/Webassembly">Steadylearner Web</a>  repository for your index.css or use your own CSS if you want.</p>
+
+<p>I hope you made it and we will find how to upload it in the website such as  <a href="https://www.steadylearner.com/yew_counter" title="Click it will open a new tab at https://www.steadylearner.com/yew_counter">Yew Counter</a>  in  <a href="https://www.steadylearner.com/" title="Click it will open a new tab at https://www.steadylearner.com">Steadylearner</a>.</p>
+
+<p>If you build the file with  <strong>$yarn prod</strong>  at this point, you will see console message similar to</p>
+
+<pre><code>$cp target/deploy/index.css release/ &amp;&amp; cp target/deploy/
+</code></pre>
+
+<p>and your production files ready at  <strong>release</strong>  folder.</p>
+
+<pre><code>├── favicon.ico
+├── index.css
+├── index.html
+├── index.js
+└── index.wasm
+</code></pre>
+
+<p>It won&rsquo;t be that different from  <strong>static</strong>  folder and we will learn how to modify it to work for in  <a href="https://www.steadylearner.com/" title="Click it will open a new tab at https://www.steadylearner.com">our Rust Website</a>.</p>
+
+<p>The entire app is simple but you may call yourself &ldquo;Full Stack Rust Devloper&rdquo; after you deploy more advanced apps later.</p>
+
+<p>(You may edit frontend part of  <a href="https://www.steadylearner.com/blog/read/How-to-start-Rust-Chat-App" title="Click it will open a new tab at https://www.steadylearner.com/blog/read/How-to-start-Rust-Chat-App">Rust Chat App</a>  with  <a href="https://github.com/DenisKolodin/yew" title="Click it will open a new tab at https://github.com/DenisKolodin/yew">Yew</a>  if you want a challenge.)</p>
+
+<h2 id="5-how-to-upload-it-in-your-website">5. How to upload it in your website</h2>
+
+<p>The files we made before are just static files.</p>
+
+<p>If you have experience in single page apps and how to make them work in your website, you will know that what you need are</p>
+
+<ol>
+<li><p>Make a route for the  <strong>index.html</strong>  and verify it work</p></li>
+
+<li><p>Edit path for other static files such as  <strong>index.css</strong>,  <strong>index.js</strong>,  <strong>index.wasm</strong>  and  <strong>favicon.ico</strong>etc.</p></li>
+</ol>
+
+<p>In this part, we will use  <strong>Rust</strong>  Rocket framework and its relevant codes.</p>
+
+<p>I do not have any favor of it. Just use it for  <a href="https://www.steadylearner.com/" title="Click it will open a new tab at https://www.steadylearner.com">Steadylearner</a>  and  <a href="https://www.steadylearner.com/blog" title="Click it will open a new tab at https://www.steadylearner.com/blog">blog posts</a>  because</p>
+
+<ol>
+<li><p>It has many examples.</p></li>
+
+<li><p>It is better to use  <strong>path</strong>  first framework when you need many webpages with different paths.</p></li>
+</ol>
+
+<p>You can use whatever web framework and languages you want and just refer the process here.</p>
+
+<p>If you want the entire example for this part, you may refer to files and folder structure used for  <a href="https://www.steadylearner.com/blog/read/How-to-start-Rust-Chat-App" title="Click it will open a new tab at https://www.steadylearner.com/blog/read/How-to-start-Rust-Chat-App">Rust Chat App</a>  and use static files you made.</p>
+
+<p>We will first start with get.rs to write a route to serve  <strong>index.html</strong>  file we made before.</p>
+
+<pre><code>use std::io;
+use std::path::{PathBuf};
+use rocket::response::{NamedFile, Redirect};
+
+// [Web]
+
+#[get(&quot;/yew_counter&quot;)]
+pub fn yew_counter() -&gt; io::Result&lt;NamedFile&gt; {
+    NamedFile::open(&quot;static/yew_counter/index.html&quot;)
+}
+</code></pre>
+
+<p>You can infer that you should incldue all the static files you made before in  <strong>static/yew_counter</strong>folder.</p>
+
+<p>and  <strong>main.rs</strong>  to serve routes and start your application.</p>
+
+<pre><code>#![feature(proc_macro_hygiene, decl_macro, custom_attribute, rustc_private, type_ascription, async_await)]
+#[macro_use] extern crate rocket;
+#[macro_use] extern crate rocket_contrib;
+
+mod route;
+use crate::route::{static_files, get};
+
+fn rocket() -&gt; rocket::Rocket {
+    rocket::ignite()
+        .mount(
+            &quot;/&quot;,
+            routes![
+                static_files::file,
+
+                get::index,
+
+                // Web, I use it instead of Webassembly.
+
+                get::yew_counter,
+            ],
+        )
+        .register(catchers![error::not_found])
+}
+
+fn main() {
+    rocket().launch();
+}
+</code></pre>
+
+<p>They are simplified and you can use your own codes instead.</p>
+
+<p>You are ready with your serverside code.</p>
+
+<p>I hope you already made  <strong>yew_counter</strong>  folder and we should edit  <strong>index.html</strong>  and  <strong>index.js</strong>  file.</p>
+
+<p>Because the environment to serve file is different between development and production, we have to modify paths to make everything work in serverside.</p>
+
+<p>You can refer to  <a href="https://github.com/steadylearner/Webassembly" title="Click it will open a new tab at https://github.com/steadylearner/Webassembly">Steadylearner Web</a>  repository and  <strong>static_files_in_server_example</strong>  in  <strong>Yew/referenece</strong>  folder if you want the entire example.</p>
+
+<p>Inside  <strong>index.html</strong>  it have parts to link CSS files and JavaScript files to it.</p>
+
+<pre><code>&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;steadylearner.css&quot; /&gt;
+&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;index.css&quot; /&gt;
+
+&lt;body&gt;
+  &lt;script src=&quot;index.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+</code></pre>
+
+<p>You can modify it to</p>
+
+<pre><code>&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;/static/css/steadylearner.css&quot; /&gt;
+&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;/static/yew_counter/index.css&quot; /&gt;
+
+&lt;body&gt;
+  &lt;script src=&quot;/static/yew_counter/index.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+</code></pre>
+
+<p>I had already equivalent CSS for  <a href="https://www.steadylearner.com/" title="Click it will open a new tab at https://www.steadylearner.com">Steadylearner</a>  so I used path for it instead of  <strong>yew_counter</strong>folder not to duplicate here.</p>
+
+<p>It would not be difficult to find what happens here if  <a href="https://www.google.com/search?q=how+to+deploy+Rust" title="Click it will open a new tab at https://www.google.com/search?q=how+to+deploy+Rust">you know how to deploy a website</a>.</p>
+
+<p>and in your  <strong>index.js</strong>, you can see that code to serve webassembly files similar to</p>
+
+<pre><code>if (typeof process === &quot;object&quot;) {
+    var path = require(&quot;path&quot;);
+
+    var wasm_path = path.join(__dirname, &quot;index.wasm&quot;);
+    var buffer = fs.readFileSync(wasm_path);
+    var mod = new WebAssembly.Module(buffer);
+    var wasm_instance = new WebAssembly.Instance(mod, instance.imports);
+    return instance.initialize(wasm_instance);
+} else {
+    var file = fetch(&quot;index.wasm&quot;, {
+    credentials: &quot;same-origin&quot;
+});
+</code></pre>
+
+<p>It may not work in your serverside so you may modify it to</p>
+
+<pre><code>if (typeof process === &quot;object&quot;) {
+    var wasm_path = &quot;/static/yew_counter/index.wasm&quot;;
+    var buffer = fs.readFileSync(wasm_path);
+    var mod = new WebAssembly.Module(buffer);
+    var wasm_instance = new WebAssembly.Instance(mod, instance.imports);
+    return instance.initialize(wasm_instance);
+} else {
+    var file = fetch(&quot;/static/yew_counter/index.wasm&quot;, {
+    credentials: &quot;same-origin&quot;
+});
+</code></pre>
+
+<p>It is JavaScript but what we do is the same. You just modify paths to work well inside with other files in your machine.</p>
+
+<p>You may use static files as they are and worked. But hope this example helpful whenever you find a path relevant problem.</p>
+
+<p>Everything is ready. You can use  <strong>$cargo run &ndash;bin main</strong>  or other command to start your app in production.</p>
+
+<p>You will see your webpage similar to  <a href="https://www.steadylearner.com/yew_counter" title="Click it will open a new tab at https://www.steadylearner.com/yew_counter">Yew Counter</a>  in  <a href="https://www.steadylearner.com/" title="Click it will open a new tab at https://www.steadylearner.com">Steadylearner</a>.</p>
+
+<p>I used term  <strong>production</strong>  here because what you need to do after this process is just to copy and paste them if you use virtual machine for Linux to deploy your website.</p>
+
+<p>You can see  <a href="https://www.steadylearner.com/yew_counter" title="Click it will open a new tab at https://www.steadylearner.com/yew_counter">the exact example</a>  at  <a href="https://www.steadylearner.com/" title="Click it will open a new tab at https://www.steadylearner.com">Steadylearner</a>  and its many webpages.</p>
+
+<h2 id="6-conclusion">6. Conclusion</h2>
+
+<p>I hope you made it.</p>
+
+<p>We could set up development environment for Rust  <a href="https://github.com/DenisKolodin/yew" title="Click it will open a new tab at https://github.com/DenisKolodin/yew">Yew</a>. Then, we improved the official example. We could learn  <a href="https://www.steadylearner.com/yew_counter" title="Click it will open a new tab at https://www.steadylearner.com/yew_counter">how to deploy it</a>.</p>
+
+<p>If you had already  <a href="https://www.steadylearner.com/" title="Click it will open a new tab at https://www.steadylearner.com">a website built with Rust</a>, it wouldn&rsquo;t be difficult to follow this post. Because what we made are just static files and there is no difference from other CSS, HTML and JavaScirpt files etc.</p>
+
+<p>In the next post, we will learn how to build  <a href="https://www.steadylearner.com/blog/read/How-to-start-Rust-Chat-App" title="Click it will open a new tab at https://www.steadylearner.com/blog/read/How-to-start-Rust-Chat-App">Rust Chat App</a>  with  <a href="https://github.com/DenisKolodin/yew" title="Click it will open a new tab at https://github.com/DenisKolodin/yew">Yew</a>  instead of JavaScript. It would not be difficult because we already have the minimal code and know how to deploy it.</p>
+
+<p>If you want more advanced example, you may visit  <a href="https://github.com/anxiousmodernman/rocket-yew-starter-pack" title="Click it will open a new tab at https://github.com/anxiousmodernman/rocket-yew-starter-pack">Rocket Yew starter pack</a>  or  <a href="https://medium.com/@saschagrunert/a-web-application-completely-in-rust-6f6bdb6c4471" title="Click it will open a new tab at https://medium.com/@saschagrunert/a-web-application-completely-in-rust-6f6bdb6c4471">Web completely in Rust</a>.</p>
+
+<p>I want to people know that type of framework and languages are not important but programmers with these posts.</p>
+
+<p><strong>Thanks and please share this post with others.</strong></p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

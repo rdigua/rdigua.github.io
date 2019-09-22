@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="rust-web框架列表-https-larder-io-blog-larder-links-09-rust-web-frameworks-原始链接"><a href="https://larder.io/blog/larder-links-09-rust-web-frameworks/" title="原始链接">Rust Web框架列表</a></h1>
+
+<p>由于Rust生态系统还处于早期阶段，因此框架有很多选择。每个人都有自己的优点和缺点，没有明显的赢家。</p>
+
+<hr />
+
+<p><strong><a href="https://rocket.rs/">Rocket</a></strong></p>
+
+<p>Rocket是一个十几岁的框架 - 比其他许多框架更发达，但仍然不太成熟。它的特殊功能是通过宏来注释请求处理函数，这个宏包括路由、参数和所需的数据，例如有效的反序列化形式，以及定义一种依赖注入。此外，文档非常好，开发活跃，并且与Actix一起，这是最常用的框架之一，因此可以从发展的社区知识中受益。火箭需要Rust的nightly以上版本。</p>
+
+<p><strong><a href="https://actix.rs/">Actix-web</a></strong></p>
+
+<p>Actix-web是一个基于Actix构建的框架，Actix是Rust的一个actor系统。它虽然成立时间没有Rocket那么长，但已经获得了另一个社区的最爱。独特的actor方法意味着单独的组件（如数据库访问和后台任务）都被实现为异步actor，它们通过消息传递相互通信。Actix-web可能因出现在<a href="https://www.techempower.com/benchmarks/">TechEmpower Web框架基准测试的排名顶端</a>而闻名。Actix-web正在积极开发中，并且具有相当全面的文档。</p>
+
+<p><strong><a href="https://gotham.rs/">Gotham</a></strong></p>
+
+<p>Gotham是一个异步的Web框架，它与Rocket一样时间长，但在2018年由于原始开发人员离开而不太活跃。我喜欢它简单明了的方法，但对于某些常见任务来说它可能被认为有点冗长，并且最近在功能方面落后于更受欢迎的框架。</p>
+
+<p><strong><a href="https://github.com/carllerche/tower-web">Tower-web</a></strong></p>
+
+<p>Tower-web是另一个平易近人的框架，旨在提供所有标准功能。它基于Tower：一个网络客户端/服务器组件库，这意味着它最终应该获得“batteries included”状态。它也是由Rust最流行的异步运行时库Tokio的核心贡献者之一开发的，这似乎是一个优点。像火箭一样，Tower-web使用宏来减少样板，但不需要Rust nightly 。由于它是新的，它仍然缺少功能和文档的方式，但正在积极开发。</p>
+
+<p><strong><a href="https://github.com/seanmonstar/warp">Warp</a></strong></p>
+
+<p>Warp是一个具有独特可组合性角度的框架，允许将可重复使用的“过滤器”链接在一起，这些过滤器可用于参数提取或包括所需应用程序状态，这样可以构建路由和请求处理程序。它在文档方面也很新颖，但在积极开发中。其开发人员和Tower-web的开发人员彼此都比较了解，并且可能在未来将Warp和Tower-web合并为单个框架。</p>
+
+<p><strong><a href="https://github.com/tomaka/rouille">Rouille</a></strong></p>
+
+<p>Rouille是一个同步微框架，它提供了Web框架的构建块，其余部分留给你。它既小又简单，并没有太多文档，但似乎正在积极开发中。</p>
+
+<p><strong><a href="https://github.com/mehcode/shio-rs">SHIO</a></strong></p>
+
+<p>Shio是一个异步微框架，与Rouille有许多共同之处。它似乎没有得到很多积极的开发，并且没有很多文档的方式，尽管它确实有一些例子。</p>
+
+<p><strong><a href="https://github.com/nickel-org/nickel.rs">Nickel</a></strong></p>
+
+<p>Nickel是一个受Express JavaScript框架启发的轻量级框架。它是第一个出现在Rust中的框架之一，但仍然看到了一些维护，但似乎没有积极开发。它的文档很稀疏。</p>
+
+<p><strong><a href="https://github.com/Ogeon/rustful">Rustful</a></strong></p>
+
+<p>Rustful是另一个微框架。它似乎没有看到太多积极的开发，但我把它包括在这里，以防它看起来像你在用的东西。</p>
+
+<p><strong><a href="https://github.com/DenisKolodin/yew">Yew</a>  （前端）</strong></p>
+
+<p>受Elm和React启发的前端框架启发，Yew利用Rust的能力编译到WebAssembly。似乎它与JavaScript有良好的互操作性，并且已经足够成熟可使用。它没有很多文档，但确实有很多例子，并且正在积极开发中。</p>
+
+<p><strong><a href="http://diesel.rs/">Diesel</a>（ORM）</strong></p>
+
+<p>Diesel是Rust的事实上的ORM解决方案。它支持迁移，模式生成，并且具有构建DSL的良好查询。我在过去使用MySQL时遇到了问题，看起来像Postgres是它受欢迎的数据库（足够公平），但是开发是活跃的。</p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

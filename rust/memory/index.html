@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="allocating-memory">Allocating Memory</h1>
+
+<ol>
+<li><pre><code class="language-rust">// It does nothing.
+fn main() {
+static _A: u32 = 3;
+static _B: i32 = -1_000_000;
+static _C: f64 = 5.7e10;
+static _D: u8 = 200;
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">// It does nothing.
+fn main() {
+let _a: u32 = 3;
+let _b: i32 = -1_000_000;
+let _c: f64 = 5.7e10;
+let _d: u8 = 200;
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">// It does nothing.
+fn main() {
+fn f1(x1: i32) {
+    let y1 = 2 + x1;
+}
+fn f2(x2: i32) {
+    f1(x2 + 7);
+}
+let k = 20;
+f1(k + 4);
+f2(30);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+1 0
+2 0
+3 0
+4 0
+and so on, until a stack overflow runtime error.
+*/
+fn main() {
+const SIZE: usize = 100_000;
+const N_ARRAY: usize = 1_000_000;
+fn create_array() -&gt; [u8; SIZE] { [0u8; SIZE] }
+fn recursive_func(n: usize) {
+    let a = create_array();
+    println!(&quot;{} {}&quot;, N_ARRAY - n + 1, a[0]);
+    if n &gt; 1 { recursive_func(n - 1) }
+}
+recursive_func(N_ARRAY);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+1 0
+2 0
+3 0
+4 0
+and so on, until a stack overflow runtime error.
+*/
+fn main() {
+const SIZE: usize = 100_000;
+const N_ARRAY: usize = 1_000_000;
+fn create_array() -&gt; Box&lt;[u8; SIZE]&gt; { Box::new([0u8; SIZE]) }
+fn recursive_func(n: usize) {
+    let a = create_array();
+    println!(&quot;{} {}&quot;, N_ARRAY - n + 1, a[0]);
+    if n &gt; 1 { recursive_func(n - 1) }
+}
+recursive_func(N_ARRAY);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+3.4 [1, 2, 3] 3.4 true*/
+fn main() {
+fn f(p: &amp;f64) {
+    let a = Box::new(*p);
+    {
+        let b = Box::new([1, 2, 3]);
+        print!(&quot;{} {:?}&quot;, *a, *b);
+    }
+    let c = Box::new(true);
+    print!(&quot; {} {}&quot;, a, c);
+}
+f(&amp;3.4);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+7 7; 7 9 9*/
+fn main() {
+let a = 7;
+let a_box: Box&lt;i32&gt;;
+let mut a_ref: &amp;i32 = &amp;a;
+print!(&quot;{} {};&quot;, a, *a_ref);
+a_box = Box::new(a + 2);
+a_ref = &amp;*a_box;
+print!(&quot; {} {} {}&quot;, a, *a_ref, *a_box);
+}
+</code></pre></li>
+
+<li><pre><code class="language-rust">/* It prints:
+7 7; 7 7 9; 7 7 7*/
+fn main() {
+let a = 7;
+let mut a_box: Box&lt;i32&gt;;
+let a_ref: &amp;i32 = &amp;a;
+print!(&quot;{} {};&quot;, a, a_ref);
+a_box = Box::new(a + 2);
+print!(&quot; {} {} {};&quot;, a, a_ref, a_box);
+a_box = Box::new(*a_ref);
+print!(&quot; {} {} {}&quot;, a, a_ref, a_box);
+}
+</code></pre></li>
+</ol>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>

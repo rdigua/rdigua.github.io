@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &middot; Jay Blog</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="http://blog.jaytogo.com/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="http://blog.jaytogo.com/"><h1>Jay Blog</h1></a>
+      <p class="lead">
+       learning rust, reviwe c, erp, javascript, blog, python 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="http://blog.jaytogo.com/">Home</a> </li>
+        <li><a href="/rust/"> rust </a></li>
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
+
+<h1 id="wasi">WASI</h1>
+
+<h2 id="the-webassembly-system-interface">The WebAssembly System Interface</h2>
+
+<p>For a quick intro to WASI, including getting started using it, see  <a href="https://github.com/CraneStation/wasmtime/blob/master/docs/WASI-intro.md">the intro document</a>.</p>
+
+<p>For more documentation, see  <a href="https://github.com/CraneStation/wasmtime/blob/master/docs/WASI-documents.md">the documents guide</a>.</p>
+
+<p>Here’s a quick guide to the repositories where things live:</p>
+
+<p><a href="https://github.com/CraneStation/wasi-sdk">wasi-sdk</a>  - “WASI SDK” packages for C/C++. If you want to try out compiling C/C++, this is a good place to start. “It’s just clang.”</p>
+
+<p>WASI-enabled Rust - Rust Nightly builds now have built-in WASI support. To get started using Rust for targeting WASI:</p>
+
+<pre><code>rustup target add wasm32-unknown-wasi --toolchain nightly
+cargo +nightly build --target wasm32-unknown-wasi
+
+</code></pre>
+
+<p><a href="https://github.com/CraneStation/wasmtime/">wasmtime</a>  - Wasmtime WebAssembly runtime, with WASI support, as well as the WASI documentation.</p>
+
+<p><a href="https://github.com/fastly/lucet/">Lucet</a>  - Fastly’s WebAssembly runtime with WASI support.</p>
+
+<p>Everything here is a work in progress prototype, and not yet stable.</p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>
